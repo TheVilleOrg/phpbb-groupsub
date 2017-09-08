@@ -1,0 +1,11 @@
+travis/			export-ignore
+.travis.yml		export-ignore
+.gitignore		export-ignore
+.gitattributes	export-ignore
+composer.lock	export-ignore
+build.xml		export-ignore
+.csslintrc		export-ignore
+.editorconfig	export-ignore
+.jscsrc		export-ignore
+.jshintrc		export-ignore
+.codeclimate.yml	export-ignore
