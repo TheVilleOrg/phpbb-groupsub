@@ -1,0 +1,17 @@
+imports:
+    - { resource: tables.yml }
+
+services:
+    stevotvr.groupsub.entity.product:
+        class: stevotvr\groupsub\entity\product
+        shared: false
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '%stevotvr.groupsub.tables.products%'
+    stevotvr.groupsub.entity.subscription:
+        class: stevotvr\groupsub\entity\subscription
+        shared: false
+        arguments:
+            - '@dbal.conn'
+            - '%stevotvr.groupsub.tables.subs%'

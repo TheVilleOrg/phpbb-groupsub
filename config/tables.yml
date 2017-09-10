@@ -1,0 +1,4 @@
+parameters:
+    stevotvr.groupsub.tables.products: '%core.table_prefix%groupsub'
+    stevotvr.groupsub.tables.groups: '%core.table_prefix%groupsub_groups'
+    stevotvr.groupsub.tables.subs: '%core.table_prefix%groupsub_subs'
