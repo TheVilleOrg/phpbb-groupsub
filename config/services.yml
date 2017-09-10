@@ -15,3 +15,19 @@ services:
         arguments:
             - '@dbal.conn'
             - '%stevotvr.groupsub.tables.subs%'
+    stevotvr.groupsub.operator.product:
+        class: stevotvr\groupsub\operator\product
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '%stevotvr.groupsub.tables.products%'
+            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.subs%'
+    stevotvr.groupsub.operator.subscription:
+        class: stevotvr\groupsub\operator\subscription
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '%stevotvr.groupsub.tables.products%'
+            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.subs%'
