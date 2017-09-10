@@ -37,9 +37,9 @@ class subscription extends operator implements subscription_interface
 
 	public function add_subscription(entity $subscription)
 	{
-		$product->insert();
-		$product_id = $product->get_id();
-		return $product->load($product_id);
+		$subscription->insert();
+		$subscription_id = $subscription->get_id();
+		return $subscription->load($subscription_id);
 	}
 
 	public function delete_subscription($sub_id)
