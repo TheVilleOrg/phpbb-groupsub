@@ -16,7 +16,7 @@ use phpbb\db\driver\driver_interface;
 /**
  * Group Subscription subscription operator base class.
  */
-class operator
+abstract class operator
 {
 	/**
 	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
