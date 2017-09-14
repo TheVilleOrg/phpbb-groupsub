@@ -194,8 +194,6 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 	public function delete($id)
 	{
-		$entity = $this->container->get('stevotvr.groupsub.entity.product')->load($id);
-
 		if (!confirm_box(true))
 		{
 			$hidden_fields = build_hidden_fields(array(

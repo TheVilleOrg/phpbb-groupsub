@@ -205,8 +205,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	public function delete($id)
 	{
-		$entity = $this->container->get('stevotvr.groupsub.entity.subscription')->load($id);
-
 		if (!confirm_box(true))
 		{
 			$hidden_fields = build_hidden_fields(array(
