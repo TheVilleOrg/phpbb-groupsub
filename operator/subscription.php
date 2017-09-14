@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\operator;
 
 use stevotvr\groupsub\entity\subscription_interface as entity;
+use stevotvr\groupsub\exception\out_of_bounds;
 
 /**
  * Group Subscription subscription operator.
@@ -19,20 +20,66 @@ class subscription extends operator implements subscription_interface
 {
 	public function get_subscriptions($product_id = 0)
 	{
-		$entities = array();
+		return $this->get_subscription_rows(($product_id > 0) ? 'p.gs_id = ' . (int) $product_id : null);
+	}
 
-		$where = ($product_id > 0) ? 'WHERE gs_id = ' . (int) $product_id : '';
-		$sql = 'SELECT *
-				FROM ' . $this->sub_table . '
-				' . $where;
+	public function get_subscription($sub_id)
+	{
+		$subscriptions = $this->get_subscription_rows('s.sub_id = ' . (int) $sub_id);
+
+		if (!count($subscriptions))
+		{
+			throw new out_of_bounds('sub_id');
+		}
+
+		return $subscriptions[0];
+	}
+
+	/**
+	 * Get subscription data from the database.
+	 *
+	 * @param string|null $where The where clause
+	 *
+	 * @return array Array of subscription data
+	 *                     product	string
+	 *                     username	string
+	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
+	 */
+	protected function get_subscription_rows($where = null)
+	{
+		$subscriptions = array();
+
+		$sql_ary = array(
+			'SELECT'	=> 's.*, p.gs_name, u.username',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->product_table => 'p'),
+					'ON'	=> 's.gs_id = p.gs_id',
+				),
+				array(
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'	=> 's.user_id = u.user_id',
+				),
+			),
+		);
+		if ($where)
+		{
+			$sql_ary['WHERE'] = $where;
+		}
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$entities[] = $this->container->get('stevotvr.groupsub.entity.subscription')->import($row);
+			$subscriptions[] = array(
+				'product'	=> $row['gs_name'],
+				'username'	=> $row['username'],
+				'entity'	=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
+			);
 		}
 		$this->db->sql_freeresult($result);
 
-		return $entities;
+		return $subscriptions;
 	}
 
 	public function add_subscription(entity $subscription)

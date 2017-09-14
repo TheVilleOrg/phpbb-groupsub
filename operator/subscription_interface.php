@@ -16,13 +16,30 @@ namespace stevotvr\groupsub\operator;
 interface subscription_interface
 {
 	/**
-	 * Get subscriptions
+	 * Get subscriptions.
 	 *
 	 * @param int $product_id The product ID, 0 to get all subscriptions
 	 *
-	 * @return array An array of subscription entities
+	 * @return array Array associative arrays of subscription data
+	 *                     product	string
+	 *                     username	string
+	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */
 	public function get_subscriptions($product_id = 0);
+
+	/**
+	 * Get a subscription.
+	 *
+	 * @param int $sub_id The subscription ID
+	 *
+	 * @return array Associative array of subscription data
+	 *                     product	string
+	 *                     username	string
+	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
+	 *
+	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 */
+	public function get_subscription($sub_id);
 
 	/**
 	 * Add a subscription.

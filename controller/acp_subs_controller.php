@@ -13,6 +13,7 @@ namespace stevotvr\groupsub\controller;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
+use phpbb\user;
 use stevotvr\groupsub\entity\subscription_interface as sub_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\product_interface as prod_operator;
@@ -35,28 +36,38 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $sub_operator;
 
 	/**
+	 * @var \phpbb\user
+	 */
+	protected $user;
+
+	/**
 	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\language\language                           $language
 	 * @param \phpbb\request\request                             $request
 	 * @param \phpbb\template\template                           $template
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
+	 * @param \phpbb\user                                        $user
 	 */
-	public function __construct(ContainerInterface $container, language $language, request $request, template $template, prod_operator $prod_operator, sub_operator $sub_operator)
+	public function __construct(ContainerInterface $container, language $language, request $request, template $template, prod_operator $prod_operator, sub_operator $sub_operator, user $user)
 	{
 		parent::__construct($container, $language, $request, $template);
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
+		$this->user = $user;
 	}
 
 	public function display()
 	{
-		$entities = $this->sub_operator->get_subscriptions();
+		$subscriptions = $this->sub_operator->get_subscriptions();
 
-		foreach ($entities as $entity)
+		foreach ($subscriptions as $subscription)
 		{
+			$entity = $subscription['entity'];
 			$this->template->assign_block_vars('subscription', array(
-				'SUB_ID'	=> $entity->get_id(),
+				'SUB_USER'		=> $subscription['username'],
+				'SUB_PRODUCT'	=> $subscription['product'],
+				'SUB_EXPIRES'	=> $this->user->format_date($entity->get_expire()),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
@@ -84,10 +95,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	public function edit($id)
 	{
-		$entity = $this->container->get('stevotvr.groupsub.entity.subscription')->load($id);
-		$this->add_edit_sub_data($entity);
+		$subscription = $this->sub_operator->get_subscription($id);
+		$this->add_edit_sub_data($subscription['entity']);
 		$this->template->assign_vars(array(
 			'S_EDIT_SUB'	=> true,
+
+			'SUB_PRODUCT'	=> $subscription['product'],
+			'SUB_USER'		=> $subscription['username'],
 
 			'U_ACTION'		=> $this->u_action . '&amp;action=edit&amp;id=' . $id,
 		));

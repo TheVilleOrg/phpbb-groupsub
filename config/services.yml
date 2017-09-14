@@ -27,6 +27,7 @@ services:
             - '@template'
             - '@stevotvr.groupsub.operator.product'
             - '@stevotvr.groupsub.operator.subscription'
+            - '@user'
     stevotvr.groupsub.entity.product:
         class: stevotvr\groupsub\entity\product
         shared: false
