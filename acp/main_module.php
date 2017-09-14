@@ -10,8 +10,6 @@
 
 namespace stevotvr\groupsub\acp;
 
-use stevotvr\groupsub\controller\acp_base_interface;
-
 /**
  * Group Subscription main ACP module.
  */
