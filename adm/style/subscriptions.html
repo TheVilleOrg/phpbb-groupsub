@@ -1,0 +1,101 @@
+{% include 'overall_header.html' %}
+
+
+<a id="maincontent"></a>
+
+{% if S_ADD_SUB or S_EDIT_SUB %}
+
+	<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+
+	{% if S_ERROR %}
+		<div class="errorbox">
+			<h3>{{ lang('WARNING') }}</h3>
+			<p>{{ ERROR_MSG }}</p>
+		</div>
+	{% endif %}
+
+	{% if S_ADD_SUB %}
+		<h1>{{ lang('ACP_GROUPSUB_SUB_ADD') }}</h1>
+	{% else %}
+		<h1>{{ lang('ACP_GROUPSUB_SUB_EDIT') }}</h1>
+	{% endif %}
+
+	<form id="add_edit_sub" method="post" action="{{ U_ACTION }}">
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_SUB_DETAILS')}}</legend>
+			{% if S_ADD_SUB %}
+				<dl>
+					<dt><label for="sub_user">{{ lang('ACP_GROUPSUB_SUB_USER') ~ lang('COLON') }}</label></dt>
+					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" value="{{ SUB_USER }}" maxlength="255" /></dd>
+				</dl>
+				<dl>
+					<dt><label for="sub_product">{{ lang('ACP_GROUPSUB_SUB_PRODUCT') ~ lang('COLON') }}</label></dt>
+					<dd><select name="sub_product" id="sub_product">
+						{% for p in product %}
+							<option value="{{ p.PROD_ID }}">{{ p.PROD_NAME }}</option>
+						{% endfor %}
+					</select></dd>
+				</dl>
+			{% else %}
+				<dl>
+					<dt>{{ lang('ACP_GROUPSUB_SUB_USER') ~ lang('COLON') }}</dt>
+					<dd>{{ SUB_USER }}</dd>
+				</dl>
+				<dl>
+					<dt>{{ lang('ACP_GROUPSUB_SUB_PRODUCT') ~ lang('COLON') }}</dt>
+					<dd>{{ SUB_PRODUCT }}</dd>
+				</dl>
+			{% endif %}
+			<dl>
+				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255" /></dd>
+			</dl>
+		</fieldset>
+		<fieldset class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" />
+			{{ S_FORM_TOKEN }}
+		</fieldset>
+	</form>
+
+{% else %}
+
+	<h1>{{ lang('ACP_GROUPSUB_MANAGE_SUBS') }}</h1>
+
+	<p>{{ lang('ACP_GROUPSUB_MANAGE_SUBS_EXPLAIN') }}</p>
+
+	<table class="table1 zebra-table responsive">
+		<thead>
+			<th>{{ lang('ACP_GROUPSUB_USER') }}</th>
+			<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+			<th style="width: 15%">{{ lang('ACP_GROUPSUB_EXPIRES') }}</th>
+			<th style="width: 10%">{{ lang('ACTION') }}</th>
+		</thead>
+		<tbody>
+			{% for s in subscription %}
+				<tr>
+					<td><strong>{{ s.SUB_USER }}</strong></td>
+					<td><strong>{{ s.SUB_PRODUCT }}</strong></td>
+					<td><strong>{{ s.SUB_EXPIRES }}</strong></td>
+					<td class="actions">
+						<a href="{{ s.U_EDIT }}">{{ ICON_EDIT }}</a>
+						<a href="{{ s.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_SUBS') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<form id="sub_add" method="post" action="{{ U_ADD_SUB }}">
+		<fieldset class="quick">
+			<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_SUB_ADD') }}" />
+		</fieldset>
+	</form>
+
+{% endif %}
+
+{% include 'overall_footer.html' %}

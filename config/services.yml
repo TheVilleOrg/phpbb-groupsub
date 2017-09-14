@@ -2,6 +2,31 @@ imports:
     - { resource: tables.yml }
 
 services:
+    stevotvr.groupsub.controller.acp.settings:
+        class: stevotvr\groupsub\controller\acp_settings_controller
+        arguments:
+            - '@service_container'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@config'
+    stevotvr.groupsub.controller.acp.product:
+        class: stevotvr\groupsub\controller\acp_prods_controller
+        arguments:
+            - '@service_container'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@stevotvr.groupsub.operator.product'
+    stevotvr.groupsub.controller.acp.subscription:
+        class: stevotvr\groupsub\controller\acp_subs_controller
+        arguments:
+            - '@service_container'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@stevotvr.groupsub.operator.product'
+            - '@stevotvr.groupsub.operator.subscription'
     stevotvr.groupsub.entity.product:
         class: stevotvr\groupsub\entity\product
         shared: false

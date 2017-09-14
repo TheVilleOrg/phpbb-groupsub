@@ -82,4 +82,23 @@ class version_0_1_0 extends migration
 			),
 		);
 	}
+
+	public function update_data()
+	{
+		return array(
+			array('module.add', array(
+				'acp',
+				'ACP_CAT_DOT_MODS',
+				'ACP_GROUPSUB_TITLE',
+			)),
+			array('module.add', array(
+				'acp',
+				'ACP_GROUPSUB_TITLE',
+				array(
+					'module_basename'	=> '\stevotvr\groupsub\acp\main_module',
+					'modes'				=> array('settings', 'products', 'subscriptions'),
+				),
+			)),
+		);
+	}
 }
