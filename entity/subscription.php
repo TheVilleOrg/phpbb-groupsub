@@ -35,7 +35,7 @@ class subscription extends entity implements subscription_interface
 	{
 		$product = (int) $product;
 
-		if ($product < 0 || $product > 16777215)
+		if ($product < 0)
 		{
 			throw new out_of_bounds('gs_id');
 		}
@@ -54,7 +54,7 @@ class subscription extends entity implements subscription_interface
 	{
 		$user = (int) $user;
 
-		if ($user < 0 || $user > 16777215)
+		if ($user < 0)
 		{
 			throw new out_of_bounds('user_id');
 		}
@@ -73,7 +73,7 @@ class subscription extends entity implements subscription_interface
 	{
 		$expire = (int) $expire;
 
-		if ($expire < 0 || $expire > 16777215)
+		if ($expire < 0)
 		{
 			throw new out_of_bounds('sub_expires');
 		}
