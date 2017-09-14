@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\entity;
 
+use stevotvr\groupsub\exception\out_of_bounds;
+
 /**
  * Group Subscription subscription entity.
  */

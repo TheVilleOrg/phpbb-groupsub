@@ -12,6 +12,8 @@ namespace stevotvr\groupsub\entity;
 
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
+use stevotvr\groupsub\exception\out_of_bounds;
+use stevotvr\groupsub\exception\unexpected_value;
 
 /**
  * Group Subscription product entity.
