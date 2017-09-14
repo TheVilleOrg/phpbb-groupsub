@@ -59,7 +59,7 @@ class version_0_1_0 extends migration
 						'sub_id'		=> array('UINT', null, 'auto_increment'),
 						'gs_id'			=> array('UINT', 0),
 						'user_id'		=> array('UINT', 0),
-						'sub_expires'	=> array('UINT', 0),
+						'sub_expires'	=> array('UINT:11', 0),
 					),
 					'PRIMARY_KEY' => 'sub_id',
 					'KEYS' => array(
