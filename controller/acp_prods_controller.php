@@ -26,6 +26,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class acp_prods_controller extends acp_base_controller implements acp_prods_interface
 {
 	/**
+	 * Time units
+	 */
+	const WEEK = 7;
+	const MONTH = 30;
+	const YEAR = 365;
+
+	/**
 	 * @var \stevotvr\groupsub\operator\product_interface
 	 */
 	protected $prod_operator;
@@ -114,7 +121,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'desc'		=> $this->request->variable('prod_desc', '', true),
 			'price'		=> $this->request->variable('prod_price', 0),
 			'currency'	=> $this->request->variable('prod_currency', ''),
-			'length'	=> $this->request->variable('prod_length', 0),
+			'length'	=> $this->parse_length(),
 			'warn_time'	=> $this->request->variable('prod_warn_time', 0),
 			'grace'		=> $this->request->variable('prod_grace', 0),
 		);
@@ -174,7 +181,6 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'PROD_NAME'			=> $entity->get_name(),
 			'PROD_DESC'			=> $entity->get_desc_for_edit(),
 			'PROD_PRICE'		=> is_int($entity->get_price()) ? $entity->get_price() : '',
-			'PROD_LENGTH'		=> is_int($entity->get_length()) ? $entity->get_length() : '',
 			'PROD_WARN_TIME'	=> is_int($entity->get_warn_time()) ? $entity->get_warn_time() : $this->config['stevotvr_groupsub_warn_time'],
 			'PROD_GRACE'		=> is_int($entity->get_grace()) ? $entity->get_grace() : $this->config['stevotvr_groupsub_grace'],
 
@@ -186,6 +192,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		));
 
 		$this->load_groups($entity->get_id());
+		$this->load_length($entity);
 		$this->assign_currency_vars($entity->get_currency());
 	}
 
@@ -232,6 +239,80 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		{
 			$this->prod_operator->add_group($prod_id, $group_id);
 		}
+	}
+
+	/**
+	 * Load the length and length unit options into template variables.
+	 *
+	 * @param \stevotvr\groupsub\entity\product_interface $entity The product
+	 */
+	protected function load_length(prod_entity $entity)
+	{
+		$selected = null;
+		$length = $entity->get_length();
+		if (is_int($length))
+		{
+			if ($length > 0)
+			{
+				if ($length % self::YEAR === 0)
+				{
+					$selected = 'years';
+					$length /= self::YEAR;
+				}
+				else if ($length % self::MONTH === 0)
+				{
+					$selected = 'months';
+					$length /= self::MONTH;
+				}
+				else if ($length % self::WEEK === 0)
+				{
+					$selected = 'weeks';
+					$length /= self::WEEK;
+				}
+			}
+
+			$this->template->assign_var('PROD_LENGTH', $length);
+		}
+
+		foreach (array('days', 'weeks', 'months', 'years') as $unit)
+		{
+			$this->template->assign_block_vars('time_unit', array(
+				'UNIT_ID'	=> $unit,
+				'UNIT_NAME'	=> $this->language->lang('ACP_GROUPSUB_' . strtoupper($unit)),
+
+				'S_SELECTED'	=> ($unit === $selected),
+			));
+		}
+	}
+
+	/**
+	 * Parse the length fields.
+	 *
+	 * @return int The length in days
+	 */
+	protected function parse_length()
+	{
+		$value = $this->request->variable('prod_length', 0);
+		if ($value === 0)
+		{
+			return 0;
+		}
+
+		$unit = $this->request->variable('prod_length_unit', '');
+		switch ($unit)
+		{
+			case 'weeks':
+				return $value * self::WEEK;
+			break;
+			case 'months':
+				return $value * self::MONTH;
+			break;
+			case 'years':
+				return $value * self::YEAR;
+			break;
+		}
+
+		return $value;
 	}
 
 	/**

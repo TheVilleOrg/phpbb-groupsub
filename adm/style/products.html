@@ -75,7 +75,14 @@
 			</dl>
 			<dl>
 				<dt><label for="prod_length">{{ lang('ACP_GROUPSUB_PROD_LENGTH') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_LENGTH_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="prod_length" name="prod_length" size="4" maxlength="10" value="{{ PROD_LENGTH }}" />&nbsp;{{ lang('ACP_GROUPSUB_DAYS') }}</dd>
+				<dd>
+					<input class="text" type="text" id="prod_length" name="prod_length" size="4" maxlength="10" value="{{ PROD_LENGTH }}" />&nbsp;
+					<select name="prod_length_unit" id="prod_length_unit">
+						{% for u in time_unit %}
+							<option value="{{ u.UNIT_ID }}"{% if u.S_SELECTED %} selected="selected"{% endif %}>{{ u.UNIT_NAME }}</option>
+						{% endfor %}
+					</select>
+				</dd>
 			</dl>
 			<dl>
 				<dt><label for="prod_warn_time">{{ lang('ACP_GROUPSUB_PROD_WARN_TIME') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_WARN_TIME_EXPLAIN') }}</span></dt>

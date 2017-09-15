@@ -69,7 +69,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_PROD_PRICE'				=> 'Subscription price',
 	'ACP_GROUPSUB_PROD_PRICE_EXPLAIN'		=> 'Enter the price for the subscription.',
 	'ACP_GROUPSUB_PROD_LENGTH'				=> 'Subscription length',
-	'ACP_GROUPSUB_PROD_LENGTH_EXPLAIN'		=> 'Enter the length of the subscription in days. Enter 0 for a never-ending subscription.',
+	'ACP_GROUPSUB_PROD_LENGTH_EXPLAIN'		=> 'Enter the length of the subscription. Enter 0 for a never-ending subscription.',
 	'ACP_GROUPSUB_PROD_WARN_TIME'			=> 'Warning time',
 	'ACP_GROUPSUB_PROD_WARN_TIME_EXPLAIN'	=> 'The number of days before the expiration of a subscription to notify the subscriber.',
 	'ACP_GROUPSUB_PROD_GRACE'				=> 'Grace period',
@@ -105,4 +105,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_EXPIRES_UNLIMITED'	=> 'Never',
 
 	'ACP_GROUPSUB_DAYS'		=> 'days',
+	'ACP_GROUPSUB_WEEKS'	=> 'weeks',
+	'ACP_GROUPSUB_MONTHS'	=> 'months',
+	'ACP_GROUPSUB_YEARS'	=> 'years',
 ));
