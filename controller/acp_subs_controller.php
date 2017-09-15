@@ -197,7 +197,14 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	protected function load_products()
 	{
-		foreach ($this->prod_operator->get_products() as $entity)
+		$entities = $this->prod_operator->get_products();
+
+		if (!count($entities))
+		{
+			trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PRODS') . adm_back_link($this->u_action), E_USER_WARNING);
+		}
+
+		foreach ($entities as $entity)
 		{
 			$this->template->assign_block_vars('product', array(
 				'PROD_ID'	=> $entity->get_id(),
