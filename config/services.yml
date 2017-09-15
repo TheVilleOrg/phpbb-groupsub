@@ -33,7 +33,10 @@ services:
             - '%stevotvr.groupsub.currencies%'
             - '@stevotvr.groupsub.operator.product'
             - '@stevotvr.groupsub.operator.subscription'
+            - '@dbal.conn'
             - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
     stevotvr.groupsub.entity.product:
         class: stevotvr\groupsub\entity\product
         shared: false

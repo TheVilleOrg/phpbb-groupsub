@@ -26,7 +26,8 @@
 			{% if S_ADD_SUB %}
 				<dl>
 					<dt><label for="sub_user">{{ lang('ACP_GROUPSUB_SUB_USER') ~ lang('COLON') }}</label></dt>
-					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" value="{{ SUB_USER }}" maxlength="255" /></dd>
+					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" maxlength="255" /></dd>
+					<dd>[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]</dd>
 				</dl>
 				<dl>
 					<dt><label for="sub_product">{{ lang('ACP_GROUPSUB_SUB_PRODUCT') ~ lang('COLON') }}</label></dt>

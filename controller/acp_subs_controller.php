@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\controller;
 
 use phpbb\config\config;
+use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
@@ -37,9 +38,27 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $sub_operator;
 
 	/**
+	 * @var \phpbb\db\driver\driver_interface
+	 */
+	protected $db;
+
+	/**
 	 * @var \phpbb\user
 	 */
 	protected $user;
+
+	/**
+	 * The root phpBB path.
+	 *
+	 * @var string
+	 */
+	protected $root_path;
+	/**
+	 * The script file extension.
+	 *
+	 * @var string
+	 */
+	protected $php_ext;
 
 	/**
 	 * @param \phpbb\config\config                               $config
@@ -47,17 +66,24 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * @param \phpbb\language\language                           $language
 	 * @param \phpbb\request\request                             $request
 	 * @param \phpbb\template\template                           $template
-	 * @param array                                              $currencies List of currencies
+	 * @param array                                              $currencies    List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
+	 * @param \phpbb\db\driver\driver_interface                  $db
 	 * @param \phpbb\user                                        $user
+	 * @param string                                             $root_path     The root phpBB path
+	 * @param string                                             $php_ext       The script file
+	 *                                                                          extension
 	 */
-	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, user $user)
+	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, driver_interface $db, user $user, $root_path, $php_ext)
 	{
 		parent::__construct($config, $container, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
+		$this->db = $db;
 		$this->user = $user;
+		$this->root_path = $root_path;
+		$this->php_ext = $php_ext;
 	}
 
 	public function display()
@@ -89,10 +115,14 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		$entity = $this->container->get('stevotvr.groupsub.entity.subscription');
 		$this->add_edit_sub_data($entity);
+
+		$u_find_username = append_sid($this->root_path . 'memberlist.' . $this->php_ext,
+			'mode=searchuser&amp;form=add_edit_sub&amp;field=sub_user&amp;select_single=true');
 		$this->template->assign_vars(array(
 			'S_ADD_SUB'	=> true,
 
-			'U_ACTION'	=> $this->u_action . '&amp;action=add',
+			'U_ACTION'			=> $this->u_action . '&amp;action=add',
+			'U_FIND_USERNAME'	=> $u_find_username,
 		));
 	}
 
@@ -136,8 +166,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 		else
 		{
+			if ($submit)
+			{
+				$this->parse_username($data, $errors);
+			}
 			$data['product'] = $this->request->variable('sub_product', 0);
-			$data['user'] = $this->request->variable('sub_user', 0);
 
 			$this->load_products();
 		}
@@ -188,6 +221,31 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 			'U_BACK'	=> $this->u_action,
 		));
+	}
+
+	/**
+	 * Parse the user field for creating a subscription.
+	 *
+	 * @param array &$data   The submitted data
+	 * @param array &$errors The error array
+	 */
+	protected function parse_username(array &$data, array &$errors)
+	{
+		$username = $this->request->variable('sub_user', '', true);
+		$sql = 'SELECT user_id
+				FROM ' . USERS_TABLE . "
+				WHERE username_clean = '" . $this->db->sql_escape(utf8_clean_string($username)) . "'";
+		$result = $this->db->sql_query($sql);
+		$userrow = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if (!$userrow)
+		{
+			$errors[] = 'NO_USER';
+			return;
+		}
+
+		$data['user'] = (int) $userrow['user_id'];
 	}
 
 	protected function parse_expire()
