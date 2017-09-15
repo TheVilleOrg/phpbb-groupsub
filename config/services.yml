@@ -3,8 +3,9 @@ imports:
     - { resource: currencies.yml }
 
 services:
-    stevotvr.groupsub.controller.acp.settings:
-        class: stevotvr\groupsub\controller\acp_settings_controller
+    stevotvr.groupsub.controller.acp:
+        class: stevotvr\groupsub\controller\acp_base_controller
+        abstract: true
         arguments:
             - '@config'
             - '@service_container'
@@ -12,60 +13,58 @@ services:
             - '@language'
             - '@request'
             - '@template'
+    stevotvr.groupsub.controller.acp.settings:
+        class: stevotvr\groupsub\controller\acp_settings_controller
+        parent: stevotvr.groupsub.controller.acp
+        arguments:
             - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.controller.acp.product:
         class: stevotvr\groupsub\controller\acp_prods_controller
+        parent: stevotvr.groupsub.controller.acp
         arguments:
-            - '@config'
-            - '@service_container'
-            - '@dbal.conn'
-            - '@language'
-            - '@request'
-            - '@template'
             - '%stevotvr.groupsub.currencies%'
             - '@stevotvr.groupsub.operator.product'
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller
+        parent: stevotvr.groupsub.controller.acp
         arguments:
-            - '@config'
-            - '@service_container'
-            - '@dbal.conn'
-            - '@language'
-            - '@request'
-            - '@template'
             - '%stevotvr.groupsub.currencies%'
             - '@stevotvr.groupsub.operator.product'
             - '@stevotvr.groupsub.operator.subscription'
             - '@user'
             - '%core.root_path%'
             - '%core.php_ext%'
-    stevotvr.groupsub.entity.product:
-        class: stevotvr\groupsub\entity\product
-        shared: false
+    stevotvr.groupsub.entity:
+        class: stevotvr\groupsub\entity\entity
+        abstract: true
         arguments:
             - '@dbal.conn'
+    stevotvr.groupsub.entity.product:
+        class: stevotvr\groupsub\entity\product
+        parent: stevotvr.groupsub.entity
+        shared: false
+        arguments:
             - '%stevotvr.groupsub.tables.products%'
             - '@config'
             - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.entity.subscription:
         class: stevotvr\groupsub\entity\subscription
+        parent: stevotvr.groupsub.entity
         shared: false
         arguments:
+            - '%stevotvr.groupsub.tables.subs%'
+    stevotvr.groupsub.operator:
+        class: stevotvr\groupsub\operator\operator
+        abstract: true
+        arguments:
+            - '@service_container'
             - '@dbal.conn'
+            - '%stevotvr.groupsub.tables.products%'
+            - '%stevotvr.groupsub.tables.groups%'
             - '%stevotvr.groupsub.tables.subs%'
     stevotvr.groupsub.operator.product:
         class: stevotvr\groupsub\operator\product
-        arguments:
-            - '@service_container'
-            - '@dbal.conn'
-            - '%stevotvr.groupsub.tables.products%'
-            - '%stevotvr.groupsub.tables.groups%'
-            - '%stevotvr.groupsub.tables.subs%'
+        parent: stevotvr.groupsub.operator
     stevotvr.groupsub.operator.subscription:
         class: stevotvr\groupsub\operator\subscription
-        arguments:
-            - '@service_container'
-            - '@dbal.conn'
-            - '%stevotvr.groupsub.tables.products%'
-            - '%stevotvr.groupsub.tables.groups%'
-            - '%stevotvr.groupsub.tables.subs%'
+        parent: stevotvr.groupsub.operator
