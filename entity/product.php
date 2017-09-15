@@ -12,6 +12,7 @@ namespace stevotvr\groupsub\entity;
 
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
+use stevotvr\groupsub\exception\missing_field;
 use stevotvr\groupsub\exception\out_of_bounds;
 use stevotvr\groupsub\exception\unexpected_value;
 
@@ -63,6 +64,11 @@ class product extends entity implements product_interface
 	{
 		$ident = (string) $ident;
 
+		if ($ident === '')
+		{
+			throw new missing_field('gs_ident');
+		}
+
 		if (truncate_string($ident, 30) !== $ident)
 		{
 			throw new unexpected_value('gs_ident', 'TOO_LONG');
@@ -81,6 +87,11 @@ class product extends entity implements product_interface
 	public function set_name($name)
 	{
 		$name = (string) $name;
+
+		if ($name === '')
+		{
+			throw new missing_field('gs_name');
+		}
 
 		if (truncate_string($name, 255) !== $name)
 		{
