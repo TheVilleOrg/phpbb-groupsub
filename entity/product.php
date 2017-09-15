@@ -34,6 +34,7 @@ class product extends entity implements product_interface
 		'gs_desc_bbcode_bitfield'	=> 'string',
 		'gs_desc_bbcode_options'	=> 'integer',
 		'gs_price'					=> 'set_price',
+		'gs_currency'				=> 'set_currency',
 		'gs_length'					=> 'set_length',
 		'gs_warn_time'				=> 'set_warn_time',
 		'gs_grace'					=> 'set_grace',
@@ -179,6 +180,24 @@ class product extends entity implements product_interface
 		$this->data['gs_price'] = $price;
 
 		return $this;
+	}
+
+	public function get_currency()
+	{
+		return isset($this->data['gs_currency']) ? (string) $this->data['gs_currency'] : '';
+	}
+
+	public function set_currency($currency)
+	{
+		$currency = strtoupper((string) $currency);
+
+		$len = strlen($currency);
+		if ($len !== 0 && $len !== 3)
+		{
+			throw new unexpected_value('gs_currency', 'INVALID_CURRENCY');
+		}
+
+		$this->data['gs_currency'] = $currency;
 	}
 
 	public function get_length()

@@ -36,6 +36,7 @@ class version_0_1_0 extends migration
 						'gs_desc_bbcode_bitfield'	=> array('VCHAR:255', ''),
 						'gs_desc_bbcode_options'	=> array('UINT:11', 7),
 						'gs_price'					=> array('UINT', 0),
+						'gs_currency'				=> array('VCHAR:3', ''),
 						'gs_length'					=> array('UINT', 0),
 						'gs_warn_time'				=> array('UINT', 0),
 						'gs_grace'					=> array('UINT', 0),
@@ -86,6 +87,8 @@ class version_0_1_0 extends migration
 	public function update_data()
 	{
 		return array(
+			array('config.add', array('stevotvr_groupsub_currency', 'USD')),
+
 			array('module.add', array(
 				'acp',
 				'ACP_CAT_DOT_MODS',

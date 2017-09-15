@@ -113,6 +113,20 @@ interface product_interface extends entity_interface
 	public function set_price($price);
 
 	/**
+	 * @return string The currency code of the price of this product
+	 */
+	public function get_currency();
+
+	/**
+	 * @param string $currency The currency code of the price of this product
+	 *
+	 * @return product_interface This object for chaining
+	 *
+	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 */
+	public function set_currency($currency);
+
+	/**
 	 * @return int The length of this product in days
 	 */
 	public function get_length();

@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\config\config;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
@@ -41,17 +42,19 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $user;
 
 	/**
+	 * @param \phpbb\config\config                               $config
 	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\language\language                           $language
 	 * @param \phpbb\request\request                             $request
 	 * @param \phpbb\template\template                           $template
+	 * @param array                                              $currencies List of currency codes
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\user                                        $user
 	 */
-	public function __construct(ContainerInterface $container, language $language, request $request, template $template, prod_operator $prod_operator, sub_operator $sub_operator, user $user)
+	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, user $user)
 	{
-		parent::__construct($container, $language, $request, $template);
+		parent::__construct($config, $container, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
 		$this->user = $user;

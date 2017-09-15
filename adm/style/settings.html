@@ -1,3 +1,32 @@
 {% include 'overall_header.html' %}
 
+<h1>{{ lang('SETTINGS') }}</h1>
+
+{% if S_ERROR %}
+	<div class="errorbox">
+		<h3>{{ lang('WARNING') }}</h3>
+		<p>{{ ERROR_MSG }}</p>
+	</div>
+{% endif %}
+
+<form id="settings" method="post" action="{{ U_ACTION }}">
+	<fieldset>
+		<dl>
+			<dt><label for="groupsub_currency">{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="groupsub_currency" id="groupsub_currency">
+					{% for c in currency %}
+						<option value="{{ c.CURRENCY }}"{% if c.S_SELECTED %} selected="selected"{% endif %}>{{ c.CURRENCY }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+	</fieldset>
+	<fieldset class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" />
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
+
 {% include 'overall_footer.html' %}

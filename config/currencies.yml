@@ -1,0 +1,26 @@
+parameters:
+    stevotvr.groupsub.currencies:
+        - AUD
+        - BRL
+        - CAD
+        - CHF
+        - CZK
+        - DKK
+        - EUR
+        - GBP
+        - HKD
+        - HUF
+        - ILS
+        - JPY
+        - MXN
+        - MYR
+        - NOK
+        - NZD
+        - PHP
+        - PLN
+        - RUB
+        - SEK
+        - SGD
+        - THB
+        - TWD
+        - USD

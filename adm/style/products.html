@@ -37,7 +37,14 @@
 			</dl>
 			<dl>
 				<dt><label for="prod_price">{{ lang('ACP_GROUPSUB_PROD_PRICE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_PRICE_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="prod_price" name="prod_price" size="4" maxlength="10" value="{{ PROD_PRICE }}" /></dd>
+				<dd>
+					<input class="text" type="text" id="prod_price" name="prod_price" size="4" maxlength="10" value="{{ PROD_PRICE }}" />&nbsp;
+					<select name="prod_currency" id="prod_currency">
+						{% for c in currency %}
+							<option value="{{ c.CURRENCY }}"{% if c.S_SELECTED %} selected="selected"{% endif %}>{{ c.CURRENCY }}</option>
+						{% endfor %}
+					</select>
+				</dd>
 			</dl>
 			<dl>
 				<dt><label for="prod_length">{{ lang('ACP_GROUPSUB_PROD_LENGTH') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_LENGTH_EXPLAIN') }}</span></dt>
@@ -76,7 +83,7 @@
 			{% for p in product %}
 				<tr>
 					<td><strong>{{ p.PROD_NAME }}</strong></td>
-					<td><strong>{{ p.PROD_PRICE }}</strong></td>
+					<td><strong>{{ p.PROD_PRICE }} {{ p.PROD_CURRENCY }}</strong></td>
 					<td><strong>{{ p.PROD_LENGTH }}</strong></td>
 					<td class="actions">
 						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>

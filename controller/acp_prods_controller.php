@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\config\config;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
@@ -29,15 +30,17 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	protected $prod_operator;
 
 	/**
+	 * @param \phpbb\config\config                          $config
 	 * @param ContainerInterface                            $container
 	 * @param \phpbb\language\language                      $language
 	 * @param \phpbb\request\request                        $request
 	 * @param \phpbb\template\template                      $template
+	 * @param array                                         $currencies List of currency codes
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
-	public function __construct(ContainerInterface $container, language $language, request $request, template $template, prod_operator $prod_operator)
+	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator)
 	{
-		parent::__construct($container, $language, $request, $template);
+		parent::__construct($config, $container, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 
 		$language->add_lang('posting');
@@ -52,6 +55,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			$this->template->assign_block_vars('product', array(
 				'PROD_NAME'		=> $entity->get_name(),
 				'PROD_PRICE'	=> $entity->get_price(),
+				'PROD_CURRENCY'	=> $entity->get_currency(),
 				'PROD_LENGTH'	=> $entity->get_length(),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
@@ -106,6 +110,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'name'		=> $this->request->variable('prod_name', '', true),
 			'desc'		=> $this->request->variable('prod_desc', '', true),
 			'price'		=> $this->request->variable('prod_price', 0),
+			'currency'	=> $this->request->variable('prod_currency', ''),
 			'length'	=> $this->request->variable('prod_length', 0),
 			'warn_time'	=> $this->request->variable('prod_warn_time', 0),
 			'grace'		=> $this->request->variable('prod_grace', 0),
@@ -168,6 +173,8 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 			'U_BACK'	=> $this->u_action,
 		));
+
+		$this->assign_currency_vars($entity->get_currency());
 	}
 
 	/**

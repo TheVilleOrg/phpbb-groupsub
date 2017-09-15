@@ -10,37 +10,15 @@
 
 namespace stevotvr\groupsub\controller;
 
-use phpbb\config\config;
-use phpbb\language\language;
-use phpbb\request\request;
-use phpbb\template\template;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 /**
  * Group Subscription settings ACP controller.
  */
 class acp_settings_controller extends acp_base_controller implements acp_settings_interface
 {
-	/**
-	 * @var \phpbb\config\config
-	 */
-	protected $config;
-
-	/**
-	 * @param ContainerInterface       $container
-	 * @param \phpbb\language\language $language
-	 * @param \phpbb\request\request   $request
-	 * @param \phpbb\template\template $template
-	 * @param \phpbb\config\config     $config
-	 */
-	public function __construct(ContainerInterface $container, language $language, request $request, template $template, config $config)
-	{
-		parent::__construct($container, $language, $request, $template);
-		$this->config = $config;
-	}
-
 	public function handle()
 	{
+		$errors = array();
+
 		add_form_key('stevotvr_groupsub_settings');
 
 		if ($this->request->is_set_post('submit'))
@@ -50,11 +28,32 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 				trigger_error('FORM_INVALID');
 			}
 
-			trigger_error($this->language->lang('ACP_GROUPSUB_SETTINGS_SAVED') . adm_back_link($this->u_action));
+			$data = array(
+				'currency'	=> $this->request->variable('groupsub_currency', ''),
+			);
+
+			if (!in_array($data['currency'], $this->currencies))
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_CURRENCY';
+			}
+
+			if (!count($errors)) {
+				foreach ($data as $key => $value) {
+					$this->config->set('stevotvr_groupsub_' . $key, $value);
+				}
+
+				trigger_error($this->language->lang('ACP_GROUPSUB_SETTINGS_SAVED') . adm_back_link($this->u_action));
+			}
 		}
 
+		$errors = array_map(array($this->language, 'lang'), $errors);
 		$this->template->assign_vars(array(
+			'S_ERROR'	=> (bool) count($errors),
+			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
+
 			'U_ACTION'	=> $this->u_action,
 		));
+
+		$this->assign_currency_vars();
 	}
 }
