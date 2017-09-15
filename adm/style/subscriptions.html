@@ -48,7 +48,7 @@
 				</dl>
 			{% endif %}
 			<dl>
-				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label></dt>
+				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN') }}</span></dt>
 				<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255" /></dd>
 				<dd><label for="sub_expire">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
 			</dl>
@@ -78,7 +78,7 @@
 				<tr>
 					<td>{{ s.SUB_USER }}</td>
 					<td>{{ s.SUB_PRODUCT }}</td>
-					<td>{{ s.SUB_EXPIRES }}</td>
+					<td>{% if s.SUB_EXPIRES %}{{ s.SUB_EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 					<td class="actions">
 						<a href="{{ s.U_EDIT }}">{{ ICON_EDIT }}</a>
 						<a href="{{ s.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>

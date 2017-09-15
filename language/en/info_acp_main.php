@@ -82,6 +82,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SUB_USER'				=> 'Subscriber',
 	'ACP_GROUPSUB_SUB_PRODUCT'			=> 'Product',
 	'ACP_GROUPSUB_SUB_EXPIRE'			=> 'Expires',
+	'ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN'	=> 'Enter the date at which this subscription should end. Leave this field blank for a never-ending subscription',
 
 	'ACP_GROUPSUB_ERROR_CURRENCY'		=> 'You must select a valid currency.',
 	'ACP_GROUPSUB_ERROR_NO_PRODS'		=> 'There are no products for which to create a subscription.',
@@ -94,4 +95,6 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_USER'		=> 'Subscriber',
 	'ACP_GROUPSUB_SUB'		=> 'Subscription',
 	'ACP_GROUPSUB_EXPIRES'	=> 'Expires',
+
+	'ACP_GROUPSUB_EXPIRES_UNLIMITED'	=> 'Never',
 ));

@@ -96,7 +96,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			$this->template->assign_block_vars('subscription', array(
 				'SUB_USER'		=> $subscription['username'],
 				'SUB_PRODUCT'	=> $subscription['product'],
-				'SUB_EXPIRES'	=> $this->user->format_date($entity->get_expire()),
+				'SUB_EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
@@ -259,7 +259,15 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	protected function parse_expire(array &$data, array &$errors)
 	{
-		$date_parts = explode('-', $this->request->variable('sub_expire', ''));
+		$sub_expire = $this->request->variable('sub_expire', '');
+
+		if ($sub_expire === '')
+		{
+			$data['expire'] = 0;
+			return;
+		}
+
+		$date_parts = explode('-', $sub_expire);
 		if (count($date_parts) == 3 && ((int) $date_parts[0] < 9999) &&
 			(strlen($date_parts[0]) == 4) && (strlen($date_parts[1]) == 2) && (strlen($date_parts[2]) == 2))
 		{
