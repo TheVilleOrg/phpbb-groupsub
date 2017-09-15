@@ -248,11 +248,17 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$data['user'] = (int) $userrow['user_id'];
 	}
 
+	/**
+	 * Parse the expiration date fields.
+	 */
 	protected function parse_expire()
 	{
 		return time() + 3600;
 	}
 
+	/**
+	 * Load the list of available products into template block variables.
+	 */
 	protected function load_products()
 	{
 		$entities = $this->prod_operator->get_products();
