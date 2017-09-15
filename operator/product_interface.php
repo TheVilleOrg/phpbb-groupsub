@@ -70,4 +70,11 @@ interface product_interface
 	 * @param int $group_id   The group ID
 	 */
 	public function remove_group($product_id, $group_id);
+
+	/**
+	 * Remove all groups from a product.
+	 *
+	 * @param int $product_id The product ID
+	 */
+	public function remove_groups($product_id);
 }

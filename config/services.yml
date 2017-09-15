@@ -8,6 +8,7 @@ services:
         arguments:
             - '@config'
             - '@service_container'
+            - '@dbal.conn'
             - '@language'
             - '@request'
             - '@template'
@@ -17,6 +18,7 @@ services:
         arguments:
             - '@config'
             - '@service_container'
+            - '@dbal.conn'
             - '@language'
             - '@request'
             - '@template'
@@ -27,13 +29,13 @@ services:
         arguments:
             - '@config'
             - '@service_container'
+            - '@dbal.conn'
             - '@language'
             - '@request'
             - '@template'
             - '%stevotvr.groupsub.currencies%'
             - '@stevotvr.groupsub.operator.product'
             - '@stevotvr.groupsub.operator.subscription'
-            - '@dbal.conn'
             - '@user'
             - '%core.root_path%'
             - '%core.php_ext%'

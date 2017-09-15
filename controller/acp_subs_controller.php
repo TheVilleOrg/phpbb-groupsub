@@ -38,11 +38,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $sub_operator;
 
 	/**
-	 * @var \phpbb\db\driver\driver_interface
-	 */
-	protected $db;
-
-	/**
 	 * @var \phpbb\user
 	 */
 	protected $user;
@@ -63,24 +58,23 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * @param \phpbb\config\config                               $config
 	 * @param ContainerInterface                                 $container
+	 * @param \phpbb\db\driver\driver_interface                  $db
 	 * @param \phpbb\language\language                           $language
 	 * @param \phpbb\request\request                             $request
 	 * @param \phpbb\template\template                           $template
 	 * @param array                                              $currencies    List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
-	 * @param \phpbb\db\driver\driver_interface                  $db
 	 * @param \phpbb\user                                        $user
 	 * @param string                                             $root_path     The root phpBB path
 	 * @param string                                             $php_ext       The script file
 	 *                                                                          extension
 	 */
-	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, driver_interface $db, user $user, $root_path, $php_ext)
+	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, user $user, $root_path, $php_ext)
 	{
-		parent::__construct($config, $container, $language, $request, $template, $currencies);
+		parent::__construct($config, $container, $db, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
-		$this->db = $db;
 		$this->user = $user;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;

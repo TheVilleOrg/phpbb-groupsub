@@ -121,4 +121,11 @@ class product extends operator implements product_interface
 					AND group_id = ' . (int) $group_id;
 		$this->db->sql_query($sql);
 	}
+
+	public function remove_groups($product_id)
+	{
+		$sql = 'DELETE FROM ' . $this->group_table . '
+				WHERE gs_id = ' . (int) $product_id;
+		$this->db->sql_query($sql);
+	}
 }

@@ -46,6 +46,22 @@
 					<label><input type="checkbox" class="radio" name="parse_magic_url"<{% if S_PARSE_MAGIC_URL_CHECKED %} checked="checked"<{% endif %} /> {{ lang('PARSE_URLS') }}</label>
 				</dd>
 			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_PROD_GROUPS')}}</legend>
+			<dl>
+				<dt><label for="prod_groups">{{ lang('ACP_GROUPSUB_PROD_GROUPS') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_GROUPS_EXPLAIN') }}</span></dt>
+				<dd>
+					<select name="prod_groups[]" id="prod_groups" multiple="multiple" size="10">
+						{% for g in group %}
+							<option value="{{ g.GROUP_ID }}"{% if g.S_SELECTED %} selected="selected"{% endif %}>{{ g.GROUP_NAME }}</option>
+						{% endfor %}
+					</select>
+				</dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_PROD_SUB')}}</legend>
 			<dl>
 				<dt><label for="prod_price">{{ lang('ACP_GROUPSUB_PROD_PRICE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_PRICE_EXPLAIN') }}</span></dt>
 				<dd>

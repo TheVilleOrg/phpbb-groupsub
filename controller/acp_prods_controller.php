@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\controller;
 
 use phpbb\config\config;
+use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
@@ -32,15 +33,16 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	/**
 	 * @param \phpbb\config\config                          $config
 	 * @param ContainerInterface                            $container
+	 * @param \phpbb\db\driver\driver_interface             $db
 	 * @param \phpbb\language\language                      $language
 	 * @param \phpbb\request\request                        $request
 	 * @param \phpbb\template\template                      $template
 	 * @param array                                         $currencies List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
-	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator)
+	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator)
 	{
-		parent::__construct($config, $container, $language, $request, $template, $currencies);
+		parent::__construct($config, $container, $db, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 
 		$language->add_lang('posting');
@@ -156,6 +158,8 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 					$message = 'ACP_GROUPSUB_PROD_ADD_SUCCESS';
 				}
 
+				$this->parse_groups($entity->get_id());
+
 				trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
 			}
 		}
@@ -181,7 +185,53 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'U_BACK'	=> $this->u_action,
 		));
 
+		$this->load_groups($entity->get_id());
 		$this->assign_currency_vars($entity->get_currency());
+	}
+
+	/**
+	 * Load the list of groups into template block variables.
+	 *
+	 * @param int $prod_id The product ID
+	 */
+	protected function load_groups($prod_id)
+	{
+		$selected = $prod_id ? $this->prod_operator->get_groups($prod_id) : array();
+
+		$sql = 'SELECT group_id, group_name
+				FROM ' . GROUPS_TABLE . '
+				WHERE group_type <> ' . GROUP_SPECIAL . '
+				ORDER BY group_name	ASC';
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$this->template->assign_block_vars('group', array(
+				'GROUP_ID'		=> (int) $row['group_id'],
+				'GROUP_NAME'	=> $row['group_name'],
+
+				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
+			));
+		}
+	}
+
+	/**
+	 * Parse the group list from the input.
+	 *
+	 * @param int $prod_id The product ID
+	 */
+	protected function parse_groups($prod_id)
+	{
+		if (!$prod_id)
+		{
+			return;
+		}
+
+		$group_ids = $this->request->variable('prod_groups', array(0));
+		$this->prod_operator->remove_groups($prod_id);
+		foreach ($group_ids as $group_id)
+		{
+			$this->prod_operator->add_group($prod_id, $group_id);
+		}
 	}
 
 	/**
