@@ -38,7 +38,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'EXCEPTION_OUT_OF_BOUNDS'		=> 'The field `%1$s` received a value out of its range.',
-	'EXCEPTION_TOO_LONG'			=> 'The field `%1$s` received a value longer than the maximum length of %2$d',
-	'EXCEPTION_INVALID_CURRENCY'	=> 'The field `%s` received an invalid currency code',
+	'EXCEPTION_OUT_OF_BOUNDS'		=> 'The field `%s` received a value out of its range.',
+	'EXCEPTION_TOO_LONG'			=> 'The field `%s` received a value longer than its maximum length.',
+	'EXCEPTION_INVALID_CURRENCY'	=> 'The field `%s` received an invalid currency code.',
 ));
