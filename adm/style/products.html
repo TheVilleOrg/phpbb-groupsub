@@ -85,7 +85,8 @@
 
 	<table class="table1 zebra-table responsive">
 		<thead>
-			<th>{{ lang('ACP_GROUPSUB_PROD') }}</th>
+			<th style="width: 10%">{{ lang('ACP_GROUPSUB_PROD') }}</th>
+			<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
 			<th style="width: 10%">{{ lang('ACP_GROUPSUB_PRICE') }}</th>
 			<th style="width: 10%">{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
 			<th style="width: 10%">{{ lang('ACTION') }}</th>
@@ -93,9 +94,10 @@
 		<tbody>
 			{% for p in product %}
 				<tr>
+					<td>{{ p.PROD_IDENT }}</td>
 					<td><strong>{{ p.PROD_NAME }}</strong></td>
-					<td><strong>{{ p.PROD_PRICE }}</strong></td>
-					<td><strong>{{ p.PROD_LENGTH }}</strong></td>
+					<td>{{ p.PROD_PRICE }}</td>
+					<td>{{ p.PROD_LENGTH }}</td>
 					<td class="actions">
 						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
 						<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>

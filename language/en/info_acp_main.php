@@ -85,7 +85,8 @@ $lang = array_merge($lang, array(
 
 	'ACP_GROUPSUB_ERROR_CURRENCY'		=> 'You must select a valid currency',
 
-	'ACP_GROUPSUB_PROD'		=> 'Name',
+	'ACP_GROUPSUB_PROD'		=> 'Product',
+	'ACP_GROUPSUB_NAME'		=> 'Name',
 	'ACP_GROUPSUB_PRICE'	=> 'Price',
 	'ACP_GROUPSUB_LENGTH'	=> 'Length',
 	'ACP_GROUPSUB_USER'		=> 'Subscriber',
