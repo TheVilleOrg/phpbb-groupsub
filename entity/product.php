@@ -21,11 +21,6 @@ use stevotvr\groupsub\exception\unexpected_value;
  */
 class product extends entity implements product_interface
 {
-	/**
-	 * @var \phpbb\config\config
-	 */
-	protected $config;
-
 	protected $columns = array(
 		'gs_id'						=> 'integer',
 		'gs_ident'					=> 'string',
@@ -45,14 +40,28 @@ class product extends entity implements product_interface
 	protected $id_column = 'gs_id';
 
 	/**
-	 * @param \phpbb\config\config              $config
+	 * @var \phpbb\config\config
+	 */
+	protected $config;
+
+	/**
+	 * Array of currencies
+	 *
+	 * @var array
+	 */
+	protected $currencies;
+
+	/**
 	 * @param \phpbb\db\driver\driver_interface $db
 	 * @param string                            $table_name The name of the database table
+	 * @param \phpbb\config\config              $config
+	 * @param array                             $currencies List of currencies
 	 */
-	public function __construct(config $config, driver_interface $db, $table_name)
+	public function __construct(driver_interface $db, $table_name, config $config, array $currencies)
 	{
 		parent::__construct($db, $table_name);
 		$this->config = $config;
+		$this->currencies = $currencies;
 	}
 
 	public function get_ident()
@@ -219,8 +228,7 @@ class product extends entity implements product_interface
 	{
 		$currency = strtoupper((string) $currency);
 
-		$len = strlen($currency);
-		if ($len !== 0 && $len !== 3)
+		if (!isset($this->currencies[$currency]))
 		{
 			throw new unexpected_value('gs_currency', 'INVALID_CURRENCY');
 		}

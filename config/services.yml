@@ -43,9 +43,10 @@ services:
         class: stevotvr\groupsub\entity\product
         shared: false
         arguments:
-            - '@config'
             - '@dbal.conn'
             - '%stevotvr.groupsub.tables.products%'
+            - '@config'
+            - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.entity.subscription:
         class: stevotvr\groupsub\entity\subscription
         shared: false
