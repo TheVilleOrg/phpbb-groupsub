@@ -153,9 +153,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 		add_form_key('add_edit_sub');
 
-		$data = array(
-			'expire'	=> $this->parse_expire(),
-		);
+		$data = array();
+		if ($submit)
+		{
+			$this->parse_expire($data, $errors);
+		}
 
 		if ($entity->get_id())
 		{
@@ -212,12 +214,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 
 		$errors = array_map(array($this->language, 'lang'), $errors);
+		$expire = $entity->get_expire() ? $this->user->format_date($entity->get_expire(), 'Y-m-d') : '';
 
 		$this->template->assign_vars(array(
 			'S_ERROR'	=> (bool) count($errors),
 			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
 
-			'SUB_EXPIRE'	=> $entity->get_expire(),
+			'SUB_EXPIRE'	=> $expire,
 
 			'U_BACK'	=> $this->u_action,
 		));
@@ -250,10 +253,24 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	/**
 	 * Parse the expiration date fields.
+	 *
+	 * @param array &$data   The submitted data
+	 * @param array &$errors The error array
 	 */
-	protected function parse_expire()
+	protected function parse_expire(array &$data, array &$errors)
 	{
-		return time() + 3600;
+		$date_parts = explode('-', $this->request->variable('sub_expire', ''));
+		if (count($date_parts) == 3 && ((int) $date_parts[0] < 9999) &&
+			(strlen($date_parts[0]) == 4) && (strlen($date_parts[1]) == 2) && (strlen($date_parts[2]) == 2))
+		{
+			$data['expire'] = $this->user->create_datetime()
+										->setDate((int) $date_parts[0], (int) $date_parts[1], (int) $date_parts[2])
+										->setTime(0, 0, 0)
+										->getTimestamp();
+			return;
+		}
+
+		$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
 	}
 
 	/**
