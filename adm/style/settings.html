@@ -16,7 +16,7 @@
 			<dd>
 				<select name="groupsub_currency" id="groupsub_currency">
 					{% for c in currency %}
-						<option value="{{ c.CURRENCY }}"{% if c.S_SELECTED %} selected="selected"{% endif %}>{{ c.CURRENCY }}</option>
+						<option value="{{ c.CURRENCY }}"{% if c.S_SELECTED %} selected="selected"{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
 					{% endfor %}
 				</select>
 			</dd>

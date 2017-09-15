@@ -35,7 +35,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	 * @param \phpbb\language\language                      $language
 	 * @param \phpbb\request\request                        $request
 	 * @param \phpbb\template\template                      $template
-	 * @param array                                         $currencies List of currency codes
+	 * @param array                                         $currencies List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
 	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator)
@@ -52,10 +52,10 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 		foreach ($entities as $entity)
 		{
+			$price = sprintf('%s%d %s', $this->currencies[$entity->get_currency()], $entity->get_price(), $entity->get_currency());
 			$this->template->assign_block_vars('product', array(
 				'PROD_NAME'		=> $entity->get_name(),
-				'PROD_PRICE'	=> $entity->get_price(),
-				'PROD_CURRENCY'	=> $entity->get_currency(),
+				'PROD_PRICE'	=> $price,
 				'PROD_LENGTH'	=> $entity->get_length(),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),

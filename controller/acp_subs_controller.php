@@ -47,7 +47,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * @param \phpbb\language\language                           $language
 	 * @param \phpbb\request\request                             $request
 	 * @param \phpbb\template\template                           $template
-	 * @param array                                              $currencies List of currency codes
+	 * @param array                                              $currencies List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\user                                        $user

@@ -47,7 +47,7 @@ abstract class acp_base_controller implements acp_base_interface
 	protected $template;
 
 	/**
-	 * Array of currency codes
+	 * Array of currencies
 	 *
 	 * @var array
 	 */
@@ -66,7 +66,7 @@ abstract class acp_base_controller implements acp_base_interface
 	 * @param \phpbb\language\language $language
 	 * @param \phpbb\request\request   $request
 	 * @param \phpbb\template\template $template
-	 * @param array                    $currencies List of currency codes
+	 * @param array                    $currencies List of currencies
 	 */
 	public function __construct(config $config, ContainerInterface $container, language $language, request $request, template $template, array $currencies)
 	{
@@ -91,12 +91,13 @@ abstract class acp_base_controller implements acp_base_interface
 	protected function assign_currency_vars($selected = null)
 	{
 		$selected = $selected ? $selected : $this->config['stevotvr_groupsub_currency'];
-		foreach ($this->currencies as $currency)
+		foreach ($this->currencies as $code => $symbol)
 		{
 			$this->template->assign_block_vars('currency', array(
-				'CURRENCY'	=> $currency,
+				'CURRENCY'	=> $code,
+				'SYMBOL'	=> $symbol,
 
-				'S_SELECTED'	=> ($currency === $selected),
+				'S_SELECTED'	=> ($code === $selected),
 			));
 		}
 	}
