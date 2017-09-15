@@ -37,7 +37,8 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 				$errors[] = 'ACP_GROUPSUB_ERROR_CURRENCY';
 			}
 
-			if (!count($errors)) {
+			if (!count($errors))
+			{
 				foreach ($data as $key => $value)
 				{
 					$this->config->set('stevotvr_groupsub_' . $key, $value);
