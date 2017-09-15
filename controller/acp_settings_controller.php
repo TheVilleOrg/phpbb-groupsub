@@ -30,6 +30,8 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 
 			$data = array(
 				'currency'	=> $this->request->variable('groupsub_currency', ''),
+				'warn_time'	=> $this->request->variable('groupsub_warn_time', 0),
+				'grace'		=> $this->request->variable('groupsub_grace', 0),
 			);
 
 			if (!in_array($data['currency'], $this->currencies))
@@ -52,6 +54,9 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 		$this->template->assign_vars(array(
 			'S_ERROR'	=> (bool) count($errors),
 			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
+
+			'WARN_TIME'	=> $this->config['stevotvr_groupsub_warn_time'],
+			'GRACE'		=> $this->config['stevotvr_groupsub_grace'],
 
 			'U_ACTION'	=> $this->u_action,
 		));

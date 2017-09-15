@@ -193,7 +193,7 @@ class product extends entity implements product_interface
 
 	public function get_price()
 	{
-		return isset($this->data['gs_price']) ? (int) $this->data['gs_price'] : 0;
+		return isset($this->data['gs_price']) ? (int) $this->data['gs_price'] : null;
 	}
 
 	public function set_price($price)
@@ -230,7 +230,7 @@ class product extends entity implements product_interface
 
 	public function get_length()
 	{
-		return isset($this->data['gs_length']) ? (int) $this->data['gs_length'] : 0;
+		return isset($this->data['gs_length']) ? (int) $this->data['gs_length'] : null;
 	}
 
 	public function set_length($length)
@@ -249,7 +249,7 @@ class product extends entity implements product_interface
 
 	public function get_warn_time()
 	{
-		return isset($this->data['gs_warn_time']) ? (int) $this->data['gs_warn_time'] : 0;
+		return isset($this->data['gs_warn_time']) ? (int) $this->data['gs_warn_time'] : null;
 	}
 
 	public function set_warn_time($warn_time)
@@ -268,7 +268,7 @@ class product extends entity implements product_interface
 
 	public function get_grace()
 	{
-		return isset($this->data['gs_grace']) ? (int) $this->data['gs_grace'] : 0;
+		return isset($this->data['gs_grace']) ? (int) $this->data['gs_grace'] : null;
 	}
 
 	public function set_grace($grace)

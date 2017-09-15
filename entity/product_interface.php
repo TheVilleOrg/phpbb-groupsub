@@ -99,7 +99,7 @@ interface product_interface extends entity_interface
 	public function set_smilies_enabled($enable);
 
 	/**
-	 * @return int The price of this product
+	 * @return int|null The price of this product
 	 */
 	public function get_price();
 
@@ -127,7 +127,7 @@ interface product_interface extends entity_interface
 	public function set_currency($currency);
 
 	/**
-	 * @return int The length of this product in days
+	 * @return int|null The length of this product in days
 	 */
 	public function get_length();
 
@@ -141,8 +141,8 @@ interface product_interface extends entity_interface
 	public function set_length($length);
 
 	/**
-	 * @return int The time in days before the expiration of this product at which to notify
-	 *             subscribers
+	 * @return int|null The time in days before the expiration of this product at which to notify
+	 *                  subscribers
 	 */
 	public function get_warn_time();
 
@@ -157,8 +157,8 @@ interface product_interface extends entity_interface
 	public function set_warn_time($warn_time);
 
 	/**
-	 * @return int The time in days after the expiration of this product at which to remove
-	 *             subscribers from usergroups
+	 * @return int|null The time in days after the expiration of this product at which to remove
+	 *                  subscribers from usergroups
 	 */
 	public function get_grace();
 

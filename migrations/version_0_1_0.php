@@ -88,6 +88,8 @@ class version_0_1_0 extends migration
 	{
 		return array(
 			array('config.add', array('stevotvr_groupsub_currency', 'USD')),
+			array('config.add', array('stevotvr_groupsub_warn_time', 5)),
+			array('config.add', array('stevotvr_groupsub_grace', 5)),
 
 			array('module.add', array(
 				'acp',

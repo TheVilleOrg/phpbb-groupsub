@@ -43,8 +43,11 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SETTINGS'					=> 'Settings',
 	'ACP_GROUPSUB_SETTINGS_TITLE'			=> 'Group Subscription settings',
 	'ACP_GROUPSUB_SETTINGS_SAVED'			=> 'Group Subscription options saved successfully',
+	'ACP_GROUPSUB_SETTINGS_DEFAULTS'		=> 'Product defaults',
 	'ACP_GROUPSUB_DEFAULT_CURRENCY'			=> 'Default currency',
 	'ACP_GROUPSUB_DEFAULT_CURRENCY_EXPLAIN'	=> 'This is the default currency for all new products, which can be overridden on a per-product basis.',
+	'ACP_GROUPSUBB_DEFAULT_WARN_TIME'		=> 'Default warning time',
+	'ACP_GROUPSUBB_DEFAULT_GRACE'			=> 'Default grace period',
 
 	'ACP_GROUPSUB_MANAGE_PRODS'				=> 'Manage products',
 	'ACP_GROUPSUB_MANAGE_PRODS_EXPLAIN'		=> 'Here you can manage the subscription options that are available.',
