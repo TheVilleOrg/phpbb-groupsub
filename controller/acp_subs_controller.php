@@ -219,7 +219,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
-				'mode'		=> 'subscription',
+				'mode'		=> 'subscriptions',
 				'action'	=> 'delete',
 			));
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_DELETE_CONFIRM'), $hidden_fields);
