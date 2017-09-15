@@ -22,6 +22,17 @@
 	<form id="add_edit_prod" method="post" action="{{ U_ACTION }}">
 		<fieldset>
 			<legend>{{ lang('ACP_GROUPSUB_PROD_DETAILS')}}</legend>
+			{% if S_ADD_PROD %}
+				<dl>
+					<dt><label for="prod_ident">{{ lang('ACP_GROUPSUB_PROD_IDENT') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_IDENT_EXPLAIN') }}</span></dt>
+					<dd><input class="text medium" type="text" id="prod_ident" name="prod_ident" value="{{ PROD_IDENT }}" maxlength="30" /></dd>
+				</dl>
+			{% else %}
+				<dl>
+					<dt>{{ lang('ACP_GROUPSUB_PROD_IDENT') ~ lang('COLON') }}</dt>
+					<dd>{{ PROD_IDENT }}</dd>
+				</dl>
+			{% endif %}
 			<dl>
 				<dt><label for="prod_name">{{ lang('ACP_GROUPSUB_PROD_NAME') ~ lang('COLON') }}</label></dt>
 				<dd><input class="text medium" type="text" id="prod_name" name="prod_name" value="{{ PROD_NAME }}" maxlength="255" /></dd>

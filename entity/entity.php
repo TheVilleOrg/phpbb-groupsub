@@ -50,7 +50,7 @@ abstract class entity implements entity_interface
 	 *
 	 * @var string
 	 */
-	private $table_name;
+	protected $table_name;
 
 	/**
 	 * @param \phpbb\db\driver\driver_interface $db

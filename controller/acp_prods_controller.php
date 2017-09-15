@@ -116,6 +116,11 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'grace'		=> $this->request->variable('prod_grace', 0),
 		);
 
+		if (!$entity->get_id())
+		{
+			$data['ident'] = $this->request->variable('prod_ident', '', true);
+		}
+
 		$this->set_parse_options($entity, $submit);
 
 		if ($submit)
@@ -160,6 +165,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'S_ERROR'	=> (bool) count($errors),
 			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
 
+			'PROD_IDENT'		=> $entity->get_ident(),
 			'PROD_NAME'			=> $entity->get_name(),
 			'PROD_DESC'			=> $entity->get_desc_for_edit(),
 			'PROD_PRICE'		=> $entity->get_price(),

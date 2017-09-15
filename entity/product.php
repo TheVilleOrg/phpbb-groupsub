@@ -28,7 +28,7 @@ class product extends entity implements product_interface
 
 	protected $columns = array(
 		'gs_id'						=> 'integer',
-		'gs_ident'					=> 'set_ident',
+		'gs_ident'					=> 'string',
 		'gs_name'					=> 'set_name',
 		'gs_desc'					=> 'string',
 		'gs_desc_bbcode_uid'		=> 'string',
@@ -62,7 +62,8 @@ class product extends entity implements product_interface
 
 	public function set_ident($ident)
 	{
-		$ident = (string) $ident;
+		$ident = strtolower(utf8_clean_string((string) $ident));
+		$ident = preg_replace('/\s+/', '_', $ident);
 
 		if ($ident === '')
 		{
@@ -72,6 +73,22 @@ class product extends entity implements product_interface
 		if (truncate_string($ident, 30) !== $ident)
 		{
 			throw new unexpected_value('gs_ident', 'TOO_LONG');
+		}
+
+		if (!preg_match('/^[a-z][a-z\d_]*$/', $ident))
+		{
+			throw new unexpected_value('gs_ident', 'INVALID_IDENT');
+		}
+
+		$sql = 'SELECT gs_id
+				FROM ' . $this->table_name . "
+				WHERE gs_ident = '" . $this->db->sql_escape($ident) . "'";
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+		if ($row !== false)
+		{
+			throw new unexpected_value('gs_ident', 'NOT_UNIQUE');
 		}
 
 		$this->data['gs_ident'] = $ident;
