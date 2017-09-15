@@ -38,7 +38,8 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			}
 
 			if (!count($errors)) {
-				foreach ($data as $key => $value) {
+				foreach ($data as $key => $value)
+				{
 					$this->config->set('stevotvr_groupsub_' . $key, $value);
 				}
 
