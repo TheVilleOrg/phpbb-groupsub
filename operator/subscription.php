@@ -18,9 +18,71 @@ use stevotvr\groupsub\exception\out_of_bounds;
  */
 class subscription extends operator implements subscription_interface
 {
-	public function get_subscriptions($product_id = 0, $limit = 0, $start = 0)
+	/**
+	 * @var int The offset for querying subscriptions
+	 */
+	protected $start = 0;
+
+	/**
+	 * @var int The limit for querying subscriptions
+	 */
+	protected $limit = 0;
+
+	/**
+	 * @var array The list of filters for building the WHERE clause
+	 */
+	protected $filters = array();
+
+	/**
+	 * @var string The ORDER BY clause
+	 */
+	protected $sort = null;
+
+	public function set_start($start)
 	{
-		return $this->get_subscription_rows(($product_id > 0) ? 'p.gs_id = ' . (int) $product_id : null, $limit, $start);
+		$this->start = (int) $start;
+		return $this;
+	}
+
+	public function set_limit($limit)
+	{
+		$this->limit = (int) $limit;
+		return $this;
+	}
+
+	public function set_user($user_id)
+	{
+		$this->filters['s.user_id'] = (int) $user_id;
+		return $this;
+	}
+
+	public function set_product($prod_id)
+	{
+		$this->filters['s.prod_id'] = (int) $prod_id;
+		return $this;
+	}
+
+	public function set_sort($field, $desc = false)
+	{
+		if (!$field)
+		{
+			$this->sort = null;
+			return $this;
+		}
+
+		$this->sort = $field . ($desc ? ' DESC' : ' ASC');
+		return $this;
+	}
+
+	public function get_subscriptions()
+	{
+		$where = array();
+		foreach ($this->filters as $key => $value)
+		{
+			$where[] = $key . ' = ' . $value;
+		}
+
+		return $this->get_subscription_rows(implode(' AND ', $where), $this->sort, $this->limit, $this->start);
 	}
 
 	public function get_subscription($sub_id)
@@ -38,7 +100,8 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * Get subscription data from the database.
 	 *
-	 * @param string|null $where The where clause
+	 * @param string|null $where The WHERE clause
+	 * @param string|null $sort  The ORDER BY clause
 	 * @param int         $limit The maximum number of rows to get
 	 * @param int         $start The row at which to start
 	 *
@@ -47,7 +110,7 @@ class subscription extends operator implements subscription_interface
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */
-	protected function get_subscription_rows($where = null, $limit = 0, $start = 0)
+	protected function get_subscription_rows($where = null, $sort = null, $limit = 0, $start = 0)
 	{
 		$subscriptions = array();
 
@@ -65,10 +128,17 @@ class subscription extends operator implements subscription_interface
 				),
 			),
 		);
+
 		if ($where)
 		{
 			$sql_ary['WHERE'] = $where;
 		}
+
+		if ($sort)
+		{
+			$sql_ary['ORDER_BY'] = $sort;
+		}
+
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$result = $limit ? $this->db->sql_query_limit($sql, $limit, $start) : $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
@@ -109,23 +179,6 @@ class subscription extends operator implements subscription_interface
 		$this->db->sql_query($sql);
 
 		return (bool) $this->db->sql_affectedrows();
-	}
-
-	public function get_user_subscriptions($user_id)
-	{
-		$entities = array();
-
-		$sql = 'SELECT *
-				FROM ' . $this->sub_table . '
-				WHERE user_id = ' . (int) $user_id;
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$entities[] = $this->container->get('stevotvr.groupsub.entity.subscription')->import($row);
-		}
-		$this->db->sql_freeresult($result);
-
-		return $entities;
 	}
 
 	public function get_subscribed_users($group_id)

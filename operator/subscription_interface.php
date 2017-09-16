@@ -16,18 +16,52 @@ namespace stevotvr\groupsub\operator;
 interface subscription_interface
 {
 	/**
-	 * Get subscriptions.
+	 * @param int $start The offset for querying subscriptions
 	 *
-	 * @param int $product_id The product ID, 0 to get all subscriptions
-	 * @param int $limit      The maximum number of subscriptions to get
-	 * @param int $start      The subscription at which to start
+	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
+	 */
+	public function set_start($start);
+
+	/**
+	 * @param int $limit The limit for querying subscriptions
+	 *
+	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
+	 */
+	public function set_limit($limit);
+
+	/**
+	 * @param int $user_id The user ID for which to query subscriptions
+	 *
+	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
+	 */
+	public function set_user($user_id);
+
+	/**
+	 * @param int $prod_id The product ID for which to query subscriptions
+	 *
+	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
+	 */
+	public function set_product($prod_id);
+
+	/**
+	 * Set the sorting options for querying subscriptions.
+	 *
+	 * @param string  $field The name of the field by which to sort
+	 * @param boolean $desc  Sort in descending order
+	 *
+	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
+	 */
+	public function set_sort($field, $desc = false);
+
+	/**
+	 * Get subscriptions.
 	 *
 	 * @return array Array associative arrays of subscription data
 	 *                     product	string
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */
-	public function get_subscriptions($product_id = 0, $limit = 0, $start = 0);
+	public function get_subscriptions();
 
 	/**
 	 * Get a subscription.
@@ -65,15 +99,6 @@ interface subscription_interface
 	 * @return boolean The subscription was deleted
 	 */
 	public function delete_subscription($sub_id);
-
-	/**
-	 * Get all subscriptions for a user.
-	 *
-	 * @param int $user_id The user ID
-	 *
-	 * @return array An array of subscription entities
-	 */
-	public function get_user_subscriptions($user_id);
 
 	/**
 	 * Get all subscribed users of a group.

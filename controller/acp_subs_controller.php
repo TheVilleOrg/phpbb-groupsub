@@ -93,7 +93,10 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$start = $this->request->variable('start', 0);
 		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
 
-		$subscriptions = $this->sub_operator->get_subscriptions(0, $limit, $start);
+		$subscriptions = $this->sub_operator
+							->set_limit($limit)
+							->set_start($start)
+							->get_subscriptions();
 
 		foreach ($subscriptions as $subscription)
 		{
