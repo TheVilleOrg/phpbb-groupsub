@@ -86,7 +86,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 				'PROD_NAME'			=> $entity->get_name(),
 				'PROD_PRICE'		=> $price,
 				'PROD_LENGTH'		=> $length,
-				'PROD_LENGTH_UNIT'	=> $this->language->lang('ACP_GROUPSUB_' . strtoupper($unit)),
+				'PROD_LENGTH_UNIT'	=> $this->language->lang('ACP_GROUPSUB_' . strtoupper($unit), $length),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
