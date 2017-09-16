@@ -19,13 +19,15 @@ interface subscription_interface
 	 * Get subscriptions.
 	 *
 	 * @param int $product_id The product ID, 0 to get all subscriptions
+	 * @param int $limit      The maximum number of subscriptions to get
+	 * @param int $start      The subscription at which to start
 	 *
 	 * @return array Array associative arrays of subscription data
 	 *                     product	string
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */
-	public function get_subscriptions($product_id = 0);
+	public function get_subscriptions($product_id = 0, $limit = 0, $start = 0);
 
 	/**
 	 * Get a subscription.
@@ -40,6 +42,13 @@ interface subscription_interface
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
 	public function get_subscription($sub_id);
+
+	/**
+	 * Count the total number of subscription.
+	 *
+	 * @return int The total number of subscription
+	 */
+	public function count_subscriptions();
 
 	/**
 	 * Add a subscription.

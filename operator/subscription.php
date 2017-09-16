@@ -18,9 +18,9 @@ use stevotvr\groupsub\exception\out_of_bounds;
  */
 class subscription extends operator implements subscription_interface
 {
-	public function get_subscriptions($product_id = 0)
+	public function get_subscriptions($product_id = 0, $limit = 0, $start = 0)
 	{
-		return $this->get_subscription_rows(($product_id > 0) ? 'p.gs_id = ' . (int) $product_id : null);
+		return $this->get_subscription_rows(($product_id > 0) ? 'p.gs_id = ' . (int) $product_id : null, $limit, $start);
 	}
 
 	public function get_subscription($sub_id)
@@ -39,13 +39,15 @@ class subscription extends operator implements subscription_interface
 	 * Get subscription data from the database.
 	 *
 	 * @param string|null $where The where clause
+	 * @param int         $limit The maximum number of rows to get
+	 * @param int         $start The row at which to start
 	 *
 	 * @return array Array of subscription data
 	 *                     product	string
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */
-	protected function get_subscription_rows($where = null)
+	protected function get_subscription_rows($where = null, $limit = 0, $start = 0)
 	{
 		$subscriptions = array();
 
@@ -68,7 +70,7 @@ class subscription extends operator implements subscription_interface
 			$sql_ary['WHERE'] = $where;
 		}
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query($sql);
+		$result = $limit ? $this->db->sql_query_limit($sql, $limit, $start) : $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$subscriptions[] = array(
@@ -80,6 +82,17 @@ class subscription extends operator implements subscription_interface
 		$this->db->sql_freeresult($result);
 
 		return $subscriptions;
+	}
+
+	public function count_subscriptions()
+	{
+		$sql = 'SELECT COUNT(sub_id) AS sub_count
+				FROM ' . $this->sub_table;
+		$result = $this->db->sql_query($sql);
+		$count = $this->db->sql_fetchfield('sub_count');
+		$this->db->sql_freeresult($result);
+
+		return (int) $count;
 	}
 
 	public function add_subscription(entity $subscription)

@@ -92,6 +92,12 @@
 		</tbody>
 	</table>
 
+	{% if pagination %}
+		<div class="pagination">
+			{% include 'pagination.html' %}
+		</div>
+	{% endif %}
+
 	<form id="sub_add" method="post" action="{{ U_ADD_SUB }}">
 		<fieldset class="quick">
 			<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_SUB_ADD') }}" />

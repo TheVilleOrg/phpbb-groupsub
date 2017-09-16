@@ -13,6 +13,7 @@ namespace stevotvr\groupsub\controller;
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
+use phpbb\pagination;
 use phpbb\request\request;
 use phpbb\template\template;
 use phpbb\user;
@@ -43,6 +44,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $user;
 
 	/**
+	 * @var \phpbb\pagination
+	 */
+	protected $pagination;
+
+	/**
 	 * The root phpBB path.
 	 *
 	 * @var string
@@ -65,16 +71,18 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * @param array                                              $currencies    List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
+	 * @param \phpbb\pagination                                  $pagination
 	 * @param \phpbb\user                                        $user
 	 * @param string                                             $root_path     The root phpBB path
 	 * @param string                                             $php_ext       The script file
 	 *                                                                          extension
 	 */
-	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, user $user, $root_path, $php_ext)
+	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, pagination $pagination, user $user, $root_path, $php_ext)
 	{
 		parent::__construct($config, $container, $db, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
+		$this->pagination = $pagination;
 		$this->user = $user;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
@@ -82,7 +90,10 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	public function display()
 	{
-		$subscriptions = $this->sub_operator->get_subscriptions();
+		$start = $this->request->variable('start', 0);
+		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
+
+		$subscriptions = $this->sub_operator->get_subscriptions(0, $limit, $start);
 
 		foreach ($subscriptions as $subscription)
 		{
@@ -103,6 +114,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'U_ACTION'	=> $this->u_action,
 			'U_ADD_SUB'	=> $this->u_action . '&amp;action=add',
 		));
+
+		$total = $this->sub_operator->count_subscriptions();
+		$this->pagination->generate_template_pagination($this->u_action, 'pagination', 'start', $total, $limit, $start);
 	}
 
 	public function add()
