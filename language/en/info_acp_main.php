@@ -102,7 +102,8 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SUB'		=> 'Subscription',
 	'ACP_GROUPSUB_EXPIRES'	=> 'Expires',
 
-	'ACP_GROUPSUB_EXPIRES_UNLIMITED'	=> 'Never',
+	'ACP_GROUPSUB_EXPIRES_UNLIMITED'	=> 'Unlimited',
+	'ACP_GROUPSUB_EXPIRES_NEVER'		=> 'Never',
 
 	'ACP_GROUPSUB_DAYS'		=> 'days',
 	'ACP_GROUPSUB_WEEKS'	=> 'weeks',

@@ -120,7 +120,7 @@
 					<td>{{ p.PROD_IDENT }}</td>
 					<td><strong>{{ p.PROD_NAME }}</strong></td>
 					<td>{{ p.PROD_PRICE }}</td>
-					<td>{{ p.PROD_LENGTH }}</td>
+					<td>{% if p.PROD_LENGTH %}{{ p.PROD_LENGTH }} {{ p.PROD_LENGTH_UNIT }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 					<td class="actions">
 						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
 						<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>

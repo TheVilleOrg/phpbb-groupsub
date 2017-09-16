@@ -62,11 +62,31 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		foreach ($entities as $entity)
 		{
 			$price = sprintf('%s%d %s', $this->currencies[$entity->get_currency()], $entity->get_price(), $entity->get_currency());
+
+			$length = $entity->get_length();
+			$unit = 'days';
+			if ($length % self::YEAR === 0)
+			{
+				$unit = 'years';
+				$length /= self::YEAR;
+			}
+			else if ($length % self::MONTH === 0)
+			{
+				$unit = 'months';
+				$length /= self::MONTH;
+			}
+			else if ($length % self::WEEK === 0)
+			{
+				$unit = 'weeks';
+				$length /= self::WEEK;
+			}
+
 			$this->template->assign_block_vars('product', array(
-				'PROD_IDENT'	=> $entity->get_ident(),
-				'PROD_NAME'		=> $entity->get_name(),
-				'PROD_PRICE'	=> $price,
-				'PROD_LENGTH'	=> $entity->get_length(),
+				'PROD_IDENT'		=> $entity->get_ident(),
+				'PROD_NAME'			=> $entity->get_name(),
+				'PROD_PRICE'		=> $price,
+				'PROD_LENGTH'		=> $length,
+				'PROD_LENGTH_UNIT'	=> $this->language->lang('ACP_GROUPSUB_' . strtoupper($unit)),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
