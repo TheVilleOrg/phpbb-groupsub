@@ -58,7 +58,7 @@ class subscription extends operator implements subscription_interface
 
 	public function set_product($prod_id)
 	{
-		$this->filters['s.prod_id'] = (int) $prod_id;
+		$this->filters['s.gs_id'] = (int) $prod_id;
 		return $this;
 	}
 
@@ -79,6 +79,11 @@ class subscription extends operator implements subscription_interface
 		$where = array();
 		foreach ($this->filters as $key => $value)
 		{
+			if (!$value)
+			{
+				continue;
+			}
+
 			$where[] = $key . ' = ' . $value;
 		}
 

@@ -88,33 +88,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->php_ext = $php_ext;
 	}
 
-	/**
-	 * Parse the URL parameters for the main list display options.
-	 *
-	 * @param string &$sort_key Variable to hold the value of the sort key parameters
-	 * @param string &$sort_dir Variable to hold the value of the sort direction parameters
-	 * @param int    &$start    Variable to hold the value of the start parameters
-	 * @param int    &$limit    Variable to hold the value of the limit parameters
-	 *
-	 * @return string The reconstructed parameter string
-	 */
-	protected function parse_display_params(&$sort_key = '', &$sort_dir = '', &$start = 0, &$limit = 0)
-	{
-		$sort_key = $this->request->variable('sk', 'u');
-		$sort_dir = $this->request->variable('sd', 'a');
-		$start = $this->request->variable('start', 0);
-		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
-
-		return sprintf('&amp;sk=%s&amp;sd=%s&amp;start=%d&amp;limit=%d', $sort_key, $sort_dir, $start, $limit);
-	}
-
 	public function display()
 	{
 		$sort_key = $sort_dir = '';
-		$start = $limit = 0;
-		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
+		$start = $limit = $prod_id = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $prod_id);
 
-		if ($this->request->is_set_post('sort'))
+		if ($this->request->is_set_post('sort') || $this->request->is_set_post('filter'))
 		{
 			redirect($this->u_action . $params);
 			return;
@@ -126,6 +106,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 							->set_limit($limit)
 							->set_start($start)
 							->set_sort($this->get_sort_field($sort_key), ($sort_dir === 'd'))
+							->set_product($prod_id)
 							->get_subscriptions();
 
 		foreach ($subscriptions as $subscription)
@@ -149,6 +130,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'U_ACTION'	=> $this->u_action . $params,
 			'U_ADD_SUB'	=> $this->u_action . $params . '&amp;action=add',
 		));
+
+		$this->load_products($prod_id);
 
 		$total = $this->sub_operator->count_subscriptions();
 		$this->pagination->generate_template_pagination($this->u_action, 'pagination', 'start', $total, $limit, $start);
@@ -281,7 +264,10 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			}
 			$data['product'] = $this->request->variable('sub_product', 0);
 
-			$this->load_products();
+			if (!$this->load_products($data['product']))
+			{
+				trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PRODS') . adm_back_link($this->u_action . $params), E_USER_WARNING);
+			}
 		}
 
 		if ($submit)
@@ -388,32 +374,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
 	}
 
-	/**
-	 * Load the list of available products into template block variables.
-	 */
-	protected function load_products()
-	{
-		$entities = $this->prod_operator->get_products();
-
-		if (!count($entities))
-		{
-			trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PRODS') . adm_back_link($this->u_action), E_USER_WARNING);
-		}
-
-		foreach ($entities as $entity)
-		{
-			$this->template->assign_block_vars('product', array(
-				'PROD_ID'	=> $entity->get_id(),
-				'PROD_NAME'	=> $entity->get_name(),
-			));
-		}
-	}
-
 	public function delete($id)
 	{
 		$sort_key = $sort_dir = '';
-		$start = $limit = 0;
-		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
+		$start = $limit = $prod_id = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $prod_id);
 
 		if (!confirm_box(true))
 		{
@@ -424,6 +389,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 				'sd'		=> $sort_dir,
 				'start'		=> $start,
 				'limit'		=> $limit,
+				'prod_id'	=> $prod_id,
 				'action'	=> 'delete',
 			));
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_DELETE_CONFIRM'), $hidden_fields);
@@ -445,5 +411,68 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 
 		trigger_error($this->language->lang('ACP_GROUPSUB_SUB_DELETE_SUCCESS') . adm_back_link($this->u_action . $params));
+	}
+
+	/**
+	 * Parse the URL parameters for the main list display options.
+	 *
+	 * @param string &$sort_key Variable to hold the value of the sort key parameters
+	 * @param string &$sort_dir Variable to hold the value of the sort direction parameters
+	 * @param int    &$start    Variable to hold the value of the start parameters
+	 * @param int    &$limit    Variable to hold the value of the limit parameters
+	 * @param int    &$prod_id  Variable to hold the value of the product parameters
+	 *
+	 * @return string The reconstructed parameter string
+	 */
+	protected function parse_display_params(&$sort_key = '', &$sort_dir = '', &$start = 0, &$limit = 0, &$prod_id = 0)
+	{
+		$sort_key = $this->request->variable('sk', 'u');
+		$sort_dir = $this->request->variable('sd', 'a');
+		$start = $this->request->variable('start', 0);
+		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
+		$prod_id = $this->request->variable('prod_id', 0);
+
+		return sprintf(
+			'&amp;sk=%s&amp;sd=%s&amp;start=%d&amp;limit=%d&amp;prod_id=%d',
+			$sort_key,
+			$sort_dir,
+			$start,
+			$limit,
+			$prod_id
+		);
+	}
+
+	/**
+	 * Load the list of available products into template block variables.
+	 *
+	 * @param int $selected The selected product ID
+	 *
+	 * @return int The number of products
+	 */
+	protected function load_products($selected = 0)
+	{
+		$entities = $this->prod_operator->get_products();
+
+		foreach ($entities as $entity)
+		{
+			$s_selected = ($entity->get_id() === $selected);
+
+			if ($s_selected)
+			{
+				$this->template->assign_vars(array(
+					'PROD_NAME'	=> $entity->get_name(),
+					'PROD_ID'	=> $selected,
+				));
+			}
+
+			$this->template->assign_block_vars('product', array(
+				'PROD_ID'	=> $entity->get_id(),
+				'PROD_NAME'	=> $entity->get_name(),
+
+				'S_SELECTED'	=> $s_selected,
+			));
+		}
+
+		return count($entities);
 	}
 }
