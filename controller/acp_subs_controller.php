@@ -213,7 +213,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	public function add()
 	{
-		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
+		$params = $this->parse_display_params();
 		$entity = $this->container->get('stevotvr.groupsub.entity.subscription');
 		$this->add_edit_sub_data($entity, $params);
 
@@ -229,7 +229,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	public function edit($id)
 	{
-		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
+		$params = $this->parse_display_params();
 		$subscription = $this->sub_operator->get_subscription($id);
 		$this->add_edit_sub_data($subscription['entity'], $params);
 
