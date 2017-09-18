@@ -124,14 +124,15 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			));
 		}
 
+		$prod_count = $this->load_products($prod_id);
 		$this->template->assign_vars(array(
 			'LIMIT'	=> $limit,
 
 			'U_ACTION'	=> $this->u_action . $params,
 			'U_ADD_SUB'	=> $this->u_action . $params . '&amp;action=add',
-		));
 
-		$this->load_products($prod_id);
+			'S_SHOW_ADD'	=> (bool) $prod_count,
+		));
 
 		$total = $this->sub_operator->count_subscriptions();
 		$this->pagination->generate_template_pagination($this->u_action, 'pagination', 'start', $total, $limit, $start);

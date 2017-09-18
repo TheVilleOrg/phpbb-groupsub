@@ -136,12 +136,14 @@
 		</div>
 	{% endif %}
 
-	<form id="sub_add" method="post" action="{{ U_ADD_SUB }}">
-		<fieldset class="quick">
-			<input type="hidden" name="sub_product" value="{{ PROD_ID }}" />
-			<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_SUB_ADD') }}" />
-		</fieldset>
-	</form>
+	{% if S_SHOW_ADD %}
+		<form id="sub_add" method="post" action="{{ U_ADD_SUB }}">
+			<fieldset class="quick">
+				<input type="hidden" name="sub_product" value="{{ PROD_ID }}" />
+				<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_SUB_ADD') }}" />
+			</fieldset>
+		</form>
+	{% endif %}
 
 {% endif %}
 
