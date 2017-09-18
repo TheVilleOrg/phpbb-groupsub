@@ -13,7 +13,7 @@ namespace stevotvr\groupsub\controller;
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
-use phpbb\request\request;
+use phpbb\request\request_interface;
 use phpbb\template\template;
 use stevotvr\groupsub\entity\product_interface as prod_entity;
 use stevotvr\groupsub\exception\base;
@@ -42,12 +42,12 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	 * @param ContainerInterface                            $container
 	 * @param \phpbb\db\driver\driver_interface             $db
 	 * @param \phpbb\language\language                      $language
-	 * @param \phpbb\request\request                        $request
+	 * @param \phpbb\request\request_interface              $request
 	 * @param \phpbb\template\template                      $template
 	 * @param array                                         $currencies List of currencies
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
-	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request $request, template $template, array $currencies, prod_operator $prod_operator)
+	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request_interface $request, template $template, array $currencies, prod_operator $prod_operator)
 	{
 		parent::__construct($config, $container, $db, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;

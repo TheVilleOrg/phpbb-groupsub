@@ -13,7 +13,7 @@ namespace stevotvr\groupsub\controller;
 use phpbb\config\config;
 use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
-use phpbb\request\request;
+use phpbb\request\request_interface;
 use phpbb\template\template;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -43,7 +43,7 @@ abstract class acp_base_controller implements acp_base_interface
 	protected $language;
 
 	/**
-	 * @var \phpbb\request\request
+	 * @var \phpbb\request\request_interface
 	 */
 	protected $request;
 
@@ -71,11 +71,11 @@ abstract class acp_base_controller implements acp_base_interface
 	 * @param ContainerInterface                $container
 	 * @param \phpbb\db\driver\driver_interface $db
 	 * @param \phpbb\language\language          $language
-	 * @param \phpbb\request\request            $request
+	 * @param \phpbb\request\request_interface  $request
 	 * @param \phpbb\template\template          $template
 	 * @param array                             $currencies List of currencies
 	 */
-	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request $request, template $template, array $currencies)
+	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request_interface $request, template $template, array $currencies)
 	{
 		$this->config = $config;
 		$this->container = $container;
