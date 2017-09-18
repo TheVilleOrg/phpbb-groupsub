@@ -88,14 +88,44 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->php_ext = $php_ext;
 	}
 
-	public function display()
+	/**
+	 * Parse the URL parameters for the main list display options.
+	 *
+	 * @param string &$sort_key Variable to hold the value of the sort key parameters
+	 * @param string &$sort_dir Variable to hold the value of the sort direction parameters
+	 * @param int    &$start    Variable to hold the value of the start parameters
+	 * @param int    &$limit    Variable to hold the value of the limit parameters
+	 *
+	 * @return string The reconstructed parameter string
+	 */
+	protected function parse_display_params(&$sort_key = '', &$sort_dir = '', &$start = 0, &$limit = 0)
 	{
+		$sort_key = $this->request->variable('sk', 'u');
+		$sort_dir = $this->request->variable('sd', 'a');
 		$start = $this->request->variable('start', 0);
 		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
+
+		return sprintf('&amp;sk=%s&amp;sd=%s&amp;start=%d&amp;limit=%d', $sort_key, $sort_dir, $start, $limit);
+	}
+
+	public function display()
+	{
+		$sort_key = $sort_dir = '';
+		$start = $limit = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
+
+		if ($this->request->is_set_post('sort'))
+		{
+			redirect($this->u_action . $params);
+			return;
+		}
+
+		$this->load_sort_options($sort_key, $sort_dir);
 
 		$subscriptions = $this->sub_operator
 							->set_limit($limit)
 							->set_start($start)
+							->set_sort($this->get_sort_field($sort_key), ($sort_dir === 'd'))
 							->get_subscriptions();
 
 		foreach ($subscriptions as $subscription)
@@ -106,48 +136,110 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 				'SUB_PRODUCT'	=> $subscription['product'],
 				'SUB_EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
 
-				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
-				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
-				'U_EDIT'		=> $this->u_action . '&amp;action=edit&amp;id=' . $entity->get_id(),
-				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $entity->get_id(),
+				'U_MOVE_UP'		=> $this->u_action . $params . '&amp;action=move_up&amp;id=' . $entity->get_id(),
+				'U_MOVE_DOWN'	=> $this->u_action . $params . '&amp;action=move_down&amp;id=' . $entity->get_id(),
+				'U_EDIT'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $entity->get_id(),
+				'U_DELETE'		=> $this->u_action . $params . '&amp;action=delete&amp;id=' . $entity->get_id(),
 			));
 		}
 
 		$this->template->assign_vars(array(
-			'U_ACTION'	=> $this->u_action,
-			'U_ADD_SUB'	=> $this->u_action . '&amp;action=add',
+			'U_ACTION'	=> $this->u_action . $params,
+			'U_ADD_SUB'	=> $this->u_action . $params . '&amp;action=add',
 		));
 
 		$total = $this->sub_operator->count_subscriptions();
 		$this->pagination->generate_template_pagination($this->u_action, 'pagination', 'start', $total, $limit, $start);
 	}
 
+	/**
+	 * Load the sorting options into template variables.
+	 *
+	 * @param string $sort_key The current sort key value
+	 * @param string $sort_dir The current sort direction value
+	 */
+	protected function load_sort_options($sort_key, $sort_dir)
+	{
+		$options = array(
+			'u'	=> $this->language->lang('ACP_GROUPSUB_USER'),
+			'p'	=> $this->language->lang('ACP_GROUPSUB_SUB'),
+			'e'	=> $this->language->lang('ACP_GROUPSUB_EXPIRES'),
+		);
+		foreach ($options as $key => $name)
+		{
+			$this->template->assign_block_vars('sort_key', array(
+				'KEY'	=> $key,
+				'NAME'	=> $name,
+
+				'S_SELECTED'	=> ($key === $sort_key),
+			));
+		}
+
+		$options = array(
+			'a'	=> $this->language->lang('ASCENDING'),
+			'd'	=> $this->language->lang('DESCENDING'),
+		);
+		foreach ($options as $key => $name)
+		{
+			$this->template->assign_block_vars('sort_dir', array(
+				'KEY'	=> $key,
+				'NAME'	=> $name,
+
+				'S_SELECTED'	=> ($key === $sort_dir),
+			));
+		}
+	}
+
+	/**
+	 * Translate the sort key into the name of the database column.
+	 *
+	 * @param string $sort_key The sort key
+	 *
+	 * @return string The name of the database column
+	 */
+	protected function get_sort_field($sort_key)
+	{
+		switch ($sort_key) {
+			case 'p':
+				return 'p.gs_name';
+			break;
+			case 'e':
+				return 's.sub_expires';
+			break;
+		}
+
+		return 'u.username';
+	}
+
 	public function add()
 	{
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
 		$entity = $this->container->get('stevotvr.groupsub.entity.subscription');
-		$this->add_edit_sub_data($entity);
+		$this->add_edit_sub_data($entity, $params);
 
 		$u_find_username = append_sid($this->root_path . 'memberlist.' . $this->php_ext,
 			'mode=searchuser&amp;form=add_edit_sub&amp;field=sub_user&amp;select_single=true');
 		$this->template->assign_vars(array(
 			'S_ADD_SUB'	=> true,
 
-			'U_ACTION'			=> $this->u_action . '&amp;action=add',
+			'U_ACTION'			=> $this->u_action . $params . '&amp;action=add',
 			'U_FIND_USERNAME'	=> $u_find_username,
 		));
 	}
 
 	public function edit($id)
 	{
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
 		$subscription = $this->sub_operator->get_subscription($id);
-		$this->add_edit_sub_data($subscription['entity']);
+		$this->add_edit_sub_data($subscription['entity'], $params);
+
 		$this->template->assign_vars(array(
 			'S_EDIT_SUB'	=> true,
 
 			'SUB_PRODUCT'	=> $subscription['product'],
 			'SUB_USER'		=> $subscription['username'],
 
-			'U_ACTION'		=> $this->u_action . '&amp;action=edit&amp;id=' . $id,
+			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
 		));
 	}
 
@@ -155,8 +247,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * Process data for the add/edit subscription form.
 	 *
 	 * @param \stevotvr\groupsub\entity\subscription_interface $entity The subscription
+	 * @param string                                           $params The URL parameters string
 	 */
-	protected function add_edit_sub_data(sub_entity $entity)
+	protected function add_edit_sub_data(sub_entity $entity, $params)
 	{
 		$errors = array();
 
@@ -220,7 +313,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 					$message = 'ACP_GROUPSUB_SUB_ADD_SUCCESS';
 				}
 
-				trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
+				trigger_error($this->language->lang($message) . adm_back_link($this->u_action . $params));
 			}
 		}
 
@@ -233,7 +326,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 			'SUB_EXPIRE'	=> $expire,
 
-			'U_BACK'	=> $this->u_action,
+			'U_BACK'	=> $this->u_action . $params,
 		));
 	}
 
@@ -315,11 +408,19 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 	public function delete($id)
 	{
+		$sort_key = $sort_dir = '';
+		$start = $limit = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);
+
 		if (!confirm_box(true))
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
 				'mode'		=> 'subscriptions',
+				'sk'		=> $sort_key,
+				'sd'		=> $sort_dir,
+				'start'		=> $start,
+				'limit'		=> $limit,
 				'action'	=> 'delete',
 			));
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_DELETE_CONFIRM'), $hidden_fields);
@@ -340,6 +441,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			));
 		}
 
-		trigger_error($this->language->lang('ACP_GROUPSUB_SUB_DELETE_SUCCESS') . adm_back_link($this->u_action));
+		trigger_error($this->language->lang('ACP_GROUPSUB_SUB_DELETE_SUCCESS') . adm_back_link($this->u_action . $params));
 	}
 }

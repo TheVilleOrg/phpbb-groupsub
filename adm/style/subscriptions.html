@@ -92,6 +92,23 @@
 		</tbody>
 	</table>
 
+	<form id="sub_sort" method="post" action="{{ U_ACTION }}">
+		<fieldset class="display-options">
+			{{ lang('SORT_BY') ~ lang('COLON') }}
+			<select name="sk" id="sk">
+				{% for k in sort_key %}
+					<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected="selected"{% endif %}>{{ k.NAME }}</option>
+				{% endfor %}
+			</select>
+			<select name="sd" id="sd">
+				{% for d in sort_dir %}
+					<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected="selected"{% endif %}>{{ d.NAME }}</option>
+				{% endfor %}
+			</select>
+			<input class="button2" type="submit" name="sort" value="{{ lang('GO') }}" />
+		</fieldset>
+	</form>
+
 	{% if pagination %}
 		<div class="pagination">
 			{% include 'pagination.html' %}
