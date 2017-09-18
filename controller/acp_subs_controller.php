@@ -199,7 +199,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	protected function get_sort_field($sort_key)
 	{
-		switch ($sort_key) {
+		switch ($sort_key)
+		{
 			case 'p':
 				return 'p.gs_name';
 			break;
