@@ -105,6 +105,10 @@
 					<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected="selected"{% endif %}>{{ d.NAME }}</option>
 				{% endfor %}
 			</select>
+			{% if pagination %}
+				{{ lang('ACP_GROUPSUB_SUBS_PER_PAGE') ~ lang('COLON') }}
+				<input class="inputbox autowidth" type="number" name="limit" id="limit" min="0" max="100" value="{{ LIMIT }}" />
+			{% endif %}
 			<input class="button2" type="submit" name="sort" value="{{ lang('GO') }}" />
 		</fieldset>
 	</form>

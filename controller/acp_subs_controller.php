@@ -144,6 +144,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 
 		$this->template->assign_vars(array(
+			'LIMIT'	=> $limit,
+
 			'U_ACTION'	=> $this->u_action . $params,
 			'U_ADD_SUB'	=> $this->u_action . $params . '&amp;action=add',
 		));
