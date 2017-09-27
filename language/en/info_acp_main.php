@@ -75,7 +75,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_PROD_GRACE'				=> 'Grace period',
 	'ACP_GROUPSUB_PROD_GRACE_EXPLAIN'		=> 'The number of days after a subscription ends before removing the user from groups.',
 
-	'ACP_GROUPSUB_MANAGE_SUBS'			=> 'Manage subscription',
+	'ACP_GROUPSUB_MANAGE_SUBS'			=> 'Manage subscriptions',
 	'ACP_GROUPSUB_MANAGE_SUBS_EXPLAIN'	=> 'Here you can view, modify, and cancel subscriptions.',
 	'ACP_GROUPSUB_NO_SUBS'				=> 'No subscriptions',
 	'ACP_GROUPSUB_SUB_ADD'				=> 'Create subscription',
