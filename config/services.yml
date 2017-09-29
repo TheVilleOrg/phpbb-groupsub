@@ -69,3 +69,7 @@ services:
     stevotvr.groupsub.operator.subscription:
         class: stevotvr\groupsub\operator\subscription
         parent: stevotvr.groupsub.operator
+        calls:
+            - method: setup
+              arguments:
+                - '@config'

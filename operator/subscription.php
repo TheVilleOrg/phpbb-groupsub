@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\operator;
 
+use phpbb\config\config;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\exception\out_of_bounds;
 
@@ -37,6 +38,21 @@ class subscription extends operator implements subscription_interface
 	 * @var string The ORDER BY clause
 	 */
 	protected $sort = null;
+
+	/**
+	 * @var int The grace period in seconds
+	 */
+	protected $grace;
+
+	/**
+	 * Set up the operator with the configuration.
+	 *
+	 * @param \phpbb\config\config $config
+	 */
+	public function setup(config $config)
+	{
+		$this->grace = (int) $config['stevotvr_groupsub_grace'] * 86400;
+	}
 
 	public function set_start($start)
 	{
@@ -199,7 +215,7 @@ class subscription extends operator implements subscription_interface
 					'ON'	=> 'g.gs_id = s.gs_id',
 				),
 			),
-			'WHERE'		=> 'g.group_id = ' . (int) $group_id,
+			'WHERE'		=> 'g.group_id = ' . (int) $group_id . ' AND s.sub_expires > ' . (time() - $this->grace),
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$result = $this->db->sql_query($sql);
