@@ -10,18 +10,12 @@
 
 namespace stevotvr\groupsub\controller;
 
-use phpbb\config\config;
-use phpbb\db\driver\driver_interface;
-use phpbb\language\language;
 use phpbb\pagination;
-use phpbb\request\request_interface;
-use phpbb\template\template;
 use phpbb\user;
 use stevotvr\groupsub\entity\subscription_interface as sub_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\product_interface as prod_operator;
 use stevotvr\groupsub\operator\subscription_interface as sub_operator;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Group Subscription subscription management ACP controller.
@@ -62,28 +56,29 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $php_ext;
 
 	/**
-	 * @param \phpbb\config\config                               $config
-	 * @param ContainerInterface                                 $container
-	 * @param \phpbb\db\driver\driver_interface                  $db
-	 * @param \phpbb\language\language                           $language
-	 * @param \phpbb\request\request_interface                   $request
-	 * @param \phpbb\template\template                           $template
-	 * @param array                                              $currencies    List of currencies
+	 * Set up the controller.
+	 *
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\pagination                                  $pagination
 	 * @param \phpbb\user                                        $user
-	 * @param string                                             $root_path     The root phpBB path
-	 * @param string                                             $php_ext       The script file
-	 *                                                                          extension
 	 */
-	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request_interface $request, template $template, array $currencies, prod_operator $prod_operator, sub_operator $sub_operator, pagination $pagination, user $user, $root_path, $php_ext)
+	public function setup(prod_operator $prod_operator, sub_operator $sub_operator, pagination $pagination, user $user)
 	{
-		parent::__construct($config, $container, $db, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
 		$this->pagination = $pagination;
 		$this->user = $user;
+	}
+
+	/**
+	 * Set the phpBB installation path information.
+	 *
+	 * @param string $root_path The root phpBB path
+	 * @param string $php_ext   The script file extension
+	 */
+	public function set_path_info($root_path, $php_ext)
+	{
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 	}

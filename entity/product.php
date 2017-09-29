@@ -11,7 +11,6 @@
 namespace stevotvr\groupsub\entity;
 
 use phpbb\config\config;
-use phpbb\db\driver\driver_interface;
 use stevotvr\groupsub\exception\missing_field;
 use stevotvr\groupsub\exception\out_of_bounds;
 use stevotvr\groupsub\exception\unexpected_value;
@@ -52,14 +51,13 @@ class product extends entity implements product_interface
 	protected $currencies;
 
 	/**
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param string                            $table_name The name of the database table
-	 * @param \phpbb\config\config              $config
-	 * @param array                             $currencies List of currencies
+	 * Set up the entity with the configuration.
+	 *
+	 * @param \phpbb\config\config $config
+	 * @param array                $currencies List of currencies
 	 */
-	public function __construct(driver_interface $db, $table_name, config $config, array $currencies)
+	public function setup(config $config, array $currencies)
 	{
-		parent::__construct($db, $table_name);
 		$this->config = $config;
 		$this->currencies = $currencies;
 	}

@@ -10,15 +10,9 @@
 
 namespace stevotvr\groupsub\controller;
 
-use phpbb\config\config;
-use phpbb\db\driver\driver_interface;
-use phpbb\language\language;
-use phpbb\request\request_interface;
-use phpbb\template\template;
 use stevotvr\groupsub\entity\product_interface as prod_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\product_interface as prod_operator;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Group Subscription product management ACP controller.
@@ -38,21 +32,15 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	protected $prod_operator;
 
 	/**
-	 * @param \phpbb\config\config                          $config
-	 * @param ContainerInterface                            $container
-	 * @param \phpbb\db\driver\driver_interface             $db
-	 * @param \phpbb\language\language                      $language
-	 * @param \phpbb\request\request_interface              $request
-	 * @param \phpbb\template\template                      $template
-	 * @param array                                         $currencies List of currencies
+	 * Set up the controller.
+	 *
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
-	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request_interface $request, template $template, array $currencies, prod_operator $prod_operator)
+	public function setup(prod_operator $prod_operator)
 	{
-		parent::__construct($config, $container, $db, $language, $request, $template, $currencies);
 		$this->prod_operator = $prod_operator;
 
-		$language->add_lang('posting');
+		$this->language->add_lang('posting');
 	}
 
 	public function display()

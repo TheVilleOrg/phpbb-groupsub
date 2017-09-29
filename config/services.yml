@@ -13,28 +13,31 @@ services:
             - '@language'
             - '@request'
             - '@template'
+            - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.controller.acp.settings:
         class: stevotvr\groupsub\controller\acp_settings_controller
         parent: stevotvr.groupsub.controller.acp
-        arguments:
-            - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.controller.acp.product:
         class: stevotvr\groupsub\controller\acp_prods_controller
         parent: stevotvr.groupsub.controller.acp
-        arguments:
-            - '%stevotvr.groupsub.currencies%'
-            - '@stevotvr.groupsub.operator.product'
+        calls:
+            - method: setup
+              arguments:
+                - '@stevotvr.groupsub.operator.product'
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller
         parent: stevotvr.groupsub.controller.acp
-        arguments:
-            - '%stevotvr.groupsub.currencies%'
-            - '@stevotvr.groupsub.operator.product'
-            - '@stevotvr.groupsub.operator.subscription'
-            - '@pagination'
-            - '@user'
-            - '%core.root_path%'
-            - '%core.php_ext%'
+        calls:
+            - method: setup
+              arguments:
+                - '@stevotvr.groupsub.operator.product'
+                - '@stevotvr.groupsub.operator.subscription'
+                - '@pagination'
+                - '@user'
+            - method: set_path_info
+              arguments:
+                - '%core.root_path%'
+                - '%core.php_ext%'
     stevotvr.groupsub.entity:
         class: stevotvr\groupsub\entity\entity
         abstract: true
@@ -46,8 +49,11 @@ services:
         shared: false
         arguments:
             - '%stevotvr.groupsub.tables.products%'
-            - '@config'
-            - '%stevotvr.groupsub.currencies%'
+        calls:
+            - method: setup
+              arguments:
+                - '@config'
+                - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.entity.subscription:
         class: stevotvr\groupsub\entity\subscription
         parent: stevotvr.groupsub.entity
