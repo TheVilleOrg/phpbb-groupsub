@@ -20,27 +20,37 @@ use stevotvr\groupsub\exception\out_of_bounds;
 class subscription extends operator implements subscription_interface
 {
 	/**
-	 * @var int The offset for querying subscriptions
+	 * The offset for querying subscriptions.
+	 *
+	 * @var int
 	 */
 	protected $start = 0;
 
 	/**
-	 * @var int The limit for querying subscriptions
+	 * The limit for querying subscriptions.
+	 *
+	 * @var int
 	 */
 	protected $limit = 0;
 
 	/**
-	 * @var array The list of filters for building the WHERE clause
+	 * The list of filters for building the WHERE clause.
+	 *
+	 * @var array
 	 */
 	protected $filters = array();
 
 	/**
-	 * @var string The ORDER BY clause
+	 * The ORDER BY clause.
+	 *
+	 * @var string
 	 */
 	protected $sort = null;
 
 	/**
-	 * @var int The grace period in seconds
+	 * The grace period in seconds.
+	 *
+	 * @var int
 	 */
 	protected $grace;
 
