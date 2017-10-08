@@ -23,6 +23,7 @@ services:
         calls:
             - method: setup
               arguments:
+                - '@group_helper'
                 - '@stevotvr.groupsub.operator.product'
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller

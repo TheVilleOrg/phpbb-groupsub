@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\group\helper;
 use stevotvr\groupsub\entity\product_interface as prod_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\product_interface as prod_operator;
@@ -27,6 +28,11 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	const YEAR = 365;
 
 	/**
+	 * @var \phpbb\group\helper
+	 */
+	protected $group_helper;
+
+	/**
 	 * @var \stevotvr\groupsub\operator\product_interface
 	 */
 	protected $prod_operator;
@@ -34,10 +40,12 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	/**
 	 * Set up the controller.
 	 *
+	 * @param \phpbb\group\helper                           $group_helper
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
-	public function setup(prod_operator $prod_operator)
+	public function setup(helper $group_helper, prod_operator $prod_operator)
 	{
+		$this->group_helper = $group_helper;
 		$this->prod_operator = $prod_operator;
 
 		$this->language->add_lang('posting');
@@ -211,21 +219,29 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	 */
 	protected function load_groups($prod_id)
 	{
+		$groups = array();
+
 		$selected = $prod_id ? $this->prod_operator->get_groups($prod_id) : array();
 
 		$sql = 'SELECT group_id, group_name
-				FROM ' . GROUPS_TABLE . '
-				WHERE group_type <> ' . GROUP_SPECIAL . '
-				ORDER BY group_name	ASC';
+				FROM ' . GROUPS_TABLE;
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$this->template->assign_block_vars('group', array(
+			$groups[] = array(
 				'GROUP_ID'		=> (int) $row['group_id'],
-				'GROUP_NAME'	=> $row['group_name'],
+				'GROUP_NAME'	=> $this->group_helper->get_name($row['group_name']),
 
 				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
-			));
+			);
+		}
+		$this->db->sql_freeresult($result);
+
+		$names = array_map('strtolower', array_column($groups, 'GROUP_NAME'));
+		array_multisort($names, SORT_ASC, SORT_STRING, $groups);
+		foreach ($groups as $group)
+		{
+			$this->template->assign_block_vars('group', $group);
 		}
 	}
 
