@@ -38,6 +38,24 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+    stevotvr.groupsub.controller.ipn:
+        class: stevotvr\groupsub\controller\ipn_controller
+        arguments:
+            - '@config'
+            - '@service_container'
+            - '@request'
+            - '@stevotvr.groupsub.operator.subscription'
+    stevotvr.groupsub.controller.main:
+        class: stevotvr\groupsub\controller\main_controller
+        arguments:
+            - '@config'
+            - '@service_container'
+            - '@controller.helper'
+            - '@language'
+            - '@stevotvr.groupsub.operator.product'
+            - '@stevotvr.groupsub.operator.subscription'
+            - '@template'
+            - '@user'
     stevotvr.groupsub.entity:
         class: stevotvr\groupsub\entity\entity
         abstract: true

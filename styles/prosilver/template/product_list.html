@@ -1,0 +1,35 @@
+{% include 'overall_header.html' %}
+
+<h2>{{ lang('GROUPSUB_PRODUCT_LIST') }}</h2>
+
+{% for p in product %}
+
+<div class="panel bg{% if loop.index is odd %}1{% else %}2{% endif %}">
+
+<div class="inner">
+
+	<h3>{{ p.PROD_NAME }}</h3>
+
+	<p>{{ p.PROD_DESC }}</p>
+
+	{% include '@stevotvr_groupsub/pp_button.html' with p %}
+
+</div>
+
+</div>
+
+{% else %}
+
+<div class="panel bg1">
+
+<div class="inner">
+
+	<p>{{ lang('GROUPSUB_NO_PRODUCTS') }}</p>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% include 'overall_footer.html' %}

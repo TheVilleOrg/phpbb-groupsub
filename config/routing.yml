@@ -1,0 +1,6 @@
+stevotvr_groupsub_main:
+    path: /groupsub/subs/{name}
+    defaults: { _controller: stevotvr.groupsub.controller.main:handle, name: null }
+stevotvr_groupsub_ipn:
+    path: /groupsub/ipn
+    defaults: { _controller: stevotvr.groupsub.controller.ipn:handle }

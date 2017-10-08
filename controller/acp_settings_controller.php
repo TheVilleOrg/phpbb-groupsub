@@ -29,9 +29,12 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			}
 
 			$data = array(
-				'currency'	=> $this->request->variable('groupsub_currency', ''),
-				'warn_time'	=> $this->request->variable('groupsub_warn_time', 0),
-				'grace'		=> $this->request->variable('groupsub_grace', 0),
+				'pp_sandbox'		=> $this->request->variable('groupsub_pp_sandbox', true),
+				'pp_sb_business'	=> $this->request->variable('groupsub_pp_sb_business', ''),
+				'pp_business'		=> $this->request->variable('groupsub_pp_business', ''),
+				'currency'			=> $this->request->variable('groupsub_currency', ''),
+				'warn_time'			=> $this->request->variable('groupsub_warn_time', 0),
+				'grace'				=> $this->request->variable('groupsub_grace', 0),
 			);
 
 			if (!isset($this->currencies[$data['currency']]))
@@ -55,8 +58,11 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			'S_ERROR'	=> (bool) count($errors),
 			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
 
-			'WARN_TIME'	=> $this->config['stevotvr_groupsub_warn_time'],
-			'GRACE'		=> $this->config['stevotvr_groupsub_grace'],
+			'PP_SANDBOX'		=> $this->config['stevotvr_groupsub_pp_sandbox'],
+			'PP_SB_BUSINESS'	=> $this->config['stevotvr_groupsub_pp_sb_business'],
+			'PP_BUSINESS'		=> $this->config['stevotvr_groupsub_pp_business'],
+			'WARN_TIME'			=> $this->config['stevotvr_groupsub_warn_time'],
+			'GRACE'				=> $this->config['stevotvr_groupsub_grace'],
 
 			'U_ACTION'	=> $this->u_action,
 		));
