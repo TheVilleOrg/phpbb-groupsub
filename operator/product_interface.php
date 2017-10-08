@@ -56,6 +56,13 @@ interface product_interface
 	public function get_groups($product_id);
 
 	/**
+	 * Get the group information for all products.
+	 *
+	 * @return array Array of associative arrays of group information
+	 */
+	public function get_all_groups();
+
+	/**
 	 * Add a group to a product.
 	 *
 	 * @param int $product_id The product ID

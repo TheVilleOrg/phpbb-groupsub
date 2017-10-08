@@ -40,6 +40,9 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'GROUPSUB_PRODUCT_LIST'	=> 'Subscriptions',
 	'GROUPSUB_NO_PRODUCTS'	=> 'There are no subscriptions available.',
+	'GROUPSUB_PRICE'		=> 'Price',
+	'GROUPSUB_LENGTH'		=> 'Length',
+	'GROUPSUB_SUBSCRIBE'	=> 'Subscribe',
 
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
 	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',

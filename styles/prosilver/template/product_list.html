@@ -10,9 +10,36 @@
 
 	<h3>{{ p.PROD_NAME }}</h3>
 
-	<p>{{ p.PROD_DESC }}</p>
+	<div class="column1">
 
-	{% include '@stevotvr_groupsub/pp_button.html' with p %}
+		<p>{{ p.PROD_DESC }}</p>
+
+		{% if p.group %}
+			<h4>{{ lang('GROUPS') }}</h4>
+
+			<ul>
+				{% for g in p.group %}
+					<li>{{ g.GROUP_NAME }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+
+	</div>
+
+	<div class="column2">
+
+		<dl class="details">
+			<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
+			<dd>{{ p.PROD_DISPLAY_PRICE }}</dd>
+			<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
+			<dd>{{ p.PROD_LENGTH }}</dd>
+			<dt>{{ lang('GROUPSUB_SUBSCRIBE') ~ lang('COLON') }}</dt>
+			<dd>
+				{% include '@stevotvr_groupsub/pp_button.html' with p %}
+			</dd>
+		</dl>
+
+	</div>
 
 </div>
 

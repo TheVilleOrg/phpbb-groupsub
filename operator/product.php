@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\operator;
 
+use phpbb\group\helper;
 use stevotvr\groupsub\entity\product_interface as entity;
 
 /**
@@ -17,6 +18,13 @@ use stevotvr\groupsub\entity\product_interface as entity;
  */
 class product extends operator implements product_interface
 {
+	protected $group_helper;
+
+	public function setup(helper $group_helper)
+	{
+		$this->group_helper = $group_helper;
+	}
+
 	public function get_products()
 	{
 		$entities = array();
@@ -101,6 +109,40 @@ class product extends operator implements product_interface
 		$this->db->sql_freeresult($result);
 
 		return $ids;
+	}
+
+	public function get_all_groups()
+	{
+		$product_groups = array();
+
+		$sql_ary = array(
+			'SELECT'	=> 's.gs_id, g.group_id, g.group_name',
+			'FROM'		=> array($this->group_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array(GROUPS_TABLE => 'g'),
+					'ON'	=> 'g.group_id = s.group_id',
+				),
+			),
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$product_groups[(int) $row['gs_id']][] = array(
+				'id'	=> (int) $row['group_id'],
+				'name'	=> $this->group_helper->get_name($row['group_name']),
+			);
+		}
+		$this->db->sql_freeresult($result);
+
+		foreach ($product_groups as &$product_group)
+		{
+			$names = array_map('strtolower', array_column($product_group, 'name'));
+			array_multisort($names, SORT_ASC, SORT_STRING, $product_group);
+		}
+
+		return $product_groups;
 	}
 
 	public function add_group($product_id, $group_id)
