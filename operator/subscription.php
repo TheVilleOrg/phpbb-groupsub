@@ -20,6 +20,24 @@ use stevotvr\groupsub\exception\out_of_bounds;
 class subscription extends operator implements subscription_interface
 {
 	/**
+	 * @var \stevotvr\groupsub\operator\product_interface
+	 */
+	protected $prod_operator;
+
+	/**
+	 * The root phpBB path.
+	 *
+	 * @var string
+	 */
+	protected $root_path;
+	/**
+	 * The script file extension.
+	 *
+	 * @var string
+	 */
+	protected $php_ext;
+
+	/**
 	 * The offset for querying subscriptions.
 	 *
 	 * @var int
@@ -55,13 +73,27 @@ class subscription extends operator implements subscription_interface
 	protected $grace;
 
 	/**
-	 * Set up the operator with the configuration.
+	 * Set up the operator.
 	 *
-	 * @param \phpbb\config\config $config
+	 * @param \phpbb\config\config                          $config
+	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 */
-	public function setup(config $config)
+	public function setup(config $config, product_interface $prod_operator)
 	{
 		$this->grace = (int) $config['stevotvr_groupsub_grace'] * 86400;
+		$this->prod_operator = $prod_operator;
+	}
+
+	/**
+	 * Set the phpBB installation path information.
+	 *
+	 * @param string $root_path The root phpBB path
+	 * @param string $php_ext   The script file extension
+	 */
+	public function set_path_info($root_path, $php_ext)
+	{
+		$this->root_path = $root_path;
+		$this->php_ext = $php_ext;
 	}
 
 	public function set_start($start)
@@ -198,9 +230,26 @@ class subscription extends operator implements subscription_interface
 
 	public function add_subscription(entity $subscription)
 	{
+		if (!function_exists('group_user_add'))
+		{
+			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+		}
+
 		$subscription->insert();
 		$subscription_id = $subscription->get_id();
-		return $subscription->load($subscription_id);
+		$subscription->load($subscription_id);
+
+		if ($subscription->get_id())
+		{
+			$user = $subscription->get_user();
+			$groups = $this->prod_operator->get_groups($subscription->get_product());
+			foreach ($groups as $group)
+			{
+				group_user_add($group, $user);
+			}
+		}
+
+		return $subscription;
 	}
 
 	public function delete_subscription($sub_id)

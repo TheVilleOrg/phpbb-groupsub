@@ -103,3 +103,8 @@ services:
             - method: setup
               arguments:
                 - '@config'
+                - '@stevotvr.groupsub.operator.product'
+            - method: set_path_info
+              arguments:
+                - '%core.root_path%'
+                - '%core.php_ext%'
