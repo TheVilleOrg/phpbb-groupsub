@@ -18,8 +18,16 @@ use stevotvr\groupsub\entity\product_interface as entity;
  */
 class product extends operator implements product_interface
 {
+	/**
+	 * @var \phpbb\group\helper
+	 */
 	protected $group_helper;
 
+	/**
+	 * Set up the operator.
+	 *
+	 * @param \phpbb\group\helper $group_helper
+	 */
 	public function setup(helper $group_helper)
 	{
 		$this->group_helper = $group_helper;
