@@ -108,4 +108,9 @@ interface subscription_interface
 	 * @return array An array of user IDs
 	 */
 	public function get_subscribed_users($group_id);
+
+	/**
+	 * Find all expiring subscriptions and remove the users from the associated groups.
+	 */
+	public function process_expiring();
 }

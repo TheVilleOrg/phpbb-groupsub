@@ -60,12 +60,14 @@ class version_0_1_0 extends migration
 						'sub_id'		=> array('UINT', null, 'auto_increment'),
 						'gs_id'			=> array('UINT', 0),
 						'user_id'		=> array('UINT', 0),
+						'sub_active'	=> array('BOOL', 1),
 						'sub_expires'	=> array('UINT:11', 0),
 					),
 					'PRIMARY_KEY' => 'sub_id',
 					'KEYS' => array(
 						'gs_id'			=> array('INDEX', 'gs_id'),
 						'user_id'		=> array('INDEX', 'user_id'),
+						'sub_active'	=> array('INDEX', 'sub_active'),
 						'sub_expires'	=> array('INDEX', 'sub_expires'),
 					),
 				),
@@ -93,6 +95,7 @@ class version_0_1_0 extends migration
 			array('config.add', array('stevotvr_groupsub_currency', 'USD')),
 			array('config.add', array('stevotvr_groupsub_warn_time', 5)),
 			array('config.add', array('stevotvr_groupsub_grace', 5)),
+			array('config.add', array('stevotvr_groupsub_cron_last_run', 0)),
 
 			array('module.add', array(
 				'acp',

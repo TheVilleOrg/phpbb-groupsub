@@ -3,6 +3,17 @@ imports:
     - { resource: currencies.yml }
 
 services:
+    stevotvr.groupsub.cron.task.main:
+        class: stevotvr\groupsub\cron\task\main
+        arguments:
+            - '@config'
+            - '@stevotvr.groupsub.operator.subscription'
+        calls:
+            - method: set_name
+              arguments:
+                - cron.task.stevotvr.groupsub
+        tags:
+            - { name: cron.task }
     stevotvr.groupsub.controller.acp:
         class: stevotvr\groupsub\controller\acp_base_controller
         abstract: true
@@ -103,7 +114,6 @@ services:
             - method: setup
               arguments:
                 - '@config'
-                - '@stevotvr.groupsub.operator.product'
             - method: set_path_info
               arguments:
                 - '%core.root_path%'
