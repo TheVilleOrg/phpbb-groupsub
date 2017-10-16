@@ -138,14 +138,16 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'price'		=> $this->request->variable('prod_price', 0),
 			'currency'	=> $this->request->variable('prod_currency', ''),
 			'length'	=> $this->parse_length(),
-			'warn_time'	=> $this->request->variable('prod_warn_time', 0),
-			'grace'		=> $this->request->variable('prod_grace', 0),
+			'warn_time'	=> max(0, $this->request->variable('prod_warn_time', 0)),
+			'grace'		=> max(0, $this->request->variable('prod_grace', 0)),
 		);
 
 		if (!$entity->get_id())
 		{
 			$data['ident'] = $this->request->variable('prod_ident', '', true);
 		}
+
+		$data['warn_time'] = min($data['warn_time'], $data['length']);
 
 		$this->set_parse_options($entity, $submit);
 
@@ -317,7 +319,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	protected function parse_length()
 	{
 		$value = $this->request->variable('prod_length', 0);
-		if ($value === 0)
+		if ($value <= 0)
 		{
 			return 0;
 		}
