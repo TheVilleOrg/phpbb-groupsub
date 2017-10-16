@@ -158,6 +158,11 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 				$errors[] = 'FORM_INVALID';
 			}
 
+			if ($data['price'] < 1)
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_PRICE';
+			}
+
 			foreach ($data as $name => $value)
 			{
 				try
