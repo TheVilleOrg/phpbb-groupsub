@@ -47,9 +47,4 @@ $lang = array_merge($lang, array(
 
 	'GROUPSUB_NOTIFICATION_EXPIRED_TITLE'		=> 'Subscription expired',
 	'GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE'	=> '<b>%s</b> has expired.',
-
-	'GROUPSUB_NOTIFICATION_DAYS'	=> array(
-		1	=> 'day',
-		2	=> 'days',
-	),
 ));

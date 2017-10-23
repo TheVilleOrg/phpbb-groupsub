@@ -47,6 +47,8 @@ class warn extends base_type
 
 	public function get_email_template_variables()
 	{
+		$this->language->add_lang('common', 'stevotvr/groupsub');
+
 		$user_info = $this->user_loader->get_user($this->user_id);
 		$tz = new \DateTimeZone($user_info['user_timezone']);
 		$time = date('c', $this->get_data('sub_expires'));
@@ -59,7 +61,7 @@ class warn extends base_type
 
 		return array(
 			'DAYS_LEFT'		=> $days_left,
-			'DAYS'			=> $this->language->lang('GROUPSUB_NOTIFICATION_DAYS', $days_left),
+			'DAYS'			=> $this->language->lang('GROUPSUB_DAYS', $days_left),
 			'EXPIRE_DATE'	=> $datetime->format('|M d, Y|'),
 			'SUB_NAME'		=> $this->get_data('gs_name'),
 

@@ -14,19 +14,13 @@ use phpbb\group\helper;
 use stevotvr\groupsub\entity\product_interface as prod_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\product_interface as prod_operator;
+use stevotvr\groupsub\operator\unit_helper_interface;
 
 /**
  * Group Subscription product management ACP controller.
  */
 class acp_prods_controller extends acp_base_controller implements acp_prods_interface
 {
-	/**
-	 * Time units
-	 */
-	const WEEK = 7;
-	const MONTH = 30;
-	const YEAR = 365;
-
 	/**
 	 * @var \phpbb\group\helper
 	 */
@@ -38,15 +32,22 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	protected $prod_operator;
 
 	/**
+	 * @var \stevotvr\groupsub\operator\unit_helper_interface
+	 */
+	protected $unit_helper;
+
+	/**
 	 * Set up the controller.
 	 *
-	 * @param \phpbb\group\helper                           $group_helper
-	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
+	 * @param \phpbb\group\helper                               $group_helper
+	 * @param \stevotvr\groupsub\operator\product_interface     $prod_operator
+	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 */
-	public function setup(helper $group_helper, prod_operator $prod_operator)
+	public function setup(helper $group_helper, prod_operator $prod_operator, unit_helper_interface $unit_helper)
 	{
 		$this->group_helper = $group_helper;
 		$this->prod_operator = $prod_operator;
+		$this->unit_helper = $unit_helper;
 
 		$this->language->add_lang('posting');
 	}
@@ -59,30 +60,11 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		{
 			$price = sprintf('%s%d %s', $this->currencies[$entity->get_currency()], $entity->get_price(), $entity->get_currency());
 
-			$length = $entity->get_length();
-			$unit = 'days';
-			if ($length % self::YEAR === 0)
-			{
-				$unit = 'years';
-				$length /= self::YEAR;
-			}
-			else if ($length % self::MONTH === 0)
-			{
-				$unit = 'months';
-				$length /= self::MONTH;
-			}
-			else if ($length % self::WEEK === 0)
-			{
-				$unit = 'weeks';
-				$length /= self::WEEK;
-			}
-
 			$this->template->assign_block_vars('product', array(
-				'PROD_IDENT'		=> $entity->get_ident(),
-				'PROD_NAME'			=> $entity->get_name(),
-				'PROD_PRICE'		=> $price,
-				'PROD_LENGTH'		=> $length,
-				'PROD_LENGTH_UNIT'	=> $this->language->lang('ACP_GROUPSUB_' . strtoupper($unit), $length),
+				'PROD_IDENT'	=> $entity->get_ident(),
+				'PROD_NAME'		=> $entity->get_name(),
+				'PROD_PRICE'	=> $price,
+				'PROD_LENGTH'	=> $this->unit_helper->get_formatted_timespan($entity->get_length()),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
@@ -285,21 +267,8 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		{
 			if ($length > 0)
 			{
-				if ($length % self::YEAR === 0)
-				{
-					$selected = 'years';
-					$length /= self::YEAR;
-				}
-				else if ($length % self::MONTH === 0)
-				{
-					$selected = 'months';
-					$length /= self::MONTH;
-				}
-				else if ($length % self::WEEK === 0)
-				{
-					$selected = 'weeks';
-					$length /= self::WEEK;
-				}
+				extract($this->unit_helper->get_timespan_parts($length));
+				$selected = $unit;
 			}
 
 			$this->template->assign_var('PROD_LENGTH', $length);
@@ -309,7 +278,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		{
 			$this->template->assign_block_vars('time_unit', array(
 				'UNIT_ID'	=> $unit,
-				'UNIT_NAME'	=> $this->language->lang('ACP_GROUPSUB_' . strtoupper($unit)),
+				'UNIT_NAME'	=> $this->language->lang('GROUPSUB_' . strtoupper($unit)),
 
 				'S_SELECTED'	=> ($unit === $selected),
 			));
@@ -330,17 +299,12 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		}
 
 		$unit = $this->request->variable('prod_length_unit', '');
-		switch ($unit)
+		try
 		{
-			case 'weeks':
-				return $value * self::WEEK;
-			break;
-			case 'months':
-				return $value * self::MONTH;
-			break;
-			case 'years':
-				return $value * self::YEAR;
-			break;
+			return $this->unit_helper->get_days($value, $unit);
+		}
+		catch (base $e)
+		{
 		}
 
 		return $value;

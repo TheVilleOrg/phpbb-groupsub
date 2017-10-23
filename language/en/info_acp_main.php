@@ -114,21 +114,4 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_EXPIRES_NEVER'		=> 'Never',
 	'ACP_GROUPSUB_ALL_PRODUCTS'			=> 'All products',
 	'ACP_GROUPSUB_SUBS_PER_PAGE'		=> 'Items per page',
-
-	'ACP_GROUPSUB_DAYS'		=> array(
-		1	=> 'day',
-		2	=> 'days',
-	),
-	'ACP_GROUPSUB_WEEKS'	=> array(
-		1	=> 'week',
-		2	=> 'weeks',
-	),
-	'ACP_GROUPSUB_MONTHS'	=> array(
-		1	=> 'month',
-		2	=> 'months',
-	),
-	'ACP_GROUPSUB_YEARS'	=> array(
-		1	=> 'year',
-		2	=> 'years',
-	),
 ));

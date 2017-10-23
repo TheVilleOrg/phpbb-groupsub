@@ -57,6 +57,7 @@ services:
               arguments:
                 - '@group_helper'
                 - '@stevotvr.groupsub.operator.product'
+                - '@stevotvr.groupsub.operator.unit_helper'
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller
         parent: stevotvr.groupsub.controller.acp
@@ -140,3 +141,7 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+    stevotvr.groupsub.operator.unit_helper:
+        class: stevotvr\groupsub\operator\unit_helper
+        arguments:
+            - '@language'

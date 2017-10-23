@@ -86,11 +86,11 @@
 			</dl>
 			<dl>
 				<dt><label for="prod_warn_time">{{ lang('ACP_GROUPSUB_PROD_WARN_TIME') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_WARN_TIME_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="prod_warn_time" name="prod_warn_time" size="4" maxlength="10" value="{{ PROD_WARN_TIME }}" />&nbsp;{{ lang('ACP_GROUPSUB_DAYS') }}</dd>
+				<dd><input class="text" type="text" id="prod_warn_time" name="prod_warn_time" size="4" maxlength="10" value="{{ PROD_WARN_TIME }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
 			</dl>
 			<dl>
 				<dt><label for="prod_grace">{{ lang('ACP_GROUPSUB_PROD_GRACE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PROD_GRACE_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="prod_grace" name="prod_grace" size="4" maxlength="10" value="{{ PROD_GRACE }}" />&nbsp;{{ lang('ACP_GROUPSUB_DAYS') }}</dd>
+				<dd><input class="text" type="text" id="prod_grace" name="prod_grace" size="4" maxlength="10" value="{{ PROD_GRACE }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
 			</dl>
 		</fieldset>
 		<fieldset class="submit-buttons">
@@ -120,7 +120,7 @@
 					<td>{{ p.PROD_IDENT }}</td>
 					<td><strong>{{ p.PROD_NAME }}</strong></td>
 					<td>{{ p.PROD_PRICE }}</td>
-					<td>{% if p.PROD_LENGTH %}{{ p.PROD_LENGTH }} {{ p.PROD_LENGTH_UNIT }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
+					<td>{% if p.PROD_LENGTH %}{{ p.PROD_LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 					<td class="actions">
 						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
 						<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
