@@ -1,4 +1,4 @@
-Subject: Your subscription expires in {DAYS_LEFT} days
+Subject: Your subscription expires in {DAYS_LEFT} {DAYS}
 
 Hello {USERNAME},
 

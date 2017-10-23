@@ -55,8 +55,11 @@ class warn extends base_type
 		$params = array('name' => $this->get_data('gs_ident'));
 		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::RELATIVE_PATH);
 
+		$days_left = floor(((int) $this->get_data('sub_expires') - time()) / 86400);
+
 		return array(
-			'DAYS_LEFT'		=> floor(((int) $this->get_data('sub_expires') - time()) / 86400),
+			'DAYS_LEFT'		=> $days_left,
+			'DAYS'			=> $this->language->lang('GROUPSUB_NOTIFICATION_DAYS', $days_left),
 			'EXPIRE_DATE'	=> $datetime->format('|M d, Y|'),
 			'SUB_NAME'		=> $this->get_data('gs_name'),
 
