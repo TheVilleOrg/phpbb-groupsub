@@ -33,12 +33,14 @@ class product extends operator implements product_interface
 		$this->group_helper = $group_helper;
 	}
 
-	public function get_products()
+	public function get_products($name = false)
 	{
 		$entities = array();
 
+		$where = $name ? "WHERE gs_ident = '" . $this->db->sql_escape($name) . "'" : '';
 		$sql = 'SELECT *
 				FROM ' . $this->product_table . '
+				' . $where . '
 				ORDER BY gs_order ASC, gs_id ASC';
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))

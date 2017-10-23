@@ -18,9 +18,11 @@ interface product_interface
 	/**
 	 * Get all products.
 	 *
+	 * @param string $name The identifier of the product, false to get all products
+	 *
 	 * @return array An array of product entities
 	 */
-	public function get_products();
+	public function get_products($name = false);
 
 	/**
 	 * Add a product.

@@ -119,7 +119,7 @@ class main_controller
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
 		));
 
-		$products = $this->prod_operator->get_products();
+		$products = $this->prod_operator->get_products($name);
 		$product_groups = $this->prod_operator->get_all_groups();
 		foreach ($products as $product)
 		{
