@@ -57,11 +57,12 @@ class version_0_1_0 extends migration
 				),
 				$this->table_prefix . 'groupsub_subs' => array(
 					'COLUMNS' => array(
-						'sub_id'		=> array('UINT', null, 'auto_increment'),
-						'gs_id'			=> array('UINT', 0),
-						'user_id'		=> array('UINT', 0),
-						'sub_active'	=> array('BOOL', 1),
-						'sub_expires'	=> array('UINT:11', 0),
+						'sub_id'			=> array('UINT', null, 'auto_increment'),
+						'gs_id'				=> array('UINT', 0),
+						'user_id'			=> array('UINT', 0),
+						'sub_notify_status'	=> array('USINT', 0),
+						'sub_active'		=> array('BOOL', 1),
+						'sub_expires'		=> array('UINT:11', 0),
 					),
 					'PRIMARY_KEY' => 'sub_id',
 					'KEYS' => array(

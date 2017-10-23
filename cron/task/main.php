@@ -45,6 +45,7 @@ class main extends base
 	public function run()
 	{
 		$this->sub_operator->process_expiring();
+		$this->sub_operator->notify_subscribers();
 
 		$this->config->set('stevotvr_groupsub_cron_last_run', time());
 	}

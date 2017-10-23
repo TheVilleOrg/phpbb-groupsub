@@ -14,6 +14,27 @@ services:
                 - cron.task.stevotvr.groupsub
         tags:
             - { name: cron.task }
+    stevotvr.groupsub.notification.type:
+        class: stevotvr\groupsub\notification\type\base_type
+        abstract: true
+        parent: notification.type.base
+        calls:
+            - method: setup
+              arguments:
+                - '@controller.helper'
+                - '@user_loader'
+    stevotvr.groupsub.notification.type.warn:
+        class: stevotvr\groupsub\notification\type\warn
+        shared: false
+        parent: stevotvr.groupsub.notification.type
+        tags:
+            - { name: notification.type }
+    stevotvr.groupsub.notification.type.expired:
+        class: stevotvr\groupsub\notification\type\expired
+        shared: false
+        parent: stevotvr.groupsub.notification.type
+        tags:
+            - { name: notification.type }
     stevotvr.groupsub.controller.acp:
         class: stevotvr\groupsub\controller\acp_base_controller
         abstract: true
@@ -114,6 +135,7 @@ services:
             - method: setup
               arguments:
                 - '@config'
+                - '@notification_manager'
             - method: set_path_info
               arguments:
                 - '%core.root_path%'

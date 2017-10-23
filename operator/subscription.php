@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\operator;
 
 use phpbb\config\config;
+use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\exception\out_of_bounds;
 
@@ -19,6 +20,11 @@ use stevotvr\groupsub\exception\out_of_bounds;
  */
 class subscription extends operator implements subscription_interface
 {
+	/**
+	 * @var \phpbb\notification\manager
+	 */
+	protected $notification_manager;
+
 	/**
 	 * The root phpBB path.
 	 *
@@ -61,6 +67,13 @@ class subscription extends operator implements subscription_interface
 	protected $sort = null;
 
 	/**
+	 * The warning time in seconds.
+	 *
+	 * @var int
+	 */
+	protected $warn_time;
+
+	/**
 	 * The grace period in seconds.
 	 *
 	 * @var int
@@ -70,10 +83,14 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\config\config $config
+	 * @param \phpbb\config\config        $config
+	 * @param \phpbb\notification\manager $notification_manager
 	 */
-	public function setup(config $config)
+	public function setup(config $config, manager $notification_manager)
 	{
+		$this->notification_manager = $notification_manager;
+
+		$this->warn_time = (int) $config['stevotvr_groupsub_warn_time'] * 86400;
 		$this->grace = (int) $config['stevotvr_groupsub_grace'] * 86400;
 	}
 
@@ -312,6 +329,63 @@ class subscription extends operator implements subscription_interface
 				SET sub_active = 0
 				WHERE ' . $this->db->sql_in_set('sub_id', array_keys($sub_ids));
 		$this->db->sql_query($sql);
+	}
+
+	public function notify_subscribers()
+	{
+		$sub_ids = array();
+
+		$sql_ary = array(
+			'SELECT'	=> 's.sub_id, s.user_id, s.sub_expires, p.gs_ident, p.gs_name',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->product_table => 'p'),
+					'ON'	=> 's.gs_id = p.gs_id',
+				),
+			),
+			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . ' AND s.sub_expires < ' . time(),
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$sub_ids[] = (int) $row['sub_id'];
+			$this->notification_manager->delete_notifications('stevotvr.groupsub.notification.type.warn', (int) $row['sub_id']);
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
+		}
+		$this->db->sql_freeresult($result);
+
+		if (count($sub_ids))
+		{
+			$sql = 'UPDATE ' . $this->sub_table . '
+					SET sub_notify_status = ' . subscription_interface::NOTIFY_EXPIRED . '
+					WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
+			$this->db->sql_query($sql);
+		}
+
+		if ($this->warn_time)
+		{
+			$sub_ids = array();
+
+			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . ' AND s.sub_expires < ' . (time() + $this->warn_time);
+			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+			$result = $this->db->sql_query($sql);
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$sub_ids[] = (int) $row['sub_id'];
+				$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.warn', $row);
+			}
+			$this->db->sql_freeresult($result);
+
+			if (count($sub_ids))
+			{
+				$sql = 'UPDATE ' . $this->sub_table . '
+						SET sub_notify_status = ' . subscription_interface::NOTIFY_WARN . '
+						WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
+				$this->db->sql_query($sql);
+			}
+		}
 	}
 
 	/**

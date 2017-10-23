@@ -15,6 +15,11 @@ namespace stevotvr\groupsub\operator;
  */
 interface subscription_interface
 {
+	/* Notification statuses */
+	const NOTIFY_NONE		= 0;
+	const NOTIFY_WARN		= 1;
+	const NOTIFY_EXPIRED	= 2;
+
 	/**
 	 * @param int $start The offset for querying subscriptions
 	 *
@@ -113,4 +118,9 @@ interface subscription_interface
 	 * Find all expiring subscriptions and remove the users from the associated groups.
 	 */
 	public function process_expiring();
+
+	/**
+	 * Notify subscribers of expiring and expired subscriptions.
+	 */
+	public function notify_subscribers();
 }
