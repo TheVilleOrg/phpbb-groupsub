@@ -54,8 +54,9 @@ class warn extends base_type
 
 		$params = array('name' => $this->get_data('gs_ident'));
 		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::RELATIVE_PATH);
+
 		return array(
-			'DAYS_LEFT'		=> $this->get_data('days_left'),
+			'DAYS_LEFT'		=> floor(((int) $this->get_data('sub_expires') - time()) / 86400),
 			'EXPIRE_DATE'	=> $datetime->format('|M d, Y|'),
 			'SUB_NAME'		=> $this->get_data('gs_name'),
 
@@ -70,7 +71,6 @@ class warn extends base_type
 
 	public function create_insert_array($data, $pre_create_data = array())
 	{
-		$this->set_data('days_left', (int) $data['days_left']);
 		$this->set_data('sub_expires', (int) $data['sub_expires']);
 
 		parent::create_insert_array($data, $pre_create_data);
