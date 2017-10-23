@@ -89,6 +89,7 @@ services:
             - '@stevotvr.groupsub.operator.product'
             - '@stevotvr.groupsub.operator.subscription'
             - '@template'
+            - '@stevotvr.groupsub.operator.unit_helper'
             - '@user'
             - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.entity:

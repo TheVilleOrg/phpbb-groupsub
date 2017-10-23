@@ -17,6 +17,7 @@ use phpbb\template\template;
 use phpbb\user;
 use stevotvr\groupsub\operator\product_interface;
 use stevotvr\groupsub\operator\subscription_interface;
+use stevotvr\groupsub\operator\unit_helper_interface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -60,6 +61,11 @@ class main_controller
 	protected $template;
 
 	/**
+	 * @var \stevotvr\groupsub\operator\unit_helper_interface
+	 */
+	protected $unit_helper;
+
+	/**
 	 * @var \phpbb\user
 	 */
 	protected $user;
@@ -79,10 +85,11 @@ class main_controller
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\template\template                           $template
+	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
 	 * @param \phpbb\user                                        $user
 	 * @param array                                              $currencies List of currencies
 	 */
-	public function __construct(config $config, ContainerInterface $container, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, user $user, array $currencies)
+	public function __construct(config $config, ContainerInterface $container, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user, array $currencies)
 	{
 		$this->config = $config;
 		$this->container = $container;
@@ -91,6 +98,7 @@ class main_controller
 		$this->prod_operator = $prod_operator;
 		$this->sub_operator = $sub_operator;
 		$this->template = $template;
+		$this->unit_helper = $unit_helper;
 		$this->user = $user;
 		$this->currencies = $currencies;
 
@@ -134,7 +142,7 @@ class main_controller
 				'PROD_PRICE'			=> $price,
 				'PROD_CURRENCY'			=> $currency,
 				'PROD_DISPLAY_PRICE'	=> $display_price,
-				'PROD_LENGTH'			=> $product->get_length(),
+				'PROD_LENGTH'			=> $this->unit_helper->get_formatted_timespan($product->get_length()),
 
 				'U_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $product->get_ident())),
 			));
