@@ -62,5 +62,5 @@ interface unit_helper_interface
 	 *
 	 * @throws \stevotvr\groupsub\exception\unexpected_value
 	 */
-	public function get_formatted_price($price, $currency);
+	public function get_formatted_price($value, $currency);
 }

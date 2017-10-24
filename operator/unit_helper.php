@@ -91,13 +91,13 @@ class unit_helper implements unit_helper_interface
 		throw new unexpected_value('unit');
 	}
 
-	public function get_formatted_price($price, $currency)
+	public function get_formatted_price($value, $currency)
 	{
 		if (!isset($this->currencies[$currency]))
 		{
 			throw new unexpected_value('currency');
 		}
 
-		return sprintf('%s%d %s', $this->currencies[$currency], $price, $currency);
+		return sprintf('%s%d %s', $this->currencies[$currency], $value, $currency);
 	}
 }
