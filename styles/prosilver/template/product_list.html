@@ -12,7 +12,7 @@
 
 	<div class="column1">
 
-		<p>{{ p.PROD_DESC }}</p>
+		<p>{% if p.PROD_DESC %}{{ p.PROD_DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
 
 		{% if p.group %}
 			<h4>{{ lang('GROUPS') }}</h4>
