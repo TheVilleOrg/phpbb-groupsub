@@ -76,7 +76,6 @@ services:
         class: stevotvr\groupsub\controller\ipn_controller
         arguments:
             - '@config'
-            - '@service_container'
             - '@request'
             - '@stevotvr.groupsub.operator.subscription'
     stevotvr.groupsub.controller.main:

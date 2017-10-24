@@ -97,6 +97,14 @@ interface subscription_interface
 	public function add_subscription(\stevotvr\groupsub\entity\subscription_interface $subscription);
 
 	/**
+	 * Create or extend a subscription for a user.
+	 *
+	 * @param int $prod_id The product ID
+	 * @param int $user_id The user ID
+	 */
+	public function create_subscription($prod_id, $user_id);
+
+	/**
 	 * Delete a subscription.
 	 *
 	 * @param int $sub_id The subscription ID

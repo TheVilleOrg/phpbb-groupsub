@@ -13,7 +13,6 @@ namespace stevotvr\groupsub\controller;
 use phpbb\config\config;
 use phpbb\request\request_interface;
 use stevotvr\groupsub\operator\subscription_interface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -38,11 +37,6 @@ class ipn_controller
 	protected $config;
 
 	/**
-	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
-	 */
-	protected $container;
-
-	/**
 	 * @var \phpbb\request\request_interface
 	 */
 	protected $request;
@@ -54,14 +48,12 @@ class ipn_controller
 
 	/**
 	 * @param \phpbb\config\config                               $config
-	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\request\request_interface                   $request
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 */
-	public function __construct(config $config, ContainerInterface $container, request_interface $request, subscription_interface $sub_operator)
+	public function __construct(config $config, request_interface $request, subscription_interface $sub_operator)
 	{
 		$this->config = $config;
-		$this->container = $container;
 		$this->request = $request;
 		$this->sub_operator = $sub_operator;
 	}
@@ -81,12 +73,7 @@ class ipn_controller
 				$user_id = $this->request->variable('custom', 0);
 				$prod_id = $this->request->variable('item_number', 0);
 
-				$product = $this->container->get('stevotvr.groupsub.entity.product')->load($prod_id);
-				$subscription = $this->container->get('stevotvr.groupsub.entity.subscription')
-									->set_product($product->get_id())
-									->set_user($user_id)
-									->set_expire(time() + ($product->get_length() * 86400));
-				$this->sub_operator->add_subscription($subscription);
+				$this->sub_operator->create_subscription($prod_id, $user_id);
 			}
 		}
 

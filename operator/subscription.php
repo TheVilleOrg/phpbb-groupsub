@@ -253,6 +253,41 @@ class subscription extends operator implements subscription_interface
 		return $subscription;
 	}
 
+	public function create_subscription($prod_id, $user_id)
+	{
+		$product = $this->container->get('stevotvr.groupsub.entity.product')->load($prod_id);
+		$length = $product->get_length() * 86400;
+
+		$sql = 'SELECT sub_id, sub_expires
+				FROM ' . $this->sub_table . '
+				WHERE sub_active = 1 AND gs_id = ' . $product->get_id() . ' AND user_id = ' . (int) $user_id;
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if ($row)
+		{
+			$expires = (int) $row['sub_expires'] + $length;
+			$sql = 'UPDATE ' . $this->sub_table . '
+					SET sub_expires = ' . $expires . ', sub_notify_status = 0
+					WHERE sub_id = ' . (int) $row['sub_id'];
+			$this->db->sql_query($sql);
+
+			$this->notification_manager->delete_notifications(array(
+				'stevotvr.groupsub.notification.type.warn',
+				'stevotvr.groupsub.notification.type.expired',
+			), (int) $row['sub_id']);
+
+			return;
+		}
+
+		$subscription = $this->container->get('stevotvr.groupsub.entity.subscription')
+							->set_product($product->get_id())
+							->set_user((int) $user_id)
+							->set_expire(time() + $length);
+		$this->add_subscription($subscription);
+	}
+
 	public function delete_subscription($sub_id)
 	{
 		$this->remove_user_from_groups($this->get_groups($sub_id));
