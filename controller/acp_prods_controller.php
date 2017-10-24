@@ -58,12 +58,10 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 		foreach ($entities as $entity)
 		{
-			$price = sprintf('%s%d %s', $this->currencies[$entity->get_currency()], $entity->get_price(), $entity->get_currency());
-
 			$this->template->assign_block_vars('product', array(
 				'PROD_IDENT'	=> $entity->get_ident(),
 				'PROD_NAME'		=> $entity->get_name(),
-				'PROD_PRICE'	=> $price,
+				'PROD_PRICE'	=> $this->unit_helper->get_formatted_price($entity->get_price(), $entity->get_currency()),
 				'PROD_LENGTH'	=> $this->unit_helper->get_formatted_timespan($entity->get_length()),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),

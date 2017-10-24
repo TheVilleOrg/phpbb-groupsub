@@ -91,7 +91,6 @@ services:
             - '@template'
             - '@stevotvr.groupsub.operator.unit_helper'
             - '@user'
-            - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.entity:
         class: stevotvr\groupsub\entity\entity
         abstract: true
@@ -145,4 +144,5 @@ services:
     stevotvr.groupsub.operator.unit_helper:
         class: stevotvr\groupsub\operator\unit_helper
         arguments:
+            - '%stevotvr.groupsub.currencies%'
             - '@language'

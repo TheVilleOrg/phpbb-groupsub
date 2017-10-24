@@ -71,13 +71,6 @@ class main_controller
 	protected $user;
 
 	/**
-	 * Array of currencies
-	 *
-	 * @var array
-	 */
-	protected $currencies;
-
-	/**
 	 * @param \phpbb\config\config                               $config
 	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\controller\helper                           $helper
@@ -87,9 +80,8 @@ class main_controller
 	 * @param \phpbb\template\template                           $template
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
 	 * @param \phpbb\user                                        $user
-	 * @param array                                              $currencies List of currencies
 	 */
-	public function __construct(config $config, ContainerInterface $container, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user, array $currencies)
+	public function __construct(config $config, ContainerInterface $container, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
 	{
 		$this->config = $config;
 		$this->container = $container;
@@ -100,7 +92,6 @@ class main_controller
 		$this->template = $template;
 		$this->unit_helper = $unit_helper;
 		$this->user = $user;
-		$this->currencies = $currencies;
 
 		$language->add_lang('common', 'stevotvr/groupsub');
 	}
@@ -134,14 +125,13 @@ class main_controller
 			$id = $product->get_id();
 			$price = $product->get_price();
 			$currency = $product->get_currency();
-			$display_price = sprintf('%s%s %s', $this->currencies[$currency], $price, $currency);
 			$this->template->assign_block_vars('product', array(
 				'PROD_ID'				=> $id,
 				'PROD_NAME'				=> $product->get_name(),
 				'PROD_DESC'				=> $product->get_desc_for_display(),
 				'PROD_PRICE'			=> $price,
 				'PROD_CURRENCY'			=> $currency,
-				'PROD_DISPLAY_PRICE'	=> $display_price,
+				'PROD_DISPLAY_PRICE'	=> $this->unit_helper->get_formatted_price($price, $currency),
 				'PROD_LENGTH'			=> $this->unit_helper->get_formatted_timespan($product->get_length()),
 
 				'U_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $product->get_ident())),

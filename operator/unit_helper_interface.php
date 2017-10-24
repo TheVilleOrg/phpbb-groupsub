@@ -51,4 +51,16 @@ interface unit_helper_interface
 	 * @throws \stevotvr\groupsub\exception\unexpected_value
 	 */
 	public function get_days($length, $unit);
+
+	/**
+	 * Get the formatted price with symbol, value, and currency.
+	 *
+	 * @param int    $value    The value
+	 * @param string $currency The currency
+	 *
+	 * @return string The formatted price
+	 *
+	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 */
+	public function get_formatted_price($price, $currency);
 }
