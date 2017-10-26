@@ -13,6 +13,7 @@ namespace stevotvr\groupsub\controller;
 use phpbb\config\config;
 use phpbb\request\request_interface;
 use stevotvr\groupsub\operator\subscription_interface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -32,9 +33,19 @@ class ipn_controller
 	const VALID = 'VERIFIED';
 
 	/**
+	 * The status for a completed payment
+	 */
+	const STATUS_COMPLETED = 'Completed';
+
+	/**
 	 * @var \phpbb\config\config
 	 */
 	protected $config;
+
+	/**
+	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
+	 */
+	protected $container;
 
 	/**
 	 * @var \phpbb\request\request_interface
@@ -48,12 +59,14 @@ class ipn_controller
 
 	/**
 	 * @param \phpbb\config\config                               $config
+	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\request\request_interface                   $request
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 */
-	public function __construct(config $config, request_interface $request, subscription_interface $sub_operator)
+	public function __construct(config $config, ContainerInterface $container, request_interface $request, subscription_interface $sub_operator)
 	{
 		$this->config = $config;
+		$this->container = $container;
 		$this->request = $request;
 		$this->sub_operator = $sub_operator;
 	}
@@ -70,10 +83,37 @@ class ipn_controller
 			$sandbox = (bool) $this->config['stevotvr_groupsub_pp_sandbox'];
 			if (self::verify($sandbox))
 			{
-				$user_id = $this->request->variable('custom', 0);
-				$prod_id = $this->request->variable('item_number', 0);
+				if (self::STATUS_COMPLETED !== $this->request->variable('payment_status', ''))
+				{
+					return new Response('', 200);
+				}
 
-				$this->sub_operator->create_subscription($prod_id, $user_id);
+				if ($sandbox !== $this->request->variable('test_ipn', true))
+				{
+					return new Response('', 400);
+				}
+
+				$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
+				if ($business !== $this->request->variable('business', ''))
+				{
+					return new Response('', 400);
+				}
+
+				$prod_id = $this->request->variable('item_number', 0);
+				$product = $this->container->get('stevotvr.groupsub.entity.product')->load($prod_id);
+
+				if ($product->get_price() !== $this->request->variable('payment_gross', 0))
+				{
+					return new Response('', 400);
+				}
+
+				if ($product->get_currency() !== $this->request->variable('mc_currency', ''))
+				{
+					return new Response('', 400);
+				}
+
+				$user_id = $this->request->variable('custom', 0);
+				$this->sub_operator->create_subscription($product->get_id(), $user_id);
 			}
 		}
 
