@@ -15,6 +15,7 @@ use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
 use phpbb\request\request_interface;
 use phpbb\template\template;
+use stevotvr\groupsub\operator\currency_interface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -31,6 +32,11 @@ abstract class acp_base_controller implements acp_base_interface
 	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
 	 */
 	protected $container;
+
+	/**
+	 * @var \stevotvr\groupsub\operator\currency_interface
+	 */
+	protected $currency;
 
 	/**
 	 * @var \phpbb\db\driver\driver_interface
@@ -53,13 +59,6 @@ abstract class acp_base_controller implements acp_base_interface
 	protected $template;
 
 	/**
-	 * Array of currencies
-	 *
-	 * @var array
-	 */
-	protected $currencies;
-
-	/**
 	 * The URL for the current page.
 	 *
 	 * @var string
@@ -67,23 +66,23 @@ abstract class acp_base_controller implements acp_base_interface
 	protected $u_action;
 
 	/**
-	 * @param \phpbb\config\config              $config
-	 * @param ContainerInterface                $container
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\language\language          $language
-	 * @param \phpbb\request\request_interface  $request
-	 * @param \phpbb\template\template          $template
-	 * @param array                             $currencies List of currencies
+	 * @param \phpbb\config\config                           $config
+	 * @param ContainerInterface                             $container
+	 * @param \stevotvr\groupsub\operator\currency_interface $currency
+	 * @param \phpbb\db\driver\driver_interface              $db
+	 * @param \phpbb\language\language                       $language
+	 * @param \phpbb\request\request_interface               $request
+	 * @param \phpbb\template\template                       $template
 	 */
-	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, request_interface $request, template $template, array $currencies)
+	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, driver_interface $db, language $language, request_interface $request, template $template)
 	{
 		$this->config = $config;
 		$this->container = $container;
+		$this->currency = $currency;
 		$this->db = $db;
 		$this->language = $language;
 		$this->request = $request;
 		$this->template = $template;
-		$this->currencies = $currencies;
 
 		$language->add_lang('common', 'stevotvr/groupsub');
 	}
@@ -101,11 +100,11 @@ abstract class acp_base_controller implements acp_base_interface
 	protected function assign_currency_vars($selected = null)
 	{
 		$selected = $selected ? $selected : $this->config['stevotvr_groupsub_currency'];
-		foreach ($this->currencies as $code => $symbol)
+		foreach ($this->currency->get_currencies() as $code => $currency)
 		{
 			$this->template->assign_block_vars('currency', array(
 				'CURRENCY'	=> $code,
-				'SYMBOL'	=> $symbol,
+				'SYMBOL'	=> $currency['symbol'],
 
 				'S_SELECTED'	=> ($code === $selected),
 			));

@@ -15,6 +15,7 @@ use phpbb\controller\helper;
 use phpbb\language\language;
 use phpbb\template\template;
 use phpbb\user;
+use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\product_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 use stevotvr\groupsub\operator\unit_helper_interface;
@@ -34,6 +35,11 @@ class main_controller
 	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
 	 */
 	protected $container;
+
+	/**
+	 * @var \stevotvr\groupsub\operator\currency_interface
+	 */
+	protected $currency;
 
 	/**
 	 * @var \phpbb\controller\helper
@@ -73,6 +79,7 @@ class main_controller
 	/**
 	 * @param \phpbb\config\config                               $config
 	 * @param ContainerInterface                                 $container
+	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \phpbb\controller\helper                           $helper
 	 * @param \phpbb\language\language                           $language
 	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
@@ -81,10 +88,11 @@ class main_controller
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
 	 * @param \phpbb\user                                        $user
 	 */
-	public function __construct(config $config, ContainerInterface $container, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
+	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
 	{
 		$this->config = $config;
 		$this->container = $container;
+		$this->currency = $currency;
 		$this->helper = $helper;
 		$this->language = $language;
 		$this->prod_operator = $prod_operator;
@@ -129,9 +137,9 @@ class main_controller
 				'PROD_ID'				=> $id,
 				'PROD_NAME'				=> $product->get_name(),
 				'PROD_DESC'				=> $product->get_desc_for_display(),
-				'PROD_PRICE'			=> $price,
+				'PROD_PRICE'			=> $this->currency->format_value($currency, $price),
 				'PROD_CURRENCY'			=> $currency,
-				'PROD_DISPLAY_PRICE'	=> $this->unit_helper->get_formatted_price($price, $currency),
+				'PROD_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
 				'PROD_LENGTH'			=> $this->unit_helper->get_formatted_timespan($product->get_length()),
 
 				'U_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $product->get_ident())),

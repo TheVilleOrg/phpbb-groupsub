@@ -61,7 +61,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			$this->template->assign_block_vars('product', array(
 				'PROD_IDENT'	=> $entity->get_ident(),
 				'PROD_NAME'		=> $entity->get_name(),
-				'PROD_PRICE'	=> $this->unit_helper->get_formatted_price($entity->get_price(), $entity->get_currency()),
+				'PROD_PRICE'	=> $this->currency->format_price($entity->get_currency(), $entity->get_price()),
 				'PROD_LENGTH'	=> $this->unit_helper->get_formatted_timespan($entity->get_length()),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
@@ -115,7 +115,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		$data = array(
 			'name'		=> $this->request->variable('prod_name', '', true),
 			'desc'		=> $this->request->variable('prod_desc', '', true),
-			'price'		=> $this->request->variable('prod_price', 0),
+			'price'		=> $this->request->variable('prod_price', ''),
 			'currency'	=> $this->request->variable('prod_currency', ''),
 			'length'	=> $this->parse_length(),
 			'warn_time'	=> max(0, $this->request->variable('prod_warn_time', 0)),
@@ -127,6 +127,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			$data['ident'] = $this->request->variable('prod_ident', '', true);
 		}
 
+		$data['price'] = empty($data['currency']) ? '' : $this->currency->parse_value($data['currency'], $data['price']);
 		$data['warn_time'] = min($data['warn_time'], $data['length']);
 
 		$this->set_parse_options($entity, $submit);
@@ -183,7 +184,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			'PROD_IDENT'		=> $entity->get_ident(),
 			'PROD_NAME'			=> $entity->get_name(),
 			'PROD_DESC'			=> $entity->get_desc_for_edit(),
-			'PROD_PRICE'		=> is_int($entity->get_price()) ? $entity->get_price() : '',
+			'PROD_PRICE'		=> $entity->get_currency() ? $this->currency->format_value($entity->get_currency(), $entity->get_price()) : '',
 			'PROD_WARN_TIME'	=> is_int($entity->get_warn_time()) ? $entity->get_warn_time() : $this->config['stevotvr_groupsub_warn_time'],
 			'PROD_GRACE'		=> is_int($entity->get_grace()) ? $entity->get_grace() : $this->config['stevotvr_groupsub_grace'],
 

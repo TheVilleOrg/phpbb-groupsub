@@ -24,19 +24,10 @@ class unit_helper implements unit_helper_interface
 	protected $language;
 
 	/**
-	 * Array of currencies
-	 *
-	 * @var array
-	 */
-	protected $currencies;
-
-	/**
-	 * @param array                    $currencies List of currencies
 	 * @param \phpbb\language\language $language
 	 */
-	public function __construct(array $currencies, language $language)
+	public function __construct(language $language)
 	{
-		$this->currencies = $currencies;
 		$this->language = $language;
 
 		$language->add_lang('common', 'stevotvr/groupsub');
@@ -89,15 +80,5 @@ class unit_helper implements unit_helper_interface
 		}
 
 		throw new unexpected_value('unit');
-	}
-
-	public function get_formatted_price($value, $currency)
-	{
-		if (!isset($this->currencies[$currency]))
-		{
-			throw new unexpected_value('currency');
-		}
-
-		return sprintf('%s%d %s', $this->currencies[$currency], $value, $currency);
 	}
 }

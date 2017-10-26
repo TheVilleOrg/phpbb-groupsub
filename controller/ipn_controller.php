@@ -12,6 +12,7 @@ namespace stevotvr\groupsub\controller;
 
 use phpbb\config\config;
 use phpbb\request\request_interface;
+use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,11 @@ class ipn_controller
 	protected $container;
 
 	/**
+	 * @var \stevotvr\groupsub\operator\currency_interface
+	 */
+	protected $currency;
+
+	/**
 	 * @var \phpbb\request\request_interface
 	 */
 	protected $request;
@@ -61,12 +67,14 @@ class ipn_controller
 	 * @param \phpbb\config\config                               $config
 	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\request\request_interface                   $request
+	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 */
-	public function __construct(config $config, ContainerInterface $container, request_interface $request, subscription_interface $sub_operator)
+	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, request_interface $request, subscription_interface $sub_operator)
 	{
 		$this->config = $config;
 		$this->container = $container;
+		$this->currency = $currency;
 		$this->request = $request;
 		$this->sub_operator = $sub_operator;
 	}
@@ -102,12 +110,13 @@ class ipn_controller
 				$prod_id = $this->request->variable('item_number', 0);
 				$product = $this->container->get('stevotvr.groupsub.entity.product')->load($prod_id);
 
-				if ($product->get_price() !== $this->request->variable('payment_gross', 0))
+				if ($product->get_currency() !== $this->request->variable('mc_currency', ''))
 				{
 					return new Response('', 400);
 				}
 
-				if ($product->get_currency() !== $this->request->variable('mc_currency', ''))
+				$price = $this->currency->parse_value($product->get_currency(), $product->get_price());
+				if ($price !== $this->request->variable('payment_gross', 0))
 				{
 					return new Response('', 400);
 				}

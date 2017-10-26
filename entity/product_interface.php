@@ -99,12 +99,12 @@ interface product_interface extends entity_interface
 	public function set_smilies_enabled($enable);
 
 	/**
-	 * @return int|null The price of this product
+	 * @return int|null The price of this product in the currency subunit
 	 */
 	public function get_price();
 
 	/**
-	 * @param int $price The price of this product
+	 * @param int $price The price of this product in the currency subunit
 	 *
 	 * @return product_interface This object for chaining
 	 *
