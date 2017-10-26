@@ -10,7 +10,6 @@
 
 namespace stevotvr\groupsub\operator;
 
-use phpbb\language\language;
 use stevotvr\groupsub\exception\unexpected_value;
 
 /**
