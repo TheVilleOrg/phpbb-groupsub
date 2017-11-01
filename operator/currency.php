@@ -70,7 +70,7 @@ class currency implements currency_interface
 		$this->validate($currency_code);
 		$currency = $this->currencies[$currency_code];
 
-		$format = $currency['symbol_first'] ? '%s%s %s' : '%2$s%1$s %3$s';
+		$format = $currency['symbol_first'] ? '%s%s&nbsp;%s' : '%2$s%1$s&nbsp;%3$s';
 		$price = $this->format_value($currency_code, $value, true);
 
 		return sprintf($format, $currency['symbol'], $price, $currency_code);
