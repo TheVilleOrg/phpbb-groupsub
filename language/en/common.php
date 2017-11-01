@@ -48,6 +48,9 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
 	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',
 
+	'GROUPSUB_DECIMAL_SEPARATOR'	=> '.',
+	'GROUPSUB_THOUSANDS_SEPARATOR'	=> ',',
+
 	'GROUPSUB_DAYS'		=> array(
 		1	=> 'day',
 		2	=> 'days',

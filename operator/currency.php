@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\operator;
 
+use phpbb\language\language;
 use stevotvr\groupsub\exception\unexpected_value;
 
 /**
@@ -25,11 +26,20 @@ class currency implements currency_interface
 	protected $currencies;
 
 	/**
-	 * @param array $currencies List of currencies
+	 * @var \phpbb\language\language
 	 */
-	public function __construct(array $currencies)
+	protected $language;
+
+	/**
+	 * @param array                    $currencies List of currencies
+	 * @param \phpbb\language\language $language
+	 */
+	public function __construct(array $currencies, language $language)
 	{
 		$this->currencies = $currencies;
+		$this->language = $language;
+
+		$language->add_lang('common', 'stevotvr/groupsub');
 	}
 
 	public function get_currencies()
@@ -49,10 +59,10 @@ class currency implements currency_interface
 
 		if ($with_separator)
 		{
-			$unit = number_format($unit, 0, '', $currency['thousands_separator']);
+			$unit = number_format($unit, 0, '', $this->language->lang('GROUPSUB_THOUSANDS_SEPARATOR'));
 		}
 
-		return sprintf('%s%s%02d', $unit, $currency['decimal_mark'], $subunit);
+		return sprintf('%s%s%02d', $unit, $this->language->lang('GROUPSUB_DECIMAL_SEPARATOR'), $subunit);
 	}
 
 	public function format_price($currency_code, $value)
@@ -71,14 +81,17 @@ class currency implements currency_interface
 		$this->validate($currency_code);
 		$currency = $this->currencies[$currency_code];
 
-		$parts = explode($currency['decimal_mark'], $value, 2);
+		$decimal_separator = $this->language->lang('GROUPSUB_DECIMAL_SEPARATOR');
+		$thousands_separator = $this->language->lang('GROUPSUB_THOUSANDS_SEPARATOR');
 
-		if (!preg_match('/^[\d' . $currency['thousands_separator'] . ']*$/', $parts[0]))
+		$parts = explode($decimal_separator, $value, 2);
+
+		if (!preg_match('/^[\d' . $thousands_separator . ']*$/', $parts[0]))
 		{
 			throw new unexpected_value('value');
 		}
 
-		$unit = (int) str_replace($currency['thousands_separator'], '', $parts[0]);
+		$unit = (int) str_replace($thousands_separator, '', $parts[0]);
 		$subunit = 0;
 
 		if (count($parts) > 1)

@@ -151,3 +151,4 @@ services:
         class: stevotvr\groupsub\operator\currency
         arguments:
             - '%stevotvr.groupsub.currencies%'
+            - '@language'

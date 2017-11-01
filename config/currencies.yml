@@ -4,143 +4,95 @@ parameters:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         BRL:
             symbol: 'R$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: ','
-            thousands_separator: '.'
         CAD:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         CHF:
             symbol: 'CHF'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         CZK:
             symbol: 'Kč'
             subunit_to_unit: 100
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: ' '
         DKK:
             symbol: 'kr.'
             subunit_to_unit: 100
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: '.'
         EUR:
             symbol: '€'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: ','
-            thousands_separator: '.'
         GBP:
             symbol: '£'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         HKD:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         HUF:
             symbol: 'Ft'
             subunit_to_unit: 1
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: ' '
         ILS:
             symbol: '₪'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         JPY:
             symbol: '¥'
             subunit_to_unit: 1
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         MXN:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         MYR:
             symbol: 'RM'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         NOK:
             symbol: 'kr'
             subunit_to_unit: 100
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: '.'
         NZD:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         PHP:
             symbol: '₱'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         PLN:
             symbol: 'zł'
             subunit_to_unit: 100
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: ' '
         RUB:
             symbol: '₽'
             subunit_to_unit: 100
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: '.'
         SEK:
             symbol: 'kr'
             subunit_to_unit: 100
             symbol_first: false
-            decimal_mark: ','
-            thousands_separator: ' '
         SGD:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         THB:
             symbol: '฿'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         TWD:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
         USD:
             symbol: '$'
             subunit_to_unit: 100
             symbol_first: true
-            decimal_mark: '.'
-            thousands_separator: ','
