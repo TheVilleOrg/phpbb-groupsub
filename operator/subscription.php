@@ -260,7 +260,7 @@ class subscription extends operator implements subscription_interface
 
 		$sql = 'SELECT sub_id, sub_expires
 				FROM ' . $this->sub_table . '
-				WHERE sub_active = 1 AND gs_id = ' . $product->get_id() . ' AND user_id = ' . (int) $user_id;
+				WHERE sub_active = 1 AND gs_id = ' . (int) $product->get_id() . ' AND user_id = ' . (int) $user_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
