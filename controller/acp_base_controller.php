@@ -83,8 +83,6 @@ abstract class acp_base_controller implements acp_base_interface
 		$this->language = $language;
 		$this->request = $request;
 		$this->template = $template;
-
-		$language->add_lang('common', 'stevotvr/groupsub');
 	}
 
 	public function set_page_url($page_url)

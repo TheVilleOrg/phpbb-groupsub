@@ -100,8 +100,6 @@ class main_controller
 		$this->template = $template;
 		$this->unit_helper = $unit_helper;
 		$this->user = $user;
-
-		$language->add_lang('common', 'stevotvr/groupsub');
 	}
 
 	/**

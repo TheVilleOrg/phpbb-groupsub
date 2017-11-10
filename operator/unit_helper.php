@@ -29,8 +29,6 @@ class unit_helper implements unit_helper_interface
 	public function __construct(language $language)
 	{
 		$this->language = $language;
-
-		$language->add_lang('common', 'stevotvr/groupsub');
 	}
 
 	public function get_formatted_timespan($days)

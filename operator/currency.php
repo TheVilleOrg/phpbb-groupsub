@@ -38,8 +38,6 @@ class currency implements currency_interface
 	{
 		$this->currencies = $currencies;
 		$this->language = $language;
-
-		$language->add_lang('common', 'stevotvr/groupsub');
 	}
 
 	public function get_currencies()
