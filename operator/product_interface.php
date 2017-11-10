@@ -25,6 +25,13 @@ interface product_interface
 	public function get_products($name = false);
 
 	/**
+	 * Count the total number of products.
+	 *
+	 * @return int The total number of products
+	 */
+	public function count_products();
+
+	/**
 	 * Add a product.
 	 *
 	 * @param \stevotvr\groupsub\entity\product_interface $product

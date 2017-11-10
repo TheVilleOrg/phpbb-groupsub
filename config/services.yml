@@ -3,6 +3,14 @@ imports:
     - { resource: currencies.yml }
 
 services:
+    stevotvr.groupsub.listener:
+        class: stevotvr\groupsub\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@stevotvr.groupsub.operator.product'
+            - '@template'
+        tags:
+            - { name: event.listener }
     stevotvr.groupsub.cron.task.main:
         class: stevotvr\groupsub\cron\task\main
         arguments:

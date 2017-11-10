@@ -52,6 +52,17 @@ class product extends operator implements product_interface
 		return $entities;
 	}
 
+	public function count_products()
+	{
+		$sql = 'SELECT COUNT(gs_id) AS gs_count
+				FROM ' . $this->product_table;
+		$result = $this->db->sql_query($sql);
+		$count = $this->db->sql_fetchfield('gs_count');
+		$this->db->sql_freeresult($result);
+
+		return (int) $count;
+	}
+
 	public function add_product(entity $product)
 	{
 		$product->insert();
