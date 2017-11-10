@@ -56,7 +56,7 @@ class main_listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Adds the extension language set on user setup.
+	 * Adds the extension language set and the controller link on user setup.
 	 *
 	 * @param \phpbb\event\data $event The event data
 	 */
