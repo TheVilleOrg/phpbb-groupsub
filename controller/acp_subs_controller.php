@@ -364,6 +364,12 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 										->setDate((int) $date_parts[0], (int) $date_parts[1], (int) $date_parts[2])
 										->setTime(0, 0, 0)
 										->getTimestamp();
+
+			if ($data['expire'] < time())
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
+			}
+
 			return;
 		}
 

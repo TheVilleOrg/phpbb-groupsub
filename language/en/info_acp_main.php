@@ -99,6 +99,7 @@ $lang = array_merge($lang, array(
 
 	'ACP_GROUPSUB_ERROR_CURRENCY'		=> 'You must select a valid currency.',
 	'ACP_GROUPSUB_ERROR_NO_PRODS'		=> 'There are no products for which to create a subscription.',
+	'ACP_GROUPSUB_ERROR_DATE_IN_PAST'	=> 'The expiration date entered was in the past.',
 	'ACP_GROUPSUB_ERROR_INVALID_DATE'	=> 'The expiration date entered was in an invalid format.',
 	'ACP_GROUPSUB_ERROR_INVALID_PRICE'	=> 'The price must be greater than 0.',
 
