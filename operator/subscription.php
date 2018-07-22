@@ -290,7 +290,14 @@ class subscription extends operator implements subscription_interface
 
 	public function delete_subscription($sub_id)
 	{
-		$this->remove_user_from_groups($this->get_groups($sub_id));
+		$sql = 'SELECT user_id
+				FROM ' . $this->sub_table . '
+				WHERE sub_id = ' . (int) $sub_id;
+		$this->db->sql_query($sql);
+		$user_id = $this->db->sql_fetchfield('user_id');
+		$this->db->sql_freeresult();
+
+		$this->remove_user_from_groups($user_id, $this->get_groups($sub_id));
 
 		$sql = 'DELETE FROM ' . $this->sub_table . '
 				WHERE sub_id = ' . (int) $sub_id;
