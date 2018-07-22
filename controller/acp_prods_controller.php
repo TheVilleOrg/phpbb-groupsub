@@ -212,7 +212,8 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		$selected = $prod_id ? $this->prod_operator->get_groups($prod_id) : array();
 
 		$sql = 'SELECT group_id, group_name
-				FROM ' . GROUPS_TABLE;
+				FROM ' . GROUPS_TABLE . '
+				WHERE group_type < ' . GROUP_SPECIAL;
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
