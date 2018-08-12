@@ -6,6 +6,7 @@ services:
     stevotvr.groupsub.listener:
         class: stevotvr\groupsub\event\main_listener
         arguments:
+            - '@config'
             - '@controller.helper'
             - '@stevotvr.groupsub.operator.product'
             - '@template'

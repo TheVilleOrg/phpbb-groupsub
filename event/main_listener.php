@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\event;
 
+use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\event\data;
 use phpbb\template\template;
@@ -21,6 +22,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+	/**
+	 * @var \phpbb\config\config
+	 */
+	protected $config;
+
 	/**
 	 * @var \phpbb\controller\helper
 	 */
@@ -37,12 +43,14 @@ class main_listener implements EventSubscriberInterface
 	protected $template;
 
 	/**
+	 * @param \phpbb\config\config                          $config
 	 * @param \phpbb\controller\helper                      $helper
 	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
 	 * @param \phpbb\template\template                      $template
 	 */
-	public function __construct(helper $helper, product_interface $prod_operator, template $template)
+	public function __construct(config $config, helper $helper, product_interface $prod_operator, template $template)
 	{
+		$this->config = $config;
 		$this->helper = $helper;
 		$this->prod_operator = $prod_operator;
 		$this->template = $template;
@@ -69,9 +77,22 @@ class main_listener implements EventSubscriberInterface
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 
-		if ($this->prod_operator->count_products())
+		if ($this->groupsub_active() && $this->prod_operator->count_products())
 		{
 			$this->template->assign_var('U_GROUPSUB_SUBS', $this->helper->route('stevotvr_groupsub_main'));
 		}
+	}
+
+	/**
+	 * Check if the extension is configured.
+	 *
+	 * @return boolean The extension is ready to use
+	 */
+	protected function groupsub_active()
+	{
+		$pp_sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
+		$sb = $pp_sandbox && !empty($this->config['stevotvr_groupsub_pp_sb_business']);
+		$live = !$pp_sandbox && !empty($this->config['stevotvr_groupsub_pp_business']);
+		return $sb || $live;
 	}
 }
