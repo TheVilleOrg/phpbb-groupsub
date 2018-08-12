@@ -37,7 +37,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 				'grace'				=> max(0, $this->request->variable('groupsub_grace', 0)),
 			);
 
-			if (!isset($this->currencies[$data['currency']]))
+			if (!$this->currency->is_valid($data['currency']))
 			{
 				$errors[] = 'ACP_GROUPSUB_ERROR_CURRENCY';
 			}
