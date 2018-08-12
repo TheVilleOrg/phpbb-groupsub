@@ -148,6 +148,7 @@ services:
               arguments:
                 - '@config'
                 - '@notification_manager'
+                - '@dispatcher'
             - method: set_path_info
               arguments:
                 - '%core.root_path%'

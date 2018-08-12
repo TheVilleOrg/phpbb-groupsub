@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\operator;
 
 use phpbb\config\config;
+use phpbb\event\dispatcher;
 use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\exception\out_of_bounds;
@@ -24,6 +25,11 @@ class subscription extends operator implements subscription_interface
 	 * @var \phpbb\notification\manager
 	 */
 	protected $notification_manager;
+
+	/**
+	 * @var \phpbb\event\dispatcher
+	 */
+	protected $phpbb_dispatcher;
 
 	/**
 	 * The root phpBB path.
@@ -85,10 +91,12 @@ class subscription extends operator implements subscription_interface
 	 *
 	 * @param \phpbb\config\config        $config
 	 * @param \phpbb\notification\manager $notification_manager
+	 * @param \phpbb\event\dispatcher     $phpbb_dispatcher
 	 */
-	public function setup(config $config, manager $notification_manager)
+	public function setup(config $config, manager $notification_manager, dispatcher $phpbb_dispatcher)
 	{
 		$this->notification_manager = $notification_manager;
+		$this->phpbb_dispatcher = $phpbb_dispatcher;
 
 		$this->warn_time = (int) $config['stevotvr_groupsub_warn_time'] * 86400;
 		$this->grace = (int) $config['stevotvr_groupsub_grace'] * 86400;
@@ -248,6 +256,7 @@ class subscription extends operator implements subscription_interface
 		{
 			$groups = $this->get_groups($subscription->get_id());
 			$this->add_user_to_groups($subscription->get_user(), $groups);
+			$this->dispatch_start_event($subscription->get_user(), $subscription->get_id(), $subscription->get_product());
 		}
 
 		return $subscription;
@@ -290,14 +299,15 @@ class subscription extends operator implements subscription_interface
 
 	public function delete_subscription($sub_id)
 	{
-		$sql = 'SELECT user_id
+		$sql = 'SELECT gs_id, user_id
 				FROM ' . $this->sub_table . '
 				WHERE sub_id = ' . (int) $sub_id;
 		$this->db->sql_query($sql);
-		$user_id = $this->db->sql_fetchfield('user_id');
+		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
 
-		$this->remove_user_from_groups($user_id, $this->get_groups($sub_id));
+		$this->remove_user_from_groups((int) $row['user_id'], $this->get_groups($sub_id));
+		$this->dispatch_end_event((int) $row['user_id'], $sub_id, (int) $row['gs_id']);
 
 		$sql = 'DELETE FROM ' . $this->sub_table . '
 				WHERE sub_id = ' . (int) $sub_id;
@@ -336,9 +346,10 @@ class subscription extends operator implements subscription_interface
 	{
 		$sub_ids = array();
 		$group_ids = array();
+		$user_ids = array();
 
 		$sql_ary = array(
-			'SELECT'	=> 's.sub_id, s.user_id, g.group_id',
+			'SELECT'	=> 's.sub_id, s.gs_id, s.user_id, g.group_id',
 			'FROM'		=> array($this->sub_table => 's'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -352,12 +363,13 @@ class subscription extends operator implements subscription_interface
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$sub_ids[(int) $row['sub_id']] = true;
+			$sub_ids[(int) $row['sub_id']] = (int) $row['gs_id'];
+			$user_ids[(int) $row['sub_id']] = (int) $row['user_id'];
 			$group_ids[(int) $row['user_id']][] = (int) $row['group_id'];
 		}
 		$this->db->sql_freeresult($result);
 
-		if (!count($sub_ids))
+		if (empty($sub_ids))
 		{
 			return;
 		}
@@ -365,6 +377,11 @@ class subscription extends operator implements subscription_interface
 		foreach ($group_ids as $user => $groups)
 		{
 			$this->remove_user_from_groups($user, $groups);
+		}
+
+		foreach ($sub_ids as $sub_id => $gs_id)
+		{
+			$this->dispatch_end_event($user_ids[$sub_id], $sub_id, $gs_id);
 		}
 
 		$sql = 'UPDATE ' . $this->sub_table . '
@@ -499,6 +516,50 @@ class subscription extends operator implements subscription_interface
 		{
 			group_user_del($group_id, $user_id);
 		}
+	}
+
+	/**
+	 * Dispatch the event for a subscription starting.
+	 *
+	 * @param int $user_id The user ID
+	 * @param int $sub_id  The subscription ID
+	 * @param int $prod_id The product ID
+	 */
+	protected function dispatch_start_event($user_id, $sub_id, $prod_id)
+	{
+		/**
+		 * Event triggered when a subscription is started.
+		 *
+		 * @event stevotvr.groupsub.subscription_started
+		 * @var int user_id The user ID
+		 * @var int sub_id  The subscription ID
+		 * @var int prod_id The product ID
+		 * @since 0.1.0
+		 */
+		$vars = array('user_id', 'sub_id', 'prod_id');
+		$this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars));
+	}
+
+	/**
+	 * Dispatch the event for a subscription ending.
+	 *
+	 * @param int $user_id The user ID
+	 * @param int $sub_id  The subscription ID
+	 * @param int $prod_id The product ID
+	 */
+	protected function dispatch_end_event($user_id, $sub_id, $prod_id)
+	{
+		/**
+		 * Event triggered when a subscription is ended.
+		 *
+		 * @event stevotvr.groupsub.subscription_ended
+		 * @var int user_id The user ID
+		 * @var int sub_id  The subscription ID
+		 * @var int prod_id The product ID
+		 * @since 0.1.0
+		 */
+		$vars = array('user_id', 'sub_id', 'prod_id');
+		$this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_ended', compact($vars));
 	}
 
 }
