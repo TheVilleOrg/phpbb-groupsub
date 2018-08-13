@@ -537,7 +537,7 @@ class subscription extends operator implements subscription_interface
 		 * @since 0.1.0
 		 */
 		$vars = array('user_id', 'sub_id', 'prod_id');
-		$this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars));
+		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
 	}
 
 	/**
@@ -559,7 +559,7 @@ class subscription extends operator implements subscription_interface
 		 * @since 0.1.0
 		 */
 		$vars = array('user_id', 'sub_id', 'prod_id');
-		$this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_ended', compact($vars));
+		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_ended', compact($vars)));
 	}
 
 }
