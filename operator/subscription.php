@@ -11,7 +11,7 @@
 namespace stevotvr\groupsub\operator;
 
 use phpbb\config\config;
-use phpbb\event\dispatcher;
+use phpbb\event\dispatcher_interface;
 use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\exception\out_of_bounds;
@@ -27,7 +27,7 @@ class subscription extends operator implements subscription_interface
 	protected $notification_manager;
 
 	/**
-	 * @var \phpbb\event\dispatcher
+	 * @var \phpbb\event\dispatcher_interface
 	 */
 	protected $phpbb_dispatcher;
 
@@ -89,9 +89,9 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\config\config        $config
-	 * @param \phpbb\notification\manager $notification_manager
-	 * @param \phpbb\event\dispatcher     $phpbb_dispatcher
+	 * @param \phpbb\config\config              $config
+	 * @param \phpbb\notification\manager       $notification_manager
+	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
 	 */
 	public function setup(config $config, manager $notification_manager, dispatcher $phpbb_dispatcher)
 	{
