@@ -93,7 +93,7 @@ class subscription extends operator implements subscription_interface
 	 * @param \phpbb\notification\manager       $notification_manager
 	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
 	 */
-	public function setup(config $config, manager $notification_manager, dispatcher $phpbb_dispatcher)
+	public function setup(config $config, manager $notification_manager, dispatcher_interface $phpbb_dispatcher)
 	{
 		$this->notification_manager = $notification_manager;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
