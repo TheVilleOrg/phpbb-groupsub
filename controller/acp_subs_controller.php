@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\json_response;
 use phpbb\pagination;
 use phpbb\user;
 use stevotvr\groupsub\entity\subscription_interface as sub_entity;

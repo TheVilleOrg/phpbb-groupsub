@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\controller;
 
 use phpbb\group\helper;
+use phpbb\json_response;
 use stevotvr\groupsub\entity\product_interface as prod_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\product_interface as prod_operator;
