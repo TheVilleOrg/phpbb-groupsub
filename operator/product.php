@@ -105,10 +105,10 @@ class product extends operator implements product_interface
 		}
 		$this->db->sql_freeresult($result);
 
-		$position = array_search($item_id, $ids);
+		$position = array_search($product_id, $ids);
 		array_splice($ids, $position, 1);
 		$position += $offset;
-		array_splice($ids, $position, 0, $item_id);
+		array_splice($ids, $position, 0, $product_id);
 
 		foreach ($ids as $pos => $id)
 		{
