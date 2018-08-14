@@ -205,7 +205,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	{
 		$posted = $this->request->is_set_post('prod_name');
 
-		$ident = $post['ident'] ? $post['ident'] : $entity->get_ident();
+		$ident = !$entity->get_id() ? $post['ident'] : $entity->get_ident();
 		$name = $posted ? $post['name'] : $entity->get_name();
 		$desc = $posted ? $post['desc'] : $entity->get_desc_for_edit();
 		$bbcode = $posted ? $post['bbcode_enabled'] : $entity->is_bbcode_enabled();
