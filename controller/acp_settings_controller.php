@@ -61,6 +61,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			'PP_SANDBOX'		=> $this->config['stevotvr_groupsub_pp_sandbox'],
 			'PP_SB_BUSINESS'	=> $this->config['stevotvr_groupsub_pp_sb_business'],
 			'PP_BUSINESS'		=> $this->config['stevotvr_groupsub_pp_business'],
+			'CURRENCY'			=> $this->config['stevotvr_groupsub_currency'],
 			'WARN_TIME'			=> $this->config['stevotvr_groupsub_warn_time'],
 			'GRACE'				=> $this->config['stevotvr_groupsub_grace'],
 

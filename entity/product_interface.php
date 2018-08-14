@@ -99,48 +99,6 @@ interface product_interface extends entity_interface
 	public function set_smilies_enabled($enable);
 
 	/**
-	 * @return int|null The price of this product in the currency subunit
-	 */
-	public function get_price();
-
-	/**
-	 * @param int $price The price of this product in the currency subunit
-	 *
-	 * @return product_interface This object for chaining
-	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
-	 */
-	public function set_price($price);
-
-	/**
-	 * @return string The currency code of the price of this product
-	 */
-	public function get_currency();
-
-	/**
-	 * @param string $currency The currency code of the price of this product
-	 *
-	 * @return product_interface This object for chaining
-	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
-	 */
-	public function set_currency($currency);
-
-	/**
-	 * @return int|null The length of this product in days
-	 */
-	public function get_length();
-
-	/**
-	 * @param int $length The length of this product in days
-	 *
-	 * @return product_interface This object for chaining
-	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
-	 */
-	public function set_length($length);
-
-	/**
 	 * @return int|null The time in days before the expiration of this product at which to notify
 	 *                  subscribers
 	 */

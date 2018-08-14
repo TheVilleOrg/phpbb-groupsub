@@ -92,19 +92,16 @@ abstract class acp_base_controller implements acp_base_interface
 
 	/**
 	 * Assign template block variables for the currency select box.
-	 *
-	 * @param string|null $selected The selected currency
 	 */
-	protected function assign_currency_vars($selected = null)
+	protected function assign_currency_vars()
 	{
-		$selected = $selected ? $selected : $this->config['stevotvr_groupsub_currency'];
 		foreach ($this->currency->get_currencies() as $code => $currency)
 		{
 			$this->template->assign_block_vars('currency', array(
 				'CURRENCY'	=> $code,
 				'SYMBOL'	=> $currency['symbol'],
 
-				'S_SELECTED'	=> ($code === $selected),
+				'S_DEFAULT'	=> $code === $this->config['stevotvr_groupsub_currency'],
 			));
 		}
 	}

@@ -35,9 +35,6 @@ class version_0_1_0 extends migration
 						'gs_desc_bbcode_uid'		=> array('VCHAR:8', ''),
 						'gs_desc_bbcode_bitfield'	=> array('VCHAR:255', ''),
 						'gs_desc_bbcode_options'	=> array('UINT:11', 7),
-						'gs_price'					=> array('UINT', 0),
-						'gs_currency'				=> array('VCHAR:3', ''),
-						'gs_length'					=> array('UINT', 0),
 						'gs_warn_time'				=> array('UINT', 0),
 						'gs_grace'					=> array('UINT', 0),
 						'gs_order'					=> array('UINT', 0),
@@ -46,6 +43,21 @@ class version_0_1_0 extends migration
 					'KEYS' => array(
 						'gs_order'	=> array('INDEX', 'gs_order'),
 						'gs_ident'	=> array('UNIQUE', 'gs_ident'),
+					),
+				),
+				$this->table_prefix . 'groupsub_prices' => array(
+					'COLUMNS' => array(
+						'p_id'			=> array('UINT', null, 'auto_increment'),
+						'gs_id'			=> array('UINT', 0),
+						'p_price'		=> array('UINT', 0),
+						'p_currency'	=> array('VCHAR:3', ''),
+						'p_length'		=> array('UINT', 0),
+						'p_order'		=> array('UINT', 0),
+					),
+					'PRIMARY_KEY' => 'p_id',
+					'KEYS' => array(
+						'gs_id'			=> array('INDEX', 'gs_id'),
+						'p_order'		=> array('INDEX', 'p_order'),
 					),
 				),
 				$this->table_prefix . 'groupsub_groups' => array(
@@ -82,6 +94,7 @@ class version_0_1_0 extends migration
 			'drop_tables'   => array(
 				$this->table_prefix . 'groupsub_subs',
 				$this->table_prefix . 'groupsub_groups',
+				$this->table_prefix . 'groupsub_prices',
 				$this->table_prefix . 'groupsub',
 			),
 		);

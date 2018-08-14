@@ -10,36 +10,13 @@
 
 namespace stevotvr\groupsub\operator;
 
-use phpbb\language\language;
 use stevotvr\groupsub\exception\unexpected_value;
 
 /**
  * Group Subscription currency operator.
  */
-class currency implements currency_interface
+class currency extends operator implements currency_interface
 {
-	/**
-	 * Array of currencies
-	 *
-	 * @var array
-	 */
-	protected $currencies;
-
-	/**
-	 * @var \phpbb\language\language
-	 */
-	protected $language;
-
-	/**
-	 * @param array                    $currencies List of currencies
-	 * @param \phpbb\language\language $language
-	 */
-	public function __construct(array $currencies, language $language)
-	{
-		$this->currencies = $currencies;
-		$this->language = $language;
-	}
-
 	public function get_currencies()
 	{
 		return $this->currencies;
@@ -84,7 +61,7 @@ class currency implements currency_interface
 
 		$parts = explode($decimal_separator, $value, 2);
 
-		if (!preg_match('/^[\d' . $thousands_separator . ']*$/', $parts[0]))
+		if (!preg_match('/^[\d\\' . $thousands_separator . ']*$/', $parts[0]))
 		{
 			throw new unexpected_value('value');
 		}

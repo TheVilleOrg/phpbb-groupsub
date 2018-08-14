@@ -28,9 +28,6 @@ class product extends entity implements product_interface
 		'gs_desc_bbcode_uid'		=> 'string',
 		'gs_desc_bbcode_bitfield'	=> 'string',
 		'gs_desc_bbcode_options'	=> 'integer',
-		'gs_price'					=> 'set_price',
-		'gs_currency'				=> 'set_currency',
-		'gs_length'					=> 'set_length',
 		'gs_warn_time'				=> 'set_warn_time',
 		'gs_grace'					=> 'set_grace',
 		'gs_order'					=> 'set_order',
@@ -44,22 +41,13 @@ class product extends entity implements product_interface
 	protected $config;
 
 	/**
-	 * Array of currencies
-	 *
-	 * @var array
-	 */
-	protected $currencies;
-
-	/**
 	 * Set up the entity with the configuration.
 	 *
 	 * @param \phpbb\config\config $config
-	 * @param array                $currencies List of currencies
 	 */
-	public function setup(config $config, array $currencies)
+	public function setup(config $config)
 	{
 		$this->config = $config;
-		$this->currencies = $currencies;
 	}
 
 	public function get_ident()
@@ -164,6 +152,10 @@ class product extends entity implements product_interface
 
 	public function is_bbcode_enabled()
 	{
+		if (!isset($this->data['gs_desc_bbcode_options']))
+		{
+			return true;
+		}
 		return ($this->data['gs_desc_bbcode_options'] & OPTION_FLAG_BBCODE);
 	}
 
@@ -176,6 +168,10 @@ class product extends entity implements product_interface
 
 	public function is_magic_url_enabled()
 	{
+		if (!isset($this->data['gs_desc_bbcode_options']))
+		{
+			return true;
+		}
 		return ($this->data['gs_desc_bbcode_options'] & OPTION_FLAG_LINKS);
 	}
 
@@ -188,67 +184,16 @@ class product extends entity implements product_interface
 
 	public function is_smilies_enabled()
 	{
+		if (!isset($this->data['gs_desc_bbcode_options']))
+		{
+			return true;
+		}
 		return ($this->data['gs_desc_bbcode_options'] & OPTION_FLAG_SMILIES);
 	}
 
 	public function set_smilies_enabled($enable)
 	{
 		$this->set_desc_option(OPTION_FLAG_SMILIES, $enable);
-
-		return $this;
-	}
-
-	public function get_price()
-	{
-		return isset($this->data['gs_price']) ? (int) $this->data['gs_price'] : null;
-	}
-
-	public function set_price($price)
-	{
-		$price = (int) $price;
-
-		if ($price < 0 || $price > 16777215)
-		{
-			throw new out_of_bounds('gs_price');
-		}
-
-		$this->data['gs_price'] = $price;
-
-		return $this;
-	}
-
-	public function get_currency()
-	{
-		return isset($this->data['gs_currency']) ? (string) $this->data['gs_currency'] : '';
-	}
-
-	public function set_currency($currency)
-	{
-		$currency = strtoupper((string) $currency);
-
-		if (!isset($this->currencies[$currency]))
-		{
-			throw new unexpected_value('gs_currency', 'INVALID_CURRENCY');
-		}
-
-		$this->data['gs_currency'] = $currency;
-	}
-
-	public function get_length()
-	{
-		return isset($this->data['gs_length']) ? (int) $this->data['gs_length'] : null;
-	}
-
-	public function set_length($length)
-	{
-		$length = (int) $length;
-
-		if ($length < 0 || $length > 16777215)
-		{
-			throw new out_of_bounds('gs_length');
-		}
-
-		$this->data['gs_length'] = $length;
 
 		return $this;
 	}

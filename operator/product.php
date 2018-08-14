@@ -80,6 +80,10 @@ class product extends operator implements product_interface
 				WHERE gs_id = ' . (int) $product_id;
 		$this->db->sql_query($sql);
 
+		$sql = 'DELETE FROM ' . $this->price_table . '
+				WHERE gs_id = ' . (int) $product_id;
+		$this->db->sql_query($sql);
+
 		$sql = 'DELETE FROM ' . $this->product_table . '
 				WHERE gs_id = ' . (int) $product_id;
 		$this->db->sql_query($sql);
@@ -101,10 +105,10 @@ class product extends operator implements product_interface
 		}
 		$this->db->sql_freeresult($result);
 
-		$position = array_search($product_id, $ids);
+		$position = array_search($item_id, $ids);
 		array_splice($ids, $position, 1);
 		$position += $offset;
-		array_splice($ids, $position, 0, $product_id);
+		array_splice($ids, $position, 0, $item_id);
 
 		foreach ($ids as $pos => $id)
 		{
@@ -112,6 +116,38 @@ class product extends operator implements product_interface
 					SET gs_order = ' . $pos . '
 					WHERE gs_id = ' . (int) $id;
 			$this->db->sql_query($sql);
+		}
+	}
+
+	public function get_prices($product_id = false)
+	{
+		$entities = array();
+
+		$where = $product_id ? 'WHERE gs_id = ' . (int) $product_id : '';
+		$sql = 'SELECT *
+				FROM ' . $this->price_table . '
+				' . $where . '
+				ORDER BY p_order ASC, p_id ASC';
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$entities[(int) $row['gs_id']][] = $this->container->get('stevotvr.groupsub.entity.price')->import($row);
+		}
+		$this->db->sql_freeresult();
+
+		return $entities;
+	}
+
+	public function set_prices($product_id, array $prices)
+	{
+		$sql = 'DELETE FROM ' . $this->price_table . '
+				WHERE gs_id = ' . (int) $product_id;
+		$this->db->sql_query($sql);
+
+		$i = 0;
+		foreach ($prices as $entity)
+		{
+			$entity->set_product($product_id)->set_order($i++)->insert();
 		}
 	}
 
@@ -190,5 +226,19 @@ class product extends operator implements product_interface
 		$sql = 'DELETE FROM ' . $this->group_table . '
 				WHERE gs_id = ' . (int) $product_id;
 		$this->db->sql_query($sql);
+	}
+
+	public function get_length($product_id, $price, $currency)
+	{
+		$sql = 'SELECT p_length
+				FROM ' . $this->price_table . '
+				WHERE gs_id = ' . (int) $product_id . '
+					AND p_price = ' . (int) $price . '
+					AND p_currency = ' . $this->db->sql_escape($currency);
+		$this->db->sql_query($sql);
+		$length = $this->db->sql_fetchfield('p_length');
+		$this->db->sql_freeresult();
+
+		return $length === false ? false : (int) $length;
 	}
 }

@@ -56,20 +56,30 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	public function display()
 	{
 		$entities = $this->prod_operator->get_products();
+		$prices = $this->prod_operator->get_prices();
 
 		foreach ($entities as $entity)
 		{
 			$this->template->assign_block_vars('product', array(
 				'PROD_IDENT'	=> $entity->get_ident(),
 				'PROD_NAME'		=> $entity->get_name(),
-				'PROD_PRICE'	=> $this->currency->format_price($entity->get_currency(), $entity->get_price()),
-				'PROD_LENGTH'	=> $this->unit_helper->get_formatted_timespan($entity->get_length()),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
 				'U_EDIT'		=> $this->u_action . '&amp;action=edit&amp;id=' . $entity->get_id(),
 				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $entity->get_id(),
 			));
+
+			if (isset($prices[$entity->get_id()]))
+			{
+				foreach ($prices[$entity->get_id()] as $price)
+				{
+					$this->template->assign_block_vars('product.price', array(
+						'PROD_PRICE'	=> $this->currency->format_price($price->get_currency(), $price->get_price()),
+						'PROD_LENGTH'	=> $this->unit_helper->get_formatted_timespan($price->get_length()),
+					));
+				}
+			}
 		}
 
 		$this->template->assign_vars(array(
@@ -114,13 +124,13 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		add_form_key('add_edit_prod');
 
 		$data = array(
-			'name'		=> $this->request->variable('prod_name', '', true),
-			'desc'		=> $this->request->variable('prod_desc', '', true),
-			'price'		=> $this->request->variable('prod_price', ''),
-			'currency'	=> $this->request->variable('prod_currency', ''),
-			'length'	=> $this->parse_length(),
-			'warn_time'	=> max(0, $this->request->variable('prod_warn_time', 0)),
-			'grace'		=> max(0, $this->request->variable('prod_grace', 0)),
+			'name'				=> $this->request->variable('prod_name', '', true),
+			'desc'				=> $this->request->variable('prod_desc', '', true),
+			'bbcode_enabled'	=> $this->request->variable('parse_bbcode', false),
+			'magic_url_enabled'	=> $this->request->variable('parse_magic_url', false),
+			'smilies_enabled'	=> $this->request->variable('parse_smilies', false),
+			'warn_time'			=> max(0, $this->request->variable('prod_warn_time', 0)),
+			'grace'				=> max(0, $this->request->variable('prod_grace', 0)),
 		);
 
 		if (!$entity->get_id())
@@ -128,21 +138,11 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			$data['ident'] = $this->request->variable('prod_ident', '', true);
 		}
 
-		$data['price'] = empty($data['currency']) ? '' : $this->currency->parse_value($data['currency'], $data['price']);
-		$data['warn_time'] = min($data['warn_time'], $data['length']);
-
-		$this->set_parse_options($entity, $submit);
-
 		if ($submit)
 		{
 			if (!check_form_key('add_edit_prod'))
 			{
 				$errors[] = 'FORM_INVALID';
-			}
-
-			if ($data['price'] < 1)
-			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_PRICE';
 			}
 
 			foreach ($data as $name => $value)
@@ -171,34 +171,63 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 				}
 
 				$this->parse_groups($entity->get_id());
+				$this->parse_prices($entity->get_id());
 
-				trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
+				if (empty($errors))
+				{
+					trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
+				}
 			}
 		}
 
-		$errors = array_map(array($this->language, 'lang'), $errors);
-
-		$this->template->assign_vars(array(
-			'S_ERROR'	=> (bool) count($errors),
-			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
-
-			'PROD_IDENT'		=> $entity->get_ident(),
-			'PROD_NAME'			=> $entity->get_name(),
-			'PROD_DESC'			=> $entity->get_desc_for_edit(),
-			'PROD_PRICE'		=> $entity->get_currency() ? $this->currency->format_value($entity->get_currency(), $entity->get_price()) : '',
-			'PROD_WARN_TIME'	=> is_int($entity->get_warn_time()) ? $entity->get_warn_time() : $this->config['stevotvr_groupsub_warn_time'],
-			'PROD_GRACE'		=> is_int($entity->get_grace()) ? $entity->get_grace() : $this->config['stevotvr_groupsub_grace'],
-
-			'S_PARSE_BBCODE_CHECKED'	=> $entity->is_bbcode_enabled(),
-			'S_PARSE_SMILIES_CHECKED'	=> $entity->is_smilies_enabled(),
-			'S_PARSE_MAGIC_URL_CHECKED'	=> $entity->is_magic_url_enabled(),
-
-			'U_BACK'	=> $this->u_action,
-		));
+		if (!empty($errors))
+		{
+			$errors = array_map(array($this->language, 'lang'), $errors);
+			$this->template->assign_vars(array(
+				'ERROR_MSG'	=> implode('<br>', $errors),
+			));
+		}
 
 		$this->load_groups($entity->get_id());
-		$this->load_length($entity);
-		$this->assign_currency_vars($entity->get_currency());
+		$this->load_prices($entity->get_id());
+		$this->assign_tpl_vars($entity, $data);
+		$this->assign_currency_vars();
+		$this->assign_length_vars();
+	}
+
+	/**
+	 * Assign the main template variables.
+	 *
+	 * @param \stevotvr\groupsub\entity\product_interface $entity The product
+	 * @param array                                       $post   The posted data
+	 */
+	protected function assign_tpl_vars(prod_entity $entity, array $post)
+	{
+		$posted = $this->request->is_set_post('prod_name');
+
+		$ident = $post['ident'] ? $post['ident'] : $entity->get_ident();
+		$name = $posted ? $post['name'] : $entity->get_name();
+		$desc = $posted ? $post['desc'] : $entity->get_desc_for_edit();
+		$bbcode = $posted ? $post['bbcode_enabled'] : $entity->is_bbcode_enabled();
+		$magic_url = $posted ? $post['magic_url_enabled'] : $entity->is_magic_url_enabled();
+		$smilies = $posted ? $post['smilies_enabled'] : $entity->is_smilies_enabled();
+		$warn_time = $posted ? $post['warn_time'] : $entity->get_warn_time();
+		$grace = $posted ? $post['grace'] : $entity->get_grace();
+
+		$this->template->assign_vars(array(
+			'PROD_IDENT'		=> $ident,
+			'PROD_NAME'			=> $name,
+			'PROD_DESC'			=> $desc,
+			'PROD_WARN_TIME'	=> is_int($warn_time) ? $warn_time : $this->config['stevotvr_groupsub_warn_time'],
+			'PROD_GRACE'		=> is_int($grace) ? $grace : $this->config['stevotvr_groupsub_grace'],
+
+			'S_PARSE_BBCODE_CHECKED'	=> $bbcode,
+			'S_PARSE_SMILIES_CHECKED'	=> $smilies,
+			'S_PARSE_MAGIC_URL_CHECKED'	=> $magic_url,
+
+			'U_BACK'	=> $this->u_action,
+			'U_PRICES'	=> $this->u_action . '&amp;prod_id=' . $entity->get_id() . '&amp;prices=true',
+		));
 	}
 
 	/**
@@ -210,7 +239,12 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	{
 		$groups = array();
 
-		$selected = $prod_id ? $this->prod_operator->get_groups($prod_id) : array();
+		$selected = $this->request->variable('prod_groups', array(0));
+
+		if ($prod_id && empty($selected))
+		{
+			$selected = $this->prod_operator->get_groups($prod_id);
+		}
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . GROUPS_TABLE . '
@@ -256,80 +290,109 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	}
 
 	/**
-	 * Load the length and length unit options into template variables.
+	 * Load the list of prices set for a product.
 	 *
-	 * @param \stevotvr\groupsub\entity\product_interface $entity The product
+	 * @param int $prod_id The product ID
 	 */
-	protected function load_length(prod_entity $entity)
+	protected function load_prices($prod_id)
 	{
-		$selected = null;
-		$length = $entity->get_length();
-		if (is_int($length))
+		if ($this->request->is_set_post('prod_price'))
 		{
-			if ($length > 0)
-			{
-				extract($this->unit_helper->get_timespan_parts($length));
-				$selected = $unit;
-			}
+			$prices = $this->request->variable('prod_price', array(''));
+			$currencies = $this->request->variable('prod_currency', array(''));
+			$lengths = $this->request->variable('prod_length', array(0));
+			$length_units = $this->request->variable('prod_length_unit', array(''));
 
-			$this->template->assign_var('PROD_LENGTH', $length);
+			$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
+			for ($i = 0; $i < $count; $i++)
+			{
+				if ($lengths[$i] <= 0 || $prices[$i] === '')
+				{
+					continue;
+				}
+
+				$this->template->assign_block_vars('price', array(
+					'PROD_PRICE'		=> $prices[$i],
+					'PROD_CURRENCY'		=> $currencies[$i],
+					'PROD_LENGTH'		=> $lengths[$i],
+					'PROD_LENGTH_UNIT'	=> $length_units[$i],
+				));
+			}
 		}
 
-		foreach (array('days', 'weeks', 'months', 'years') as $unit)
+		if (!$prod_id)
 		{
-			$this->template->assign_block_vars('time_unit', array(
-				'UNIT_ID'	=> $unit,
-				'UNIT_NAME'	=> $this->language->lang('GROUPSUB_' . strtoupper($unit)),
+			return;
+		}
 
-				'S_SELECTED'	=> ($unit === $selected),
+		$prices = $this->prod_operator->get_prices($prod_id);
+
+		if (!isset($prices[$prod_id]))
+		{
+			return;
+		}
+
+		foreach ($prices[$prod_id] as $price)
+		{
+			$length = $this->unit_helper->get_timespan_parts($price->get_length());
+			$this->template->assign_block_vars('price', array(
+				'PROD_PRICE'		=> $this->currency->format_value($price->get_currency(), $price->get_price()),
+				'PROD_CURRENCY'		=> $price->get_currency(),
+				'PROD_LENGTH'		=> $length['length'],
+				'PROD_LENGTH_UNIT'	=> $length['unit'],
 			));
 		}
 	}
 
 	/**
-	 * Parse the length fields.
+	 * Parse the prices from the input.
 	 *
-	 * @return int The length in days
+	 * @param int $prod_id The product ID
 	 */
-	protected function parse_length()
+	protected function parse_prices($prod_id)
 	{
-		$value = $this->request->variable('prod_length', 0);
-		if ($value <= 0)
+		if (!$prod_id)
 		{
-			return 0;
+			return;
 		}
 
-		$unit = $this->request->variable('prod_length_unit', '');
-		try
+		$entities = array();
+
+		$prices = $this->request->variable('prod_price', array(''));
+		$currencies = $this->request->variable('prod_currency', array(''));
+		$lengths = $this->request->variable('prod_length', array(0));
+		$length_units = $this->request->variable('prod_length_unit', array(''));
+
+		$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
+		for ($i = 0; $i < $count; $i++)
 		{
-			return $this->unit_helper->get_days($value, $unit);
-		}
-		catch (base $e)
-		{
+			if ($lengths[$i] <= 0 || $prices[$i] === '')
+			{
+				continue;
+			}
+
+			$entity = $this->container->get('stevotvr.groupsub.entity.price')
+				->set_price($this->currency->parse_value($currencies[$i], $prices[$i]))
+				->set_currency($currencies[$i])
+				->set_length($this->unit_helper->get_days($lengths[$i], $length_units[$i]));
+
+			$entities[] = $entity;
 		}
 
-		return $value;
+		$this->prod_operator->set_prices($prod_id, $entities);
 	}
 
 	/**
-	 * Process parsing options for the product description field.
-	 *
-	 * @param \stevotvr\groupsub\entity\product_interface $entity The product
-	 * @param boolean                                     $submit The form has been submitted
+	 * Assign template variables for the length unit options.
 	 */
-	protected function set_parse_options(prod_entity $entity, $submit)
+	protected function assign_length_vars()
 	{
-		$bbcode = $this->request->variable('parse_bbcode', false);
-		$magic_url = $this->request->variable('parse_magic_url', false);
-		$smilies = $this->request->variable('parse_smilies', false);
-		$parse_options = array(
-			'bbcode'	=> $submit ? $bbcode : ($entity->get_id() ? $entity->is_bbcode_enabled() : 1),
-			'magic_url'	=> $submit ? $magic_url : ($entity->get_id() ? $entity->is_magic_url_enabled() : 1),
-			'smilies'	=> $submit ? $smilies : ($entity->get_id() ? $entity->is_smilies_enabled() : 1),
-		);
-		foreach ($parse_options as $function => $enabled)
+		foreach (array('days', 'weeks', 'months', 'years') as $unit)
 		{
-			$entity->{'set_' . $function . '_enabled'}($enabled);
+			$this->template->assign_block_vars('time_unit', array(
+				'UNIT_ID'	=> $unit,
+				'UNIT_NAME'	=> $this->language->lang('GROUPSUB_' . strtoupper($unit)),
+			));
 		}
 	}
 

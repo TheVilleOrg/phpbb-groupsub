@@ -56,6 +56,23 @@ interface product_interface
 	public function move_product($product_id, $offset);
 
 	/**
+	 * Get a list of the price options associated with a product.
+	 *
+	 * @param int $product_id The product ID or false to get all prices
+	 *
+	 * @return array Array of arrays of price entities keyed by product ID
+	 */
+	public function get_prices($product_id = false);
+
+	/**
+	 * Set the price options for a product.
+	 *
+	 * @param int   $product_id The product ID
+	 * @param array $prices     Array of price entities
+	 */
+	public function set_prices($product_id, array $prices);
+
+	/**
 	 * Get the groups assigned to a product.
 	 *
 	 * @param int $product_id The product ID
@@ -93,4 +110,15 @@ interface product_interface
 	 * @param int $product_id The product ID
 	 */
 	public function remove_groups($product_id);
+
+	/**
+	 * Get the length of a subscription based on payment amount and currency.
+	 *
+	 * @param int   $product_id The product ID
+	 * @param array $price      The price in the currency subunit
+	 * @param array $currency   The currency code of the price
+	 *
+	 * @return int The length of the subscription in days
+	 */
+	public function get_length($product_id, $price, $currency);
 }

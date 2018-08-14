@@ -117,6 +117,15 @@ services:
             - method: setup
               arguments:
                 - '@config'
+    stevotvr.groupsub.entity.price:
+        class: stevotvr\groupsub\entity\price
+        parent: stevotvr.groupsub.entity
+        shared: false
+        arguments:
+            - '%stevotvr.groupsub.tables.prices%'
+        calls:
+            - method: setup
+              arguments:
                 - '%stevotvr.groupsub.currencies%'
     stevotvr.groupsub.entity.subscription:
         class: stevotvr\groupsub\entity\subscription
@@ -130,8 +139,11 @@ services:
         arguments:
             - '@service_container'
             - '@dbal.conn'
+            - '@language'
+            - '%stevotvr.groupsub.currencies%'
             - '%stevotvr.groupsub.tables.products%'
             - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.prices%'
             - '%stevotvr.groupsub.tables.subs%'
     stevotvr.groupsub.operator.product:
         class: stevotvr\groupsub\operator\product
@@ -155,10 +167,7 @@ services:
                 - '%core.php_ext%'
     stevotvr.groupsub.operator.unit_helper:
         class: stevotvr\groupsub\operator\unit_helper
-        arguments:
-            - '@language'
+        parent: stevotvr.groupsub.operator
     stevotvr.groupsub.operator.currency:
         class: stevotvr\groupsub\operator\currency
-        arguments:
-            - '%stevotvr.groupsub.currencies%'
-            - '@language'
+        parent: stevotvr.groupsub.operator

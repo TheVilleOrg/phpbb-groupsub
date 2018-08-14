@@ -10,27 +10,13 @@
 
 namespace stevotvr\groupsub\operator;
 
-use phpbb\language\language;
 use stevotvr\groupsub\exception\unexpected_value;
 
 /**
  * Group Subscription unit helper operator.
  */
-class unit_helper implements unit_helper_interface
+class unit_helper extends operator implements unit_helper_interface
 {
-	/**
-	 * @var \phpbb\language\language
-	 */
-	protected $language;
-
-	/**
-	 * @param \phpbb\language\language $language
-	 */
-	public function __construct(language $language)
-	{
-		$this->language = $language;
-	}
-
 	public function get_formatted_timespan($days)
 	{
 		extract($this->get_timespan_parts($days));
