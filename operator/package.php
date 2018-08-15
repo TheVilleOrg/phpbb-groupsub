@@ -228,12 +228,12 @@ class package extends operator implements package_interface
 		$this->db->sql_query($sql);
 	}
 
-	public function get_length($package_id, $price, $currency)
+	public function get_length($package_id, $amount, $currency)
 	{
 		$sql = 'SELECT price_length
 				FROM ' . $this->price_table . '
 				WHERE pkg_id = ' . (int) $package_id . '
-					AND price_price = ' . (int) $price . '
+					AND price_amount = ' . (int) $amount . '
 					AND price_currency = ' . $this->db->sql_escape($currency);
 		$this->db->sql_query($sql);
 		$length = $this->db->sql_fetchfield('price_length');

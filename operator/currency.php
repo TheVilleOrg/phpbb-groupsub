@@ -46,9 +46,9 @@ class currency extends operator implements currency_interface
 		$currency = $this->currencies[$currency_code];
 
 		$format = $currency['symbol_first'] ? '%s%s&nbsp;%s' : '%2$s%1$s&nbsp;%3$s';
-		$price = $this->format_value($currency_code, $value, true);
+		$amount = $this->format_value($currency_code, $value, true);
 
-		return sprintf($format, $currency['symbol'], $price, $currency_code);
+		return sprintf($format, $currency['symbol'], $amount, $currency_code);
 	}
 
 	public function parse_value($currency_code, $value)

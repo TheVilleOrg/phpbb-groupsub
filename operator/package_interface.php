@@ -115,10 +115,10 @@ interface package_interface
 	 * Get the length of a subscription based on payment amount and currency.
 	 *
 	 * @param int   $package_id The package ID
-	 * @param array $price      The price in the currency subunit
+	 * @param array $amount     The amount in the currency subunit
 	 * @param array $currency   The currency code of the price
 	 *
 	 * @return int The length of the subscription in days
 	 */
-	public function get_length($package_id, $price, $currency);
+	public function get_length($package_id, $amount, $currency);
 }

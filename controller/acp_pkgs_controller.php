@@ -75,7 +75,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				foreach ($prices[$entity->get_id()] as $price)
 				{
 					$this->template->assign_block_vars('package.price', array(
-						'PKG_PRICE'	=> $this->currency->format_price($price->get_currency(), $price->get_price()),
+						'PKG_AMOUNT'	=> $this->currency->format_price($price->get_currency(), $price->get_amount()),
 						'PKG_LENGTH'	=> $this->unit_helper->get_formatted_timespan($price->get_length()),
 					));
 				}
@@ -296,23 +296,23 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	protected function load_prices($package_id)
 	{
-		if ($this->request->is_set_post('pkg_price'))
+		if ($this->request->is_set_post('pkg_amount'))
 		{
-			$prices = $this->request->variable('pkg_price', array(''));
+			$amounts = $this->request->variable('pkg_amount', array(''));
 			$currencies = $this->request->variable('pkg_currency', array(''));
 			$lengths = $this->request->variable('pkg_length', array(0));
 			$length_units = $this->request->variable('pkg_length_unit', array(''));
 
-			$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
+			$count = min(array_map('count', array($amounts, $currencies, $lengths, $length_units)));
 			for ($i = 0; $i < $count; $i++)
 			{
-				if ($lengths[$i] <= 0 || $prices[$i] === '')
+				if ($lengths[$i] <= 0 || $amounts[$i] === '')
 				{
 					continue;
 				}
 
 				$this->template->assign_block_vars('price', array(
-					'PKG_PRICE'			=> $prices[$i],
+					'PKG_AMOUNT'		=> $amounts[$i],
 					'PKG_CURRENCY'		=> $currencies[$i],
 					'PKG_LENGTH'		=> $lengths[$i],
 					'PKG_LENGTH_UNIT'	=> $length_units[$i],
@@ -329,7 +329,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		$prices = $this->pkg_operator->get_prices($package_id);
 
-		if (!isset($prices[$package_id]))
+		if (!isset($amounts[$package_id]))
 		{
 			return;
 		}
@@ -338,7 +338,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$length = $this->unit_helper->get_timespan_parts($price->get_length());
 			$this->template->assign_block_vars('price', array(
-				'PKG_PRICE'			=> $this->currency->format_value($price->get_currency(), $price->get_price()),
+				'PKG_AMOUNT'		=> $this->currency->format_value($price->get_currency(), $price->get_amount()),
 				'PKG_CURRENCY'		=> $price->get_currency(),
 				'PKG_LENGTH'		=> $length['length'],
 				'PKG_LENGTH_UNIT'	=> $length['unit'],
@@ -360,21 +360,21 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		$entities = array();
 
-		$prices = $this->request->variable('pkg_price', array(''));
+		$amounts = $this->request->variable('pkg_amount', array(''));
 		$currencies = $this->request->variable('pkg_currency', array(''));
 		$lengths = $this->request->variable('pkg_length', array(0));
 		$length_units = $this->request->variable('pkg_length_unit', array(''));
 
-		$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
+		$count = min(array_map('count', array($amounts, $currencies, $lengths, $length_units)));
 		for ($i = 0; $i < $count; $i++)
 		{
-			if ($lengths[$i] <= 0 || $prices[$i] === '')
+			if ($lengths[$i] <= 0 || $amounts[$i] === '')
 			{
 				continue;
 			}
 
 			$entity = $this->container->get('stevotvr.groupsub.entity.price')
-				->set_price($this->currency->parse_value($currencies[$i], $prices[$i]))
+				->set_amount($this->currency->parse_value($currencies[$i], $amounts[$i]))
 				->set_currency($currencies[$i])
 				->set_length($this->unit_helper->get_days($lengths[$i], $length_units[$i]));
 

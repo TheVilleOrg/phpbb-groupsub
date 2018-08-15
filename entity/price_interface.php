@@ -30,26 +30,26 @@ interface price_interface extends entity_interface
 	public function set_package($package_id);
 
 	/**
-	 * @return int|null The price of this option in the currency subunit
+	 * @return int|null The amount of this price option in the currency subunit
 	 */
-	public function get_price();
+	public function get_amount();
 
 	/**
-	 * @param int $price The price of this option in the currency subunit
+	 * @param int $amount The amount of this price option in the currency subunit
 	 *
 	 * @return price_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
-	public function set_price($price);
+	public function set_amount($amount);
 
 	/**
-	 * @return string The currency code of the price of this option
+	 * @return string The currency code of the amount of this price option
 	 */
 	public function get_currency();
 
 	/**
-	 * @param string $currency The currency code of the price of this option
+	 * @param string $currency The currency code of the amount of this price option
 	 *
 	 * @return price_interface This object for chaining
 	 *
@@ -58,12 +58,12 @@ interface price_interface extends entity_interface
 	public function set_currency($currency);
 
 	/**
-	 * @return int|null The subscription length of this option in days
+	 * @return int|null The subscription length of this price option in days
 	 */
 	public function get_length();
 
 	/**
-	 * @param int $length The subscription length of this option in days
+	 * @param int $length The subscription length of this price option in days
 	 *
 	 * @return price_interface This object for chaining
 	 *
@@ -72,12 +72,12 @@ interface price_interface extends entity_interface
 	public function set_length($length);
 
 	/**
-	 * @return int The sorting order of this option
+	 * @return int The sorting order of this price option
 	 */
 	public function get_order();
 
 	/**
-	 * @param int $order The sorting order of this option
+	 * @param int $order The sorting order of this price option
 	 *
 	 * @return price_interface This object for chaining
 	 *

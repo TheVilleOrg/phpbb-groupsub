@@ -21,7 +21,7 @@ class price extends entity implements price_interface
 	protected $columns = array(
 		'price_id'			=> 'integer',
 		'pkg_id'			=> 'integer',
-		'price_price'		=> 'set_price',
+		'price_amount'		=> 'set_amount',
 		'price_currency'	=> 'set_currency',
 		'price_length'		=> 'set_length',
 		'price_order'		=> 'set_order',
@@ -65,21 +65,21 @@ class price extends entity implements price_interface
 		return $this;
 	}
 
-	public function get_price()
+	public function get_amount()
 	{
-		return isset($this->data['price_price']) ? (int) $this->data['price_price'] : null;
+		return isset($this->data['price_amount']) ? (int) $this->data['price_amount'] : null;
 	}
 
-	public function set_price($price)
+	public function set_amount($amount)
 	{
-		$price = (int) $price;
+		$amount = (int) $amount;
 
-		if ($price < 0 || $price > 16777215)
+		if ($amount < 0 || $amount > 16777215)
 		{
-			throw new out_of_bounds('price_price');
+			throw new out_of_bounds('price_amount');
 		}
 
-		$this->data['price_price'] = $price;
+		$this->data['price_amount'] = $amount;
 
 		return $this;
 	}

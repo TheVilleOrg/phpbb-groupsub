@@ -49,7 +49,7 @@ class version_0_1_0 extends migration
 					'COLUMNS' => array(
 						'price_id'			=> array('UINT', null, 'auto_increment'),
 						'pkg_id'			=> array('UINT', 0),
-						'price_price'		=> array('UINT', 0),
+						'price_amount'		=> array('UINT', 0),
 						'price_currency'	=> array('VCHAR:3', ''),
 						'price_length'		=> array('UINT', 0),
 						'price_order'		=> array('UINT', 0),
