@@ -117,12 +117,12 @@ services:
             - method: setup
               arguments:
                 - '@config'
-    stevotvr.groupsub.entity.price:
-        class: stevotvr\groupsub\entity\price
+    stevotvr.groupsub.entity.term:
+        class: stevotvr\groupsub\entity\term
         parent: stevotvr.groupsub.entity
         shared: false
         arguments:
-            - '%stevotvr.groupsub.tables.prices%'
+            - '%stevotvr.groupsub.tables.terms%'
         calls:
             - method: setup
               arguments:
@@ -143,7 +143,7 @@ services:
             - '%stevotvr.groupsub.currencies%'
             - '%stevotvr.groupsub.tables.packages%'
             - '%stevotvr.groupsub.tables.groups%'
-            - '%stevotvr.groupsub.tables.prices%'
+            - '%stevotvr.groupsub.tables.terms%'
             - '%stevotvr.groupsub.tables.subs%'
     stevotvr.groupsub.operator.package:
         class: stevotvr\groupsub\operator\package

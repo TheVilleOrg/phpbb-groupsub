@@ -61,7 +61,7 @@
 			</dl>
 		</fieldset>
 		<fieldset>
-			<legend>{{ lang('ACP_GROUPSUB_PKG_PRICES') }}</legend>
+			<legend>{{ lang('ACP_GROUPSUB_PKG_TERMS') }}</legend>
 			<table class="table1 zebra-table responsive">
 				<thead>
 					<th style="width: 10%">{{ lang('ACP_GROUPSUB_PRICE') }}</th>
@@ -69,37 +69,37 @@
 					<th style="width: 10%">{{ lang('ACTION') }}</th>
 				</thead>
 				<tbody>
-				{% for p in price %}
+				{% for t in term %}
 					<tr>
 						<td>
-							<input type="text" name="pkg_amount[]" value="{{ p.PKG_AMOUNT }}">
+							<input type="text" name="pkg_amount[]" value="{{ t.PKG_AMOUNT }}">
 							<select name="pkg_currency[]">
 							{% for c in currency %}
-							    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == p.PKG_CURRENCY %} selected="selected" {% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
+							    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == t.PKG_CURRENCY %} selected="selected" {% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
 							{% endfor %}
 							</select>
 						</td>
 						<td>
-							<input type="text" name="pkg_length[]" value="{{ p.PKG_LENGTH }}">
+							<input type="text" name="pkg_length[]" value="{{ t.PKG_LENGTH }}">
 							<select name="pkg_length_unit[]">
 							{% for u in time_unit %}
-								<option value="{{ u.UNIT_ID }}"{% if u.UNIT_ID == p.PKG_LENGTH_UNIT %} selected="selected"{% endif %}>{{ u.UNIT_NAME }}</option>
+								<option value="{{ u.UNIT_ID }}"{% if u.UNIT_ID == t.PKG_LENGTH_UNIT %} selected="selected"{% endif %}>{{ u.UNIT_NAME }}</option>
 							{% endfor %}
 							</select>
 						</td>
 						<td class="actions">
 							<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
-							<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
+							<span class="up"><a href="{{ t.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
 							<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
-							<span class="down"><a href="{{ p.U_MOVE_DOWN }}" data-ajax="row_down">{{ ICON_MOVE_DOWN }}</a></span>
-							<a href="{{ p.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
+							<span class="down"><a href="{{ t.U_MOVE_DOWN }}" data-ajax="row_down">{{ ICON_MOVE_DOWN }}</a></span>
+							<a href="{{ t.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
 						</td>
 					</tr>
 				{% endfor %}
 				</tbody>
 			</table>
 			<fieldset>
-				<legend>{{ lang('ACP_GROUPSUB_PKG_PRICE_ADD')}}</legend>
+				<legend>{{ lang('ACP_GROUPSUB_PKG_TERM_ADD')}}</legend>
 				<dl>
 					<dt><label for="pkg_amount">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
 					<dd>
@@ -122,7 +122,7 @@
 						</select>
 					</dd>
 				</dl>
-				<input class="button2" type="submit" name="add_price" value="{{ lang('ACP_GROUPSUB_PKG_PRICE_ADD') }}">
+				<input class="button2" type="submit" name="add_term" value="{{ lang('ACP_GROUPSUB_PKG_TERM_ADD') }}">
 			</fieldset>
 		</fieldset>
 		<fieldset>
@@ -153,7 +153,7 @@
 		<thead>
 			<th style="width: 10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
 			<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
-			<th style="width: 30%">{{ lang('ACP_GROUPSUB_PRICES') }}</th>
+			<th style="width: 30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
 			<th style="width: 10%">{{ lang('ACTION') }}</th>
 		</thead>
 		<tbody>
@@ -162,12 +162,12 @@
 					<td>{{ p.PKG_IDENT }}</td>
 					<td><strong>{{ p.PKG_NAME }}</strong></td>
 					<td>
-					{% if p.price %}
+					{% if p.term %}
 						<table>
-						{% for pri in p.price %}
+						{% for t in p.term %}
 							<tr>
-								<td>{{ pri.PKG_AMOUNT }}</td>
-								<td>{% if pri.PKG_LENGTH %}{{ pri.PKG_LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
+								<td>{{ t.PKG_AMOUNT }}</td>
+								<td>{% if t.PKG_LENGTH %}{{ t.PKG_LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 							</tr>
 						{% endfor %}
 						</table>

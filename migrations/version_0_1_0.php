@@ -45,19 +45,19 @@ class version_0_1_0 extends migration
 						'pkg_i'	=> array('UNIQUE', 'pkg_ident'),
 					),
 				),
-				$this->table_prefix . 'groupsub_prices' => array(
+				$this->table_prefix . 'groupsub_terms' => array(
 					'COLUMNS' => array(
-						'price_id'			=> array('UINT', null, 'auto_increment'),
-						'pkg_id'			=> array('UINT', 0),
-						'price_amount'		=> array('UINT', 0),
-						'price_currency'	=> array('VCHAR:3', ''),
-						'price_length'		=> array('UINT', 0),
-						'price_order'		=> array('UINT', 0),
+						'term_id'		=> array('UINT', null, 'auto_increment'),
+						'pkg_id'		=> array('UINT', 0),
+						'term_amount'	=> array('UINT', 0),
+						'term_currency'	=> array('VCHAR:3', ''),
+						'term_length'	=> array('UINT', 0),
+						'term_order'	=> array('UINT', 0),
 					),
-					'PRIMARY_KEY' => 'price_id',
+					'PRIMARY_KEY' => 'term_id',
 					'KEYS' => array(
 						'pkg_i'	=> array('INDEX', 'pkg_id'),
-						'pri_o'	=> array('INDEX', 'price_order'),
+						'pri_o'	=> array('INDEX', 'term_order'),
 					),
 				),
 				$this->table_prefix . 'groupsub_groups' => array(
@@ -94,7 +94,7 @@ class version_0_1_0 extends migration
 			'drop_tables'   => array(
 				$this->table_prefix . 'groupsub_subs',
 				$this->table_prefix . 'groupsub_groups',
-				$this->table_prefix . 'groupsub_prices',
+				$this->table_prefix . 'groupsub_terms',
 				$this->table_prefix . 'groupsub_packages',
 			),
 		);

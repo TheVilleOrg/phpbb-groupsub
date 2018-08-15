@@ -56,21 +56,21 @@ interface package_interface
 	public function move_package($package_id, $offset);
 
 	/**
-	 * Get a list of the price options associated with a package.
+	 * Get a list of the terms associated with a package.
 	 *
-	 * @param int $package_id The package ID or false to get all prices
+	 * @param int $package_id The package ID or false to get all terms
 	 *
-	 * @return array Array of arrays of price entities keyed by package ID
+	 * @return array Array of arrays of term entities keyed by package ID
 	 */
-	public function get_prices($package_id = false);
+	public function get_terms($package_id = false);
 
 	/**
-	 * Set the price options for a package.
+	 * Set the terms for a package.
 	 *
 	 * @param int   $package_id The package ID
-	 * @param array $prices     Array of price entities
+	 * @param array $terms      Array of term entities
 	 */
-	public function set_prices($package_id, array $prices);
+	public function set_terms($package_id, array $terms);
 
 	/**
 	 * Get the groups assigned to a package.
@@ -116,7 +116,7 @@ interface package_interface
 	 *
 	 * @param int   $package_id The package ID
 	 * @param array $amount     The amount in the currency subunit
-	 * @param array $currency   The currency code of the price
+	 * @param array $currency   The currency code of the term
 	 *
 	 * @return int The length of the subscription in days
 	 */

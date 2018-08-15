@@ -56,11 +56,11 @@ abstract class operator
 	protected $group_table;
 
 	/**
-	 * The name of the groupsub_prices table.
+	 * The name of the groupsub_terms table.
 	 *
 	 * @var string
 	 */
-	protected $price_table;
+	protected $term_table;
 
 	/**
 	 * The name of the groupsub_subs table.
@@ -76,10 +76,10 @@ abstract class operator
 	 * @param array                             $currencies    List of currencies
 	 * @param string                            $package_table The name of the groupsub_packages table
 	 * @param string                            $group_table   The name of the groupsub_groups table
-	 * @param string                            $price_table   The name of the groupsub_prices table
+	 * @param string                            $term_table    The name of the groupsub_terms table
 	 * @param string                            $sub_table     The name of the groupsub_subs table
 	 */
-	public function __construct(ContainerInterface $container, driver_interface $db, language $language, array $currencies, $package_table, $group_table, $price_table, $sub_table)
+	public function __construct(ContainerInterface $container, driver_interface $db, language $language, array $currencies, $package_table, $group_table, $term_table, $sub_table)
 	{
 		$this->container = $container;
 		$this->db = $db;
@@ -87,7 +87,7 @@ abstract class operator
 		$this->currencies = $currencies;
 		$this->package_table = $package_table;
 		$this->group_table = $group_table;
-		$this->price_table = $price_table;
+		$this->term_table = $term_table;
 		$this->sub_table = $sub_table;
 	}
 }

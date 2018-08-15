@@ -80,7 +80,7 @@ class package extends operator implements package_interface
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 
-		$sql = 'DELETE FROM ' . $this->price_table . '
+		$sql = 'DELETE FROM ' . $this->term_table . '
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 
@@ -119,33 +119,33 @@ class package extends operator implements package_interface
 		}
 	}
 
-	public function get_prices($package_id = false)
+	public function get_terms($package_id = false)
 	{
 		$entities = array();
 
 		$where = $package_id ? 'WHERE pkg_id = ' . (int) $package_id : '';
 		$sql = 'SELECT *
-				FROM ' . $this->price_table . '
+				FROM ' . $this->term_table . '
 				' . $where . '
-				ORDER BY price_order ASC, price_id ASC';
+				ORDER BY term_order ASC, term_id ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
-			$entities[(int) $row['pkg_id']][] = $this->container->get('stevotvr.groupsub.entity.price')->import($row);
+			$entities[(int) $row['pkg_id']][] = $this->container->get('stevotvr.groupsub.entity.term')->import($row);
 		}
 		$this->db->sql_freeresult();
 
 		return $entities;
 	}
 
-	public function set_prices($package_id, array $prices)
+	public function set_terms($package_id, array $terms)
 	{
-		$sql = 'DELETE FROM ' . $this->price_table . '
+		$sql = 'DELETE FROM ' . $this->term_table . '
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 
 		$i = 0;
-		foreach ($prices as $entity)
+		foreach ($terms as $entity)
 		{
 			$entity->set_package($package_id)->set_order($i++)->insert();
 		}
@@ -230,13 +230,13 @@ class package extends operator implements package_interface
 
 	public function get_length($package_id, $amount, $currency)
 	{
-		$sql = 'SELECT price_length
-				FROM ' . $this->price_table . '
+		$sql = 'SELECT term_length
+				FROM ' . $this->term_table . '
 				WHERE pkg_id = ' . (int) $package_id . '
-					AND price_amount = ' . (int) $amount . '
-					AND price_currency = ' . $this->db->sql_escape($currency);
+					AND term_amount = ' . (int) $amount . '
+					AND term_currency = ' . $this->db->sql_escape($currency);
 		$this->db->sql_query($sql);
-		$length = $this->db->sql_fetchfield('price_length');
+		$length = $this->db->sql_fetchfield('term_length');
 		$this->db->sql_freeresult();
 
 		return $length === false ? false : (int) $length;

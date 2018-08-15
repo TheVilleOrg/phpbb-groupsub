@@ -56,7 +56,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	public function display()
 	{
 		$entities = $this->pkg_operator->get_packages();
-		$prices = $this->pkg_operator->get_prices();
+		$terms = $this->pkg_operator->get_terms();
 
 		foreach ($entities as $entity)
 		{
@@ -70,13 +70,13 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $entity->get_id(),
 			));
 
-			if (isset($prices[$entity->get_id()]))
+			if (isset($terms[$entity->get_id()]))
 			{
-				foreach ($prices[$entity->get_id()] as $price)
+				foreach ($terms[$entity->get_id()] as $term)
 				{
-					$this->template->assign_block_vars('package.price', array(
-						'PKG_AMOUNT'	=> $this->currency->format_price($price->get_currency(), $price->get_amount()),
-						'PKG_LENGTH'	=> $this->unit_helper->get_formatted_timespan($price->get_length()),
+					$this->template->assign_block_vars('package.term', array(
+						'PKG_AMOUNT'	=> $this->currency->format_price($term->get_currency(), $term->get_amount()),
+						'PKG_LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
 					));
 				}
 			}
@@ -171,7 +171,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				}
 
 				$this->parse_groups($entity->get_id());
-				$this->parse_prices($entity->get_id());
+				$this->parse_terms($entity->get_id());
 
 				if (empty($errors))
 				{
@@ -189,7 +189,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		}
 
 		$this->load_groups($entity->get_id());
-		$this->load_prices($entity->get_id());
+		$this->load_terms($entity->get_id());
 		$this->assign_tpl_vars($entity, $data);
 		$this->assign_currency_vars();
 		$this->assign_length_vars();
@@ -289,11 +289,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	}
 
 	/**
-	 * Load the list of prices set for a package.
+	 * Load the list of terms set for a package.
 	 *
 	 * @param int $package_id The package ID
 	 */
-	protected function load_prices($package_id)
+	protected function load_terms($package_id)
 	{
 		if ($this->request->is_set_post('pkg_amount'))
 		{
@@ -310,7 +310,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 					continue;
 				}
 
-				$this->template->assign_block_vars('price', array(
+				$this->template->assign_block_vars('term', array(
 					'PKG_AMOUNT'		=> $amounts[$i],
 					'PKG_CURRENCY'		=> $currencies[$i],
 					'PKG_LENGTH'		=> $lengths[$i],
@@ -326,19 +326,19 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			return;
 		}
 
-		$prices = $this->pkg_operator->get_prices($package_id);
+		$terms = $this->pkg_operator->get_terms($package_id);
 
-		if (!isset($amounts[$package_id]))
+		if (!isset($terms[$package_id]))
 		{
 			return;
 		}
 
-		foreach ($prices[$package_id] as $price)
+		foreach ($terms[$package_id] as $term)
 		{
-			$length = $this->unit_helper->get_timespan_parts($price->get_length());
-			$this->template->assign_block_vars('price', array(
-				'PKG_AMOUNT'		=> $this->currency->format_value($price->get_currency(), $price->get_amount()),
-				'PKG_CURRENCY'		=> $price->get_currency(),
+			$length = $this->unit_helper->get_timespan_parts($term->get_length());
+			$this->template->assign_block_vars('term', array(
+				'PKG_AMOUNT'		=> $this->currency->format_value($term->get_currency(), $term->get_amount()),
+				'PKG_CURRENCY'		=> $term->get_currency(),
 				'PKG_LENGTH'		=> $length['length'],
 				'PKG_LENGTH_UNIT'	=> $length['unit'],
 			));
@@ -346,11 +346,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	}
 
 	/**
-	 * Parse the prices from the input.
+	 * Parse the terms from the input.
 	 *
 	 * @param int $package_id The package ID
 	 */
-	protected function parse_prices($package_id)
+	protected function parse_terms($package_id)
 	{
 		if (!$package_id)
 		{
@@ -372,7 +372,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				continue;
 			}
 
-			$entity = $this->container->get('stevotvr.groupsub.entity.price')
+			$entity = $this->container->get('stevotvr.groupsub.entity.term')
 				->set_amount($this->currency->parse_value($currencies[$i], $amounts[$i]))
 				->set_currency($currencies[$i])
 				->set_length($this->unit_helper->get_days($lengths[$i], $length_units[$i]));
@@ -380,7 +380,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			$entities[] = $entity;
 		}
 
-		$this->pkg_operator->set_prices($package_id, $entities);
+		$this->pkg_operator->set_terms($package_id, $entities);
 	}
 
 	/**

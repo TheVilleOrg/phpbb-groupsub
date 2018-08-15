@@ -14,20 +14,20 @@ use stevotvr\groupsub\exception\out_of_bounds;
 use stevotvr\groupsub\exception\unexpected_value;
 
 /**
- * Group Subscription price option entity.
+ * Group Subscription term entity.
  */
-class price extends entity implements price_interface
+class term extends entity implements term_interface
 {
 	protected $columns = array(
-		'price_id'			=> 'integer',
-		'pkg_id'			=> 'integer',
-		'price_amount'		=> 'set_amount',
-		'price_currency'	=> 'set_currency',
-		'price_length'		=> 'set_length',
-		'price_order'		=> 'set_order',
+		'term_id'		=> 'integer',
+		'pkg_id'		=> 'integer',
+		'term_amount'	=> 'set_amount',
+		'term_currency'	=> 'set_currency',
+		'term_length'	=> 'set_length',
+		'term_order'	=> 'set_order',
 	);
 
-	protected $id_column = 'price_id';
+	protected $id_column = 'term_id';
 
 	/**
 	 * Array of currencies
@@ -67,7 +67,7 @@ class price extends entity implements price_interface
 
 	public function get_amount()
 	{
-		return isset($this->data['price_amount']) ? (int) $this->data['price_amount'] : null;
+		return isset($this->data['term_amount']) ? (int) $this->data['term_amount'] : null;
 	}
 
 	public function set_amount($amount)
@@ -76,17 +76,17 @@ class price extends entity implements price_interface
 
 		if ($amount < 0 || $amount > 16777215)
 		{
-			throw new out_of_bounds('price_amount');
+			throw new out_of_bounds('term_amount');
 		}
 
-		$this->data['price_amount'] = $amount;
+		$this->data['term_amount'] = $amount;
 
 		return $this;
 	}
 
 	public function get_currency()
 	{
-		return isset($this->data['price_currency']) ? (string) $this->data['price_currency'] : '';
+		return isset($this->data['term_currency']) ? (string) $this->data['term_currency'] : '';
 	}
 
 	public function set_currency($currency)
@@ -95,17 +95,17 @@ class price extends entity implements price_interface
 
 		if (!isset($this->currencies[$currency]))
 		{
-			throw new unexpected_value('price_currency', 'INVALID_CURRENCY');
+			throw new unexpected_value('term_currency', 'INVALID_CURRENCY');
 		}
 
-		$this->data['price_currency'] = $currency;
+		$this->data['term_currency'] = $currency;
 
 		return $this;
 	}
 
 	public function get_length()
 	{
-		return isset($this->data['price_length']) ? (int) $this->data['price_length'] : null;
+		return isset($this->data['term_length']) ? (int) $this->data['term_length'] : null;
 	}
 
 	public function set_length($length)
@@ -114,17 +114,17 @@ class price extends entity implements price_interface
 
 		if ($length < 0 || $length > 16777215)
 		{
-			throw new out_of_bounds('price_length');
+			throw new out_of_bounds('term_length');
 		}
 
-		$this->data['price_length'] = $length;
+		$this->data['term_length'] = $length;
 
 		return $this;
 	}
 
 	public function get_order()
 	{
-		return isset($this->data['price_order']) ? (int) $this->data['price_order'] : 0;
+		return isset($this->data['term_order']) ? (int) $this->data['term_order'] : 0;
 	}
 
 	public function set_order($order)
@@ -133,10 +133,10 @@ class price extends entity implements price_interface
 
 		if ($order < 0 || $order > 16777215)
 		{
-			throw new out_of_bounds('price_order');
+			throw new out_of_bounds('term_order');
 		}
 
-		$this->data['price_order'] = $order;
+		$this->data['term_order'] = $order;
 
 		return $this;
 	}
