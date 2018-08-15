@@ -318,6 +318,8 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 					'PROD_LENGTH_UNIT'	=> $length_units[$i],
 				));
 			}
+
+			return;
 		}
 
 		if (!$prod_id)
