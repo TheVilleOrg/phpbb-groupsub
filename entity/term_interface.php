@@ -30,26 +30,26 @@ interface term_interface extends entity_interface
 	public function set_package($package_id);
 
 	/**
-	 * @return int|null The amount of this term in the currency subunit
+	 * @return int|null The price of this term in the currency subunit
 	 */
-	public function get_amount();
+	public function get_price();
 
 	/**
-	 * @param int $amount The amount of this term in the currency subunit
+	 * @param int $price The price of this term in the currency subunit
 	 *
 	 * @return term_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
-	public function set_amount($amount);
+	public function set_price($price);
 
 	/**
-	 * @return string The currency code of the amount of this term
+	 * @return string The currency code of the price of this term
 	 */
 	public function get_currency();
 
 	/**
-	 * @param string $currency The currency code of the amount of this term
+	 * @param string $currency The currency code of the price of this term
 	 *
 	 * @return term_interface This object for chaining
 	 *

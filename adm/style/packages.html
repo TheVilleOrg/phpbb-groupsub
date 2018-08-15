@@ -72,7 +72,7 @@
 				{% for t in term %}
 					<tr>
 						<td>
-							<input type="text" name="pkg_amount[]" value="{{ t.PKG_AMOUNT }}">
+							<input type="text" name="pkg_price[]" value="{{ t.PKG_PRICE }}">
 							<select name="pkg_currency[]">
 							{% for c in currency %}
 							    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == t.PKG_CURRENCY %} selected="selected" {% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
@@ -101,9 +101,9 @@
 			<fieldset>
 				<legend>{{ lang('ACP_GROUPSUB_PKG_TERM_ADD')}}</legend>
 				<dl>
-					<dt><label for="pkg_amount">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
+					<dt><label for="pkg_price">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
 					<dd>
-						<input class="text" type="text" id="pkg_amount" name="pkg_amount[]" size="4" maxlength="10" value="{{ PKG_AMOUNT }}" />&nbsp;
+						<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="4" maxlength="10" value="{{ PKG_PRICE }}" />&nbsp;
 						<select name="pkg_currency[]" id="pkg_currency">
 							{% for c in currency %}
 								<option value="{{ c.CURRENCY }}"{% if c.S_DEFAULT %} selected="selected"{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
@@ -166,7 +166,7 @@
 						<table>
 						{% for t in p.term %}
 							<tr>
-								<td>{{ t.PKG_AMOUNT }}</td>
+								<td>{{ t.PKG_PRICE }}</td>
 								<td>{% if t.PKG_LENGTH %}{{ t.PKG_LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 							</tr>
 						{% endfor %}

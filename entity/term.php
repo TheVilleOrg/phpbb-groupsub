@@ -21,7 +21,7 @@ class term extends entity implements term_interface
 	protected $columns = array(
 		'term_id'		=> 'integer',
 		'pkg_id'		=> 'integer',
-		'term_amount'	=> 'set_amount',
+		'term_price'	=> 'set_price',
 		'term_currency'	=> 'set_currency',
 		'term_length'	=> 'set_length',
 		'term_order'	=> 'set_order',
@@ -65,21 +65,21 @@ class term extends entity implements term_interface
 		return $this;
 	}
 
-	public function get_amount()
+	public function get_price()
 	{
-		return isset($this->data['term_amount']) ? (int) $this->data['term_amount'] : null;
+		return isset($this->data['term_price']) ? (int) $this->data['term_price'] : null;
 	}
 
-	public function set_amount($amount)
+	public function set_price($price)
 	{
-		$amount = (int) $amount;
+		$price = (int) $price;
 
-		if ($amount < 0 || $amount > 16777215)
+		if ($price < 0 || $price > 16777215)
 		{
-			throw new out_of_bounds('term_amount');
+			throw new out_of_bounds('term_price');
 		}
 
-		$this->data['term_amount'] = $amount;
+		$this->data['term_price'] = $price;
 
 		return $this;
 	}
