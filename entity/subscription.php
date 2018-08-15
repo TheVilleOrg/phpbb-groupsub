@@ -31,16 +31,16 @@ class subscription extends entity implements subscription_interface
 		return isset($this->data['pkg_id']) ? (int) $this->data['pkg_id'] : 0;
 	}
 
-	public function set_package($package)
+	public function set_package($package_id)
 	{
-		$package = (int) $package;
+		$package_id = (int) $package_id;
 
-		if ($package < 0)
+		if ($package_id < 0)
 		{
 			throw new out_of_bounds('pkg_id');
 		}
 
-		$this->data['pkg_id'] = $package;
+		$this->data['pkg_id'] = $package_id;
 
 		return $this;
 	}
@@ -50,16 +50,16 @@ class subscription extends entity implements subscription_interface
 		return isset($this->data['user_id']) ? (int) $this->data['user_id'] : 0;
 	}
 
-	public function set_user($user)
+	public function set_user($user_id)
 	{
-		$user = (int) $user;
+		$user_id = (int) $user_id;
 
-		if ($user < 0)
+		if ($user_id < 0)
 		{
 			throw new out_of_bounds('user_id');
 		}
 
-		$this->data['user_id'] = $user;
+		$this->data['user_id'] = $user_id;
 
 		return $this;
 	}

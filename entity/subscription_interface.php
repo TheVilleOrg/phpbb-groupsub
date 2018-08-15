@@ -21,13 +21,13 @@ interface subscription_interface extends entity_interface
 	public function get_package();
 
 	/**
-	 * @param int $package The package ID
+	 * @param int $package_id The package ID
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
-	public function set_package($package);
+	public function set_package($package_id);
 
 	/**
 	 * @return int The user ID
@@ -35,13 +35,13 @@ interface subscription_interface extends entity_interface
 	public function get_user();
 
 	/**
-	 * @param int $user The user ID
+	 * @param int $user_id The user ID
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
-	public function set_user($user);
+	public function set_user($user_id);
 
 	/**
 	 * @return int The expiration time as a Unix timestamp
