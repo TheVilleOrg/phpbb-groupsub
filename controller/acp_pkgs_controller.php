@@ -226,7 +226,6 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			'S_PARSE_MAGIC_URL_CHECKED'	=> $magic_url,
 
 			'U_BACK'	=> $this->u_action,
-			'U_PRICES'	=> $this->u_action . '&amp;pkg_id=' . $entity->get_id() . '&amp;prices=true',
 		));
 	}
 
