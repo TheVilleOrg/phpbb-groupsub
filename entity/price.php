@@ -19,15 +19,15 @@ use stevotvr\groupsub\exception\unexpected_value;
 class price extends entity implements price_interface
 {
 	protected $columns = array(
-		'p_id'						=> 'integer',
-		'gs_id'						=> 'integer',
-		'p_price'					=> 'set_price',
-		'p_currency'				=> 'set_currency',
-		'p_length'					=> 'set_length',
-		'p_order'					=> 'set_order',
+		'price_id'			=> 'integer',
+		'pkg_id'			=> 'integer',
+		'price_price'		=> 'set_price',
+		'price_currency'	=> 'set_currency',
+		'price_length'		=> 'set_length',
+		'price_order'		=> 'set_order',
 	);
 
-	protected $id_column = 'p_id';
+	protected $id_column = 'price_id';
 
 	/**
 	 * Array of currencies
@@ -46,28 +46,28 @@ class price extends entity implements price_interface
 		$this->currencies = $currencies;
 	}
 
-	public function get_product()
+	public function get_package()
 	{
-		return isset($this->data['gs_id']) ? (int) $this->data['gs_id'] : 0;
+		return isset($this->data['pkg_id']) ? (int) $this->data['pkg_id'] : 0;
 	}
 
-	public function set_product($product_id)
+	public function set_package($package_id)
 	{
-		$product_id = (int) $product_id;
+		$package_id = (int) $package_id;
 
-		if ($product_id < 0)
+		if ($package_id < 0)
 		{
-			throw new out_of_bounds('gs_id');
+			throw new out_of_bounds('pkg_id');
 		}
 
-		$this->data['gs_id'] = $product_id;
+		$this->data['pkg_id'] = $package_id;
 
 		return $this;
 	}
 
 	public function get_price()
 	{
-		return isset($this->data['p_price']) ? (int) $this->data['p_price'] : null;
+		return isset($this->data['price_price']) ? (int) $this->data['price_price'] : null;
 	}
 
 	public function set_price($price)
@@ -76,17 +76,17 @@ class price extends entity implements price_interface
 
 		if ($price < 0 || $price > 16777215)
 		{
-			throw new out_of_bounds('p_price');
+			throw new out_of_bounds('price_price');
 		}
 
-		$this->data['p_price'] = $price;
+		$this->data['price_price'] = $price;
 
 		return $this;
 	}
 
 	public function get_currency()
 	{
-		return isset($this->data['p_currency']) ? (string) $this->data['p_currency'] : '';
+		return isset($this->data['price_currency']) ? (string) $this->data['price_currency'] : '';
 	}
 
 	public function set_currency($currency)
@@ -95,17 +95,17 @@ class price extends entity implements price_interface
 
 		if (!isset($this->currencies[$currency]))
 		{
-			throw new unexpected_value('p_currency', 'INVALID_CURRENCY');
+			throw new unexpected_value('price_currency', 'INVALID_CURRENCY');
 		}
 
-		$this->data['p_currency'] = $currency;
+		$this->data['price_currency'] = $currency;
 
 		return $this;
 	}
 
 	public function get_length()
 	{
-		return isset($this->data['p_length']) ? (int) $this->data['p_length'] : null;
+		return isset($this->data['price_length']) ? (int) $this->data['price_length'] : null;
 	}
 
 	public function set_length($length)
@@ -114,17 +114,17 @@ class price extends entity implements price_interface
 
 		if ($length < 0 || $length > 16777215)
 		{
-			throw new out_of_bounds('p_length');
+			throw new out_of_bounds('price_length');
 		}
 
-		$this->data['p_length'] = $length;
+		$this->data['price_length'] = $length;
 
 		return $this;
 	}
 
 	public function get_order()
 	{
-		return isset($this->data['p_order']) ? (int) $this->data['p_order'] : 0;
+		return isset($this->data['price_order']) ? (int) $this->data['price_order'] : 0;
 	}
 
 	public function set_order($order)
@@ -133,10 +133,10 @@ class price extends entity implements price_interface
 
 		if ($order < 0 || $order > 16777215)
 		{
-			throw new out_of_bounds('p_order');
+			throw new out_of_bounds('price_order');
 		}
 
-		$this->data['p_order'] = $order;
+		$this->data['price_order'] = $order;
 
 		return $this;
 	}

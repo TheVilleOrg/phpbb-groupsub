@@ -1,5 +1,5 @@
 parameters:
-    stevotvr.groupsub.tables.products: '%core.table_prefix%groupsub'
+    stevotvr.groupsub.tables.packages: '%core.table_prefix%groupsub_packages'
     stevotvr.groupsub.tables.groups: '%core.table_prefix%groupsub_groups'
     stevotvr.groupsub.tables.prices: '%core.table_prefix%groupsub_prices'
     stevotvr.groupsub.tables.subs: '%core.table_prefix%groupsub_subs'

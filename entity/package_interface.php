@@ -11,52 +11,52 @@
 namespace stevotvr\groupsub\entity;
 
 /**
- * Group Subscription product entity interface.
+ * Group Subscription package entity interface.
  */
-interface product_interface extends entity_interface
+interface package_interface extends entity_interface
 {
 	/**
-	 * @return string The unique identifier string for this product
+	 * @return string The unique identifier string for this package
 	 */
 	public function get_ident();
 
 	/**
-	 * @param string $ident The unique identifier string for this product
+	 * @param string $ident The unique identifier string for this package
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\unexpected_value
 	 */
 	public function set_ident($ident);
 
 	/**
-	 * @return string The name of this product
+	 * @return string The name of this package
 	 */
 	public function get_name();
 
 	/**
-	 * @param string $name The name of this product
+	 * @param string $name The name of this package
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\unexpected_value
 	 */
 	public function set_name($name);
 
 	/**
-	 * @return string The description of this product for editing
+	 * @return string The description of this package for editing
 	 */
 	public function get_desc_for_edit();
 
 	/**
-	 * @return string The description of this product for display
+	 * @return string The description of this package for display
 	 */
 	public function get_desc_for_display();
 
 	/**
-	 * @param string $desc The description of this product
+	 * @param string $desc The description of this package
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\unexpected_value
 	 */
@@ -70,7 +70,7 @@ interface product_interface extends entity_interface
 	/**
 	 * @param boolean $enable Enable BBCode on the description.
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 */
 	public function set_bbcode_enabled($enable);
 
@@ -82,7 +82,7 @@ interface product_interface extends entity_interface
 	/**
 	 * @param boolean $enable Enable URL parsing on the description.
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 */
 	public function set_magic_url_enabled($enable);
 
@@ -94,51 +94,51 @@ interface product_interface extends entity_interface
 	/**
 	 * @param boolean $enable Enable smilies on the description.
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 */
 	public function set_smilies_enabled($enable);
 
 	/**
-	 * @return int|null The time in days before the expiration of this product at which to notify
+	 * @return int|null The time in days before the expiration of this package at which to notify
 	 *                  subscribers
 	 */
 	public function get_warn_time();
 
 	/**
-	 * @param int $warn_time The time in days before the expiration of this product at which to
+	 * @param int $warn_time The time in days before the expiration of this package at which to
 	 *                       notify subscribers
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
 	public function set_warn_time($warn_time);
 
 	/**
-	 * @return int|null The time in days after the expiration of this product at which to remove
+	 * @return int|null The time in days after the expiration of this package at which to remove
 	 *                  subscribers from usergroups
 	 */
 	public function get_grace();
 
 	/**
-	 * @param int $grace The time in days after the expiration of this product at which to remove
+	 * @param int $grace The time in days after the expiration of this package at which to remove
 	 *                   subscribers from usergroups
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
 	public function set_grace($grace);
 
 	/**
-	 * @return int The order of this product
+	 * @return int The order of this package
 	 */
 	public function get_order();
 
 	/**
-	 * @param int $order The order of this product
+	 * @param int $order The order of this package
 	 *
-	 * @return product_interface This object for chaining
+	 * @return package_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */

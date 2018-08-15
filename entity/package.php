@@ -16,24 +16,24 @@ use stevotvr\groupsub\exception\out_of_bounds;
 use stevotvr\groupsub\exception\unexpected_value;
 
 /**
- * Group Subscription product entity.
+ * Group Subscription package entity.
  */
-class product extends entity implements product_interface
+class package extends entity implements package_interface
 {
 	protected $columns = array(
-		'gs_id'						=> 'integer',
-		'gs_ident'					=> 'string',
-		'gs_name'					=> 'set_name',
-		'gs_desc'					=> 'string',
-		'gs_desc_bbcode_uid'		=> 'string',
-		'gs_desc_bbcode_bitfield'	=> 'string',
-		'gs_desc_bbcode_options'	=> 'integer',
-		'gs_warn_time'				=> 'set_warn_time',
-		'gs_grace'					=> 'set_grace',
-		'gs_order'					=> 'set_order',
+		'pkg_id'					=> 'integer',
+		'pkg_ident'					=> 'string',
+		'pkg_name'					=> 'set_name',
+		'pkg_desc'					=> 'string',
+		'pkg_desc_bbcode_uid'		=> 'string',
+		'pkg_desc_bbcode_bitfield'	=> 'string',
+		'pkg_desc_bbcode_options'	=> 'integer',
+		'pkg_warn_time'				=> 'set_warn_time',
+		'pkg_grace'					=> 'set_grace',
+		'pkg_order'					=> 'set_order',
 	);
 
-	protected $id_column = 'gs_id';
+	protected $id_column = 'pkg_id';
 
 	/**
 	 * @var \phpbb\config\config
@@ -52,7 +52,7 @@ class product extends entity implements product_interface
 
 	public function get_ident()
 	{
-		return isset($this->data['gs_ident']) ? (string) $this->data['gs_ident'] : '';
+		return isset($this->data['pkg_ident']) ? (string) $this->data['pkg_ident'] : '';
 	}
 
 	public function set_ident($ident)
@@ -62,38 +62,38 @@ class product extends entity implements product_interface
 
 		if ($ident === '')
 		{
-			throw new missing_field('gs_ident');
+			throw new missing_field('pkg_ident');
 		}
 
 		if (truncate_string($ident, 30) !== $ident)
 		{
-			throw new unexpected_value('gs_ident', 'TOO_LONG');
+			throw new unexpected_value('pkg_ident', 'TOO_LONG');
 		}
 
 		if (!preg_match('/^[a-z][a-z\d_]*$/', $ident))
 		{
-			throw new unexpected_value('gs_ident', 'INVALID_IDENT');
+			throw new unexpected_value('pkg_ident', 'INVALID_IDENT');
 		}
 
-		$sql = 'SELECT gs_id
+		$sql = 'SELECT pkg_id
 				FROM ' . $this->table_name . "
-				WHERE gs_ident = '" . $this->db->sql_escape($ident) . "'";
+				WHERE pkg_ident = '" . $this->db->sql_escape($ident) . "'";
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 		if ($row !== false)
 		{
-			throw new unexpected_value('gs_ident', 'NOT_UNIQUE');
+			throw new unexpected_value('pkg_ident', 'NOT_UNIQUE');
 		}
 
-		$this->data['gs_ident'] = $ident;
+		$this->data['pkg_ident'] = $ident;
 
 		return $this;
 	}
 
 	public function get_name()
 	{
-		return isset($this->data['gs_name']) ? (string) $this->data['gs_name'] : '';
+		return isset($this->data['pkg_name']) ? (string) $this->data['pkg_name'] : '';
 	}
 
 	public function set_name($name)
@@ -102,24 +102,24 @@ class product extends entity implements product_interface
 
 		if ($name === '')
 		{
-			throw new missing_field('gs_name');
+			throw new missing_field('pkg_name');
 		}
 
 		if (truncate_string($name, 255) !== $name)
 		{
-			throw new unexpected_value('gs_name', 'TOO_LONG');
+			throw new unexpected_value('pkg_name', 'TOO_LONG');
 		}
 
-		$this->data['gs_name'] = $name;
+		$this->data['pkg_name'] = $name;
 
 		return $this;
 	}
 
 	public function get_desc_for_edit()
 	{
-		$content = isset($this->data['gs_desc']) ? $this->data['gs_desc'] : '';
-		$uid = isset($this->data['gs_desc_bbcode_uid']) ? $this->data['gs_desc_bbcode_uid'] : '';
-		$options = isset($this->data['gs_desc_bbcode_options']) ? (int) $this->data['gs_desc_bbcode_options'] : 0;
+		$content = isset($this->data['pkg_desc']) ? $this->data['pkg_desc'] : '';
+		$uid = isset($this->data['pkg_desc_bbcode_uid']) ? $this->data['pkg_desc_bbcode_uid'] : '';
+		$options = isset($this->data['pkg_desc_bbcode_options']) ? (int) $this->data['pkg_desc_bbcode_options'] : 0;
 
 		$content_data = generate_text_for_edit($content, $uid, $options);
 
@@ -128,10 +128,10 @@ class product extends entity implements product_interface
 
 	public function get_desc_for_display()
 	{
-		$content = isset($this->data['gs_desc']) ? $this->data['gs_desc'] : '';
-		$uid = isset($this->data['gs_desc_bbcode_uid']) ? $this->data['gs_desc_bbcode_uid'] : '';
-		$bitfield = isset($this->data['gs_desc_bbcode_bitfield']) ? $this->data['gs_desc_bbcode_bitfield'] : '';
-		$options = isset($this->data['gs_desc_bbcode_options']) ? (int) $this->data['gs_desc_bbcode_options'] : 0;
+		$content = isset($this->data['pkg_desc']) ? $this->data['pkg_desc'] : '';
+		$uid = isset($this->data['pkg_desc_bbcode_uid']) ? $this->data['pkg_desc_bbcode_uid'] : '';
+		$bitfield = isset($this->data['pkg_desc_bbcode_bitfield']) ? $this->data['pkg_desc_bbcode_bitfield'] : '';
+		$options = isset($this->data['pkg_desc_bbcode_options']) ? (int) $this->data['pkg_desc_bbcode_options'] : 0;
 
 		return generate_text_for_display($content, $uid, $bitfield, $options);
 	}
@@ -143,20 +143,20 @@ class product extends entity implements product_interface
 		$uid = $bitfield = $flags = '';
 		generate_text_for_storage($desc, $uid, $bitfield, $flags, $this->is_bbcode_enabled(), $this->is_magic_url_enabled(), $this->is_smilies_enabled());
 
-		$this->data['gs_desc'] = $desc;
-		$this->data['gs_desc_bbcode_uid'] = $uid;
-		$this->data['gs_desc_bbcode_bitfield'] = $bitfield;
+		$this->data['pkg_desc'] = $desc;
+		$this->data['pkg_desc_bbcode_uid'] = $uid;
+		$this->data['pkg_desc_bbcode_bitfield'] = $bitfield;
 
 		return $this;
 	}
 
 	public function is_bbcode_enabled()
 	{
-		if (!isset($this->data['gs_desc_bbcode_options']))
+		if (!isset($this->data['pkg_desc_bbcode_options']))
 		{
 			return true;
 		}
-		return ($this->data['gs_desc_bbcode_options'] & OPTION_FLAG_BBCODE);
+		return ($this->data['pkg_desc_bbcode_options'] & OPTION_FLAG_BBCODE);
 	}
 
 	public function set_bbcode_enabled($enable)
@@ -168,11 +168,11 @@ class product extends entity implements product_interface
 
 	public function is_magic_url_enabled()
 	{
-		if (!isset($this->data['gs_desc_bbcode_options']))
+		if (!isset($this->data['pkg_desc_bbcode_options']))
 		{
 			return true;
 		}
-		return ($this->data['gs_desc_bbcode_options'] & OPTION_FLAG_LINKS);
+		return ($this->data['pkg_desc_bbcode_options'] & OPTION_FLAG_LINKS);
 	}
 
 	public function set_magic_url_enabled($enable)
@@ -184,11 +184,11 @@ class product extends entity implements product_interface
 
 	public function is_smilies_enabled()
 	{
-		if (!isset($this->data['gs_desc_bbcode_options']))
+		if (!isset($this->data['pkg_desc_bbcode_options']))
 		{
 			return true;
 		}
-		return ($this->data['gs_desc_bbcode_options'] & OPTION_FLAG_SMILIES);
+		return ($this->data['pkg_desc_bbcode_options'] & OPTION_FLAG_SMILIES);
 	}
 
 	public function set_smilies_enabled($enable)
@@ -200,7 +200,7 @@ class product extends entity implements product_interface
 
 	public function get_warn_time()
 	{
-		return isset($this->data['gs_warn_time']) ? (int) $this->data['gs_warn_time'] : null;
+		return isset($this->data['pkg_warn_time']) ? (int) $this->data['pkg_warn_time'] : null;
 	}
 
 	public function set_warn_time($warn_time)
@@ -209,17 +209,17 @@ class product extends entity implements product_interface
 
 		if ($warn_time < 0 || $warn_time > 16777215)
 		{
-			throw new out_of_bounds('gs_warn_time');
+			throw new out_of_bounds('pkg_warn_time');
 		}
 
-		$this->data['gs_warn_time'] = $warn_time;
+		$this->data['pkg_warn_time'] = $warn_time;
 
 		return $this;
 	}
 
 	public function get_grace()
 	{
-		return isset($this->data['gs_grace']) ? (int) $this->data['gs_grace'] : null;
+		return isset($this->data['pkg_grace']) ? (int) $this->data['pkg_grace'] : null;
 	}
 
 	public function set_grace($grace)
@@ -228,17 +228,17 @@ class product extends entity implements product_interface
 
 		if ($grace < 0 || $grace > 16777215)
 		{
-			throw new out_of_bounds('gs_grace');
+			throw new out_of_bounds('pkg_grace');
 		}
 
-		$this->data['gs_grace'] = $grace;
+		$this->data['pkg_grace'] = $grace;
 
 		return $this;
 	}
 
 	public function get_order()
 	{
-		return isset($this->data['gs_order']) ? (int) $this->data['gs_order'] : 0;
+		return isset($this->data['pkg_order']) ? (int) $this->data['pkg_order'] : 0;
 	}
 
 	public function set_order($order)
@@ -247,10 +247,10 @@ class product extends entity implements product_interface
 
 		if ($order < 0 || $order > 16777215)
 		{
-			throw new out_of_bounds('gs_order');
+			throw new out_of_bounds('pkg_order');
 		}
 
-		$this->data['gs_order'] = $order;
+		$this->data['pkg_order'] = $order;
 
 		return $this;
 	}
@@ -263,23 +263,23 @@ class product extends entity implements product_interface
 	 */
 	protected function set_desc_option($option, $value)
 	{
-		$this->data['gs_desc_bbcode_options'] = isset($this->data['gs_desc_bbcode_options']) ? $this->data['gs_desc_bbcode_options'] : 0;
+		$this->data['pkg_desc_bbcode_options'] = isset($this->data['pkg_desc_bbcode_options']) ? $this->data['pkg_desc_bbcode_options'] : 0;
 
-		if ($value && !($this->data['gs_desc_bbcode_options'] & $option))
+		if ($value && !($this->data['pkg_desc_bbcode_options'] & $option))
 		{
-			$this->data['gs_desc_bbcode_options'] += $option;
+			$this->data['pkg_desc_bbcode_options'] += $option;
 		}
 
-		if (!$value && $this->data['gs_desc_bbcode_options'] & $option)
+		if (!$value && $this->data['pkg_desc_bbcode_options'] & $option)
 		{
-			$this->data['gs_desc_bbcode_options'] -= $option;
+			$this->data['pkg_desc_bbcode_options'] -= $option;
 		}
 
-		if (!empty($this->data['gs_desc']))
+		if (!empty($this->data['pkg_desc']))
 		{
-			$content = $this->data['gs_desc'];
+			$content = $this->data['pkg_desc'];
 
-			decode_message($content, $this->data['gs_desc_bbcode_uid']);
+			decode_message($content, $this->data['pkg_desc_bbcode_uid']);
 
 			$this->set_desc($content);
 		}

@@ -11,9 +11,9 @@
 namespace stevotvr\groupsub\controller;
 
 /**
- * Group Subscription ACP products controller interface.
+ * Group Subscription ACP packages controller interface.
  */
-interface acp_prods_interface extends acp_base_interface
+interface acp_pkgs_interface extends acp_base_interface
 {
 	/**
 	 * Display all items.

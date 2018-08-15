@@ -107,22 +107,22 @@ class ipn_controller
 					return new Response('', 400);
 				}
 
-				$prod_id = $this->request->variable('item_number', 0);
-				$product = $this->container->get('stevotvr.groupsub.entity.product')->load($prod_id);
+				$pkg_id = $this->request->variable('item_number', 0);
+				$package = $this->container->get('stevotvr.groupsub.entity.package')->load($pkg_id);
 
-				if ($product->get_currency() !== $this->request->variable('mc_currency', ''))
+				if ($package->get_currency() !== $this->request->variable('mc_currency', ''))
 				{
 					return new Response('', 400);
 				}
 
-				$price = $this->currency->parse_value($product->get_currency(), $product->get_price());
+				$price = $this->currency->parse_value($package->get_currency(), $package->get_price());
 				if ($price !== $this->request->variable('payment_gross', 0))
 				{
 					return new Response('', 400);
 				}
 
 				$user_id = $this->request->variable('custom', 0);
-				$this->sub_operator->create_subscription($product->get_id(), $user_id);
+				$this->sub_operator->create_subscription($package->get_id(), $user_id);
 			}
 		}
 

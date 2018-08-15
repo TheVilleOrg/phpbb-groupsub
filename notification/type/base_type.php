@@ -71,13 +71,13 @@ abstract class base_type extends base
 
 	public function get_url()
 	{
-		return $this->helper->route('stevotvr_groupsub_main', array('name' => $this->get_data('gs_ident')));
+		return $this->helper->route('stevotvr_groupsub_main', array('name' => $this->get_data('pkg_ident')));
 	}
 
 	public function create_insert_array($data, $pre_create_data = array())
 	{
-		$this->set_data('gs_ident', $data['gs_ident']);
-		$this->set_data('gs_name', $data['gs_name']);
+		$this->set_data('pkg_ident', $data['pkg_ident']);
+		$this->set_data('pkg_name', $data['pkg_name']);
 
 		parent::create_insert_array($data, $pre_create_data);
 	}

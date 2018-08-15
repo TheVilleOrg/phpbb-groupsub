@@ -26,8 +26,8 @@ class main_info
 					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),
-				'products'	=> array(
-					'title'	=> 'ACP_GROUPSUB_MANAGE_PRODS',
+				'packages'	=> array(
+					'title'	=> 'ACP_GROUPSUB_MANAGE_PKGS',
 					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),

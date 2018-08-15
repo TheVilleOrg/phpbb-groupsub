@@ -1,18 +1,18 @@
 {% include 'overall_header.html' %}
 
-<h2>{{ lang('GROUPSUB_PRODUCT_LIST') }}</h2>
+<h2>{{ lang('GROUPSUB_PACKAGE_LIST') }}</h2>
 
-{% for p in product %}
+{% for p in package %}
 
 <div class="panel bg{% if loop.index is odd %}1{% else %}2{% endif %}">
 
 <div class="inner">
 
-	<h3>{{ p.PROD_NAME }}</h3>
+	<h3>{{ p.PKG_NAME }}</h3>
 
 	<div class="column1">
 
-		<p>{% if p.PROD_DESC %}{{ p.PROD_DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
+		<p>{% if p.PKG_DESC %}{{ p.PKG_DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
 
 		{% if p.group %}
 			<h4>{{ lang('GROUPS') }}</h4>
@@ -30,9 +30,9 @@
 
 		<dl class="details">
 			<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
-			<dd>{{ p.PROD_DISPLAY_PRICE }}</dd>
+			<dd>{{ p.PKG_DISPLAY_PRICE }}</dd>
 			<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
-			<dd>{{ p.PROD_LENGTH }}</dd>
+			<dd>{{ p.PKG_LENGTH }}</dd>
 			<dt>{{ lang('GROUPSUB_SUBSCRIBE') ~ lang('COLON') }}</dt>
 			<dd>
 				{% include '@stevotvr_groupsub/pp_button.html' with p %}
@@ -51,7 +51,7 @@
 
 <div class="inner">
 
-	<p>{{ lang('GROUPSUB_NO_PRODUCTS') }}</p>
+	<p>{{ lang('GROUPSUB_NO_PACKAGES') }}</p>
 
 </div>
 

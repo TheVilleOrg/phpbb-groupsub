@@ -19,28 +19,28 @@ class subscription extends entity implements subscription_interface
 {
 	protected $columns = array(
 		'sub_id'		=> 'integer',
-		'gs_id'			=> 'integer',
+		'pkg_id'		=> 'integer',
 		'user_id'		=> 'integer',
 		'sub_expires'	=> 'set_expire',
 	);
 
 	protected $id_column = 'sub_id';
 
-	public function get_product()
+	public function get_package()
 	{
-		return isset($this->data['gs_id']) ? (int) $this->data['gs_id'] : 0;
+		return isset($this->data['pkg_id']) ? (int) $this->data['pkg_id'] : 0;
 	}
 
-	public function set_product($product)
+	public function set_package($package)
 	{
-		$product = (int) $product;
+		$package = (int) $package;
 
-		if ($product < 0)
+		if ($package < 0)
 		{
-			throw new out_of_bounds('gs_id');
+			throw new out_of_bounds('pkg_id');
 		}
 
-		$this->data['gs_id'] = $product;
+		$this->data['pkg_id'] = $package;
 
 		return $this;
 	}

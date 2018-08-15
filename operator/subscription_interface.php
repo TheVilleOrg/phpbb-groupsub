@@ -42,11 +42,11 @@ interface subscription_interface
 	public function set_user($user_id);
 
 	/**
-	 * @param int $prod_id The product ID for which to query subscriptions
+	 * @param int $package_id The package ID for which to query subscriptions
 	 *
 	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
 	 */
-	public function set_product($prod_id);
+	public function set_package($package_id);
 
 	/**
 	 * Set the sorting options for querying subscriptions.
@@ -62,7 +62,7 @@ interface subscription_interface
 	 * Get subscriptions.
 	 *
 	 * @return array Array associative arrays of subscription data
-	 *                     product	string
+	 *                     package	string
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */
@@ -74,7 +74,7 @@ interface subscription_interface
 	 * @param int $sub_id The subscription ID
 	 *
 	 * @return array Associative array of subscription data
-	 *                     product	string
+	 *                     package	string
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 *
@@ -99,10 +99,10 @@ interface subscription_interface
 	/**
 	 * Create or extend a subscription for a user.
 	 *
-	 * @param int $prod_id The product ID
-	 * @param int $user_id The user ID
+	 * @param int $package_id The package ID
+	 * @param int $user_id    The user ID
 	 */
-	public function create_subscription($prod_id, $user_id);
+	public function create_subscription($package_id, $user_id);
 
 	/**
 	 * Delete a subscription.

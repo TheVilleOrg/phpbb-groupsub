@@ -32,7 +32,7 @@ class expired extends base_type
 
 	public function get_reference()
 	{
-		return $this->language->lang('GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE', $this->get_data('gs_name'));
+		return $this->language->lang('GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE', $this->get_data('pkg_name'));
 	}
 
 	public function get_email_template()
@@ -43,7 +43,7 @@ class expired extends base_type
 	public function get_email_template_variables()
 	{
 		return array(
-			'SUB_NAME'		=> $this->get_data('gs_name'),
+			'SUB_NAME'		=> $this->get_data('pkg_name'),
 
 			'U_VIEW_SUB'	=> generate_board_url() . $this->get_url(),
 		);

@@ -12,15 +12,15 @@ namespace stevotvr\groupsub\controller;
 
 use phpbb\group\helper;
 use phpbb\json_response;
-use stevotvr\groupsub\entity\product_interface as prod_entity;
+use stevotvr\groupsub\entity\package_interface as pkg_entity;
 use stevotvr\groupsub\exception\base;
-use stevotvr\groupsub\operator\product_interface as prod_operator;
+use stevotvr\groupsub\operator\package_interface as pkg_operator;
 use stevotvr\groupsub\operator\unit_helper_interface;
 
 /**
- * Group Subscription product management ACP controller.
+ * Group Subscription package management ACP controller.
  */
-class acp_prods_controller extends acp_base_controller implements acp_prods_interface
+class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interface
 {
 	/**
 	 * @var \phpbb\group\helper
@@ -28,9 +28,9 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	protected $group_helper;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\product_interface
+	 * @var \stevotvr\groupsub\operator\package_interface
 	 */
-	protected $prod_operator;
+	protected $pkg_operator;
 
 	/**
 	 * @var \stevotvr\groupsub\operator\unit_helper_interface
@@ -41,13 +41,13 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	 * Set up the controller.
 	 *
 	 * @param \phpbb\group\helper                               $group_helper
-	 * @param \stevotvr\groupsub\operator\product_interface     $prod_operator
+	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 */
-	public function setup(helper $group_helper, prod_operator $prod_operator, unit_helper_interface $unit_helper)
+	public function setup(helper $group_helper, pkg_operator $pkg_operator, unit_helper_interface $unit_helper)
 	{
 		$this->group_helper = $group_helper;
-		$this->prod_operator = $prod_operator;
+		$this->pkg_operator = $pkg_operator;
 		$this->unit_helper = $unit_helper;
 
 		$this->language->add_lang('posting');
@@ -55,14 +55,14 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 	public function display()
 	{
-		$entities = $this->prod_operator->get_products();
-		$prices = $this->prod_operator->get_prices();
+		$entities = $this->pkg_operator->get_packages();
+		$prices = $this->pkg_operator->get_prices();
 
 		foreach ($entities as $entity)
 		{
-			$this->template->assign_block_vars('product', array(
-				'PROD_IDENT'	=> $entity->get_ident(),
-				'PROD_NAME'		=> $entity->get_name(),
+			$this->template->assign_block_vars('package', array(
+				'PKG_IDENT'	=> $entity->get_ident(),
+				'PKG_NAME'	=> $entity->get_name(),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
@@ -74,9 +74,9 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			{
 				foreach ($prices[$entity->get_id()] as $price)
 				{
-					$this->template->assign_block_vars('product.price', array(
-						'PROD_PRICE'	=> $this->currency->format_price($price->get_currency(), $price->get_price()),
-						'PROD_LENGTH'	=> $this->unit_helper->get_formatted_timespan($price->get_length()),
+					$this->template->assign_block_vars('package.price', array(
+						'PKG_PRICE'	=> $this->currency->format_price($price->get_currency(), $price->get_price()),
+						'PKG_LENGTH'	=> $this->unit_helper->get_formatted_timespan($price->get_length()),
 					));
 				}
 			}
@@ -84,16 +84,16 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 		$this->template->assign_vars(array(
 			'U_ACTION'		=> $this->u_action,
-			'U_ADD_PROD'	=> $this->u_action . '&amp;action=add',
+			'U_ADD_PKG'	=> $this->u_action . '&amp;action=add',
 		));
 	}
 
 	public function add()
 	{
-		$entity = $this->container->get('stevotvr.groupsub.entity.product');
-		$this->add_edit_prod_data($entity);
+		$entity = $this->container->get('stevotvr.groupsub.entity.package');
+		$this->add_edit_pkg_data($entity);
 		$this->template->assign_vars(array(
-			'S_ADD_PROD'	=> true,
+			'S_ADD_PKG'	=> true,
 
 			'U_ACTION'	=> $this->u_action . '&amp;action=add',
 		));
@@ -101,46 +101,46 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 
 	public function edit($id)
 	{
-		$entity = $this->container->get('stevotvr.groupsub.entity.product')->load($id);
-		$this->add_edit_prod_data($entity);
+		$entity = $this->container->get('stevotvr.groupsub.entity.package')->load($id);
+		$this->add_edit_pkg_data($entity);
 		$this->template->assign_vars(array(
-			'S_EDIT_PROD'	=> true,
+			'S_EDIT_PKG'	=> true,
 
 			'U_ACTION'		=> $this->u_action . '&amp;action=edit&amp;id=' . $id,
 		));
 	}
 
 	/**
-	 * Process data for the add/edit product form.
+	 * Process data for the add/edit package form.
 	 *
-	 * @param \stevotvr\groupsub\entity\product_interface $entity The product
+	 * @param \stevotvr\groupsub\entity\package_interface $entity The package
 	 */
-	protected function add_edit_prod_data(prod_entity $entity)
+	protected function add_edit_pkg_data(pkg_entity $entity)
 	{
 		$errors = array();
 
 		$submit = $this->request->is_set_post('submit');
 
-		add_form_key('add_edit_prod');
+		add_form_key('add_edit_pkg');
 
 		$data = array(
-			'name'				=> $this->request->variable('prod_name', '', true),
-			'desc'				=> $this->request->variable('prod_desc', '', true),
+			'name'				=> $this->request->variable('pkg_name', '', true),
+			'desc'				=> $this->request->variable('pkg_desc', '', true),
 			'bbcode_enabled'	=> $this->request->variable('parse_bbcode', false),
 			'magic_url_enabled'	=> $this->request->variable('parse_magic_url', false),
 			'smilies_enabled'	=> $this->request->variable('parse_smilies', false),
-			'warn_time'			=> max(0, $this->request->variable('prod_warn_time', 0)),
-			'grace'				=> max(0, $this->request->variable('prod_grace', 0)),
+			'warn_time'			=> max(0, $this->request->variable('pkg_warn_time', 0)),
+			'grace'				=> max(0, $this->request->variable('pkg_grace', 0)),
 		);
 
 		if (!$entity->get_id())
 		{
-			$data['ident'] = $this->request->variable('prod_ident', '', true);
+			$data['ident'] = $this->request->variable('pkg_ident', '', true);
 		}
 
 		if ($submit)
 		{
-			if (!check_form_key('add_edit_prod'))
+			if (!check_form_key('add_edit_pkg'))
 			{
 				$errors[] = 'FORM_INVALID';
 			}
@@ -162,12 +162,12 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 				if ($entity->get_id())
 				{
 					$entity->save();
-					$message = 'ACP_GROUPSUB_PROD_EDIT_SUCCESS';
+					$message = 'ACP_GROUPSUB_PKG_EDIT_SUCCESS';
 				}
 				else
 				{
-					$entity = $this->prod_operator->add_product($entity);
-					$message = 'ACP_GROUPSUB_PROD_ADD_SUCCESS';
+					$entity = $this->pkg_operator->add_package($entity);
+					$message = 'ACP_GROUPSUB_PKG_ADD_SUCCESS';
 				}
 
 				$this->parse_groups($entity->get_id());
@@ -198,12 +198,12 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	/**
 	 * Assign the main template variables.
 	 *
-	 * @param \stevotvr\groupsub\entity\product_interface $entity The product
+	 * @param \stevotvr\groupsub\entity\package_interface $entity The package
 	 * @param array                                       $post   The posted data
 	 */
-	protected function assign_tpl_vars(prod_entity $entity, array $post)
+	protected function assign_tpl_vars(pkg_entity $entity, array $post)
 	{
-		$posted = $this->request->is_set_post('prod_name');
+		$posted = $this->request->is_set_post('pkg_name');
 
 		$ident = !$entity->get_id() ? $post['ident'] : $entity->get_ident();
 		$name = $posted ? $post['name'] : $entity->get_name();
@@ -215,35 +215,35 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		$grace = $posted ? $post['grace'] : $entity->get_grace();
 
 		$this->template->assign_vars(array(
-			'PROD_IDENT'		=> $ident,
-			'PROD_NAME'			=> $name,
-			'PROD_DESC'			=> $desc,
-			'PROD_WARN_TIME'	=> is_int($warn_time) ? $warn_time : $this->config['stevotvr_groupsub_warn_time'],
-			'PROD_GRACE'		=> is_int($grace) ? $grace : $this->config['stevotvr_groupsub_grace'],
+			'PKG_IDENT'		=> $ident,
+			'PKG_NAME'		=> $name,
+			'PKG_DESC'		=> $desc,
+			'PKG_WARN_TIME'	=> is_int($warn_time) ? $warn_time : $this->config['stevotvr_groupsub_warn_time'],
+			'PKG_GRACE'		=> is_int($grace) ? $grace : $this->config['stevotvr_groupsub_grace'],
 
 			'S_PARSE_BBCODE_CHECKED'	=> $bbcode,
 			'S_PARSE_SMILIES_CHECKED'	=> $smilies,
 			'S_PARSE_MAGIC_URL_CHECKED'	=> $magic_url,
 
 			'U_BACK'	=> $this->u_action,
-			'U_PRICES'	=> $this->u_action . '&amp;prod_id=' . $entity->get_id() . '&amp;prices=true',
+			'U_PRICES'	=> $this->u_action . '&amp;pkg_id=' . $entity->get_id() . '&amp;prices=true',
 		));
 	}
 
 	/**
 	 * Load the list of groups into template block variables.
 	 *
-	 * @param int $prod_id The product ID
+	 * @param int $package_id The package ID
 	 */
-	protected function load_groups($prod_id)
+	protected function load_groups($package_id)
 	{
 		$groups = array();
 
-		$selected = $this->request->variable('prod_groups', array(0));
+		$selected = $this->request->variable('pkg_groups', array(0));
 
-		if ($prod_id && empty($selected))
+		if ($package_id && empty($selected))
 		{
-			$selected = $this->prod_operator->get_groups($prod_id);
+			$selected = $this->pkg_operator->get_groups($package_id);
 		}
 
 		$sql = 'SELECT group_id, group_name
@@ -272,36 +272,36 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	/**
 	 * Parse the group list from the input.
 	 *
-	 * @param int $prod_id The product ID
+	 * @param int $package_id The package ID
 	 */
-	protected function parse_groups($prod_id)
+	protected function parse_groups($package_id)
 	{
-		if (!$prod_id)
+		if (!$package_id)
 		{
 			return;
 		}
 
-		$group_ids = $this->request->variable('prod_groups', array(0));
-		$this->prod_operator->remove_groups($prod_id);
+		$group_ids = $this->request->variable('pkg_groups', array(0));
+		$this->pkg_operator->remove_groups($package_id);
 		foreach ($group_ids as $group_id)
 		{
-			$this->prod_operator->add_group($prod_id, $group_id);
+			$this->pkg_operator->add_group($package_id, $group_id);
 		}
 	}
 
 	/**
-	 * Load the list of prices set for a product.
+	 * Load the list of prices set for a package.
 	 *
-	 * @param int $prod_id The product ID
+	 * @param int $package_id The package ID
 	 */
-	protected function load_prices($prod_id)
+	protected function load_prices($package_id)
 	{
-		if ($this->request->is_set_post('prod_price'))
+		if ($this->request->is_set_post('pkg_price'))
 		{
-			$prices = $this->request->variable('prod_price', array(''));
-			$currencies = $this->request->variable('prod_currency', array(''));
-			$lengths = $this->request->variable('prod_length', array(0));
-			$length_units = $this->request->variable('prod_length_unit', array(''));
+			$prices = $this->request->variable('pkg_price', array(''));
+			$currencies = $this->request->variable('pkg_currency', array(''));
+			$lengths = $this->request->variable('pkg_length', array(0));
+			$length_units = $this->request->variable('pkg_length_unit', array(''));
 
 			$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
 			for ($i = 0; $i < $count; $i++)
@@ -312,36 +312,36 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 				}
 
 				$this->template->assign_block_vars('price', array(
-					'PROD_PRICE'		=> $prices[$i],
-					'PROD_CURRENCY'		=> $currencies[$i],
-					'PROD_LENGTH'		=> $lengths[$i],
-					'PROD_LENGTH_UNIT'	=> $length_units[$i],
+					'PKG_PRICE'			=> $prices[$i],
+					'PKG_CURRENCY'		=> $currencies[$i],
+					'PKG_LENGTH'		=> $lengths[$i],
+					'PKG_LENGTH_UNIT'	=> $length_units[$i],
 				));
 			}
 
 			return;
 		}
 
-		if (!$prod_id)
+		if (!$package_id)
 		{
 			return;
 		}
 
-		$prices = $this->prod_operator->get_prices($prod_id);
+		$prices = $this->pkg_operator->get_prices($package_id);
 
-		if (!isset($prices[$prod_id]))
+		if (!isset($prices[$package_id]))
 		{
 			return;
 		}
 
-		foreach ($prices[$prod_id] as $price)
+		foreach ($prices[$package_id] as $price)
 		{
 			$length = $this->unit_helper->get_timespan_parts($price->get_length());
 			$this->template->assign_block_vars('price', array(
-				'PROD_PRICE'		=> $this->currency->format_value($price->get_currency(), $price->get_price()),
-				'PROD_CURRENCY'		=> $price->get_currency(),
-				'PROD_LENGTH'		=> $length['length'],
-				'PROD_LENGTH_UNIT'	=> $length['unit'],
+				'PKG_PRICE'			=> $this->currency->format_value($price->get_currency(), $price->get_price()),
+				'PKG_CURRENCY'		=> $price->get_currency(),
+				'PKG_LENGTH'		=> $length['length'],
+				'PKG_LENGTH_UNIT'	=> $length['unit'],
 			));
 		}
 	}
@@ -349,21 +349,21 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 	/**
 	 * Parse the prices from the input.
 	 *
-	 * @param int $prod_id The product ID
+	 * @param int $package_id The package ID
 	 */
-	protected function parse_prices($prod_id)
+	protected function parse_prices($package_id)
 	{
-		if (!$prod_id)
+		if (!$package_id)
 		{
 			return;
 		}
 
 		$entities = array();
 
-		$prices = $this->request->variable('prod_price', array(''));
-		$currencies = $this->request->variable('prod_currency', array(''));
-		$lengths = $this->request->variable('prod_length', array(0));
-		$length_units = $this->request->variable('prod_length_unit', array(''));
+		$prices = $this->request->variable('pkg_price', array(''));
+		$currencies = $this->request->variable('pkg_currency', array(''));
+		$lengths = $this->request->variable('pkg_length', array(0));
+		$length_units = $this->request->variable('pkg_length_unit', array(''));
 
 		$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
 		for ($i = 0; $i < $count; $i++)
@@ -381,7 +381,7 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 			$entities[] = $entity;
 		}
 
-		$this->prod_operator->set_prices($prod_id, $entities);
+		$this->pkg_operator->set_prices($package_id, $entities);
 	}
 
 	/**
@@ -404,33 +404,33 @@ class acp_prods_controller extends acp_base_controller implements acp_prods_inte
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
-				'mode'		=> 'products',
+				'mode'		=> 'packages',
 				'action'	=> 'delete',
 			));
-			confirm_box(false, $this->language->lang('ACP_GROUPSUB_PROD_DELETE_CONFIRM'), $hidden_fields);
+			confirm_box(false, $this->language->lang('ACP_GROUPSUB_PKG_DELETE_CONFIRM'), $hidden_fields);
 			return;
 		}
 
-		$this->prod_operator->delete_product($id);
+		$this->pkg_operator->delete_package($id);
 
 		if ($this->request->is_ajax())
 		{
 			$json_response = new json_response();
 			$json_response->send(array(
 				'MESSAGE_TITLE'	=> $this->language->lang('INFORMATION'),
-				'MESSAGE_TEXT'	=> $this->language->lang('ACP_GROUPSUB_PROD_DELETE_SUCCESS'),
+				'MESSAGE_TEXT'	=> $this->language->lang('ACP_GROUPSUB_PKG_DELETE_SUCCESS'),
 				'REFRESH_DATA'	=> array(
 					'time'	=> 3
 				),
 			));
 		}
 
-		trigger_error($this->language->lang('ACP_GROUPSUB_PROD_DELETE_SUCCESS') . adm_back_link($this->u_action));
+		trigger_error($this->language->lang('ACP_GROUPSUB_PKG_DELETE_SUCCESS') . adm_back_link($this->u_action));
 	}
 
 	public function move($id, $offset)
 	{
-		$this->prod_operator->move_product($id, $offset);
+		$this->pkg_operator->move_package($id, $offset);
 
 		if ($this->request->is_ajax())
 		{

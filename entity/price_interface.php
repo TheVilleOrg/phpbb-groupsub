@@ -16,18 +16,18 @@ namespace stevotvr\groupsub\entity;
 interface price_interface extends entity_interface
 {
 	/**
-	 * @return int|null The ID of the product associated with this price option
+	 * @return int|null The ID of the package associated with this price option
 	 */
-	public function get_product();
+	public function get_package();
 
 	/**
-	 * @param int $product_id The ID of the product associated with this price option
+	 * @param int $package_id The ID of the package associated with this price option
 	 *
 	 * @return price_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
-	public function set_product($product_id);
+	public function set_package($package_id);
 
 	/**
 	 * @return int|null The price of this option in the currency subunit

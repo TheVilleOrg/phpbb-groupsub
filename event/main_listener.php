@@ -14,7 +14,7 @@ use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\event\data;
 use phpbb\template\template;
-use stevotvr\groupsub\operator\product_interface;
+use stevotvr\groupsub\operator\package_interface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -33,9 +33,9 @@ class main_listener implements EventSubscriberInterface
 	protected $helper;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\product_interface
+	 * @var \stevotvr\groupsub\operator\package_interface
 	 */
-	protected $prod_operator;
+	protected $pkg_operator;
 
 	/**
 	 * @var \phpbb\template\template
@@ -45,14 +45,14 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * @param \phpbb\config\config                          $config
 	 * @param \phpbb\controller\helper                      $helper
-	 * @param \stevotvr\groupsub\operator\product_interface $prod_operator
+	 * @param \stevotvr\groupsub\operator\package_interface $pkg_operator
 	 * @param \phpbb\template\template                      $template
 	 */
-	public function __construct(config $config, helper $helper, product_interface $prod_operator, template $template)
+	public function __construct(config $config, helper $helper, package_interface $pkg_operator, template $template)
 	{
 		$this->config = $config;
 		$this->helper = $helper;
-		$this->prod_operator = $prod_operator;
+		$this->pkg_operator = $pkg_operator;
 		$this->template = $template;
 	}
 
@@ -77,7 +77,7 @@ class main_listener implements EventSubscriberInterface
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 
-		if ($this->groupsub_active() && $this->prod_operator->count_products())
+		if ($this->groupsub_active() && $this->pkg_operator->count_packages())
 		{
 			$this->template->assign_var('U_GROUPSUB_SUBS', $this->helper->route('stevotvr_groupsub_main'));
 		}

@@ -42,11 +42,11 @@ abstract class operator
 	protected $currencies;
 
 	/**
-	 * The name of the groupsub table.
+	 * The name of the groupsub_packages table.
 	 *
 	 * @var string
 	 */
-	protected $product_table;
+	protected $package_table;
 
 	/**
 	 * The name of the groupsub_groups table.
@@ -74,18 +74,18 @@ abstract class operator
 	 * @param \phpbb\db\driver\driver_interface $db
 	 * @param \phpbb\language\language          $language
 	 * @param array                             $currencies    List of currencies
-	 * @param string                            $product_table The name of the groupsub table
+	 * @param string                            $package_table The name of the groupsub_packages table
 	 * @param string                            $group_table   The name of the groupsub_groups table
 	 * @param string                            $price_table   The name of the groupsub_prices table
 	 * @param string                            $sub_table     The name of the groupsub_subs table
 	 */
-	public function __construct(ContainerInterface $container, driver_interface $db, language $language, array $currencies, $product_table, $group_table, $price_table, $sub_table)
+	public function __construct(ContainerInterface $container, driver_interface $db, language $language, array $currencies, $package_table, $group_table, $price_table, $sub_table)
 	{
 		$this->container = $container;
 		$this->db = $db;
 		$this->language = $language;
 		$this->currencies = $currencies;
-		$this->product_table = $product_table;
+		$this->package_table = $package_table;
 		$this->group_table = $group_table;
 		$this->price_table = $price_table;
 		$this->sub_table = $sub_table;

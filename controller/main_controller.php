@@ -16,7 +16,7 @@ use phpbb\language\language;
 use phpbb\template\template;
 use phpbb\user;
 use stevotvr\groupsub\operator\currency_interface;
-use stevotvr\groupsub\operator\product_interface;
+use stevotvr\groupsub\operator\package_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 use stevotvr\groupsub\operator\unit_helper_interface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,9 +52,9 @@ class main_controller
 	protected $language;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\product_interface
+	 * @var \stevotvr\groupsub\operator\package_interface
 	 */
-	protected $prod_operator;
+	protected $pkg_operator;
 
 	/**
 	 * @var \stevotvr\groupsub\operator\subscription_interface
@@ -82,20 +82,20 @@ class main_controller
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \phpbb\controller\helper                           $helper
 	 * @param \phpbb\language\language                           $language
-	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
+	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\template\template                           $template
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
 	 * @param \phpbb\user                                        $user
 	 */
-	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, helper $helper, language $language, product_interface $prod_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
+	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, helper $helper, language $language, package_interface $pkg_operator, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
 	{
 		$this->config = $config;
 		$this->container = $container;
 		$this->currency = $currency;
 		$this->helper = $helper;
 		$this->language = $language;
-		$this->prod_operator = $prod_operator;
+		$this->pkg_operator = $pkg_operator;
 		$this->sub_operator = $sub_operator;
 		$this->template = $template;
 		$this->unit_helper = $unit_helper;
@@ -105,7 +105,7 @@ class main_controller
 	/**
 	 * Handle the /groupsub/{name} route.
 	 *
-	 * @param string|null $name The unique identifier of a product
+	 * @param string|null $name The unique identifier of a package
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
 	 */
@@ -117,7 +117,7 @@ class main_controller
 
 		if (empty($business))
 		{
-			trigger_error('GROUPSUB_NO_PRODUCTS');
+			trigger_error('GROUPSUB_NO_PACKAGES');
 		}
 
 		$this->template->assign_vars(array(
@@ -130,36 +130,36 @@ class main_controller
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
 		));
 
-		$products = $this->prod_operator->get_products($name);
-		$product_groups = $this->prod_operator->get_all_groups();
-		foreach ($products as $product)
+		$packages = $this->pkg_operator->get_packages($name);
+		$package_groups = $this->pkg_operator->get_all_groups();
+		foreach ($packages as $package)
 		{
-			$id = $product->get_id();
-			$price = $product->get_price();
-			$currency = $product->get_currency();
-			$this->template->assign_block_vars('product', array(
-				'PROD_ID'				=> $id,
-				'PROD_NAME'				=> $product->get_name(),
-				'PROD_DESC'				=> $product->get_desc_for_display(),
-				'PROD_PRICE'			=> $this->currency->format_value($currency, $price),
-				'PROD_CURRENCY'			=> $currency,
-				'PROD_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
-				'PROD_LENGTH'			=> $this->unit_helper->get_formatted_timespan($product->get_length()),
+			$id = $package->get_id();
+			$price = $package->get_price();
+			$currency = $package->get_currency();
+			$this->template->assign_block_vars('package', array(
+				'PKG_ID'			=> $id,
+				'PKG_NAME'			=> $package->get_name(),
+				'PKG_DESC'			=> $package->get_desc_for_display(),
+				'PKG_PRICE'			=> $this->currency->format_value($currency, $price),
+				'PKG_CURRENCY'		=> $currency,
+				'PKG_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
+				'PKG_LENGTH'		=> $this->unit_helper->get_formatted_timespan($package->get_length()),
 
-				'U_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $product->get_ident())),
+				'U_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $package->get_ident())),
 			));
 
-			if (isset($product_groups[$id]))
+			if (isset($package_groups[$id]))
 			{
-				foreach ($product_groups[$id] as $group)
+				foreach ($package_groups[$id] as $group)
 				{
-					$this->template->assign_block_vars('product.group', array(
+					$this->template->assign_block_vars('package.group', array(
 						'GROUP_NAME'	=> $group['name'],
 					));
 				}
 			}
 		}
 
-		return $this->helper->render('product_list.html', $this->language->lang('GROUPSUB_PRODUCT_LIST'));
+		return $this->helper->render('package_list.html', $this->language->lang('GROUPSUB_PACKAGE_LIST'));
 	}
 }

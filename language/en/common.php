@@ -38,8 +38,8 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'GROUPSUB_PRODUCT_LIST'	=> 'Subscriptions',
-	'GROUPSUB_NO_PRODUCTS'	=> 'There are no subscriptions available.',
+	'GROUPSUB_PACKAGE_LIST'	=> 'Subscriptions',
+	'GROUPSUB_NO_PACKAGES'	=> 'There are no subscriptions available.',
 	'GROUPSUB_NO_DESC'		=> 'No description available.',
 	'GROUPSUB_PRICE'		=> 'Price',
 	'GROUPSUB_LENGTH'		=> 'Length',

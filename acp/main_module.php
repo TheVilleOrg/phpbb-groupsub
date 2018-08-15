@@ -37,8 +37,8 @@ class main_module
 
 		switch ($mode)
 		{
-			case 'products':
-				$this->manage_products();
+			case 'packages':
+				$this->manage_packages();
 			break;
 			case 'subscriptions':
 				$this->manage_subscriptions();
@@ -63,13 +63,13 @@ class main_module
 	}
 
 	/**
-	 * Handle the products mode of the module.
+	 * Handle the packages mode of the module.
 	 */
-	protected function manage_products()
+	protected function manage_packages()
 	{
-		$this->tpl_name = 'products';
+		$this->tpl_name = 'packages';
 
-		$controller = $this->container->get('stevotvr.groupsub.controller.acp.product');
+		$controller = $this->container->get('stevotvr.groupsub.controller.acp.package');
 		$controller->set_page_url($this->u_action);
 
 		$action = $this->request->variable('action', '');
@@ -78,12 +78,12 @@ class main_module
 		switch ($action)
 		{
 			case 'add':
-				$this->page_title = 'ACP_GROUPSUB_PROD_ADD';
+				$this->page_title = 'ACP_GROUPSUB_PKG_ADD';
 				$controller->add();
 				return;
 			break;
 			case 'edit':
-				$this->page_title = 'ACP_GROUPSUB_PROD_EDIT';
+				$this->page_title = 'ACP_GROUPSUB_PKG_EDIT';
 				$controller->edit($id);
 				return;
 			break;
@@ -99,7 +99,7 @@ class main_module
 			break;
 		}
 
-		$this->page_title = 'ACP_GROUPSUB_MANAGE_PRODS';
+		$this->page_title = 'ACP_GROUPSUB_MANAGE_PKGS';
 		$controller->display();
 	}
 

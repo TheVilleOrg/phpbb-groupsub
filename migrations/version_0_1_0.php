@@ -26,51 +26,51 @@ class version_0_1_0 extends migration
 	{
 		return array(
 			'add_tables' => array(
-				$this->table_prefix . 'groupsub' => array(
+				$this->table_prefix . 'groupsub_packages' => array(
 					'COLUMNS' => array(
-						'gs_id'						=> array('UINT', null, 'auto_increment'),
-						'gs_ident'					=> array('VCHAR:30', ''),
-						'gs_name'					=> array('VCHAR_UNI', ''),
-						'gs_desc'					=> array('TEXT_UNI', ''),
-						'gs_desc_bbcode_uid'		=> array('VCHAR:8', ''),
-						'gs_desc_bbcode_bitfield'	=> array('VCHAR:255', ''),
-						'gs_desc_bbcode_options'	=> array('UINT:11', 7),
-						'gs_warn_time'				=> array('UINT', 0),
-						'gs_grace'					=> array('UINT', 0),
-						'gs_order'					=> array('UINT', 0),
+						'pkg_id'					=> array('UINT', null, 'auto_increment'),
+						'pkg_ident'					=> array('VCHAR:30', ''),
+						'pkg_name'					=> array('VCHAR_UNI', ''),
+						'pkg_desc'					=> array('TEXT_UNI', ''),
+						'pkg_desc_bbcode_uid'		=> array('VCHAR:8', ''),
+						'pkg_desc_bbcode_bitfield'	=> array('VCHAR:255', ''),
+						'pkg_desc_bbcode_options'	=> array('UINT:11', 7),
+						'pkg_warn_time'				=> array('UINT', 0),
+						'pkg_grace'					=> array('UINT', 0),
+						'pkg_order'					=> array('UINT', 0),
 					),
-					'PRIMARY_KEY' => 'gs_id',
+					'PRIMARY_KEY' => 'pkg_id',
 					'KEYS' => array(
-						'gs_order'	=> array('INDEX', 'gs_order'),
-						'gs_ident'	=> array('UNIQUE', 'gs_ident'),
+						'pkg_o'	=> array('INDEX', 'pkg_order'),
+						'pkg_i'	=> array('UNIQUE', 'pkg_ident'),
 					),
 				),
 				$this->table_prefix . 'groupsub_prices' => array(
 					'COLUMNS' => array(
-						'p_id'			=> array('UINT', null, 'auto_increment'),
-						'gs_id'			=> array('UINT', 0),
-						'p_price'		=> array('UINT', 0),
-						'p_currency'	=> array('VCHAR:3', ''),
-						'p_length'		=> array('UINT', 0),
-						'p_order'		=> array('UINT', 0),
+						'price_id'			=> array('UINT', null, 'auto_increment'),
+						'pkg_id'			=> array('UINT', 0),
+						'price_price'		=> array('UINT', 0),
+						'price_currency'	=> array('VCHAR:3', ''),
+						'price_length'		=> array('UINT', 0),
+						'price_order'		=> array('UINT', 0),
 					),
-					'PRIMARY_KEY' => 'p_id',
+					'PRIMARY_KEY' => 'price_id',
 					'KEYS' => array(
-						'gs_id'			=> array('INDEX', 'gs_id'),
-						'p_order'		=> array('INDEX', 'p_order'),
+						'pkg_i'	=> array('INDEX', 'pkg_id'),
+						'pri_o'	=> array('INDEX', 'price_order'),
 					),
 				),
 				$this->table_prefix . 'groupsub_groups' => array(
 					'COLUMNS' => array(
-						'gs_id'		=> array('UINT', 0),
+						'pkg_id'	=> array('UINT', 0),
 						'group_id'	=> array('UINT', 0),
 					),
-					'PRIMARY_KEY' => array('gs_id', 'group_id'),
+					'PRIMARY_KEY' => array('pkg_id', 'group_id'),
 				),
 				$this->table_prefix . 'groupsub_subs' => array(
 					'COLUMNS' => array(
 						'sub_id'			=> array('UINT', null, 'auto_increment'),
-						'gs_id'				=> array('UINT', 0),
+						'pkg_id'			=> array('UINT', 0),
 						'user_id'			=> array('UINT', 0),
 						'sub_notify_status'	=> array('USINT', 0),
 						'sub_active'		=> array('BOOL', 1),
@@ -78,10 +78,10 @@ class version_0_1_0 extends migration
 					),
 					'PRIMARY_KEY' => 'sub_id',
 					'KEYS' => array(
-						'gs_id'			=> array('INDEX', 'gs_id'),
-						'user_id'		=> array('INDEX', 'user_id'),
-						'sub_active'	=> array('INDEX', 'sub_active'),
-						'sub_expires'	=> array('INDEX', 'sub_expires'),
+						'pkg_i'	=> array('INDEX', 'pkg_id'),
+						'u_i'	=> array('INDEX', 'user_id'),
+						's_a'	=> array('INDEX', 'sub_active'),
+						's_e'	=> array('INDEX', 'sub_expires'),
 					),
 				),
 			),
@@ -95,7 +95,7 @@ class version_0_1_0 extends migration
 				$this->table_prefix . 'groupsub_subs',
 				$this->table_prefix . 'groupsub_groups',
 				$this->table_prefix . 'groupsub_prices',
-				$this->table_prefix . 'groupsub',
+				$this->table_prefix . 'groupsub_packages',
 			),
 		);
 	}
@@ -121,7 +121,7 @@ class version_0_1_0 extends migration
 				'ACP_GROUPSUB_TITLE',
 				array(
 					'module_basename'	=> '\stevotvr\groupsub\acp\main_module',
-					'modes'				=> array('settings', 'products', 'subscriptions'),
+					'modes'				=> array('settings', 'packages', 'subscriptions'),
 				),
 			)),
 		);

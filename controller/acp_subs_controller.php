@@ -15,7 +15,7 @@ use phpbb\pagination;
 use phpbb\user;
 use stevotvr\groupsub\entity\subscription_interface as sub_entity;
 use stevotvr\groupsub\exception\base;
-use stevotvr\groupsub\operator\product_interface as prod_operator;
+use stevotvr\groupsub\operator\package_interface as pkg_operator;
 use stevotvr\groupsub\operator\subscription_interface as sub_operator;
 
 /**
@@ -24,9 +24,9 @@ use stevotvr\groupsub\operator\subscription_interface as sub_operator;
 class acp_subs_controller extends acp_base_controller implements acp_subs_interface
 {
 	/**
-	 * @var \stevotvr\groupsub\operator\product_interface
+	 * @var \stevotvr\groupsub\operator\package_interface
 	 */
-	protected $prod_operator;
+	protected $pkg_operator;
 
 	/**
 	 * @var \stevotvr\groupsub\operator\subscription_interface
@@ -59,14 +59,14 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Set up the controller.
 	 *
-	 * @param \stevotvr\groupsub\operator\product_interface      $prod_operator
+	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\pagination                                  $pagination
 	 * @param \phpbb\user                                        $user
 	 */
-	public function setup(prod_operator $prod_operator, sub_operator $sub_operator, pagination $pagination, user $user)
+	public function setup(pkg_operator $pkg_operator, sub_operator $sub_operator, pagination $pagination, user $user)
 	{
-		$this->prod_operator = $prod_operator;
+		$this->pkg_operator = $pkg_operator;
 		$this->sub_operator = $sub_operator;
 		$this->pagination = $pagination;
 		$this->user = $user;
@@ -87,8 +87,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	public function display()
 	{
 		$sort_key = $sort_dir = '';
-		$start = $limit = $prod_id = 0;
-		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $prod_id);
+		$start = $limit = $pkg_id = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);
 
 		if ($this->request->is_set_post('sort') || $this->request->is_set_post('filter'))
 		{
@@ -102,7 +102,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 							->set_limit($limit)
 							->set_start($start)
 							->set_sort($this->get_sort_field($sort_key), ($sort_dir === 'd'))
-							->set_product($prod_id)
+							->set_package($pkg_id)
 							->get_subscriptions();
 
 		foreach ($subscriptions as $subscription)
@@ -110,7 +110,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			$entity = $subscription['entity'];
 			$this->template->assign_block_vars('subscription', array(
 				'SUB_USER'		=> $subscription['username'],
-				'SUB_PRODUCT'	=> $subscription['product'],
+				'SUB_PACKAGE'	=> $subscription['package'],
 				'SUB_EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
 
 				'U_MOVE_UP'		=> $this->u_action . $params . '&amp;action=move_up&amp;id=' . $entity->get_id(),
@@ -120,14 +120,14 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			));
 		}
 
-		$prod_count = $this->load_products($prod_id);
+		$pkg_count = $this->load_packages($pkg_id);
 		$this->template->assign_vars(array(
 			'LIMIT'	=> $limit,
 
 			'U_ACTION'	=> $this->u_action . $params,
 			'U_ADD_SUB'	=> $this->u_action . $params . '&amp;action=add',
 
-			'S_SHOW_ADD'	=> (bool) $prod_count,
+			'S_SHOW_ADD'	=> (bool) $pkg_count,
 		));
 
 		$total = $this->sub_operator->count_subscriptions();
@@ -184,7 +184,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		switch ($sort_key)
 		{
 			case 'p':
-				return 'p.gs_name';
+				return 'p.pkg_name';
 			break;
 			case 'e':
 				return 's.sub_expires';
@@ -219,7 +219,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->template->assign_vars(array(
 			'S_EDIT_SUB'	=> true,
 
-			'SUB_PRODUCT'	=> $subscription['product'],
+			'SUB_PACKAGE'	=> $subscription['package'],
 			'SUB_USER'		=> $subscription['username'],
 
 			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
@@ -249,7 +249,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		if ($entity->get_id())
 		{
 			$this->template->assign_vars(array(
-				'SUB_PRODUCT'	=> $entity->get_product(),
+				'SUB_PACKAGE'	=> $entity->get_package(),
 				'SUB_USER'		=> $entity->get_user(),
 			));
 		}
@@ -259,11 +259,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			{
 				$this->parse_username($data, $errors);
 			}
-			$data['product'] = $this->request->variable('sub_product', 0);
+			$data['package'] = $this->request->variable('sub_package', 0);
 
-			if (!$this->load_products($data['product']))
+			if (!$this->load_packages($data['package']))
 			{
-				trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PRODS') . adm_back_link($this->u_action . $params), E_USER_WARNING);
+				trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PKGS') . adm_back_link($this->u_action . $params), E_USER_WARNING);
 			}
 		}
 
@@ -380,8 +380,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	public function delete($id)
 	{
 		$sort_key = $sort_dir = '';
-		$start = $limit = $prod_id = 0;
-		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $prod_id);
+		$start = $limit = $pkg_id = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);
 
 		if (!confirm_box(true))
 		{
@@ -392,7 +392,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 				'sd'		=> $sort_dir,
 				'start'		=> $start,
 				'limit'		=> $limit,
-				'prod_id'	=> $prod_id,
+				'pkg_id'	=> $pkg_id,
 				'action'	=> 'delete',
 			));
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_DELETE_CONFIRM'), $hidden_fields);
@@ -419,42 +419,42 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Parse the URL parameters for the main list display options.
 	 *
-	 * @param string &$sort_key Variable to hold the value of the sort key parameters
-	 * @param string &$sort_dir Variable to hold the value of the sort direction parameters
-	 * @param int    &$start    Variable to hold the value of the start parameters
-	 * @param int    &$limit    Variable to hold the value of the limit parameters
-	 * @param int    &$prod_id  Variable to hold the value of the product parameters
+	 * @param string &$sort_key   Variable to hold the value of the sort key parameters
+	 * @param string &$sort_dir   Variable to hold the value of the sort direction parameters
+	 * @param int    &$start      Variable to hold the value of the start parameters
+	 * @param int    &$limit      Variable to hold the value of the limit parameters
+	 * @param int    &$package_id Variable to hold the value of the package parameters
 	 *
 	 * @return string The reconstructed parameter string
 	 */
-	protected function parse_display_params(&$sort_key = '', &$sort_dir = '', &$start = 0, &$limit = 0, &$prod_id = 0)
+	protected function parse_display_params(&$sort_key = '', &$sort_dir = '', &$start = 0, &$limit = 0, &$package_id = 0)
 	{
 		$sort_key = $this->request->variable('sk', 'u');
 		$sort_dir = $this->request->variable('sd', 'a');
 		$start = $this->request->variable('start', 0);
 		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
-		$prod_id = $this->request->variable('prod_id', 0);
+		$package_id = $this->request->variable('pkg_id', 0);
 
 		return sprintf(
-			'&amp;sk=%s&amp;sd=%s&amp;start=%d&amp;limit=%d&amp;prod_id=%d',
+			'&amp;sk=%s&amp;sd=%s&amp;start=%d&amp;limit=%d&amp;pkg_id=%d',
 			$sort_key,
 			$sort_dir,
 			$start,
 			$limit,
-			$prod_id
+			$package_id
 		);
 	}
 
 	/**
-	 * Load the list of available products into template block variables.
+	 * Load the list of available packages into template block variables.
 	 *
-	 * @param int $selected The selected product ID
+	 * @param int $selected The selected package ID
 	 *
-	 * @return int The number of products
+	 * @return int The number of packages
 	 */
-	protected function load_products($selected = 0)
+	protected function load_packages($selected = 0)
 	{
-		$entities = $this->prod_operator->get_products();
+		$entities = $this->pkg_operator->get_packages();
 
 		foreach ($entities as $entity)
 		{
@@ -463,14 +463,14 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			if ($s_selected)
 			{
 				$this->template->assign_vars(array(
-					'PROD_NAME'	=> $entity->get_name(),
-					'PROD_ID'	=> $selected,
+					'PKG_NAME'	=> $entity->get_name(),
+					'PKG_ID'	=> $selected,
 				));
 			}
 
-			$this->template->assign_block_vars('product', array(
-				'PROD_ID'	=> $entity->get_id(),
-				'PROD_NAME'	=> $entity->get_name(),
+			$this->template->assign_block_vars('package', array(
+				'PKG_ID'	=> $entity->get_id(),
+				'PKG_NAME'	=> $entity->get_name(),
 
 				'S_SELECTED'	=> $s_selected,
 			));

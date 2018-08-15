@@ -37,7 +37,7 @@ class warn extends base_type
 	{
 		$date = $this->user->format_date($this->get_data('sub_expires'), '|M d|');
 
-		return $this->language->lang('GROUPSUB_NOTIFICATION_WARN_REFERENCE', $this->get_data('gs_name'), $date);
+		return $this->language->lang('GROUPSUB_NOTIFICATION_WARN_REFERENCE', $this->get_data('pkg_name'), $date);
 	}
 
 	public function get_email_template()
@@ -54,7 +54,7 @@ class warn extends base_type
 		$time = date('c', $this->get_data('sub_expires'));
 		$datetime = new datetime($this->user, $time, $tz);
 
-		$params = array('name' => $this->get_data('gs_ident'));
+		$params = array('name' => $this->get_data('pkg_ident'));
 		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::RELATIVE_PATH);
 
 		$days_left = floor(((int) $this->get_data('sub_expires') - time()) / 86400);
@@ -63,7 +63,7 @@ class warn extends base_type
 			'DAYS_LEFT'		=> $days_left,
 			'DAYS'			=> $this->language->lang('GROUPSUB_DAYS', $days_left),
 			'EXPIRE_DATE'	=> $datetime->format('|M d, Y|'),
-			'SUB_NAME'		=> $this->get_data('gs_name'),
+			'SUB_NAME'		=> $this->get_data('pkg_name'),
 
 			'U_VIEW_SUB'	=> generate_board_url() . '/' . $u_view_sub,
 		);

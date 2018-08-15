@@ -8,7 +8,7 @@ services:
         arguments:
             - '@config'
             - '@controller.helper'
-            - '@stevotvr.groupsub.operator.product'
+            - '@stevotvr.groupsub.operator.package'
             - '@template'
         tags:
             - { name: event.listener }
@@ -58,14 +58,14 @@ services:
     stevotvr.groupsub.controller.acp.settings:
         class: stevotvr\groupsub\controller\acp_settings_controller
         parent: stevotvr.groupsub.controller.acp
-    stevotvr.groupsub.controller.acp.product:
-        class: stevotvr\groupsub\controller\acp_prods_controller
+    stevotvr.groupsub.controller.acp.package:
+        class: stevotvr\groupsub\controller\acp_pkgs_controller
         parent: stevotvr.groupsub.controller.acp
         calls:
             - method: setup
               arguments:
                 - '@group_helper'
-                - '@stevotvr.groupsub.operator.product'
+                - '@stevotvr.groupsub.operator.package'
                 - '@stevotvr.groupsub.operator.unit_helper'
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller
@@ -73,7 +73,7 @@ services:
         calls:
             - method: setup
               arguments:
-                - '@stevotvr.groupsub.operator.product'
+                - '@stevotvr.groupsub.operator.package'
                 - '@stevotvr.groupsub.operator.subscription'
                 - '@pagination'
                 - '@user'
@@ -97,7 +97,7 @@ services:
             - '@stevotvr.groupsub.operator.currency'
             - '@controller.helper'
             - '@language'
-            - '@stevotvr.groupsub.operator.product'
+            - '@stevotvr.groupsub.operator.package'
             - '@stevotvr.groupsub.operator.subscription'
             - '@template'
             - '@stevotvr.groupsub.operator.unit_helper'
@@ -107,12 +107,12 @@ services:
         abstract: true
         arguments:
             - '@dbal.conn'
-    stevotvr.groupsub.entity.product:
-        class: stevotvr\groupsub\entity\product
+    stevotvr.groupsub.entity.package:
+        class: stevotvr\groupsub\entity\package
         parent: stevotvr.groupsub.entity
         shared: false
         arguments:
-            - '%stevotvr.groupsub.tables.products%'
+            - '%stevotvr.groupsub.tables.packages%'
         calls:
             - method: setup
               arguments:
@@ -141,12 +141,12 @@ services:
             - '@dbal.conn'
             - '@language'
             - '%stevotvr.groupsub.currencies%'
-            - '%stevotvr.groupsub.tables.products%'
+            - '%stevotvr.groupsub.tables.packages%'
             - '%stevotvr.groupsub.tables.groups%'
             - '%stevotvr.groupsub.tables.prices%'
             - '%stevotvr.groupsub.tables.subs%'
-    stevotvr.groupsub.operator.product:
-        class: stevotvr\groupsub\operator\product
+    stevotvr.groupsub.operator.package:
+        class: stevotvr\groupsub\operator\package
         parent: stevotvr.groupsub.operator
         calls:
             - method: setup

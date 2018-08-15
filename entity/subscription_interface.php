@@ -16,18 +16,18 @@ namespace stevotvr\groupsub\entity;
 interface subscription_interface extends entity_interface
 {
 	/**
-	 * @return int The product ID
+	 * @return int The package ID
 	 */
-	public function get_product();
+	public function get_package();
 
 	/**
-	 * @param int $product The product ID
+	 * @param int $package The package ID
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
-	public function set_product($product);
+	public function set_package($package);
 
 	/**
 	 * @return int The user ID
