@@ -255,8 +255,7 @@ class subscription extends operator implements subscription_interface
 
 		if ($subscription->get_id())
 		{
-			$groups = $this->get_groups($subscription->get_id());
-			$this->add_user_to_groups($subscription->get_user(), $groups);
+			$this->add_user_to_groups($subscription->get_user(), $subscription->get_id(), $subscription->get_package());
 			$this->dispatch_start_event($subscription->get_user(), $subscription->get_id(), $subscription->get_package());
 		}
 
@@ -287,6 +286,9 @@ class subscription extends operator implements subscription_interface
 				'stevotvr.groupsub.notification.type.expired',
 			), (int) $row['sub_id']);
 
+			$this->remove_user_from_groups($user_id, $row['sub_id']);
+			$this->add_user_to_groups($user_id, $row['sub_id'], $term->get_package());
+
 			return;
 		}
 
@@ -306,7 +308,7 @@ class subscription extends operator implements subscription_interface
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
 
-		$this->remove_user_from_groups((int) $row['user_id'], $this->get_groups($sub_id));
+		$this->remove_user_from_groups($row['user_id'], $sub_id);
 		$this->dispatch_end_event((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
 
 		$sql = 'DELETE FROM ' . $this->sub_table . '
@@ -345,43 +347,23 @@ class subscription extends operator implements subscription_interface
 	public function process_expiring()
 	{
 		$sub_ids = array();
-		$group_ids = array();
-		$user_ids = array();
 
-		$sql_ary = array(
-			'SELECT'	=> 's.sub_id, s.pkg_id, s.user_id, g.group_id',
-			'FROM'		=> array($this->sub_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array($this->group_table => 'g'),
-					'ON'	=> 's.pkg_id = g.pkg_id',
-				),
-			),
-			'WHERE'		=> 's.sub_active = 1 AND s.sub_expires < ' . (time() - $this->grace),
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$sql = 'SELECT sub_id, pkg_id, user_id
+				FROM ' . $this->sub_table . '
+				WHERE sub_active = 1
+					AND sub_expires < ' . (time() - $this->grace);
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
-			$sub_ids[(int) $row['sub_id']] = (int) $row['pkg_id'];
-			$user_ids[(int) $row['sub_id']] = (int) $row['user_id'];
-			$group_ids[(int) $row['user_id']][] = (int) $row['group_id'];
+			$sub_ids[] = $row['sub_id'];
+			$this->remove_user_from_groups($row['user_id'], $row['sub_id']);
+			$this->dispatch_end_event($row['user_id'], $row['sub_id'], $row['pkg_id']);
 		}
 		$this->db->sql_freeresult();
 
 		if (empty($sub_ids))
 		{
 			return;
-		}
-
-		foreach ($group_ids as $user => $groups)
-		{
-			$this->remove_user_from_groups($user, $groups);
-		}
-
-		foreach ($sub_ids as $sub_id => $pkg_id)
-		{
-			$this->dispatch_end_event($user_ids[$sub_id], $sub_id, $pkg_id);
 		}
 
 		$sql = 'UPDATE ' . $this->sub_table . '
@@ -448,71 +430,78 @@ class subscription extends operator implements subscription_interface
 	}
 
 	/**
-	 * Get the groups associated with a subscription.
+	 * Add a user to the subscribed groups.
 	 *
-	 * @param int $sub_id The subscription ID
-	 *
-	 * @return array Array of group IDs
+	 * @param int $user_id The user ID
+	 * @param int $sub_id  The subscription ID
+	 * @param int $pkg_id  The package ID
 	 */
-	protected function get_groups($sub_id)
-	{
-		$group_ids = array();
-
-		$sql_ary = array(
-			'SELECT'	=> 'g.group_id',
-			'FROM'		=> array($this->sub_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array($this->group_table => 'g'),
-					'ON'	=> 's.pkg_id = g.pkg_id',
-				),
-			),
-			'WHERE'		=> 's.sub_id = ' . (int) $sub_id,
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$group_ids[] = (int) $row['group_id'];
-		}
-		$this->db->sql_freeresult();
-
-		return $group_ids;
-	}
-
-	/**
-	 * Add a user to a list of groups.
-	 *
-	 * @param int   $user_id   The user ID
-	 * @param array $group_ids Array of group IDs
-	 */
-	protected function add_user_to_groups($user_id, array $group_ids)
+	protected function add_user_to_groups($user_id, $sub_id, $pkg_id)
 	{
 		if (!function_exists('group_user_add'))
 		{
 			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
 		}
 
-		foreach ($group_ids as $group_id)
+		$data = array();
+		$sql = 'SELECT group_id
+				FROM ' . $this->group_table . '
+				WHERE pkg_id = ' . (int) $pkg_id;
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
-			group_user_add($group_id, $user_id);
+			$data[] = array(
+				'sub_id'	=> $sub_id,
+				'user_id'	=> $user_id,
+				'group_id'	=> $row['group_id'],
+			);
+			group_user_add($row['group_id'], $user_id);
 		}
+		$this->db->sql_freeresult();
+
+		if (empty($data))
+		{
+			return;
+		}
+
+		$this->db->sql_multi_insert($this->group_table, $data);
 	}
 
 	/**
-	 * Remove a user from a list of groups.
+	 * Remove a user from the subscribed groups.
 	 *
-	 * @param int   $user_id   The user ID
-	 * @param array $group_ids Array of group IDs
+	 * @param int $user_id The user ID
+	 * @param int $sub_id  The subscription ID
 	 */
-	protected function remove_user_from_groups($user_id, array $group_ids)
+	protected function remove_user_from_groups($user_id, $sub_id)
 	{
+		$sql = 'SELECT group_id
+				FROM ' . $this->group_table . '
+				WHERE sub_id = ' . (int) $sub_id;
+		$this->db->sql_query($sql);
+		$sub_groups = array_column($this->db->sql_fetchrowset(), 'group_id');
+		$this->db->sql_freeresult();
+
+		if (empty($sub_groups))
+		{
+			return;
+		}
+
+		$sql = 'SELECT group_id
+				FROM ' . $this->group_table . '
+				WHERE user_id = ' . (int) $user_id . '
+					AND sub_id <> ' . (int) $sub_id . '
+					AND ' . $this->db->sql_in_set('group_id', $sub_groups);
+		$this->db->sql_query($sql);
+		$keep_groups = array_column($this->db->sql_fetchrowset(), 'group_id');
+		$this->db->sql_freeresult();
+
 		if (!function_exists('group_user_del'))
 		{
 			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
 		}
 
-		foreach ($group_ids as $group_id)
+		foreach (array_diff($sub_groups, $keep_groups) as $group_id)
 		{
 			group_user_del($group_id, $user_id);
 		}

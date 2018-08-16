@@ -62,10 +62,14 @@ class version_0_1_0 extends migration
 				),
 				$this->table_prefix . 'groupsub_groups' => array(
 					'COLUMNS' => array(
-						'pkg_id'	=> array('UINT', 0),
+						'pkg_id'	=> array('UINT', null),
+						'sub_id'	=> array('UINT', null),
+						'user_id'	=> array('UINT', null),
 						'group_id'	=> array('UINT', 0),
 					),
-					'PRIMARY_KEY' => array('pkg_id', 'group_id'),
+					'KEYS' => array(
+						'k'	=> array('UNIQUE', array('pkg_id', 'sub_id', 'user_id', 'group_id')),
+					),
 				),
 				$this->table_prefix . 'groupsub_subs' => array(
 					'COLUMNS' => array(

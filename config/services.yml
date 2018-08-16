@@ -7,9 +7,12 @@ services:
         class: stevotvr\groupsub\event\main_listener
         arguments:
             - '@config'
+            - '@dbal.conn'
             - '@controller.helper'
             - '@stevotvr.groupsub.operator.package'
             - '@template'
+            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.subs%'
         tags:
             - { name: event.listener }
     stevotvr.groupsub.cron.task.main:
