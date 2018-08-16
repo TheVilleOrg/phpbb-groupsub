@@ -248,8 +248,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$sql = 'SELECT group_id, group_name
 				FROM ' . GROUPS_TABLE . '
 				WHERE group_type < ' . GROUP_SPECIAL;
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$groups[] = array(
 				'ID'	=> (int) $row['group_id'],
@@ -258,7 +258,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
 			);
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		$names = array_map('strtolower', array_column($groups, 'NAME'));
 		array_multisort($names, SORT_ASC, SORT_STRING, $groups);

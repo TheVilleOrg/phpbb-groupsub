@@ -78,9 +78,9 @@ class package extends entity implements package_interface
 		$sql = 'SELECT pkg_id
 				FROM ' . $this->table_name . "
 				WHERE pkg_ident = '" . $this->db->sql_escape($ident) . "'";
-		$result = $this->db->sql_query($sql);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
+		$this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
 		if ($row !== false)
 		{
 			throw new unexpected_value('pkg_ident', 'NOT_UNIQUE');

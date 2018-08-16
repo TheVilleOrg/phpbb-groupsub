@@ -67,9 +67,9 @@ abstract class entity implements entity_interface
 		$sql = 'SELECT *
 				FROM ' . $this->table_name . '
 				WHERE ' . $this->id_column . ' = ' . (int) $id;
-		$result = $this->db->sql_query($sql);
-		$this->data = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
+		$this->db->sql_query($sql);
+		$this->data = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
 
 		if ($this->data === false)
 		{

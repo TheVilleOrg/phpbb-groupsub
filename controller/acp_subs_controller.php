@@ -327,9 +327,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$sql = 'SELECT user_id
 				FROM ' . USERS_TABLE . "
 				WHERE username_clean = '" . $this->db->sql_escape(utf8_clean_string($username)) . "'";
-		$result = $this->db->sql_query($sql);
-		$userrow = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
+		$this->db->sql_query($sql);
+		$userrow = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
 
 		if (!$userrow)
 		{

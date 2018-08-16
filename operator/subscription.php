@@ -222,8 +222,8 @@ class subscription extends operator implements subscription_interface
 		}
 
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $limit ? $this->db->sql_query_limit($sql, $limit, $start) : $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$limit ? $this->db->sql_query_limit($sql, $limit, $start) : $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$subscriptions[] = array(
 				'package'	=> $row['pkg_name'],
@@ -231,7 +231,7 @@ class subscription extends operator implements subscription_interface
 				'entity'	=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
 			);
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return $subscriptions;
 	}
@@ -240,9 +240,9 @@ class subscription extends operator implements subscription_interface
 	{
 		$sql = 'SELECT COUNT(sub_id) AS sub_count
 				FROM ' . $this->sub_table;
-		$result = $this->db->sql_query($sql);
+		$this->db->sql_query($sql);
 		$count = $this->db->sql_fetchfield('sub_count');
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return (int) $count;
 	}
@@ -332,12 +332,12 @@ class subscription extends operator implements subscription_interface
 			'WHERE'		=> 'g.group_id = ' . (int) $group_id . ' AND s.sub_expires > ' . (time() - $this->grace),
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$ids[] = (int) $row['user_id'];
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return $ids;
 	}
@@ -360,14 +360,14 @@ class subscription extends operator implements subscription_interface
 			'WHERE'		=> 's.sub_active = 1 AND s.sub_expires < ' . (time() - $this->grace),
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$sub_ids[(int) $row['sub_id']] = (int) $row['pkg_id'];
 			$user_ids[(int) $row['sub_id']] = (int) $row['user_id'];
 			$group_ids[(int) $row['user_id']][] = (int) $row['group_id'];
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		if (empty($sub_ids))
 		{
@@ -406,14 +406,14 @@ class subscription extends operator implements subscription_interface
 			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . ' AND s.sub_expires < ' . time(),
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$sub_ids[] = (int) $row['sub_id'];
 			$this->notification_manager->delete_notifications('stevotvr.groupsub.notification.type.warn', (int) $row['sub_id']);
 			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		if (count($sub_ids))
 		{
@@ -429,13 +429,13 @@ class subscription extends operator implements subscription_interface
 
 			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . ' AND s.sub_expires < ' . (time() + $this->warn_time);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-			$result = $this->db->sql_query($sql);
-			while ($row = $this->db->sql_fetchrow($result))
+			$this->db->sql_query($sql);
+			while ($row = $this->db->sql_fetchrow())
 			{
 				$sub_ids[] = (int) $row['sub_id'];
 				$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.warn', $row);
 			}
-			$this->db->sql_freeresult($result);
+			$this->db->sql_freeresult();
 
 			if (count($sub_ids))
 			{
@@ -470,12 +470,12 @@ class subscription extends operator implements subscription_interface
 			'WHERE'		=> 's.sub_id = ' . (int) $sub_id,
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$group_ids[] = (int) $row['group_id'];
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return $group_ids;
 	}

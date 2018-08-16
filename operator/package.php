@@ -42,12 +42,12 @@ class package extends operator implements package_interface
 				FROM ' . $this->package_table . '
 				' . $where . '
 				ORDER BY pkg_order ASC, pkg_id ASC';
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$entities[] = $this->container->get('stevotvr.groupsub.entity.package')->import($row);
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return $entities;
 	}
@@ -56,9 +56,9 @@ class package extends operator implements package_interface
 	{
 		$sql = 'SELECT COUNT(pkg_id) AS pkg_count
 				FROM ' . $this->package_table;
-		$result = $this->db->sql_query($sql);
+		$this->db->sql_query($sql);
 		$count = $this->db->sql_fetchfield('pkg_count');
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return (int) $count;
 	}
@@ -94,12 +94,12 @@ class package extends operator implements package_interface
 		$sql = 'SELECT pkg_id
 				FROM ' . $this->package_table . '
 				ORDER BY pkg_order ASC, pkg_id ASC';
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$ids[] = $row['pkg_id'];
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		$position = array_search($package_id, $ids);
 		array_splice($ids, $position, 1);
@@ -154,12 +154,12 @@ class package extends operator implements package_interface
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $package_id;
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$ids[] = (int) $row['group_id'];
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		return $ids;
 	}
@@ -179,15 +179,15 @@ class package extends operator implements package_interface
 			),
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
 		{
 			$package_groups[(int) $row['pkg_id']][] = array(
 				'id'	=> (int) $row['group_id'],
 				'name'	=> $this->group_helper->get_name($row['group_name']),
 			);
 		}
-		$this->db->sql_freeresult($result);
+		$this->db->sql_freeresult();
 
 		foreach ($package_groups as &$package_group)
 		{
