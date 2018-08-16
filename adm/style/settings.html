@@ -13,24 +13,24 @@
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PAYPAL') }}</legend>
 		<dl>
-			<dt><label for="groupsub_pp_sandbox">{{ lang('ACP_GROUPSUB_PP_SANDBOX') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PP_SANDBOX_EXPLAIN') }}</span></dt>
-			<dd><label><input type="radio" id="groupsub_pp_sandbox" name="groupsub_pp_sandbox" value="1"{% if PP_SANDBOX %} checked="checked"{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="groupsub_pp_sandbox" value="0"{% if not PP_SANDBOX %} checked="checked"{% endif %}> {{ lang('NO') }}</label></dd>
+			<dt><label for="pp_sandbox">{{ lang('ACP_GROUPSUB_PP_SANDBOX') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PP_SANDBOX_EXPLAIN') }}</span></dt>
+			<dd><label><input type="radio" id="pp_sandbox" name="pp_sandbox" value="1"{% if PP_SANDBOX %} checked="checked"{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pp_sandbox" value="0"{% if not PP_SANDBOX %} checked="checked"{% endif %}> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label for="groupsub_pp_sb_business">{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS_EXPLAIN') }}</span></dt>
-			<dd><input class="text medium" type="text" id="groupsub_pp_sb_business" name="groupsub_pp_sb_business" value="{{ PP_SB_BUSINESS }}" /></dd>
+			<dt><label for="pp_sb_business">{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS_EXPLAIN') }}</span></dt>
+			<dd><input class="text medium" type="text" id="pp_sb_business" name="pp_sb_business" value="{{ PP_SB_BUSINESS }}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="groupsub_pp_business">{{ lang('ACP_GROUPSUB_PP_BUSINESS') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PP_BUSINESS_EXPLAIN') }}</span></dt>
-			<dd><input class="text medium" type="text" id="groupsub_pp_business" name="groupsub_pp_business" value="{{ PP_BUSINESS }}" /></dd>
+			<dt><label for="pp_business">{{ lang('ACP_GROUPSUB_PP_BUSINESS') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PP_BUSINESS_EXPLAIN') }}</span></dt>
+			<dd><input class="text medium" type="text" id="pp_business" name="pp_business" value="{{ PP_BUSINESS }}" /></dd>
 		</dl>
 	</fieldset>
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_DEFAULTS') }}</legend>
 		<dl>
-			<dt><label for="groupsub_currency">{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY_EXPLAIN') }}</span></dt>
+			<dt><label for="currency">{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY_EXPLAIN') }}</span></dt>
 			<dd>
-				<select name="groupsub_currency" id="groupsub_currency">
+				<select name="currency" id="currency">
 					{% for c in currency %}
 						<option value="{{ c.CURRENCY }}"{% if c.CURRENCY == CURRENCY %} selected="selected"{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
 					{% endfor %}
@@ -38,12 +38,12 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="groupsub_warn_time">{{ lang('ACP_GROUPSUBB_DEFAULT_WARN_TIME') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_WARN_TIME_EXPLAIN') }}</span></dt>
-			<dd><input class="text" type="text" id="groupsub_warn_time" name="groupsub_warn_time" size="4" maxlength="10" value="{{ WARN_TIME }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
+			<dt><label for="warn_time">{{ lang('ACP_GROUPSUBB_DEFAULT_WARN_TIME') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_WARN_TIME_EXPLAIN') }}</span></dt>
+			<dd><input class="text" type="text" id="warn_time" name="warn_time" size="4" maxlength="10" value="{{ WARN_TIME }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
 		</dl>
 		<dl>
-			<dt><label for="groupsub_grace">{{ lang('ACP_GROUPSUBB_DEFAULT_GRACE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_GRACE_EXPLAIN') }}</span></dt>
-			<dd><input class="text" type="text" id="groupsub_grace" name="groupsub_grace" size="4" maxlength="10" value="{{ GRACE }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
+			<dt><label for="grace">{{ lang('ACP_GROUPSUBB_DEFAULT_GRACE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_GRACE_EXPLAIN') }}</span></dt>
+			<dd><input class="text" type="text" id="grace" name="grace" size="4" maxlength="10" value="{{ GRACE }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
 		</dl>
 	</fieldset>
 	<fieldset class="submit-buttons">

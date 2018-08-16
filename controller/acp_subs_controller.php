@@ -469,8 +469,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			}
 
 			$this->template->assign_block_vars('package', array(
-				'PKG_ID'	=> $entity->get_id(),
-				'PKG_NAME'	=> $entity->get_name(),
+				'ID'	=> $entity->get_id(),
+				'NAME'	=> $entity->get_name(),
 
 				'S_SELECTED'	=> $s_selected,
 			));

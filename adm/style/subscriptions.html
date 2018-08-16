@@ -32,7 +32,7 @@
 					<dt><label for="sub_package">{{ lang('ACP_GROUPSUB_SUB_PACKAGE') ~ lang('COLON') }}</label></dt>
 					<dd><select name="sub_package" id="sub_package">
 						{% for p in package %}
-							<option value="{{ p.PKG_ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.PKG_NAME }}</option>
+							<option value="{{ p.ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.NAME }}</option>
 						{% endfor %}
 					</select></dd>
 				</dl>
@@ -72,7 +72,7 @@
 				<select name="pkg_id" id="pkg_id">
 					<option value="0">{{ lang('ACP_GROUPSUB_ALL_PACKAGES') }}</option>
 					{% for p in package %}
-						<option value="{{ p.PKG_ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.PKG_NAME }}</option>
+						<option value="{{ p.ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.NAME }}</option>
 					{% endfor %}
 				</select>
 				<input class="button2" type="submit" name="filter" value="{{ lang('GO') }}" />
@@ -90,9 +90,9 @@
 		<tbody>
 			{% for s in subscription %}
 				<tr>
-					<td>{{ s.SUB_USER }}</td>
-					<td>{{ s.SUB_PACKAGE }}</td>
-					<td>{% if s.SUB_EXPIRES %}{{ s.SUB_EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_NEVER') }}</i>{% endif %}</td>
+					<td>{{ s.USER }}</td>
+					<td>{{ s.PACKAGE }}</td>
+					<td>{% if s.EXPIRES %}{{ s.EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_NEVER') }}</i>{% endif %}</td>
 					<td class="actions">
 						<a href="{{ s.U_EDIT }}">{{ ICON_EDIT }}</a>
 						<a href="{{ s.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>

@@ -61,8 +61,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		foreach ($entities as $entity)
 		{
 			$this->template->assign_block_vars('package', array(
-				'PKG_IDENT'	=> $entity->get_ident(),
-				'PKG_NAME'	=> $entity->get_name(),
+				'IDENT'	=> $entity->get_ident(),
+				'NAME'	=> $entity->get_name(),
 
 				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
@@ -75,15 +75,15 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				foreach ($terms[$entity->get_id()] as $term)
 				{
 					$this->template->assign_block_vars('package.term', array(
-						'PKG_PRICE'	=> $this->currency->format_price($term->get_currency(), $term->get_price()),
-						'PKG_LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+						'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
+						'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
 					));
 				}
 			}
 		}
 
 		$this->template->assign_vars(array(
-			'U_ACTION'		=> $this->u_action,
+			'U_ACTION'	=> $this->u_action,
 			'U_ADD_PKG'	=> $this->u_action . '&amp;action=add',
 		));
 	}
@@ -252,15 +252,15 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$groups[] = array(
-				'GROUP_ID'		=> (int) $row['group_id'],
-				'GROUP_NAME'	=> $this->group_helper->get_name($row['group_name']),
+				'ID'	=> (int) $row['group_id'],
+				'NAME'	=> $this->group_helper->get_name($row['group_name']),
 
 				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
 			);
 		}
 		$this->db->sql_freeresult($result);
 
-		$names = array_map('strtolower', array_column($groups, 'GROUP_NAME'));
+		$names = array_map('strtolower', array_column($groups, 'NAME'));
 		array_multisort($names, SORT_ASC, SORT_STRING, $groups);
 		foreach ($groups as $group)
 		{
@@ -311,10 +311,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				}
 
 				$this->template->assign_block_vars('term', array(
-					'PKG_PRICE'			=> $prices[$i],
-					'PKG_CURRENCY'		=> $currencies[$i],
-					'PKG_LENGTH'		=> $lengths[$i],
-					'PKG_LENGTH_UNIT'	=> $length_units[$i],
+					'PRICE'			=> $prices[$i],
+					'CURRENCY'		=> $currencies[$i],
+					'LENGTH'		=> $lengths[$i],
+					'LENGTH_UNIT'	=> $length_units[$i],
 				));
 			}
 
@@ -337,10 +337,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$length = $this->unit_helper->get_timespan_parts($term->get_length());
 			$this->template->assign_block_vars('term', array(
-				'PKG_PRICE'			=> $this->currency->format_value($term->get_currency(), $term->get_price()),
-				'PKG_CURRENCY'		=> $term->get_currency(),
-				'PKG_LENGTH'		=> $length['length'],
-				'PKG_LENGTH_UNIT'	=> $length['unit'],
+				'PRICE'			=> $this->currency->format_value($term->get_currency(), $term->get_price()),
+				'CURRENCY'		=> $term->get_currency(),
+				'LENGTH'		=> $length['length'],
+				'LENGTH_UNIT'	=> $length['unit'],
 			));
 		}
 	}
@@ -391,8 +391,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		foreach (array('days', 'weeks', 'months', 'years') as $unit)
 		{
 			$this->template->assign_block_vars('time_unit', array(
-				'UNIT_ID'	=> $unit,
-				'UNIT_NAME'	=> $this->language->lang('GROUPSUB_' . strtoupper($unit)),
+				'ID'	=> $unit,
+				'NAME'	=> $this->language->lang('GROUPSUB_' . strtoupper($unit)),
 			));
 		}
 	}

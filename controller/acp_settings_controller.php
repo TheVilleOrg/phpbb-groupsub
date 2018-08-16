@@ -29,12 +29,12 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			}
 
 			$data = array(
-				'pp_sandbox'		=> $this->request->variable('groupsub_pp_sandbox', true),
-				'pp_sb_business'	=> $this->request->variable('groupsub_pp_sb_business', ''),
-				'pp_business'		=> $this->request->variable('groupsub_pp_business', ''),
-				'currency'			=> $this->request->variable('groupsub_currency', ''),
-				'warn_time'			=> max(0, $this->request->variable('groupsub_warn_time', 0)),
-				'grace'				=> max(0, $this->request->variable('groupsub_grace', 0)),
+				'pp_sandbox'		=> $this->request->variable('pp_sandbox', true),
+				'pp_sb_business'	=> $this->request->variable('pp_sb_business', ''),
+				'pp_business'		=> $this->request->variable('pp_business', ''),
+				'currency'			=> $this->request->variable('currency', ''),
+				'warn_time'			=> max(0, $this->request->variable('warn_time', 0)),
+				'grace'				=> max(0, $this->request->variable('grace', 0)),
 			);
 
 			if (!$this->currency->is_valid($data['currency']))
