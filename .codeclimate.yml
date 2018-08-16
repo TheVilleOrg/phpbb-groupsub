@@ -40,6 +40,8 @@ plugins:
         enabled: false
       Naming/ShortVariable:
         enabled: false
+      CleanCode/ElseExpression:
+        enabled: false
 ratings:
   paths:
   - "**.css"
