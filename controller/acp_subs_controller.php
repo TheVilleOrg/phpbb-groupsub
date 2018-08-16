@@ -109,9 +109,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		{
 			$entity = $subscription['entity'];
 			$this->template->assign_block_vars('subscription', array(
-				'SUB_USER'		=> $subscription['username'],
-				'SUB_PACKAGE'	=> $subscription['package'],
-				'SUB_EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
+				'USER'		=> $subscription['username'],
+				'PACKAGE'	=> $subscription['package'],
+				'EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
 
 				'U_MOVE_UP'		=> $this->u_action . $params . '&amp;action=move_up&amp;id=' . $entity->get_id(),
 				'U_MOVE_DOWN'	=> $this->u_action . $params . '&amp;action=move_down&amp;id=' . $entity->get_id(),
