@@ -54,7 +54,7 @@
 				<dd>
 					<select name="pkg_groups[]" id="pkg_groups" multiple="multiple" size="10">
 						{% for g in group %}
-							<option value="{{ g.GROUP_ID }}"{% if g.S_SELECTED %} selected="selected"{% endif %}>{{ g.NAME }}</option>
+							<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected="selected"{% endif %}>{{ g.NAME }}</option>
 						{% endfor %}
 					</select>
 				</dd>
