@@ -55,8 +55,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 
 		$errors = array_map(array($this->language, 'lang'), $errors);
 		$this->template->assign_vars(array(
-			'S_ERROR'	=> (bool) count($errors),
-			'ERROR_MSG'	=> count($errors) ? implode('<br />', $errors) : '',
+			'ERROR_MSG'	=> implode('<br>', $errors),
 
 			'PP_SANDBOX'		=> $this->config['stevotvr_groupsub_pp_sandbox'],
 			'PP_SB_BUSINESS'	=> $this->config['stevotvr_groupsub_pp_sb_business'],
