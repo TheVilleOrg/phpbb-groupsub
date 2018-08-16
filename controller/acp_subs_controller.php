@@ -307,7 +307,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$expire = $entity->get_expire() ? $this->user->format_date($entity->get_expire(), 'Y-m-d') : '';
 
 		$this->template->assign_vars(array(
-			'ERROR_MSG'	=> implode('<br />', $errors),
+			'ERROR_MSG'	=> implode('<br>', $errors),
 
 			'SUB_EXPIRE'	=> $expire,
 

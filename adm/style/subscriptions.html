@@ -25,7 +25,7 @@
 			{% if S_ADD_SUB %}
 				<dl>
 					<dt><label for="sub_user">{{ lang('ACP_GROUPSUB_SUB_USER') ~ lang('COLON') }}</label></dt>
-					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" maxlength="255" /></dd>
+					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" maxlength="255"></dd>
 					<dd>[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]</dd>
 				</dl>
 				<dl>
@@ -47,14 +47,14 @@
 				</dl>
 			{% endif %}
 			<dl>
-				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN') }}</span></dt>
-				<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255" /></dd>
+				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN') }}</span></dt>
+				<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255"></dd>
 				<dd><label for="sub_expire">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
 			</dl>
 		</fieldset>
 		<fieldset class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
-			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" />
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
 			{{ S_FORM_TOKEN }}
 		</fieldset>
 	</form>
@@ -75,7 +75,7 @@
 						<option value="{{ p.ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.NAME }}</option>
 					{% endfor %}
 				</select>
-				<input class="button2" type="submit" name="filter" value="{{ lang('GO') }}" />
+				<input class="button2" type="submit" name="filter" value="{{ lang('GO') }}">
 			</fieldset>
 		</form>
 	{% endif %}
@@ -121,13 +121,13 @@
 			</select>
 			{% if pagination %}
 				{{ lang('ACP_GROUPSUB_SUBS_PER_PAGE') ~ lang('COLON') }}
-				<input class="inputbox autowidth" type="number" name="limit" id="limit" min="0" max="100" value="{{ LIMIT }}" />
+				<input class="inputbox autowidth" type="number" name="limit" id="limit" min="0" max="100" value="{{ LIMIT }}">
 			{% endif %}
-			<input class="button2" type="submit" name="sort" value="{{ lang('GO') }}" />
+			<input class="button2" type="submit" name="sort" value="{{ lang('GO') }}">
 		</fieldset>
 	</form>
 
-	<hr />
+	<hr>
 
 	{% if pagination %}
 		<div class="pagination">
@@ -138,8 +138,8 @@
 	{% if S_SHOW_ADD %}
 		<form id="sub_add" method="post" action="{{ U_ADD_SUB }}">
 			<fieldset class="quick">
-				<input type="hidden" name="sub_package" value="{{ PKG_ID }}" />
-				<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_SUB_ADD') }}" />
+				<input type="hidden" name="sub_package" value="{{ PKG_ID }}">
+				<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_SUB_ADD') }}">
 			</fieldset>
 		</form>
 	{% endif %}

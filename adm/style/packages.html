@@ -24,8 +24,8 @@
 			<legend>{{ lang('ACP_GROUPSUB_PKG_DETAILS')}}</legend>
 			{% if S_ADD_PKG %}
 				<dl>
-					<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>
-					<dd><input class="text medium" type="text" id="pkg_ident" name="pkg_ident" value="{{ PKG_IDENT }}" maxlength="30" /></dd>
+					<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>
+					<dd><input class="text medium" type="text" id="pkg_ident" name="pkg_ident" value="{{ PKG_IDENT }}" maxlength="30"></dd>
 				</dl>
 			{% else %}
 				<dl>
@@ -35,22 +35,22 @@
 			{% endif %}
 			<dl>
 				<dt><label for="pkg_name">{{ lang('ACP_GROUPSUB_PKG_NAME') ~ lang('COLON') }}</label></dt>
-				<dd><input class="text medium" type="text" id="pkg_name" name="pkg_name" value="{{ PKG_NAME }}" maxlength="255" /></dd>
+				<dd><input class="text medium" type="text" id="pkg_name" name="pkg_name" value="{{ PKG_NAME }}" maxlength="255"></dd>
 			</dl>
 			<dl>
 				<dt><label for="pkg_desc">{{ lang('ACP_GROUPSUB_PKG_DESC') ~ lang('COLON') }}</label></dt>
 				<dd><textarea id="pkg_desc" name="pkg_desc" rows="5" cols="45" data-bbcode="true">{{ PKG_DESC }}</textarea></dd>
 				<dd>
-					<label><input type="checkbox" class="radio" name="parse_bbcode"{% if S_PARSE_BBCODE_CHECKED %} checked="checked"<{% endif %} /> {{ lang('PARSE_BBCODE') }}</label>
-					<label><input type="checkbox" class="radio" name="parse_smilies"<{% if S_PARSE_SMILIES_CHECKED %} checked="checked"<{% endif %} /> {{ lang('PARSE_SMILIES') }}</label>
-					<label><input type="checkbox" class="radio" name="parse_magic_url"<{% if S_PARSE_MAGIC_URL_CHECKED %} checked="checked"<{% endif %} /> {{ lang('PARSE_URLS') }}</label>
+					<label><input type="checkbox" class="radio" name="parse_bbcode"{% if S_PARSE_BBCODE_CHECKED %} checked="checked"<{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
+					<label><input type="checkbox" class="radio" name="parse_smilies"<{% if S_PARSE_SMILIES_CHECKED %} checked="checked"<{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
+					<label><input type="checkbox" class="radio" name="parse_magic_url"<{% if S_PARSE_MAGIC_URL_CHECKED %} checked="checked"<{% endif %}> {{ lang('PARSE_URLS') }}</label>
 				</dd>
 			</dl>
 		</fieldset>
 		<fieldset>
 			<legend>{{ lang('ACP_GROUPSUB_PKG_GROUPS')}}</legend>
 			<dl>
-				<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
+				<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
 				<dd>
 					<select name="pkg_groups[]" id="pkg_groups" multiple="multiple" size="10">
 						{% for g in group %}
@@ -101,9 +101,9 @@
 			<fieldset>
 				<legend>{{ lang('ACP_GROUPSUB_PKG_TERM_ADD')}}</legend>
 				<dl>
-					<dt><label for="pkg_price">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
+					<dt><label for="pkg_price">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
 					<dd>
-						<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="4" maxlength="10" value="{{ PKG_PRICE }}" />&nbsp;
+						<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="4" maxlength="10" value="{{ PKG_PRICE }}">&nbsp;
 						<select name="pkg_currency[]" id="pkg_currency">
 							{% for c in currency %}
 								<option value="{{ c.CURRENCY }}"{% if c.S_DEFAULT %} selected="selected"{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
@@ -112,9 +112,9 @@
 					</dd>
 				</dl>
 				<dl>
-					<dt><label for="pkg_length">{{ lang('ACP_GROUPSUB_PKG_LENGTH') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_LENGTH_EXPLAIN') }}</span></dt>
+					<dt><label for="pkg_length">{{ lang('ACP_GROUPSUB_PKG_LENGTH') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_LENGTH_EXPLAIN') }}</span></dt>
 					<dd>
-						<input class="text" type="text" id="pkg_length" name="pkg_length[]" size="4" maxlength="10" value="{{ PKG_LENGTH }}" />&nbsp;
+						<input class="text" type="text" id="pkg_length" name="pkg_length[]" size="4" maxlength="10" value="{{ PKG_LENGTH }}">&nbsp;
 						<select name="pkg_length_unit[]" id="pkg_length_unit">
 							{% for u in time_unit %}
 								<option value="{{ u.ID }}">{{ u.NAME }}</option>
@@ -128,17 +128,17 @@
 		<fieldset>
 			<legend>{{ lang('ACP_GROUPSUB_PKG_SUB')}}</legend>
 			<dl>
-				<dt><label for="pkg_warn_time">{{ lang('ACP_GROUPSUB_PKG_WARN_TIME') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_WARN_TIME_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="pkg_warn_time" name="pkg_warn_time" size="4" maxlength="10" value="{{ PKG_WARN_TIME }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
+				<dt><label for="pkg_warn_time">{{ lang('ACP_GROUPSUB_PKG_WARN_TIME') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_WARN_TIME_EXPLAIN') }}</span></dt>
+				<dd><input class="text" type="text" id="pkg_warn_time" name="pkg_warn_time" size="4" maxlength="10" value="{{ PKG_WARN_TIME }}">&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
 			</dl>
 			<dl>
-				<dt><label for="pkg_grace">{{ lang('ACP_GROUPSUB_PKG_GRACE') ~ lang('COLON') }}</label><br /><span>{{ lang('ACP_GROUPSUB_PKG_GRACE_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="pkg_grace" name="pkg_grace" size="4" maxlength="10" value="{{ PKG_GRACE }}" />&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
+				<dt><label for="pkg_grace">{{ lang('ACP_GROUPSUB_PKG_GRACE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GRACE_EXPLAIN') }}</span></dt>
+				<dd><input class="text" type="text" id="pkg_grace" name="pkg_grace" size="4" maxlength="10" value="{{ PKG_GRACE }}">&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
 			</dl>
 		</fieldset>
 		<fieldset class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
-			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" />
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
 			{{ S_FORM_TOKEN }}
 		</fieldset>
 	</form>
@@ -192,7 +192,7 @@
 
 	<form id="pkg_add" method="post" action="{{ U_ADD_PKG }}">
 		<fieldset class="quick">
-			<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_PKG_ADD') }}" />
+			<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_PKG_ADD') }}">
 		</fieldset>
 	</form>
 
