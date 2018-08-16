@@ -110,15 +110,4 @@ interface package_interface
 	 * @param int $package_id The package ID
 	 */
 	public function remove_groups($package_id);
-
-	/**
-	 * Get the length of a subscription based on payment amount and currency.
-	 *
-	 * @param int   $package_id The package ID
-	 * @param array $amount     The amount in the currency subunit
-	 * @param array $currency   The currency code of the term
-	 *
-	 * @return int The length of the subscription in days
-	 */
-	public function get_length($package_id, $amount, $currency);
 }

@@ -14,6 +14,7 @@ use phpbb\config\config;
 use phpbb\event\dispatcher_interface;
 use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
+use stevotvr\groupsub\entity\term_interface as term_entity;
 use stevotvr\groupsub\exception\out_of_bounds;
 
 /**
@@ -262,17 +263,16 @@ class subscription extends operator implements subscription_interface
 		return $subscription;
 	}
 
-	public function create_subscription($package_id, $user_id)
+	public function create_subscription(term_entity $term, $user_id)
 	{
-		$package = $this->container->get('stevotvr.groupsub.entity.package')->load($package_id);
-		$length = $package->get_length() * 86400;
+		$length = $term->get_length() * 86400;
 
 		$sql = 'SELECT sub_id, sub_expires
 				FROM ' . $this->sub_table . '
-				WHERE sub_active = 1 AND pkg_id = ' . (int) $package->get_id() . ' AND user_id = ' . (int) $user_id;
-		$result = $this->db->sql_query($sql);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
+				WHERE sub_active = 1 AND pkg_id = ' . (int) $term->get_package() . ' AND user_id = ' . (int) $user_id;
+		$this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
 
 		if ($row)
 		{

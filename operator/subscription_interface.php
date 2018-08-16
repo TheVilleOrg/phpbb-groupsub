@@ -99,10 +99,10 @@ interface subscription_interface
 	/**
 	 * Create or extend a subscription for a user.
 	 *
-	 * @param int $package_id The package ID
-	 * @param int $user_id    The user ID
+	 * @param \stevotvr\groupsub\entity\term_interface $term
+	 * @param int                                      $user_id The user ID
 	 */
-	public function create_subscription($package_id, $user_id);
+	public function create_subscription(\stevotvr\groupsub\entity\term_interface $term, $user_id);
 
 	/**
 	 * Delete a subscription.

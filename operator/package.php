@@ -72,10 +72,6 @@ class package extends operator implements package_interface
 
 	public function delete_package($package_id)
 	{
-		$sql = 'DELETE FROM ' . $this->sub_table . '
-				WHERE pkg_id = ' . (int) $package_id;
-		$this->db->sql_query($sql);
-
 		$sql = 'DELETE FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
@@ -226,19 +222,5 @@ class package extends operator implements package_interface
 		$sql = 'DELETE FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
-	}
-
-	public function get_length($package_id, $amount, $currency)
-	{
-		$sql = 'SELECT term_length
-				FROM ' . $this->term_table . '
-				WHERE pkg_id = ' . (int) $package_id . '
-					AND term_amount = ' . (int) $amount . '
-					AND term_currency = ' . $this->db->sql_escape($currency);
-		$this->db->sql_query($sql);
-		$length = $this->db->sql_fetchfield('term_length');
-		$this->db->sql_freeresult();
-
-		return $length === false ? false : (int) $length;
 	}
 }
