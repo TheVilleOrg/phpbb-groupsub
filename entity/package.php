@@ -28,8 +28,6 @@ class package extends entity implements package_interface
 		'pkg_desc_bbcode_uid'		=> 'string',
 		'pkg_desc_bbcode_bitfield'	=> 'string',
 		'pkg_desc_bbcode_options'	=> 'integer',
-		'pkg_warn_time'				=> 'set_warn_time',
-		'pkg_grace'					=> 'set_grace',
 		'pkg_order'					=> 'set_order',
 	);
 
@@ -194,44 +192,6 @@ class package extends entity implements package_interface
 	public function set_smilies_enabled($enable)
 	{
 		$this->set_desc_option(OPTION_FLAG_SMILIES, $enable);
-
-		return $this;
-	}
-
-	public function get_warn_time()
-	{
-		return isset($this->data['pkg_warn_time']) ? (int) $this->data['pkg_warn_time'] : null;
-	}
-
-	public function set_warn_time($warn_time)
-	{
-		$warn_time = (int) $warn_time;
-
-		if ($warn_time < 0 || $warn_time > 16777215)
-		{
-			throw new out_of_bounds('pkg_warn_time');
-		}
-
-		$this->data['pkg_warn_time'] = $warn_time;
-
-		return $this;
-	}
-
-	public function get_grace()
-	{
-		return isset($this->data['pkg_grace']) ? (int) $this->data['pkg_grace'] : null;
-	}
-
-	public function set_grace($grace)
-	{
-		$grace = (int) $grace;
-
-		if ($grace < 0 || $grace > 16777215)
-		{
-			throw new out_of_bounds('pkg_grace');
-		}
-
-		$this->data['pkg_grace'] = $grace;
 
 		return $this;
 	}

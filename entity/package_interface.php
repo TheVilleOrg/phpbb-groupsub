@@ -99,38 +99,6 @@ interface package_interface extends entity_interface
 	public function set_smilies_enabled($enable);
 
 	/**
-	 * @return int|null The time in days before the expiration of this package at which to notify
-	 *                  subscribers
-	 */
-	public function get_warn_time();
-
-	/**
-	 * @param int $warn_time The time in days before the expiration of this package at which to
-	 *                       notify subscribers
-	 *
-	 * @return package_interface This object for chaining
-	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
-	 */
-	public function set_warn_time($warn_time);
-
-	/**
-	 * @return int|null The time in days after the expiration of this package at which to remove
-	 *                  subscribers from usergroups
-	 */
-	public function get_grace();
-
-	/**
-	 * @param int $grace The time in days after the expiration of this package at which to remove
-	 *                   subscribers from usergroups
-	 *
-	 * @return package_interface This object for chaining
-	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
-	 */
-	public function set_grace($grace);
-
-	/**
 	 * @return int The order of this package
 	 */
 	public function get_order();

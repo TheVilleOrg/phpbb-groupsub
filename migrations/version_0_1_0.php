@@ -35,8 +35,6 @@ class version_0_1_0 extends migration
 						'pkg_desc_bbcode_uid'		=> array('VCHAR:8', ''),
 						'pkg_desc_bbcode_bitfield'	=> array('VCHAR:255', ''),
 						'pkg_desc_bbcode_options'	=> array('UINT:11', 7),
-						'pkg_warn_time'				=> array('UINT', 0),
-						'pkg_grace'					=> array('UINT', 0),
 						'pkg_order'					=> array('UINT', 0),
 					),
 					'PRIMARY_KEY' => 'pkg_id',

@@ -129,8 +129,6 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			'bbcode_enabled'	=> $this->request->variable('parse_bbcode', false),
 			'magic_url_enabled'	=> $this->request->variable('parse_magic_url', false),
 			'smilies_enabled'	=> $this->request->variable('parse_smilies', false),
-			'warn_time'			=> max(0, $this->request->variable('pkg_warn_time', 0)),
-			'grace'				=> max(0, $this->request->variable('pkg_grace', 0)),
 		);
 
 		if (!$entity->get_id())
@@ -211,15 +209,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$bbcode = $posted ? $post['bbcode_enabled'] : $entity->is_bbcode_enabled();
 		$magic_url = $posted ? $post['magic_url_enabled'] : $entity->is_magic_url_enabled();
 		$smilies = $posted ? $post['smilies_enabled'] : $entity->is_smilies_enabled();
-		$warn_time = $posted ? $post['warn_time'] : $entity->get_warn_time();
-		$grace = $posted ? $post['grace'] : $entity->get_grace();
 
 		$this->template->assign_vars(array(
 			'PKG_IDENT'		=> $ident,
 			'PKG_NAME'		=> $name,
 			'PKG_DESC'		=> $desc,
-			'PKG_WARN_TIME'	=> is_int($warn_time) ? $warn_time : $this->config['stevotvr_groupsub_warn_time'],
-			'PKG_GRACE'		=> is_int($grace) ? $grace : $this->config['stevotvr_groupsub_grace'],
 
 			'S_PARSE_BBCODE_CHECKED'	=> $bbcode,
 			'S_PARSE_SMILIES_CHECKED'	=> $smilies,

@@ -125,17 +125,6 @@
 				<input class="button2" type="submit" name="add_term" value="{{ lang('ACP_GROUPSUB_PKG_TERM_ADD') }}">
 			</fieldset>
 		</fieldset>
-		<fieldset>
-			<legend>{{ lang('ACP_GROUPSUB_PKG_SUB')}}</legend>
-			<dl>
-				<dt><label for="pkg_warn_time">{{ lang('ACP_GROUPSUB_PKG_WARN_TIME') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_WARN_TIME_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="pkg_warn_time" name="pkg_warn_time" size="4" maxlength="10" value="{{ PKG_WARN_TIME }}">&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
-			</dl>
-			<dl>
-				<dt><label for="pkg_grace">{{ lang('ACP_GROUPSUB_PKG_GRACE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GRACE_EXPLAIN') }}</span></dt>
-				<dd><input class="text" type="text" id="pkg_grace" name="pkg_grace" size="4" maxlength="10" value="{{ PKG_GRACE }}">&nbsp;{{ lang('GROUPSUB_DAYS') }}</dd>
-			</dl>
-		</fieldset>
 		<fieldset class="submit-buttons">
 			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
 			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
