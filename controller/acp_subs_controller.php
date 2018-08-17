@@ -241,43 +241,16 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 		add_form_key('add_edit_sub');
 
-		$data = array();
-		if ($submit)
-		{
-			$data = array(
-				'start'		=> $this->parse_date($this->request->variable('sub_start', '')),
-				'expire'	=> $this->parse_date($this->request->variable('sub_expire', '')),
-			);
+		$data = array(
+			'user'		=> $this->request->variable('sub_user', '', true),
+			'package'	=> $this->request->variable('sub_package', 0),
+			'start'		=> $this->request->variable('sub_start', ''),
+			'expire'	=> $this->request->variable('sub_expire', ''),
+		);
 
-			if (!$data['start'] || !$data['expire'])
-			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
-			}
-			else if ($data['expire'] < time())
-			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
-			}
-		}
-
-		if ($entity->get_id())
+		if (!$entity->get_id() && !$this->load_packages())
 		{
-			$this->template->assign_vars(array(
-				'SUB_PACKAGE'	=> $entity->get_package(),
-				'SUB_USER'		=> $entity->get_user(),
-			));
-		}
-		else
-		{
-			if ($submit)
-			{
-				$this->parse_username($data, $errors);
-			}
-			$data['package'] = $this->request->variable('sub_package', 0);
-
-			if (!$this->load_packages($data['package']))
-			{
-				trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PKGS') . adm_back_link($this->u_action . $params), E_USER_WARNING);
-			}
+			trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PKGS') . adm_back_link($this->u_action . $params), E_USER_WARNING);
 		}
 
 		if ($submit)
@@ -286,8 +259,36 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			{
 				$errors[] = 'FORM_INVALID';
 			}
+			$parsed_data = array();
 
-			foreach ($data as $name => $value)
+			$parsed_data['start'] = $this->parse_date($data['start']);
+			if (!$parsed_data['start'])
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
+			}
+
+			$parsed_data['expire'] = $this->parse_date($data['expire']);
+			if (!$parsed_data['expire'])
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
+			}
+			else if ($parsed_data['expire'] < time())
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
+			}
+
+			if (!$entity->get_id())
+			{
+				$parsed_data['user'] = $this->parse_username($data['user']);
+				if (!$parsed_data['user'])
+				{
+					$errors[] = 'NO_USER';
+				}
+
+				$parsed_data['package'] = $data['package'];
+			}
+
+			foreach ($parsed_data as $name => $value)
 			{
 				try
 				{
@@ -317,27 +318,61 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 
 		$errors = array_map(array($this->language, 'lang'), $errors);
-		$expire = $entity->get_expire() ? $this->user->format_date($entity->get_expire(), 'Y-m-d') : '';
 
 		$this->template->assign_vars(array(
 			'ERROR_MSG'	=> implode('<br>', $errors),
 
-			'SUB_START'		=> $this->user->format_date(time(), 'Y-m-d'),
-			'SUB_EXPIRE'	=> $expire,
-
 			'U_BACK'	=> $this->u_action . $params,
+		));
+
+		$this->assign_tpl_vars($entity, $data);
+	}
+
+	/**
+	 * Assign the main template variables.
+	 *
+	 * @param \stevotvr\groupsub\entity\subscription_interface $entity The package
+	 * @param array                                            $post   The posted data
+	 */
+	protected function assign_tpl_vars(sub_entity $entity, array $post)
+	{
+		$posted = $this->request->is_set_post('submit');
+
+		$user = !$entity->get_id() ? $post['user'] : $entity->get_user();
+		$package = !$entity->get_id() ? $post['package'] : $entity->get_package();
+
+		$start = $expire = '';
+		if ($posted)
+		{
+			$start = $post['start'];
+			$expire = $post['expire'];
+		}
+		else if ($entity->get_id())
+		{
+			$start = $this->user->format_date($entity->get_start(), 'Y-m-d');
+			$expire = $this->user->format_date($entity->get_expire(), 'Y-m-d');
+		}
+		else
+		{
+			$start = $this->user->format_date(time(), 'Y-m-d');
+		}
+
+		$this->template->assign_vars(array(
+			'SUB_USER'		=> $user,
+			'SUB_PACKAGE'	=> $package,
+			'SUB_START'		=> $start,
+			'SUB_EXPIRE'	=> $expire,
 		));
 	}
 
 	/**
 	 * Parse the user field for creating a subscription.
 	 *
-	 * @param array &$data   The submitted data
-	 * @param array &$errors The error array
+	 * @param string $username The username
+	 * @return int|boolean The user ID, or false if not found
 	 */
-	protected function parse_username(array &$data, array &$errors)
+	protected function parse_username(string $username)
 	{
-		$username = $this->request->variable('sub_user', '', true);
 		$sql = 'SELECT user_id
 				FROM ' . USERS_TABLE . "
 				WHERE username_clean = '" . $this->db->sql_escape(utf8_clean_string($username)) . "'";
@@ -347,11 +382,10 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 		if (!$userrow)
 		{
-			$errors[] = 'NO_USER';
-			return;
+			return false;
 		}
 
-		$data['user'] = (int) $userrow['user_id'];
+		return (int) $userrow['user_id'];
 	}
 
 	/**
@@ -450,31 +484,17 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Load the list of available packages into template block variables.
 	 *
-	 * @param int $selected The selected package ID
-	 *
 	 * @return int The number of packages
 	 */
-	protected function load_packages($selected = 0)
+	protected function load_packages()
 	{
 		$entities = $this->pkg_operator->get_packages();
 
 		foreach ($entities as $entity)
 		{
-			$s_selected = ($entity->get_id() === $selected);
-
-			if ($s_selected)
-			{
-				$this->template->assign_vars(array(
-					'PKG_NAME'	=> $entity->get_name(),
-					'PKG_ID'	=> $selected,
-				));
-			}
-
 			$this->template->assign_block_vars('package', array(
 				'ID'	=> $entity->get_id(),
 				'NAME'	=> $entity->get_name(),
-
-				'S_SELECTED'	=> $s_selected,
 			));
 		}
 

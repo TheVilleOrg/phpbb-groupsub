@@ -25,14 +25,14 @@
 			{% if S_ADD_SUB %}
 				<dl>
 					<dt><label for="sub_user">{{ lang('ACP_GROUPSUB_SUB_USER') ~ lang('COLON') }}</label></dt>
-					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" maxlength="255"></dd>
+					<dd><input class="text medium" type="text" id="sub_user" name="sub_user" value="{{ SUB_USER }}" maxlength="255"></dd>
 					<dd>[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]</dd>
 				</dl>
 				<dl>
 					<dt><label for="sub_package">{{ lang('ACP_GROUPSUB_SUB_PACKAGE') ~ lang('COLON') }}</label></dt>
 					<dd><select name="sub_package" id="sub_package">
 						{% for p in package %}
-							<option value="{{ p.ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.NAME }}</option>
+							<option value="{{ p.ID }}"{% if p.ID == SUB_PACKAGE %} selected="selected"{% endif %}>{{ p.NAME }}</option>
 						{% endfor %}
 					</select></dd>
 				</dl>
