@@ -487,6 +487,10 @@ class subscription extends operator implements subscription_interface
 			return;
 		}
 
+		$sql = 'DELETE FROM ' . $this->group_table . '
+				WHERE sub_id = ' . (int) $sub_id;
+		$this->db->sql_query($sql);
+
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
 				WHERE user_id = ' . (int) $user_id . '
