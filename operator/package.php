@@ -222,7 +222,8 @@ class package extends operator implements package_interface
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
 
-		if (!$row) {
+		if (!$row)
+		{
 			return false;
 		}
 
