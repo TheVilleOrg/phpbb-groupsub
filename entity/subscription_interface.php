@@ -44,6 +44,20 @@ interface subscription_interface extends entity_interface
 	public function set_user($user_id);
 
 	/**
+	 * @return int The creation time as a Unix timestamp
+	 */
+	public function get_start();
+
+	/**
+	 * @param int $start The creation time as a Unix timestamp
+	 *
+	 * @return subscription_interface This object for chaining
+	 *
+	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 */
+	public function set_start($start);
+
+	/**
 	 * @return int The expiration time as a Unix timestamp
 	 */
 	public function get_expire();

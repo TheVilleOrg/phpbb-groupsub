@@ -95,12 +95,14 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SUB_USER'				=> 'Subscriber',
 	'ACP_GROUPSUB_SUB_PACKAGE'			=> 'Package',
 	'ACP_GROUPSUB_SUB_EXPIRE'			=> 'Expires',
-	'ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN'	=> 'Enter the date at which this subscription should end. Leave this field blank for a never-ending subscription',
+	'ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN'	=> 'Enter the date at which this subscription should end. Leave this field blank for a never-ending subscription.',
+	'ACP_GROUPSUB_SUB_START'			=> 'Started',
+	'ACP_GROUPSUB_SUB_START_EXPLAIN'	=> 'Enter a starting date for this subscription.',
 
 	'ACP_GROUPSUB_ERROR_CURRENCY'		=> 'You must select a valid currency.',
 	'ACP_GROUPSUB_ERROR_NO_PKGS'		=> 'There are no packages for which to create a subscription.',
 	'ACP_GROUPSUB_ERROR_DATE_IN_PAST'	=> 'The expiration date entered was in the past.',
-	'ACP_GROUPSUB_ERROR_INVALID_DATE'	=> 'The expiration date entered was in an invalid format.',
+	'ACP_GROUPSUB_ERROR_INVALID_DATE'	=> 'The date entered was in an invalid format.',
 	'ACP_GROUPSUB_ERROR_INVALID_PRICE'	=> 'The price must be greater than 0.',
 
 	'ACP_GROUPSUB_PKG'		=> 'Package',
@@ -110,6 +112,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_LENGTH'	=> 'Length',
 	'ACP_GROUPSUB_USER'		=> 'Subscriber',
 	'ACP_GROUPSUB_SUB'		=> 'Subscription',
+	'ACP_GROUPSUB_START'	=> 'Started',
 	'ACP_GROUPSUB_EXPIRES'	=> 'Expires',
 
 	'ACP_GROUPSUB_EXPIRES_UNLIMITED'	=> 'Unlimited',

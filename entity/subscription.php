@@ -21,6 +21,7 @@ class subscription extends entity implements subscription_interface
 		'sub_id'		=> 'integer',
 		'pkg_id'		=> 'integer',
 		'user_id'		=> 'integer',
+		'sub_start'		=> 'set_start',
 		'sub_expires'	=> 'set_expire',
 	);
 
@@ -60,6 +61,25 @@ class subscription extends entity implements subscription_interface
 		}
 
 		$this->data['user_id'] = $user_id;
+
+		return $this;
+	}
+
+	public function get_start()
+	{
+		return isset($this->data['sub_start']) ? (int) $this->data['sub_start'] : 0;
+	}
+
+	public function set_start($start)
+	{
+		$start = (int) $start;
+
+		if ($start < 0)
+		{
+			throw new out_of_bounds('sub_start');
+		}
+
+		$this->data['sub_start'] = $start;
 
 		return $this;
 	}

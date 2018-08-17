@@ -295,6 +295,7 @@ class subscription extends operator implements subscription_interface
 		$subscription = $this->container->get('stevotvr.groupsub.entity.subscription')
 							->set_package($term->get_package())
 							->set_user((int) $user_id)
+							->set_start(time())
 							->set_expire(time() + $length);
 		$this->add_subscription($subscription);
 	}

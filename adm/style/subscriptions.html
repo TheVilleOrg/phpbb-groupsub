@@ -47,6 +47,11 @@
 				</dl>
 			{% endif %}
 			<dl>
+				<dt><label for="sub_start">{{ lang('ACP_GROUPSUB_SUB_START') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_START_EXPLAIN') }}</span></dt>
+				<dd><input class="text medium" type="text" id="sub_start" name="sub_start" value="{{ SUB_START }}" maxlength="255"></dd>
+				<dd><label for="sub_start">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
+			</dl>
+			<dl>
 				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN') }}</span></dt>
 				<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255"></dd>
 				<dd><label for="sub_expire">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
@@ -84,6 +89,7 @@
 		<thead>
 			<th>{{ lang('ACP_GROUPSUB_USER') }}</th>
 			<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+			<th style="width: 15%">{{ lang('ACP_GROUPSUB_START') }}</th>
 			<th style="width: 15%">{{ lang('ACP_GROUPSUB_EXPIRES') }}</th>
 			<th style="width: 10%">{{ lang('ACTION') }}</th>
 		</thead>
@@ -92,6 +98,7 @@
 				<tr>
 					<td>{{ s.USER }}</td>
 					<td>{{ s.PACKAGE }}</td>
+					<td>{{ s.STARTED }}</td>
 					<td>{% if s.EXPIRES %}{{ s.EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_NEVER') }}</i>{% endif %}</td>
 					<td class="actions">
 						<a href="{{ s.U_EDIT }}">{{ ICON_EDIT }}</a>
@@ -100,7 +107,7 @@
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="4" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_SUBS') }}</td>
+					<td colspan="5" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_SUBS') }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>

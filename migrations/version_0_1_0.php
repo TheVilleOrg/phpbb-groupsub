@@ -76,6 +76,7 @@ class version_0_1_0 extends migration
 						'user_id'			=> array('UINT', 0),
 						'sub_notify_status'	=> array('USINT', 0),
 						'sub_active'		=> array('BOOL', 1),
+						'sub_start'			=> array('UINT:11', 0),
 						'sub_expires'		=> array('UINT:11', 0),
 					),
 					'PRIMARY_KEY' => 'sub_id',

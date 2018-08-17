@@ -111,6 +111,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			$this->template->assign_block_vars('subscription', array(
 				'USER'		=> $subscription['username'],
 				'PACKAGE'	=> $subscription['package'],
+				'STARTED'	=> $this->user->format_date($entity->get_start()),
 				'EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
 
 				'U_MOVE_UP'		=> $this->u_action . $params . '&amp;action=move_up&amp;id=' . $entity->get_id(),
@@ -243,7 +244,19 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$data = array();
 		if ($submit)
 		{
-			$this->parse_expire($data, $errors);
+			$data = array(
+				'start'		=> $this->parse_date($this->request->variable('sub_start', '')),
+				'expire'	=> $this->parse_date($this->request->variable('sub_expire', '')),
+			);
+
+			if (!$data['start'] || !$data['expire'])
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
+			}
+			else if ($data['expire'] < time())
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
+			}
 		}
 
 		if ($entity->get_id())
@@ -309,6 +322,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->template->assign_vars(array(
 			'ERROR_MSG'	=> implode('<br>', $errors),
 
+			'SUB_START'		=> $this->user->format_date(time(), 'Y-m-d'),
 			'SUB_EXPIRE'	=> $expire,
 
 			'U_BACK'	=> $this->u_action . $params,
@@ -341,39 +355,28 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	}
 
 	/**
-	 * Parse the expiration date fields.
+	 * Parse a date field.
 	 *
-	 * @param array &$data   The submitted data
-	 * @param array &$errors The error array
+	 * @param string $input The formatted date
+	 * @return int|boolean The Unix timestamp, or false if invalid
 	 */
-	protected function parse_expire(array &$data, array &$errors)
+	protected function parse_date($input)
 	{
-		$sub_expire = $this->request->variable('sub_expire', '');
-
-		if ($sub_expire === '')
+		$input = trim($input);
+		if ($input === '')
 		{
-			$data['expire'] = 0;
-			return;
+			return false;
 		}
 
-		$date_parts = explode('-', $sub_expire);
-		if (count($date_parts) == 3 && ((int) $date_parts[0] < 9999) &&
-			(strlen($date_parts[0]) == 4) && (strlen($date_parts[1]) == 2) && (strlen($date_parts[2]) == 2))
+		if (preg_match('/^(\d{4})\-(\d{2})\-(\d{2})$/', $input, $date_parts))
 		{
-			$data['expire'] = $this->user->create_datetime()
-										->setDate((int) $date_parts[0], (int) $date_parts[1], (int) $date_parts[2])
-										->setTime(0, 0, 0)
-										->getTimestamp();
-
-			if ($data['expire'] < time())
-			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
-			}
-
-			return;
+			return $this->user->create_datetime()
+								->setDate((int) $date_parts[1], (int) $date_parts[2], (int) $date_parts[3])
+								->setTime(0, 0, 0)
+								->getTimestamp();
 		}
 
-		$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
+		return false;
 	}
 
 	public function delete($id)
