@@ -41,6 +41,7 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_PACKAGE_LIST'	=> 'Subscriptions',
 	'GROUPSUB_NO_PACKAGES'	=> 'There are no subscriptions available.',
 	'GROUPSUB_NO_DESC'		=> 'No description available.',
+	'GROUPSUB_SUBSCRIPTION'	=> 'Subscription',
 	'GROUPSUB_PRICE'		=> 'Price',
 	'GROUPSUB_LENGTH'		=> 'Length',
 	'GROUPSUB_SUBSCRIBE'	=> 'Subscribe',

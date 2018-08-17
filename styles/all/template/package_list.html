@@ -8,18 +8,18 @@
 
 <div class="inner">
 
-	<h3>{{ p.PKG_NAME }}</h3>
+	<h3>{{ p.NAME }}</h3>
 
 	<div class="column1">
 
-		<p>{% if p.PKG_DESC %}{{ p.PKG_DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
+		<p>{% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
 
 		{% if p.group %}
 			<h4>{{ lang('GROUPS') }}</h4>
 
 			<ul>
 				{% for g in p.group %}
-					<li>{{ g.GROUP_NAME }}</li>
+					<li>{{ g.NAME }}</li>
 				{% endfor %}
 			</ul>
 		{% endif %}
@@ -28,16 +28,12 @@
 
 	<div class="column2">
 
-		<dl class="details">
-			<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
-			<dd>{{ p.PKG_DISPLAY_PRICE }}</dd>
-			<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
-			<dd>{{ p.PKG_LENGTH }}</dd>
-			<dt>{{ lang('GROUPSUB_SUBSCRIBE') ~ lang('COLON') }}</dt>
-			<dd>
-				{% include '@stevotvr_groupsub/pp_button.html' with p %}
-			</dd>
-		</dl>
+		<form action="{{ U_ACTION }}" method="post">
+		{% for t in p.term %}
+			<label><input type="radio" name="term_id" value="{{ t.ID }}">{{ t.PRICE }} / {{ t.LENGTH }}</label><br>
+		{% endfor %}
+			<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_SUBSCRIBE') }}">
+		</form>
 
 	</div>
 

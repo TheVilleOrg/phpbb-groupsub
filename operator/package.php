@@ -12,6 +12,7 @@ namespace stevotvr\groupsub\operator;
 
 use phpbb\group\helper;
 use stevotvr\groupsub\entity\package_interface as entity;
+use stevotvr\groupsub\exception\base;
 
 /**
  * Group Subscription package operator.
@@ -144,6 +145,39 @@ class package extends operator implements package_interface
 		foreach ($terms as $entity)
 		{
 			$entity->set_package($package_id)->set_order($i++)->insert();
+		}
+	}
+
+	public function get_package_term($term_id)
+	{
+		$sql_ary = array(
+			'SELECT'	=> '*',
+			'FROM'		=> array(
+				$this->term_table		=> 't',
+				$this->package_table	=> 'p',
+			),
+			'WHERE'		=> 't.term_id = ' . (int) $term_id . '
+							AND p.pkg_id = t.pkg_id',
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
+
+		if (!$row) {
+			return false;
+		}
+
+		try
+		{
+			return array(
+				'package'	=> $this->container->get('stevotvr.groupsub.entity.package')->import($row),
+				'term'		=> $this->container->get('stevotvr.groupsub.entity.term')->import($row),
+			);
+		}
+		catch (base $e)
+		{
+			return false;
 		}
 	}
 

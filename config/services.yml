@@ -96,11 +96,11 @@ services:
         class: stevotvr\groupsub\controller\main_controller
         arguments:
             - '@config'
-            - '@service_container'
             - '@stevotvr.groupsub.operator.currency'
             - '@controller.helper'
             - '@language'
             - '@stevotvr.groupsub.operator.package'
+            - '@request'
             - '@stevotvr.groupsub.operator.subscription'
             - '@template'
             - '@stevotvr.groupsub.operator.unit_helper'

@@ -73,6 +73,17 @@ interface package_interface
 	public function set_terms($package_id, array $terms);
 
 	/**
+	 * Get package and term from a term ID.
+	 *
+	 * @param int $term_id Term ID
+	 *
+	 * @return array Associative array of
+	 *                           package \stevotvr\groupsub\entity\package_interface
+	 *                           term    \stevotvr\groupsub\entity\term_interface
+	 */
+	public function get_package_term($term_id);
+
+	/**
 	 * Get the groups assigned to a package.
 	 *
 	 * @param int $package_id The package ID
