@@ -449,23 +449,22 @@ class subscription extends operator implements subscription_interface
 				FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $pkg_id;
 		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$data[] = array(
-				'sub_id'	=> $sub_id,
-				'user_id'	=> $user_id,
-				'group_id'	=> $row['group_id'],
-			);
-			group_user_add($row['group_id'], $user_id);
-		}
+		$group_ids = array_column($this->db->sql_fetchrowset(), 'group_id');
 		$this->db->sql_freeresult();
 
-		if (empty($data))
+		foreach ($group_ids as $group_id)
 		{
-			return;
-		}
+			$data = array(
+				'sub_id'	=> $sub_id,
+				'user_id'	=> $user_id,
+				'group_id'	=> $group_id,
+			);
+			$sql = 'INSERT INTO ' . $this->group_table . '
+					' . $this->db->sql_build_array('INSERT', $data);
+			$this->db->sql_query($sql);
 
-		$this->db->sql_multi_insert($this->group_table, $data);
+			group_user_add($group_id, $user_id);
+		}
 	}
 
 	/**
