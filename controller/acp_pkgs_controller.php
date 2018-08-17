@@ -55,30 +55,27 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 	public function display()
 	{
-		$entities = $this->pkg_operator->get_packages();
-		$terms = $this->pkg_operator->get_terms();
+		$packages = $this->pkg_operator->get_packages();
 
-		foreach ($entities as $entity)
+		foreach ($packages as $package)
 		{
+			extract($package);
 			$this->template->assign_block_vars('package', array(
-				'IDENT'	=> $entity->get_ident(),
-				'NAME'	=> $entity->get_name(),
+				'IDENT'	=> $package->get_ident(),
+				'NAME'	=> $package->get_name(),
 
-				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $entity->get_id(),
-				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $entity->get_id(),
-				'U_EDIT'		=> $this->u_action . '&amp;action=edit&amp;id=' . $entity->get_id(),
-				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $entity->get_id(),
+				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $package->get_id(),
+				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $package->get_id(),
+				'U_EDIT'		=> $this->u_action . '&amp;action=edit&amp;id=' . $package->get_id(),
+				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $package->get_id(),
 			));
 
-			if (isset($terms[$entity->get_id()]))
+			foreach ($terms as $term)
 			{
-				foreach ($terms[$entity->get_id()] as $term)
-				{
-					$this->template->assign_block_vars('package.term', array(
-						'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
-						'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
-					));
-				}
+				$this->template->assign_block_vars('package.term', array(
+					'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
+					'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+				));
 			}
 		}
 

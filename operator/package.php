@@ -34,9 +34,26 @@ class package extends operator implements package_interface
 		$this->group_helper = $group_helper;
 	}
 
+	public function get_package_list()
+	{
+		$packages = array();
+
+		$sql = 'SELECT pkg_id, pkg_name
+				FROM ' . $this->package_table . '
+				ORDER BY pkg_name ASC';
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$packages[(int) $row['pkg_id']] = $row['pkg_name'];
+		}
+		$this->db->sql_freeresult();
+
+		return $packages;
+	}
+
 	public function get_packages($name = false)
 	{
-		$entities = array();
+		$packages = array();
 
 		$where = $name ? "WHERE pkg_ident = '" . $this->db->sql_escape($name) . "'" : '';
 		$sql = 'SELECT *
@@ -46,11 +63,52 @@ class package extends operator implements package_interface
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
-			$entities[] = $this->container->get('stevotvr.groupsub.entity.package')->import($row);
+			$packages[(int) $row['pkg_id']] = array(
+				'package'	=> $this->container->get('stevotvr.groupsub.entity.package')->import($row),
+				'terms'		=> array(),
+				'groups'	=> array(),
+			);
 		}
 		$this->db->sql_freeresult();
 
-		return $entities;
+		if (empty($packages))
+		{
+			return $packages;
+		}
+
+		$sql = 'SELECT *
+				FROM ' . $this->term_table . '
+				WHERE ' . $this->db->sql_in_set('pkg_id', array_keys($packages));
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$packages[(int) $row['pkg_id']]['terms'][] = $this->container->get('stevotvr.groupsub.entity.term')->import($row);
+		}
+		$this->db->sql_freeresult();
+
+		$sql_ary = array(
+			'SELECT'	=> 's.pkg_id, g.group_id, g.group_name',
+			'FROM'		=> array($this->group_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array(GROUPS_TABLE => 'g'),
+					'ON'	=> 'g.group_id = s.group_id',
+				),
+			),
+			'WHERE'		=> $this->db->sql_in_set('s.pkg_id', array_keys($packages)),
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$packages[(int) $row['pkg_id']]['groups'][] = array(
+				'id'	=> (int) $row['group_id'],
+				'name'	=> $this->group_helper->get_name($row['group_name']),
+			);
+		}
+		$this->db->sql_freeresult();
+
+		return $packages;
 	}
 
 	public function count_packages()
@@ -196,40 +254,6 @@ class package extends operator implements package_interface
 		$this->db->sql_freeresult();
 
 		return $ids;
-	}
-
-	public function get_all_groups()
-	{
-		$package_groups = array();
-
-		$sql_ary = array(
-			'SELECT'	=> 's.pkg_id, g.group_id, g.group_name',
-			'FROM'		=> array($this->group_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array(GROUPS_TABLE => 'g'),
-					'ON'	=> 'g.group_id = s.group_id',
-				),
-			),
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$package_groups[(int) $row['pkg_id']][] = array(
-				'id'	=> (int) $row['group_id'],
-				'name'	=> $this->group_helper->get_name($row['group_name']),
-			);
-		}
-		$this->db->sql_freeresult();
-
-		foreach ($package_groups as &$package_group)
-		{
-			$names = array_map('strtolower', array_column($package_group, 'name'));
-			array_multisort($names, SORT_ASC, SORT_STRING, $package_group);
-		}
-
-		return $package_groups;
 	}
 
 	public function add_group($package_id, $group_id)

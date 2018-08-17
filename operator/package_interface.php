@@ -16,11 +16,24 @@ namespace stevotvr\groupsub\operator;
 interface package_interface
 {
 	/**
-	 * Get all packages.
+	 * Get a list of package names.
+	 *
+	 * @return array Array of package names keyed by package IDs
+	 */
+	public function get_package_list();
+
+	/**
+	 * Get packages.
 	 *
 	 * @param string $name The identifier of the package, false to get all packages
 	 *
-	 * @return array An array of package entities
+	 * @return array Associative array of package data
+	 *                           package \stevotvr\groupsub\entity\package_interface
+	 *                           terms   array
+	 *                           	\stevotvr\groupsub\entity\term_interface
+	 *                           groups  array
+	 *                           	id   int
+	 *                           	name string
 	 */
 	public function get_packages($name = false);
 
@@ -91,13 +104,6 @@ interface package_interface
 	 * @return array An array of group IDs
 	 */
 	public function get_groups($package_id);
-
-	/**
-	 * Get the group information for all packages.
-	 *
-	 * @return array Array of associative arrays of group information
-	 */
-	public function get_all_groups();
 
 	/**
 	 * Add a group to a package.

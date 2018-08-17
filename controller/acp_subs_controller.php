@@ -488,16 +488,16 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	protected function load_packages()
 	{
-		$entities = $this->pkg_operator->get_packages();
+		$packages = $this->pkg_operator->get_package_list();
 
-		foreach ($entities as $entity)
+		foreach ($packages as $id => $name)
 		{
 			$this->template->assign_block_vars('package', array(
-				'ID'	=> $entity->get_id(),
-				'NAME'	=> $entity->get_name(),
+				'ID'	=> $id,
+				'NAME'	=> $name,
 			));
 		}
 
-		return count($entities);
+		return count($packages);
 	}
 }

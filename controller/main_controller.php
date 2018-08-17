@@ -130,10 +130,9 @@ class main_controller
 	protected function list_terms($name)
 	{
 		$packages = $this->pkg_operator->get_packages($name);
-		$package_groups = $this->pkg_operator->get_all_groups();
-		$package_terms = $this->pkg_operator->get_terms();
 		foreach ($packages as $package)
 		{
+			extract($package);
 			$id = $package->get_id();
 			$this->template->assign_block_vars('package', array(
 				'ID'		=> $id,
@@ -141,26 +140,20 @@ class main_controller
 				'DESC'		=> $package->get_desc_for_display(),
 			));
 
-			if (isset($package_groups[$id]))
+			foreach ($groups as $group)
 			{
-				foreach ($package_groups[$id] as $group)
-				{
-					$this->template->assign_block_vars('package.group', array(
-						'NAME'	=> $group['name'],
-					));
-				}
+				$this->template->assign_block_vars('package.group', array(
+					'NAME'	=> $group['name'],
+				));
 			}
 
-			if (isset($package_terms[$id]))
+			foreach ($terms as $term)
 			{
-				foreach ($package_terms[$id] as $term)
-				{
-					$this->template->assign_block_vars('package.term', array(
-						'ID'		=> $term->get_id(),
-						'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
-						'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
-					));
-				}
+				$this->template->assign_block_vars('package.term', array(
+					'ID'		=> $term->get_id(),
+					'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
+					'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+				));
 			}
 		}
 
