@@ -55,7 +55,7 @@ class term extends entity implements term_interface
 	{
 		$package_id = (int) $package_id;
 
-		if ($package_id < 0)
+		if ($package_id <= 0)
 		{
 			throw new out_of_bounds('pkg_id');
 		}
