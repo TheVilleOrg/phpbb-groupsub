@@ -24,6 +24,7 @@ class package extends operator implements package_interface
 
 		$sql = 'SELECT pkg_id, pkg_name
 				FROM ' . $this->package_table . '
+				WHERE pkg_enabled = 1
 				ORDER BY pkg_name ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
@@ -35,14 +36,16 @@ class package extends operator implements package_interface
 		return $packages;
 	}
 
-	public function get_packages($name = false)
+	public function get_packages($name = false, $enabled = true)
 	{
 		$packages = array();
 
-		$where = $name ? "WHERE pkg_ident = '" . $this->db->sql_escape($name) . "'" : '';
+		$where = '1 = 1';
+		$where .= $enabled ? ' AND pkg_enabled = 1' : '';
+		$where .= $name ? " AND pkg_ident = '" . $this->db->sql_escape($name) . "'" : '';
 		$sql = 'SELECT *
 				FROM ' . $this->package_table . '
-				' . $where . '
+				WHERE ' . $where . '
 				ORDER BY pkg_order ASC, pkg_id ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())

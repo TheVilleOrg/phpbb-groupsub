@@ -47,7 +47,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 	public function display()
 	{
-		$packages = $this->pkg_operator->get_packages();
+		$packages = $this->pkg_operator->get_packages(false, false);
 
 		foreach ($packages as $package)
 		{
@@ -79,7 +79,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 	public function add()
 	{
-		$entity = $this->container->get('stevotvr.groupsub.entity.package');
+		$entity = $this->container->get('stevotvr.groupsub.entity.package')
+									->set_enabled(true);
 		$this->add_edit_pkg_data($entity);
 		$this->template->assign_vars(array(
 			'S_ADD_PKG'	=> true,
@@ -118,6 +119,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			'bbcode_enabled'	=> $this->request->variable('parse_bbcode', false),
 			'magic_url_enabled'	=> $this->request->variable('parse_magic_url', false),
 			'smilies_enabled'	=> $this->request->variable('parse_smilies', false),
+			'enabled'			=> $this->request->variable('pkg_enabled', false),
 		);
 
 		if (!$entity->get_id())
@@ -198,11 +200,13 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$bbcode = $posted ? $post['bbcode_enabled'] : $entity->is_bbcode_enabled();
 		$magic_url = $posted ? $post['magic_url_enabled'] : $entity->is_magic_url_enabled();
 		$smilies = $posted ? $post['smilies_enabled'] : $entity->is_smilies_enabled();
+		$enabled = $posted ? $post['enabled'] : $entity->is_enabled();
 
 		$this->template->assign_vars(array(
 			'PKG_IDENT'		=> $ident,
 			'PKG_NAME'		=> $name,
 			'PKG_DESC'		=> $desc,
+			'PKG_ENABLED'	=> $enabled,
 
 			'S_PARSE_BBCODE_CHECKED'	=> $bbcode,
 			'S_PARSE_SMILIES_CHECKED'	=> $smilies,

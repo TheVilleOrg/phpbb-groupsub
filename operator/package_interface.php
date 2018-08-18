@@ -25,7 +25,8 @@ interface package_interface
 	/**
 	 * Get packages.
 	 *
-	 * @param string $name The identifier of the package, false to get all packages
+	 * @param string  $name    The identifier of the package, false to get all packages
+	 * @param boolean $enabled Only show enabled packages
 	 *
 	 * @return array Associative array of package data
 	 *                           package \stevotvr\groupsub\entity\package_interface
@@ -35,7 +36,7 @@ interface package_interface
 	 *                           	id   int
 	 *                           	name string
 	 */
-	public function get_packages($name = false);
+	public function get_packages($name = false, $enabled = true);
 
 	/**
 	 * Count the total number of packages.

@@ -29,6 +29,7 @@ class package extends entity implements package_interface
 		'pkg_desc_bbcode_bitfield'	=> 'string',
 		'pkg_desc_bbcode_options'	=> 'integer',
 		'pkg_order'					=> 'set_order',
+		'pkg_enabled'				=> 'boolean',
 	);
 
 	protected $id_column = 'pkg_id';
@@ -211,6 +212,17 @@ class package extends entity implements package_interface
 		}
 
 		$this->data['pkg_order'] = $order;
+
+		return $this;
+	}
+
+	public function is_enabled()
+	{
+		return isset($this->data['pkg_enabled']) ? (bool) $this->data['pkg_enabled'] : false;
+	}
+
+	public function set_enabled($enabled){
+		$this->data['pkg_enabled'] = (bool) $enabled;
 
 		return $this;
 	}

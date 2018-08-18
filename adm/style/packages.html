@@ -24,6 +24,10 @@
 	<form id="add_edit_pkg" method="post" action="{{ U_ACTION }}">
 		<fieldset>
 			<legend>{{ lang('ACP_GROUPSUB_PKG_DETAILS')}}</legend>
+			<dl>
+				<dt><label for="pkg_enabled">{{ lang('ACP_GROUPSUB_PKG_ENABLE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_ENABLE_EXPLAIN') }}</span></dt>
+				<dd><label><input type="radio" id="pkg_enabled" name="pkg_enabled" value="1"{% if PKG_ENABLED %} checked="checked"{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pkg_enabled" value="0"{% if not PKG_ENABLED %} checked="checked"{% endif %}> {{ lang('NO') }}</label></dd>
+			</dl>
 			{% if S_ADD_PKG %}
 				<dl>
 					<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>

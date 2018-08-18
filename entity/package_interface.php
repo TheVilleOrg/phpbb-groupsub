@@ -111,4 +111,16 @@ interface package_interface extends entity_interface
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
 	public function set_order($order);
+
+	/**
+	 * @return boolean The package is enabled
+	 */
+	public function is_enabled();
+
+	/**
+	 * @param boolean $enabled The package is enabled
+	 *
+	 * @return package_interface This object for chaining
+	 */
+	public function set_enabled($enabled);
 }
