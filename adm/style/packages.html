@@ -4,6 +4,8 @@
 
 {% if S_ADD_PKG or S_EDIT_PKG %}
 
+	{% INCLUDEJS '@stevotvr_groupsub/groupsub.js' %}
+
 	<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
 
 	{% if ERROR_MSG %}
@@ -66,7 +68,7 @@
 				<thead>
 					<th style="width: 10%">{{ lang('ACP_GROUPSUB_PRICE') }}</th>
 					<th style="width: 10%">{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
-					<th style="width: 10%">{{ lang('ACTION') }}</th>
+					<th style="width: 10%" class="actions">{{ lang('ACTION') }}</th>
 				</thead>
 				<tbody>
 				{% for t in term %}
@@ -89,10 +91,10 @@
 						</td>
 						<td class="actions">
 							<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
-							<span class="up"><a href="{{ t.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
+							<span class="up"><a class="move_term_up" href="#">{{ ICON_MOVE_UP }}</a></span>
 							<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
-							<span class="down"><a href="{{ t.U_MOVE_DOWN }}" data-ajax="row_down">{{ ICON_MOVE_DOWN }}</a></span>
-							<a href="{{ t.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
+							<span class="down"><a class="move_term_down" href="#">{{ ICON_MOVE_DOWN }}</a></span>
+							<a class="delete_term" href="#">{{ ICON_DELETE }}</a>
 						</td>
 					</tr>
 				{% endfor %}
