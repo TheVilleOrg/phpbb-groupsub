@@ -14,6 +14,19 @@
 
 			<p>{% if PKG_DESC %}{{ PKG_DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
 
+			{% if group %}
+			<table>
+				<thead>
+					<tr><th>{{ lang('GROUPS') }}</th></tr>
+				</thead>
+				<tbody>
+				{% for g in group %}
+					<tr><td>{{ g.NAME }}</td></tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
+
 		</div>
 
 		<div class="column2">

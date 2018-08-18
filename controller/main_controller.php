@@ -185,8 +185,10 @@ class main_controller
 			trigger_error('GROUPSUB_NO_TERM');
 		}
 
-		$price = $term['term']->get_price();
-		$currency = $term['term']->get_currency();
+		extract($term);
+
+		$price = $term->get_price();
+		$currency = $term->get_currency();
 
 		$this->template->assign_vars(array(
 			'S_PP_SANDBOX'	=> $sandbox,
@@ -194,21 +196,28 @@ class main_controller
 			'USER_ID'		=> $this->user->data['user_id'],
 			'PP_BUSINESS'	=> $business,
 
-			'PKG_NAME'				=> $term['package']->get_name(),
-			'PKG_DESC'				=> $term['package']->get_desc_for_display(),
-			'TERM_ID'				=> $term['term']->get_id(),
+			'PKG_NAME'				=> $package->get_name(),
+			'PKG_DESC'				=> $package->get_desc_for_display(),
+			'TERM_ID'				=> $term->get_id(),
 			'TERM_PRICE'			=> $this->currency->format_value($currency, $price),
 			'TERM_CURRENCY'			=> $currency,
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
-			'TERM_LENGTH'			=> $this->unit_helper->get_formatted_timespan($term['term']->get_length()),
-			'CONFIRM'				=> $this->language->lang('GROUPSUB_CONFIRM', $term['package']->get_name()),
+			'TERM_LENGTH'			=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+			'CONFIRM'				=> $this->language->lang('GROUPSUB_CONFIRM', $package->get_name()),
 
 			'U_ACTION'			=> $this->helper->route('stevotvr_groupsub_main', array('name' => $name)),
 			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),
-			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $term['package']->get_ident())),
+			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $package->get_ident())),
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
 		));
 
-		return $this->helper->render('select_term.html', $term['package']->get_name());
+		foreach ($groups as $group)
+		{
+			$this->template->assign_block_vars('group', array(
+				'NAME'	=> $group,
+			));
+		}
+
+		return $this->helper->render('select_term.html', $package->get_name());
 	}
 }
