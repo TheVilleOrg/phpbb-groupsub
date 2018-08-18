@@ -153,12 +153,15 @@
 					<td>
 					{% if p.term %}
 						<table>
-						{% for t in p.term %}
+						{% for t in p.term|slice(0, 4) %}
 							<tr>
 								<td>{{ t.PRICE }}</td>
 								<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 							</tr>
 						{% endfor %}
+						{% if p.term|length > 4 %}
+							<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
+						{% endif %}
 						</table>
 					{% endif %}
 					</td>
