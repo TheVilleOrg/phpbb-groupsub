@@ -146,6 +146,12 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				}
 			}
 
+			$terms = $this->parse_terms();
+			if ($entity->is_enabled() && empty($terms))
+			{
+				$errors[] = 'ACP_GROUPSUB_ERROR_MISSING_TERMS';
+			}
+
 			if (empty($errors))
 			{
 				if ($entity->get_id())
@@ -159,13 +165,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 					$message = 'ACP_GROUPSUB_PKG_ADD_SUCCESS';
 				}
 
+				$this->pkg_operator->set_terms($entity->get_id(), $terms);
 				$this->parse_groups($entity->get_id());
-				$this->parse_terms($entity->get_id());
 
-				if (empty($errors))
-				{
-					trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
-				}
+				trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
 			}
 		}
 
@@ -335,15 +338,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	/**
 	 * Parse the terms from the input.
 	 *
-	 * @param int $package_id The package ID
+	 * @return array An array of term entities
 	 */
-	protected function parse_terms($package_id)
+	protected function parse_terms()
 	{
-		if (!$package_id)
-		{
-			return;
-		}
-
 		$entities = array();
 
 		$prices = $this->request->variable('pkg_price', array(''));
@@ -367,7 +365,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			$entities[] = $entity;
 		}
 
-		$this->pkg_operator->set_terms($package_id, $entities);
+		return $entities;
 	}
 
 	/**

@@ -106,6 +106,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_ERROR_DATE_IN_PAST'	=> 'The expiration date entered was in the past.',
 	'ACP_GROUPSUB_ERROR_INVALID_DATE'	=> 'The date entered was in an invalid format.',
 	'ACP_GROUPSUB_ERROR_INVALID_PRICE'	=> 'The price must be greater than 0.',
+	'ACP_GROUPSUB_ERROR_MISSING_TERMS'	=> 'A package must have at least one term to be enabled.',
 
 	'ACP_GROUPSUB_PKG'		=> 'Package',
 	'ACP_GROUPSUB_NAME'		=> 'Name',
