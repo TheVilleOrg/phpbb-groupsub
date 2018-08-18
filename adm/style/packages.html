@@ -151,7 +151,7 @@
 			{% for p in package %}
 				<tr>
 					<td valign="top">{{ p.IDENT }}</td>
-					<td valign="top"><strong>{{ p.NAME }}</strong></td>
+					<td valign="top"><strong><a href="{{ p.U_EDIT }}">{{ p.NAME }}</a></strong></td>
 					<td>
 					{% if p.term %}
 						<table>
