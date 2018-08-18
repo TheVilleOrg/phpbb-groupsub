@@ -62,7 +62,9 @@ interface subscription_interface
 	 * Get subscriptions.
 	 *
 	 * @return array Array associative arrays of subscription data
-	 *                     package	string
+	 *                     package
+	 *                     	name    string
+	 *                     	deleted boolean
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 */

@@ -37,11 +37,13 @@ class version_0_1_0 extends migration
 						'pkg_desc_bbcode_options'	=> array('UINT:11', 7),
 						'pkg_order'					=> array('UINT', 0),
 						'pkg_enabled'				=> array('BOOL', 0),
+						'pkg_deleted'				=> array('BOOL', 0),
 					),
 					'PRIMARY_KEY' => 'pkg_id',
 					'KEYS' => array(
 						'pkg_o'	=> array('INDEX', 'pkg_order'),
 						'pkg_e'	=> array('INDEX', 'pkg_enabled'),
+						'pkg_e'	=> array('INDEX', 'pkg_deleted'),
 						'pkg_i'	=> array('UNIQUE', 'pkg_ident'),
 					),
 				),

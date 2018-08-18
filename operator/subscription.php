@@ -197,7 +197,7 @@ class subscription extends operator implements subscription_interface
 		$subscriptions = array();
 
 		$sql_ary = array(
-			'SELECT'	=> 's.*, p.pkg_name, u.username',
+			'SELECT'	=> 's.*, p.pkg_name, p.pkg_deleted, u.username',
 			'FROM'		=> array($this->sub_table => 's'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -226,7 +226,10 @@ class subscription extends operator implements subscription_interface
 		while ($row = $this->db->sql_fetchrow())
 		{
 			$subscriptions[] = array(
-				'package'	=> $row['pkg_name'],
+				'package'	=> array(
+					'name'		=> $row['pkg_name'],
+					'deleted'	=> (bool) $row['pkg_deleted'],
+				),
 				'username'	=> $row['username'],
 				'entity'	=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
 			);

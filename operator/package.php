@@ -40,7 +40,7 @@ class package extends operator implements package_interface
 	{
 		$packages = array();
 
-		$where = '1 = 1';
+		$where = 'pkg_deleted = 0';
 		$where .= $enabled ? ' AND pkg_enabled = 1' : '';
 		$where .= $name ? " AND pkg_ident = '" . $this->db->sql_escape($name) . "'" : '';
 		$sql = 'SELECT *
@@ -101,7 +101,8 @@ class package extends operator implements package_interface
 	public function count_packages()
 	{
 		$sql = 'SELECT COUNT(pkg_id) AS pkg_count
-				FROM ' . $this->package_table;
+				FROM ' . $this->package_table . '
+				WHERE pkg_enabled = 1';
 		$this->db->sql_query($sql);
 		$count = $this->db->sql_fetchfield('pkg_count');
 		$this->db->sql_freeresult();
@@ -126,9 +127,36 @@ class package extends operator implements package_interface
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 
-		$sql = 'DELETE FROM ' . $this->package_table . '
-				WHERE pkg_id = ' . (int) $package_id;
+		$sql = 'SELECT 1
+				FROM ' . $this->sub_table . '
+				WHERE pkg_id = ' . (int) $package_id . '
+				LIMIT 1';
 		$this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
+
+		if ($row)
+		{
+			$data = array(
+				'pkg_desc'					=> '',
+				'pkg_desc_bbcode_uid'		=> '',
+				'pkg_desc_bbcode_bitfield'	=> '',
+				'pkg_desc_bbcode_options'	=> 0,
+				'pkg_order'					=> 0,
+				'pkg_enabled'				=> 0,
+				'pkg_deleted'				=> 1,
+			);
+			$sql = 'UPDATE ' . $this->package_table . '
+					SET ' . $this->db->sql_build_array('UPDATE', $data) . '
+					WHERE pkg_id = ' . (int) $package_id;
+			$this->db->sql_query($sql);
+		}
+		else
+		{
+			$sql = 'DELETE FROM ' . $this->package_table . '
+					WHERE pkg_id = ' . (int) $package_id;
+			$this->db->sql_query($sql);
+		}
 
 		return (bool) $this->db->sql_affectedrows();
 	}
@@ -139,6 +167,7 @@ class package extends operator implements package_interface
 
 		$sql = 'SELECT pkg_id
 				FROM ' . $this->package_table . '
+				WHERE pkg_deleted = 0
 				ORDER BY pkg_order ASC, pkg_id ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())

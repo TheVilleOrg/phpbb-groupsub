@@ -98,7 +98,7 @@
 			{% for s in subscription %}
 				<tr>
 					<td>{{ s.USER }}</td>
-					<td>{{ s.PACKAGE }}</td>
+					<td>{% if s.S_PACKAGE_DELETED %}<em>{{ s.PACKAGE }} ({{ lang('ACP_GROUPSUB_DELETED') }})</em>{% else %}{{ s.PACKAGE }}{% endif %}</td>
 					<td>{{ s.STARTED }}</td>
 					<td>{% if s.EXPIRES %}{{ s.EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_NEVER') }}</i>{% endif %}</td>
 					<td class="actions">

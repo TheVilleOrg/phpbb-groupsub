@@ -124,4 +124,5 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_EXPIRES_NEVER'		=> 'Never',
 	'ACP_GROUPSUB_ALL_PACKAGES'			=> 'All subscription packages',
 	'ACP_GROUPSUB_SUBS_PER_PAGE'		=> 'Items per page',
+	'ACP_GROUPSUB_DELETED'				=> 'deleted',
 ));
