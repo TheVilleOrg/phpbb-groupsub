@@ -118,10 +118,13 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SUB'		=> 'Subscription',
 	'ACP_GROUPSUB_START'	=> 'Started',
 	'ACP_GROUPSUB_EXPIRES'	=> 'Expires',
+	'ACP_GROUPSUB_STATUS'	=> 'Status',
 	'ACP_GROUPSUB_MORE'		=> '+%d more…',
 
 	'ACP_GROUPSUB_EXPIRES_UNLIMITED'	=> 'Unlimited',
 	'ACP_GROUPSUB_EXPIRES_NEVER'		=> 'Never',
+	'ACP_GROUPSUB_ACTIVE'				=> 'Active',
+	'ACP_GROUPSUB_ENDED'				=> 'Ended',
 	'ACP_GROUPSUB_ALL_PACKAGES'			=> 'All subscription packages',
 	'ACP_GROUPSUB_SUBS_PER_PAGE'		=> 'Items per page',
 	'ACP_GROUPSUB_DELETED'				=> 'deleted',

@@ -108,8 +108,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		foreach ($subscriptions as $subscription)
 		{
 			extract($subscription);
-			$this->template->assign_block_vars($active ? 'active' : 'ended', array(
+			$this->template->assign_block_vars('subscription', array(
 				'S_PACKAGE_DELETED'	=> $package['deleted'],
+				'S_ACTIVE'			=> $active,
 
 				'USER'		=> $username,
 				'PACKAGE'	=> $package['name'],
