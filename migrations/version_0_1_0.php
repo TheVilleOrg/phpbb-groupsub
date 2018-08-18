@@ -29,7 +29,7 @@ class version_0_1_0 extends migration
 				$this->table_prefix . 'groupsub_packages' => array(
 					'COLUMNS' => array(
 						'pkg_id'					=> array('UINT', null, 'auto_increment'),
-						'pkg_ident'					=> array('VCHAR:30', ''),
+						'pkg_ident'					=> array('VCHAR:30', null),
 						'pkg_name'					=> array('VCHAR_UNI', ''),
 						'pkg_desc'					=> array('TEXT_UNI', ''),
 						'pkg_desc_bbcode_uid'		=> array('VCHAR:8', ''),

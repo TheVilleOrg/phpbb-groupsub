@@ -138,6 +138,7 @@ class package extends operator implements package_interface
 		if ($row)
 		{
 			$data = array(
+				'pkg_ident'					=> null,
 				'pkg_desc'					=> '',
 				'pkg_desc_bbcode_uid'		=> '',
 				'pkg_desc_bbcode_bitfield'	=> '',
