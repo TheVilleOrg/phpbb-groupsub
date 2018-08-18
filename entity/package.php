@@ -221,7 +221,8 @@ class package extends entity implements package_interface
 		return isset($this->data['pkg_enabled']) ? (bool) $this->data['pkg_enabled'] : false;
 	}
 
-	public function set_enabled($enabled){
+	public function set_enabled($enabled)
+	{
 		$this->data['pkg_enabled'] = (bool) $enabled;
 
 		return $this;
