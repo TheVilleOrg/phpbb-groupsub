@@ -10,7 +10,6 @@
 
 namespace stevotvr\groupsub\controller;
 
-use phpbb\group\helper;
 use phpbb\json_response;
 use stevotvr\groupsub\entity\package_interface as pkg_entity;
 use stevotvr\groupsub\exception\base;
@@ -22,11 +21,6 @@ use stevotvr\groupsub\operator\unit_helper_interface;
  */
 class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interface
 {
-	/**
-	 * @var \phpbb\group\helper
-	 */
-	protected $group_helper;
-
 	/**
 	 * @var \stevotvr\groupsub\operator\package_interface
 	 */
@@ -40,13 +34,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	/**
 	 * Set up the controller.
 	 *
-	 * @param \phpbb\group\helper                               $group_helper
 	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 */
-	public function setup(helper $group_helper, pkg_operator $pkg_operator, unit_helper_interface $unit_helper)
+	public function setup(pkg_operator $pkg_operator, unit_helper_interface $unit_helper)
 	{
-		$this->group_helper = $group_helper;
 		$this->pkg_operator = $pkg_operator;
 		$this->unit_helper = $unit_helper;
 
@@ -244,7 +236,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$groups[] = array(
 				'ID'	=> (int) $row['group_id'],
-				'NAME'	=> $this->group_helper->get_name($row['group_name']),
+				'NAME'	=> $row['group_name'],
 
 				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
 			);

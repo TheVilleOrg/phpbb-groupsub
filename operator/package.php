@@ -10,7 +10,6 @@
 
 namespace stevotvr\groupsub\operator;
 
-use phpbb\group\helper;
 use stevotvr\groupsub\entity\package_interface as entity;
 use stevotvr\groupsub\exception\base;
 
@@ -19,21 +18,6 @@ use stevotvr\groupsub\exception\base;
  */
 class package extends operator implements package_interface
 {
-	/**
-	 * @var \phpbb\group\helper
-	 */
-	protected $group_helper;
-
-	/**
-	 * Set up the operator.
-	 *
-	 * @param \phpbb\group\helper $group_helper
-	 */
-	public function setup(helper $group_helper)
-	{
-		$this->group_helper = $group_helper;
-	}
-
 	public function get_package_list()
 	{
 		$packages = array();
@@ -103,7 +87,7 @@ class package extends operator implements package_interface
 		{
 			$packages[(int) $row['pkg_id']]['groups'][] = array(
 				'id'	=> (int) $row['group_id'],
-				'name'	=> $this->group_helper->get_name($row['group_name']),
+				'name'	=> $row['group_name'],
 			);
 		}
 		$this->db->sql_freeresult();
