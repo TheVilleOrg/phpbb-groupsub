@@ -295,7 +295,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
 			for ($i = 0; $i < $count; $i++)
 			{
-				if ($lengths[$i] <= 0 || $prices[$i] === '')
+				if ($lengths[$i] <= 0 || !is_numeric($prices[$i]))
 				{
 					continue;
 				}
@@ -352,7 +352,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
 		for ($i = 0; $i < $count; $i++)
 		{
-			if ($lengths[$i] <= 0 || $prices[$i] === '')
+			if ($lengths[$i] <= 0 || !is_numeric($prices[$i]))
 			{
 				continue;
 			}
