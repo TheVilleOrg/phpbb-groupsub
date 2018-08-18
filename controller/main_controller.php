@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\auth\auth;
 use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\language\language;
@@ -26,6 +27,11 @@ use stevotvr\groupsub\operator\unit_helper_interface;
  */
 class main_controller
 {
+	/**
+	 * @var \phpbb\auth\auth
+	 */
+	protected $auth;
+
 	/**
 	 * @var \phpbb\config\config
 	 */
@@ -77,6 +83,7 @@ class main_controller
 	protected $user;
 
 	/**
+	 * @param \phpbb\auth\auth                                   $auth
 	 * @param \phpbb\config\config                               $config
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \phpbb\controller\helper                           $helper
@@ -88,8 +95,9 @@ class main_controller
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
 	 * @param \phpbb\user                                        $user
 	 */
-	public function __construct(config $config, currency_interface $currency, helper $helper, language $language, package_interface $pkg_operator, request_interface $request, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
+	public function __construct(auth $auth, config $config, currency_interface $currency, helper $helper, language $language, package_interface $pkg_operator, request_interface $request, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
 	{
+		$this->auth = $auth;
 		$this->config = $config;
 		$this->currency = $currency;
 		$this->helper = $helper;
@@ -111,13 +119,18 @@ class main_controller
 	 */
 	public function handle($name)
 	{
+		if (!$this->config['stevotvr_groupsub_active'] && !$this->auth->acl_get('a_'))
+		{
+			trigger_error('NOT_FOUND');
+		}
+
 		$term_id = $this->request->variable('term_id', 0);
 		if ($term_id)
 		{
 			return $this->select_term($term_id, $name);
 		}
 
-		return $this->list_terms($name);
+		return $this->list_packages($name);
 	}
 
 	/**
@@ -127,9 +140,15 @@ class main_controller
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
 	 */
-	protected function list_terms($name)
+	protected function list_packages($name)
 	{
 		$packages = $this->pkg_operator->get_packages($name);
+
+		if (empty($packages))
+		{
+			trigger_error('GROUPSUB_NO_PACKAGES');
+		}
+
 		foreach ($packages as $package)
 		{
 			extract($package);
@@ -173,15 +192,10 @@ class main_controller
 		$sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
 		$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
 
-		if (!$business)
-		{
-			trigger_error('GROUPSUB_NO_PACKAGES');
-		}
-
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
-			trigger_error('GROUPSUB_NO_TERM');
+			trigger_error('NOT_FOUND');
 		}
 
 		extract($term);

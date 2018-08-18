@@ -106,6 +106,7 @@ class version_0_1_0 extends migration
 	public function update_data()
 	{
 		return array(
+			array('config.add', array('stevotvr_groupsub_active', false)),
 			array('config.add', array('stevotvr_groupsub_pp_sandbox', true)),
 			array('config.add', array('stevotvr_groupsub_pp_sb_business', '')),
 			array('config.add', array('stevotvr_groupsub_pp_business', '')),

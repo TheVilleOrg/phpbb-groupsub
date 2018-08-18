@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\event;
 
+use phpbb\auth\auth;
 use phpbb\config\config;
 use phpbb\controller\helper;
 use phpbb\db\driver\driver_interface;
@@ -23,6 +24,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+	/**
+	 * @var \phpbb\auth\auth
+	 */
+	protected $auth;
+
 	/**
 	 * @var \phpbb\config\config
 	 */
@@ -63,6 +69,7 @@ class main_listener implements EventSubscriberInterface
 	protected $sub_table;
 
 	/**
+	 * @param \phpbb\auth\auth                              $auth
 	 * @param \phpbb\config\config                          $config
 	 * @param \phpbb\db\driver\driver_interface             $db
 	 * @param \phpbb\controller\helper                      $helper
@@ -73,8 +80,9 @@ class main_listener implements EventSubscriberInterface
 	 * @param string                                        $sub_table     The name of the
 	 *                                                                     groupsub_subs table
 	 */
-	public function __construct(config $config, driver_interface $db, helper $helper, package_interface $pkg_operator, template $template, $group_table, $sub_table)
+	public function __construct(auth $auth, config $config, driver_interface $db, helper $helper, package_interface $pkg_operator, template $template, $group_table, $sub_table)
 	{
+		$this->auth = $auth;
 		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
@@ -108,7 +116,7 @@ class main_listener implements EventSubscriberInterface
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 
-		if ($this->groupsub_active() && $this->pkg_operator->count_packages())
+		if (($this->config['stevotvr_groupsub_active'] || $this->auth->acl_get('a_')) && $this->pkg_operator->count_packages())
 		{
 			$this->template->assign_var('U_GROUPSUB_SUBS', $this->helper->route('stevotvr_groupsub_main'));
 		}
@@ -153,18 +161,5 @@ class main_listener implements EventSubscriberInterface
 				WHERE group_id = ' . (int) $event['group_id'] . '
 					AND ' . $this->db->sql_in_set('user_id', $event['user_id_ary']);
 		$this->db->sql_query($sql);
-	}
-
-	/**
-	 * Check if the extension is configured.
-	 *
-	 * @return boolean The extension is ready to use
-	 */
-	protected function groupsub_active()
-	{
-		$pp_sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
-		$sb = $pp_sandbox && !empty($this->config['stevotvr_groupsub_pp_sb_business']);
-		$live = !$pp_sandbox && !empty($this->config['stevotvr_groupsub_pp_business']);
-		return $sb || $live;
 	}
 }

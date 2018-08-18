@@ -49,6 +49,8 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 					$this->config->set('stevotvr_groupsub_' . $key, $value);
 				}
 
+				$this->config->set('stevotvr_groupsub_active', !$data['pp_sandbox'] && $data['pp_business']);
+
 				trigger_error($this->language->lang('ACP_GROUPSUB_SETTINGS_SAVED') . adm_back_link($this->u_action));
 			}
 		}

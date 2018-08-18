@@ -6,6 +6,7 @@ services:
     stevotvr.groupsub.listener:
         class: stevotvr\groupsub\event\main_listener
         arguments:
+            - '@auth'
             - '@config'
             - '@dbal.conn'
             - '@controller.helper'
@@ -94,6 +95,7 @@ services:
     stevotvr.groupsub.controller.main:
         class: stevotvr\groupsub\controller\main_controller
         arguments:
+            - '@auth'
             - '@config'
             - '@stevotvr.groupsub.operator.currency'
             - '@controller.helper'
