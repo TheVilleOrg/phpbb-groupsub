@@ -96,6 +96,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SUB_DETAILS'			=> 'Subscription details',
 	'ACP_GROUPSUB_SUB_USER'				=> 'Subscriber',
 	'ACP_GROUPSUB_SUB_PACKAGE'			=> 'Package',
+	'ACP_GROUPSUB_SUB_SELECT_PACKAGE'	=> 'Select package',
 	'ACP_GROUPSUB_SUB_EXPIRE'			=> 'Expires',
 	'ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN'	=> 'Enter the date at which this subscription should end. Leave this field blank for a never-ending subscription.',
 	'ACP_GROUPSUB_SUB_START'			=> 'Started',
@@ -105,7 +106,6 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_ERROR_NO_PKGS'		=> 'There are no packages for which to create a subscription.',
 	'ACP_GROUPSUB_ERROR_DATE_IN_PAST'	=> 'The expiration date entered was in the past.',
 	'ACP_GROUPSUB_ERROR_INVALID_DATE'	=> 'The date entered was in an invalid format.',
-	'ACP_GROUPSUB_ERROR_INVALID_PRICE'	=> 'The price must be greater than 0.',
 	'ACP_GROUPSUB_ERROR_MISSING_TERMS'	=> 'A package must have at least one term to be enabled.',
 	'ACP_GROUPSUB_ERROR_SUB_CONFLICT'	=> 'This member already has an active subscription to this package.<br><br><a href="%s">Edit active subscription</a>',
 
