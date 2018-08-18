@@ -302,6 +302,15 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 			if (empty($errors))
 			{
+				$conflict_id = $this->sub_operator->get_conflict($entity);
+				if ($conflict_id)
+				{
+					trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_SUB_CONFLICT', $this->u_action . '&amp;action=edit&amp;id=' . $conflict_id), E_USER_WARNING);
+				}
+			}
+
+			if (empty($errors))
+			{
 				if ($entity->get_id())
 				{
 					$entity->save();

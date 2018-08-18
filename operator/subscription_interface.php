@@ -131,4 +131,13 @@ interface subscription_interface
 	 * Notify subscribers of expiring and expired subscriptions.
 	 */
 	public function notify_subscribers();
+
+	/**
+	 * Find an active subscription that conflicts with the given subscription if one exists.
+	 *
+	 * @return int|boolean The conflicting subscription ID or false if none exists
+	 *
+	 * @param \stevotvr\groupsub\entity\subscription_interface $subscription
+	 */
+	public function get_conflict(\stevotvr\groupsub\entity\subscription_interface $subscription);
 }

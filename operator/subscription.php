@@ -430,6 +430,20 @@ class subscription extends operator implements subscription_interface
 		}
 	}
 
+	public function get_conflict(entity $subscription)
+	{
+		$sql = 'SELECT sub_id
+				FROM ' . $this->sub_table . '
+				WHERE sub_active = 1
+					AND pkg_id = ' . (int) $subscription->get_package() . '
+					AND user_id = ' . (int) $subscription->get_user();
+		$this->db->sql_query($sql);
+		$sub_id = $this->db->sql_fetchfield('sub_id');
+		$this->db->sql_freeresult();
+
+		return $sub_id ? (int) $sub_id : false;
+	}
+
 	/**
 	 * Add a user to the subscribed groups.
 	 *
