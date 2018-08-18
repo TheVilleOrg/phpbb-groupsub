@@ -114,15 +114,6 @@ interface subscription_interface
 	public function delete_subscription($sub_id);
 
 	/**
-	 * Get all subscribed users of a group.
-	 *
-	 * @param int $group_id The group ID
-	 *
-	 * @return array An array of user IDs
-	 */
-	public function get_subscribed_users($group_id);
-
-	/**
 	 * Find all expiring subscriptions and remove the users from the associated groups.
 	 */
 	public function process_expiring();

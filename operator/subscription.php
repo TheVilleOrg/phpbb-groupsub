@@ -319,32 +319,6 @@ class subscription extends operator implements subscription_interface
 		return (bool) $this->db->sql_affectedrows();
 	}
 
-	public function get_subscribed_users($group_id)
-	{
-		$ids = array();
-
-		$sql_ary = array(
-			'SELECT'	=> 's.user_id',
-			'FROM'		=> array($this->group_table => 'g'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array($this->sub_table => 's'),
-					'ON'	=> 'g.pkg_id = s.pkg_id',
-				),
-			),
-			'WHERE'		=> 'g.group_id = ' . (int) $group_id . ' AND s.sub_expires > ' . (time() - $this->grace),
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$ids[] = (int) $row['user_id'];
-		}
-		$this->db->sql_freeresult();
-
-		return $ids;
-	}
-
 	public function process_expiring()
 	{
 		$sub_ids = array();
