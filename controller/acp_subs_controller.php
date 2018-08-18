@@ -300,7 +300,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 				}
 			}
 
-			if (empty($errors))
+			if (empty($errors) && !$entity->get_id())
 			{
 				$conflict_id = $this->sub_operator->get_conflict($entity);
 				if ($conflict_id)
