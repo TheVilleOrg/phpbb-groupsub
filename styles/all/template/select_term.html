@@ -1,28 +1,37 @@
 {% include 'overall_header.html' %}
 
-<h2>{{ lang('GROUPSUB_PACKAGE_LIST') }}</h2>
+<form action="https://www.{% if S_PP_SANDBOX %}sandbox.{% endif %}paypal.com/cgi-bin/webscr" method="post">
 
-<div class="panel bg{% if loop.index is odd %}1{% else %}2{% endif %}">
+	<h2>{{ lang('GROUPSUB_PACKAGE_LIST') }}</h2>
 
-<div class="inner">
+	<div class="panel">
 
-	<h3>{{ lang('GROUPSUB_SUBSCRIBE') }}</h3>
+	<div class="inner">
 
-	<div class="column1">
+		<h3>{{ CONFIRM }}</h3>
 
-		<dl class="details">
-			<dt>{{ lang('GROUPSUB_SUBSCRIPTION') ~ lang('COLON') }}</dt>
-			<dd>{{ PKG_NAME }}</dd>
-			<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
-			<dd>{{ TERM_DISPLAY_PRICE }}</dd>
-			<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
-			<dd>{{ TERM_LENGTH }}</dd>
-		</dl>
+		<div class="column1">
 
-	</div>
+			<p>{% if PKG_DESC %}{{ PKG_DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
 
-	<div class="column2">
-		<form action="https://www.{% if S_PP_SANDBOX %}sandbox.{% endif %}paypal.com/cgi-bin/webscr" method="post">
+		</div>
+
+		<div class="column2">
+
+			<dl class="details">
+				<dt>{{ lang('GROUPSUB_SUBSCRIPTION') ~ lang('COLON') }}</dt>
+				<dd>{{ PKG_NAME }}</dd>
+				<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
+				<dd>{{ TERM_DISPLAY_PRICE }}</dd>
+				<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
+				<dd>{{ TERM_LENGTH }}</dd>
+			</dl>
+
+		</div>
+
+		<hr>
+
+		<fieldset class="submit-buttons">
 			<input type="hidden" name="business" value="{{ PP_BUSINESS }}">
 			<input type="hidden" name="cmd" value="_xclick">
 			<input type="hidden" name="notify_url" value="{{ U_NOTIFY }}">
@@ -36,13 +45,14 @@
 			<input type="hidden" name="return" value="{{ U_RETURN }}">
 			<input type="hidden" name="cancel_return" value="{{ U_CANCEL_RETURN }}">
 			<input type="hidden" name="charset" value="utf-8">
+			<a href="{{ U_ACTION }}">{{ lang('CANCEL') }}</a>
 			<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/webstatic/{{ lang('GROUPSUB_PP_LOCALE') }}/i/btn/png/btn_buynow_107x26.png" alt="{{ lang('GROUPSUB_PP_BUY_NOW') }}">
-		</form>
-		<a class="button2" href="{{ U_ACTION }}">{{ lang('CANCEL') }}</a>
+		</fieldset>
+
 	</div>
 
-</div>
+	</div>
 
-</div>
+</form>
 
 {% include 'overall_footer.html' %}

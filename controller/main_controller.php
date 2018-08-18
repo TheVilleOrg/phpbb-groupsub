@@ -133,11 +133,11 @@ class main_controller
 		foreach ($packages as $package)
 		{
 			extract($package);
-			$id = $package->get_id();
 			$this->template->assign_block_vars('package', array(
-				'ID'		=> $id,
-				'NAME'		=> $package->get_name(),
-				'DESC'		=> $package->get_desc_for_display(),
+				'ID'			=> $package->get_id(),
+				'NAME'			=> $package->get_name(),
+				'DESC'			=> $package->get_desc_for_display(),
+				'CHOOSE_TERM'	=> $this->language->lang('GROUPSUB_CHOOSE_TERM', $package->get_name()),
 			));
 
 			foreach ($groups as $group)
@@ -195,11 +195,13 @@ class main_controller
 			'PP_BUSINESS'	=> $business,
 
 			'PKG_NAME'				=> $term['package']->get_name(),
+			'PKG_DESC'				=> $term['package']->get_desc_for_display(),
 			'TERM_ID'				=> $term['term']->get_id(),
 			'TERM_PRICE'			=> $this->currency->format_value($currency, $price),
 			'TERM_CURRENCY'			=> $currency,
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
 			'TERM_LENGTH'			=> $this->unit_helper->get_formatted_timespan($term['term']->get_length()),
+			'CONFIRM'				=> $this->language->lang('GROUPSUB_CONFIRM', $term['package']->get_name()),
 
 			'U_ACTION'			=> $this->helper->route('stevotvr_groupsub_main', array('name' => $name)),
 			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),

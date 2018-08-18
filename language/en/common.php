@@ -45,6 +45,8 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_PRICE'		=> 'Price',
 	'GROUPSUB_LENGTH'		=> 'Length',
 	'GROUPSUB_SUBSCRIBE'	=> 'Subscribe',
+	'GROUPSUB_CHOOSE_TERM'	=> 'Subscribe to %s',
+	'GROUPSUB_CONFIRM'		=> 'Confirm subscription to %s',
 
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
 	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',
