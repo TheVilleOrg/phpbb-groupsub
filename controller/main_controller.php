@@ -149,14 +149,31 @@ class main_controller
 			trigger_error('GROUPSUB_NO_PACKAGES');
 		}
 
+		$subscriptions = $this->sub_operator->get_user_subscriptions($this->user->data['user_id']);
+		$warn = $this->config['stevotvr_groupsub_warn_time'] * 86400;
+
 		foreach ($packages as $package)
 		{
 			extract($package);
-			$this->template->assign_block_vars('package', array(
+			$vars = array(
 				'ID'	=> $package->get_id(),
 				'NAME'	=> $package->get_name(),
 				'DESC'	=> $package->get_desc_for_display(),
-			));
+			);
+
+			if (isset($subscriptions[$package->get_id()]))
+			{
+				$expires = $subscriptions[$package->get_id()]->get_expire();
+
+				$vars = array_merge($vars, array(
+					'S_ACTIVE'	=> true,
+					'S_WARNING'	=> ($expires - time()) < $warn,
+
+					'EXPIRES'	=> $this->user->format_date($expires),
+				));
+			}
+
+			$this->template->assign_block_vars('package', $vars);
 
 			foreach ($groups as $group)
 			{

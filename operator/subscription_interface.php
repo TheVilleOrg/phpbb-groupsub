@@ -131,4 +131,13 @@ interface subscription_interface
 	 * @param \stevotvr\groupsub\entity\subscription_interface $subscription
 	 */
 	public function get_conflict(\stevotvr\groupsub\entity\subscription_interface $subscription);
+
+	/**
+	 * Get a list of active subscriptions for a user.
+	 *
+	 * @param int $user_id The user ID
+	 *
+	 * @return array Array of subscription entities keyed by package ID
+	 */
+	public function get_user_subscriptions($user_id);
 }

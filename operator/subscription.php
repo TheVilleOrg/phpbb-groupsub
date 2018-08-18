@@ -418,6 +418,25 @@ class subscription extends operator implements subscription_interface
 		return $sub_id ? (int) $sub_id : false;
 	}
 
+	public function get_user_subscriptions($user_id)
+	{
+		$subscriptions = array();
+
+		$sql = 'SELECT *
+				FROM ' . $this->sub_table . '
+				WHERE sub_active = 1
+					AND user_id = ' . (int) $user_id . '
+				ORDER BY sub_expires ASC';
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$subscriptions[(int) $row['pkg_id']] = $this->container->get('stevotvr.groupsub.entity.subscription')->import($row);
+		}
+		$this->db->sql_freeresult();
+
+		return $subscriptions;
+	}
+
 	/**
 	 * Add a user to the subscribed groups.
 	 *

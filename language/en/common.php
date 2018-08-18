@@ -38,15 +38,17 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'GROUPSUB_PACKAGE_LIST'	=> 'Subscriptions',
-	'GROUPSUB_NO_PACKAGES'	=> 'There are no subscriptions available.',
-	'GROUPSUB_NO_DESC'		=> 'No description available.',
-	'GROUPSUB_SUBSCRIPTION'	=> 'Subscription',
-	'GROUPSUB_PRICE'		=> 'Price',
-	'GROUPSUB_LENGTH'		=> 'Length',
-	'GROUPSUB_SUBSCRIBE'	=> 'Subscribe',
-	'GROUPSUB_CHOOSE_TERM'	=> 'Subscribe to %s',
-	'GROUPSUB_CONFIRM'		=> 'Confirm subscription to %s',
+	'GROUPSUB_PACKAGE_LIST'		=> 'Subscriptions',
+	'GROUPSUB_NO_PACKAGES'		=> 'There are no subscriptions available.',
+	'GROUPSUB_NO_DESC'			=> 'No description available.',
+	'GROUPSUB_SUBSCRIPTION'		=> 'Subscription',
+	'GROUPSUB_PRICE'			=> 'Price',
+	'GROUPSUB_LENGTH'			=> 'Length',
+	'GROUPSUB_SUBSCRIBE'		=> 'Subscribe',
+	'GROUPSUB_RENEW'			=> 'Renew subscription',
+	'GROUPSUB_CHOOSE_TERM'		=> 'Subscribe to %s',
+	'GROUPSUB_SUBSCRIBED_UNTIL'	=> 'You are subscribed until %s',
+	'GROUPSUB_CONFIRM'			=> 'Confirm subscription to %s',
 
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
 	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',

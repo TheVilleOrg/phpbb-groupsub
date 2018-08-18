@@ -55,7 +55,12 @@
 				{% endfor %}
 				</p>
 			{% endif %}
+			{% if p.S_ACTIVE %}
+				<p{% if p.S_WARNING %} style="color: #f00"{% endif %}>{{ lang('GROUPSUB_SUBSCRIBED_UNTIL', p.EXPIRES) }}</p>
+				<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_RENEW') }}">
+			{% else %}
 				<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_SUBSCRIBE') }}">
+			{% endif %}
 			</fieldset>
 		</form>
 
