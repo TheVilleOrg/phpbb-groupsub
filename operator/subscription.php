@@ -169,7 +169,7 @@ class subscription extends operator implements subscription_interface
 
 	public function get_subscription($sub_id)
 	{
-		$subscriptions = $this->get_subscription_rows('s.sub_id = ' . (int) $sub_id);
+		$subscriptions = $this->get_subscription_rows('s.sub_active = 1 AND s.sub_id = ' . (int) $sub_id);
 
 		if (!count($subscriptions))
 		{
@@ -226,6 +226,7 @@ class subscription extends operator implements subscription_interface
 		while ($row = $this->db->sql_fetchrow())
 		{
 			$subscriptions[] = array(
+				'active'	=> (bool) $row['sub_active'],
 				'package'	=> array(
 					'name'		=> $row['pkg_name'],
 					'deleted'	=> (bool) $row['pkg_deleted'],
@@ -315,7 +316,8 @@ class subscription extends operator implements subscription_interface
 		$this->remove_user_from_groups($row['user_id'], $sub_id);
 		$this->dispatch_end_event((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
 
-		$sql = 'DELETE FROM ' . $this->sub_table . '
+		$sql = 'UPDATE ' . $this->sub_table . '
+				SET sub_active = 0
 				WHERE sub_id = ' . (int) $sub_id;
 		$this->db->sql_query($sql);
 
