@@ -30,12 +30,19 @@
 				</dl>
 				<dl>
 					<dt><label for="sub_package">{{ lang('ACP_GROUPSUB_SUB_PACKAGE') ~ lang('COLON') }}</label></dt>
-					<dd><select name="sub_package" id="sub_package">
+					<dd>
+					{% if package|length > 1 %}
+						<select name="sub_package" id="sub_package">
 							<option value="0">{{ lang('ACP_GROUPSUB_SUB_SELECT_PACKAGE') }}</option>
 						{% for p in package %}
 							<option value="{{ p.ID }}"{% if p.ID == SUB_PACKAGE %} selected="selected"{% endif %}>{{ p.NAME }}</option>
 						{% endfor %}
-					</select></dd>
+						</select>
+					{% else %}
+						<input type="hidden" name="sub_package" value="{{ package[0].ID }}">
+						{{ package[0].NAME }}
+					{% endif %}
+					</dd>
 				</dl>
 			{% else %}
 				<dl>
