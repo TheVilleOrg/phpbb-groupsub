@@ -263,7 +263,7 @@ class subscription extends operator implements subscription_interface
 			$this->dispatch_start_event($subscription->get_user(), $subscription->get_id(), $subscription->get_package());
 		}
 
-		return $subscription;
+		return $subscription->get_id();
 	}
 
 	public function create_subscription(term_entity $term, $user_id)
@@ -293,7 +293,7 @@ class subscription extends operator implements subscription_interface
 			$this->remove_user_from_groups($user_id, $row['sub_id']);
 			$this->add_user_to_groups($user_id, $row['sub_id'], $term->get_package());
 
-			return;
+			return (int) $row['sub_id'];
 		}
 
 		$subscription = $this->container->get('stevotvr.groupsub.entity.subscription')
@@ -301,7 +301,7 @@ class subscription extends operator implements subscription_interface
 							->set_user((int) $user_id)
 							->set_start(time())
 							->set_expire(time() + $length);
-		$this->add_subscription($subscription);
+		return $this->add_subscription($subscription);
 	}
 
 	public function delete_subscription($sub_id)

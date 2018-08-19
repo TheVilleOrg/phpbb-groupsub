@@ -88,10 +88,8 @@ services:
         class: stevotvr\groupsub\controller\ipn_controller
         arguments:
             - '@config'
-            - '@service_container'
-            - '@stevotvr.groupsub.operator.currency'
             - '@request'
-            - '@stevotvr.groupsub.operator.subscription'
+            - '@stevotvr.groupsub.operator.transaction'
     stevotvr.groupsub.controller.main:
         class: stevotvr\groupsub\controller\main_controller
         arguments:
@@ -171,3 +169,14 @@ services:
     stevotvr.groupsub.operator.currency:
         class: stevotvr\groupsub\operator\currency
         parent: stevotvr.groupsub.operator
+    stevotvr.groupsub.operator.transaction:
+        class: stevotvr\groupsub\operator\transaction
+        parent: stevotvr.groupsub.operator
+        calls:
+            - method: setup
+              arguments:
+                - '@config'
+                - '@request'
+                - '@stevotvr.groupsub.operator.currency'
+                - '@stevotvr.groupsub.operator.subscription'
+                - '%stevotvr.groupsub.tables.trans%'

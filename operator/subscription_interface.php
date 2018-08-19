@@ -95,6 +95,8 @@ interface subscription_interface
 	 * Add a subscription.
 	 *
 	 * @param \stevotvr\groupsub\entity\subscription_interface $subscription
+	 *
+	 * @return int The subscription ID
 	 */
 	public function add_subscription(\stevotvr\groupsub\entity\subscription_interface $subscription);
 
@@ -103,6 +105,8 @@ interface subscription_interface
 	 *
 	 * @param \stevotvr\groupsub\entity\term_interface $term
 	 * @param int                                      $user_id The user ID
+	 *
+	 * @return int The subscription ID
 	 */
 	public function create_subscription(\stevotvr\groupsub\entity\term_interface $term, $user_id);
 

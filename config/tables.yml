@@ -3,3 +3,4 @@ parameters:
     stevotvr.groupsub.tables.groups: '%core.table_prefix%groupsub_groups'
     stevotvr.groupsub.tables.terms: '%core.table_prefix%groupsub_terms'
     stevotvr.groupsub.tables.subs: '%core.table_prefix%groupsub_subs'
+    stevotvr.groupsub.tables.trans: '%core.table_prefix%groupsub_trans'

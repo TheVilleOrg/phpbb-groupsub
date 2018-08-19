@@ -12,9 +12,7 @@ namespace stevotvr\groupsub\controller;
 
 use phpbb\config\config;
 use phpbb\request\request_interface;
-use stevotvr\groupsub\operator\currency_interface;
-use stevotvr\groupsub\operator\subscription_interface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use stevotvr\groupsub\operator\transaction_interface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -34,24 +32,9 @@ class ipn_controller
 	const VALID = 'VERIFIED';
 
 	/**
-	 * The status for a completed payment
-	 */
-	const STATUS_COMPLETED = 'Completed';
-
-	/**
 	 * @var \phpbb\config\config
 	 */
 	protected $config;
-
-	/**
-	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
-	 */
-	protected $container;
-
-	/**
-	 * @var \stevotvr\groupsub\operator\currency_interface
-	 */
-	protected $currency;
 
 	/**
 	 * @var \phpbb\request\request_interface
@@ -59,24 +42,20 @@ class ipn_controller
 	protected $request;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\subscription_interface
+	 * @var \stevotvr\groupsub\operator\transaction_interface
 	 */
-	protected $sub_operator;
+	protected $trans_operator;
 
 	/**
 	 * @param \phpbb\config\config                               $config
-	 * @param ContainerInterface                                 $container
 	 * @param \phpbb\request\request_interface                   $request
-	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
-	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
+	 * @param \stevotvr\groupsub\operator\transaction_interface  $trans_operator
 	 */
-	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, request_interface $request, subscription_interface $sub_operator)
+	public function __construct(config $config, request_interface $request, transaction_interface $trans_operator)
 	{
 		$this->config = $config;
-		$this->container = $container;
-		$this->currency = $currency;
 		$this->request = $request;
-		$this->sub_operator = $sub_operator;
+		$this->trans_operator = $trans_operator;
 	}
 
 	/**
@@ -91,39 +70,10 @@ class ipn_controller
 			$sandbox = (bool) $this->config['stevotvr_groupsub_pp_sandbox'];
 			if (self::verify($sandbox))
 			{
-				if (self::STATUS_COMPLETED !== $this->request->variable('payment_status', ''))
-				{
-					return new Response('', 200);
-				}
-
-				if ($sandbox !== $this->request->variable('test_ipn', true))
-				{
-					return new Response('', 400);
-				}
-
-				$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
-				if ($business !== $this->request->variable('business', ''))
-				{
-					return new Response('', 400);
-				}
-
-				$term_id = $this->request->variable('item_number', 0);
-				$term = $this->container->get('stevotvr.groupsub.entity.term')->load($term_id);
-
-				if ($term->get_currency() !== $this->request->variable('mc_currency', ''))
-				{
-					return new Response('', 400);
-				}
-
-				$price = $this->currency->parse_value($term->get_currency(), $term->get_price());
-				if ($price !== $this->request->variable('payment_gross', 0))
-				{
-					return new Response('', 400);
-				}
-
-				$user_id = $this->request->variable('custom', 0);
-				$this->sub_operator->create_subscription($term, $user_id);
+				return new Response('', $this->trans_operator->process_transaction() ? 200 : 400);
 			}
+
+			return new Response('', 400);
 		}
 
 		return new Response('', 200);

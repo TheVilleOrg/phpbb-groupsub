@@ -91,6 +91,24 @@ class version_0_1_0 extends migration
 						's_e'	=> array('INDEX', 'sub_expires'),
 					),
 				),
+				$this->table_prefix . 'groupsub_trans' => array(
+					'COLUMNS' => array(
+						'trans_id'			=> array('VCHAR:17', ''),
+						'trans_test'		=> array('BOOL', 0),
+						'trans_payer'		=> array('VCHAR:13', ''),
+						'trans_amount'		=> array('UINT', 0),
+						'trans_currency'	=> array('VCHAR:3', ''),
+						'trans_time'		=> array('UINT:11', 0),
+						'user_id'			=> array('UINT', 0),
+						'sub_id'			=> array('UINT', 0),
+					),
+					'PRIMARY_KEY' => 'trans_id',
+					'KEYS' => array(
+						't_c'	=> array('INDEX', 'trans_time'),
+						'u_i'	=> array('INDEX', 'user_id'),
+						's_i'	=> array('INDEX', 'sub_id'),
+					),
+				),
 			),
 		);
 	}
@@ -103,6 +121,7 @@ class version_0_1_0 extends migration
 				$this->table_prefix . 'groupsub_groups',
 				$this->table_prefix . 'groupsub_terms',
 				$this->table_prefix . 'groupsub_packages',
+				$this->table_prefix . 'groupsub_trans',
 			),
 		);
 	}
