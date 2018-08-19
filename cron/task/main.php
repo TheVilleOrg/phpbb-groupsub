@@ -20,7 +20,7 @@ use stevotvr\groupsub\operator\subscription_interface;
 class main extends base
 {
 	/* The interval of the cron task in seconds */
-	const INTERVAL = 86400;
+	const INTERVAL = 3600;
 
 	/**
 	 * @var \phpbb\config\config
