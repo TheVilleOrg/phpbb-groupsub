@@ -113,6 +113,15 @@ services:
             - '@template'
             - '@stevotvr.groupsub.operator.unit_helper'
             - '@user'
+    stevotvr.groupsub.controller.return:
+        class: stevotvr\groupsub\controller\return_controller
+        arguments:
+            - '@controller.helper'
+            - '@language'
+            - '@stevotvr.groupsub.operator.package'
+            - '@request'
+            - '@template'
+            - '@stevotvr.groupsub.operator.unit_helper'
     stevotvr.groupsub.entity:
         class: stevotvr\groupsub\entity\entity
         abstract: true

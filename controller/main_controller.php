@@ -236,7 +236,7 @@ class main_controller
 
 			'U_ACTION'			=> $this->helper->route('stevotvr_groupsub_main', array('name' => $name)),
 			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),
-			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_main', array('name' => $package->get_ident())),
+			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '&amp;term_id=' . $term->get_id(),
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
 		));
 
