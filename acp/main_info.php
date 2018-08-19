@@ -36,6 +36,11 @@ class main_info
 					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),
+				'transactions'	=> array(
+					'title'	=> 'ACP_GROUPSUB_TRANSACTIONS',
+					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
+					'cat'	=> array('ACP_GROUPSUB_TITLE'),
+				),
 			),
 		);
 	}

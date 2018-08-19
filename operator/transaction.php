@@ -118,6 +118,36 @@ class transaction extends operator implements transaction_interface
 		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id);
 	}
 
+	public function get_transactions($start, $limit, $sort_field, $sort_desc)
+	{
+		$sql_ary = array(
+			'SELECT'	=> 't.*, u.username',
+			'FROM'		=> array(
+				$this->trans_table => 't',
+				USERS_TABLE => 'u',
+			),
+			'WHERE'		=> 't.user_id = u.user_id',
+			'ORDER_BY'	=> $sort_field . ($sort_desc ? ' DESC' : ' ASC'),
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$this->db->sql_query_limit($sql, $limit, $start);
+		$rows = $this->db->sql_fetchrowset();
+		$this->db->sql_freeresult();
+
+		return $rows;
+	}
+
+	public function count_transactions()
+	{
+		$sql = 'SELECT COUNT(trans_id) AS trans_count
+				FROM ' . $this->trans_table;
+		$this->db->sql_query($sql);
+		$count = $this->db->sql_fetchfield('trans_count');
+		$this->db->sql_freeresult();
+
+		return (int) $count;
+	}
+
 	/**
 	 * Insert a transaction into the database.
 	 *

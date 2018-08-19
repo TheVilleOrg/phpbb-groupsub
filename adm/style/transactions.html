@@ -1,0 +1,63 @@
+{% include 'overall_header.html' %}
+
+<a id="maincontent"></a>
+
+<h1>{{ lang('ACP_GROUPSUB_TRANSACTIONS') }}</h1>
+
+<table class="table1 zebra-table responsive">
+	<thead>
+		<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_ID') }}</th>
+		<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_TYPE') }}</th>
+		<th width="16%">{{ lang('ACP_GROUPSUB_AMOUNT') }}</th>
+		<th width="16%">{{ lang('ACP_GROUPSUB_TIME') }}</th>
+		<th width="16%">{{ lang('ACP_GROUPSUB_USER') }}</th>
+		<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+	</thead>
+	<tbody>
+	{% for t in transaction %}
+		<tr>
+			<td>{{ t.ID }}</td>
+			<td>{% if t.TEST %}{{ lang('ACP_GROUPSUB_SB') }}{% else %}{{ lang('ACP_GROUPSUB_LIVE') }}{% endif %}</td>
+			<td>{{ t.AMOUNT }}</td>
+			<td>{{ t.TIME }}</td>
+			<td>{{ t.USER }}</td>
+			<td><a href="{{ t.U_SUBSCRIPTION }}">{{ lang('ACP_GROUPSUB_VIEW') }}</a></td>
+		</tr>
+	{% else %}
+		<tr>
+			<td colspan="6" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_TRANS') }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+<form id="trans_sort" method="post" action="{{ U_ACTION }}">
+	<fieldset class="display-options">
+		{{ lang('SORT_BY') ~ lang('COLON') }}
+		<select name="sk" id="sk">
+			{% for k in sort_key %}
+				<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected="selected"{% endif %}>{{ k.NAME }}</option>
+			{% endfor %}
+		</select>
+		<select name="sd" id="sd">
+			{% for d in sort_dir %}
+				<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected="selected"{% endif %}>{{ d.NAME }}</option>
+			{% endfor %}
+		</select>
+		{% if pagination %}
+			{{ lang('ACP_GROUPSUB_TRANS_PER_PAGE') ~ lang('COLON') }}
+			<input class="inputbox autowidth" type="number" name="limit" id="limit" min="0" max="100" value="{{ LIMIT }}">
+		{% endif %}
+		<input class="button2" type="submit" name="sort" value="{{ lang('GO') }}">
+	</fieldset>
+</form>
+
+<hr>
+
+{% if pagination %}
+	<div class="pagination">
+		{% include 'pagination.html' %}
+	</div>
+{% endif %}
+
+{% include 'overall_footer.html' %}

@@ -39,13 +39,15 @@ class main_module
 		{
 			case 'packages':
 				$this->manage_packages();
-			break;
+				break;
 			case 'subscriptions':
 				$this->manage_subscriptions();
-			break;
+				break;
+			case 'transactions':
+				$this->manage_transactions();
+				break;
 			default:
 				$this->settings();
-			break;
 		}
 	}
 
@@ -81,22 +83,19 @@ class main_module
 				$this->page_title = 'ACP_GROUPSUB_PKG_ADD';
 				$controller->add();
 				return;
-			break;
 			case 'edit':
 				$this->page_title = 'ACP_GROUPSUB_PKG_EDIT';
 				$controller->edit($id);
 				return;
-			break;
 			case 'delete':
 				$controller->delete($id);
 				return;
-			break;
 			case 'move_up':
 				$controller->move($id, -1);
-			break;
+				break;
 			case 'move_down':
 				$controller->move($id, 1);
-			break;
+				break;
 		}
 
 		$this->page_title = 'ACP_GROUPSUB_MANAGE_PKGS';
@@ -122,19 +121,30 @@ class main_module
 				$this->page_title = 'ACP_GROUPSUB_SUB_ADD';
 				$controller->add();
 				return;
-			break;
 			case 'edit':
 				$this->page_title = 'ACP_GROUPSUB_SUB_EDIT';
 				$controller->edit($id);
 				return;
-			break;
 			case 'delete':
 				$controller->delete($id);
 				return;
-			break;
 		}
 
 		$this->page_title = 'ACP_GROUPSUB_MANAGE_SUBS';
+		$controller->display();
+	}
+
+	/**
+	 * Handle the transactions mode of the module.
+	 */
+	protected function manage_transactions()
+	{
+		$this->tpl_name = 'transactions';
+
+		$controller = $this->container->get('stevotvr.groupsub.controller.acp.transaction');
+		$controller->set_page_url($this->u_action);
+
+		$this->page_title = 'ACP_GROUPSUB_TRANSACTIONS';
 		$controller->display();
 	}
 }

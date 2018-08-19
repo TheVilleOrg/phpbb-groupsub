@@ -148,7 +148,7 @@ class version_0_1_0 extends migration
 				'ACP_GROUPSUB_TITLE',
 				array(
 					'module_basename'	=> '\stevotvr\groupsub\acp\main_module',
-					'modes'				=> array('settings', 'packages', 'subscriptions'),
+					'modes'				=> array('settings', 'packages', 'subscriptions', 'transactions'),
 				),
 			)),
 		);

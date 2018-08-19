@@ -84,6 +84,15 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+    stevotvr.groupsub.controller.acp.transaction:
+        class: stevotvr\groupsub\controller\acp_trans_controller
+        parent: stevotvr.groupsub.controller.acp
+        calls:
+            - method: setup
+              arguments:
+                - '@pagination'
+                - '@stevotvr.groupsub.operator.transaction'
+                - '@user'
     stevotvr.groupsub.controller.ipn:
         class: stevotvr\groupsub\controller\ipn_controller
         arguments:
