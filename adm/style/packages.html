@@ -28,20 +28,13 @@
 				<dt><label for="pkg_enabled">{{ lang('ACP_GROUPSUB_PKG_ENABLE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_ENABLE_EXPLAIN') }}</span></dt>
 				<dd><label><input type="radio" id="pkg_enabled" name="pkg_enabled" value="1"{% if PKG_ENABLED %} checked="checked"{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pkg_enabled" value="0"{% if not PKG_ENABLED %} checked="checked"{% endif %}> {{ lang('NO') }}</label></dd>
 			</dl>
-			{% if S_ADD_PKG %}
-				<dl>
-					<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>
-					<dd><input class="text medium" type="text" id="pkg_ident" name="pkg_ident" value="{{ PKG_IDENT }}" maxlength="30"></dd>
-				</dl>
-			{% else %}
-				<dl>
-					<dt>{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</dt>
-					<dd>{{ PKG_IDENT }}</dd>
-				</dl>
-			{% endif %}
 			<dl>
 				<dt><label for="pkg_name">{{ lang('ACP_GROUPSUB_PKG_NAME') ~ lang('COLON') }}</label></dt>
 				<dd><input class="text medium" type="text" id="pkg_name" name="pkg_name" value="{{ PKG_NAME }}" maxlength="255"></dd>
+			</dl>
+			<dl>
+				<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>
+				<dd><input class="text medium{% if not S_ADD_PKG %} disabled{% endif %}" type="text" id="pkg_ident" name="pkg_ident" value="{{ PKG_IDENT }}" width="20" maxlength="30"{% if not S_ADD_PKG %} disabled="disabled"{% endif %}></dd>
 			</dl>
 			<dl>
 				<dt><label for="pkg_desc">{{ lang('ACP_GROUPSUB_PKG_DESC') ~ lang('COLON') }}</label></dt>
