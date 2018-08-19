@@ -76,7 +76,9 @@ interface subscription_interface
 	 * @param int $sub_id The subscription ID
 	 *
 	 * @return array Associative array of subscription data
-	 *                     package	string
+	 *                     package
+	 *                     	name    string
+	 *                     	deleted boolean
 	 *                     username	string
 	 *                     entity	\stevotvr\groupsub\entity\subscription_interface
 	 *

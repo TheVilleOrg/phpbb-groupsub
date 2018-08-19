@@ -223,7 +223,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->template->assign_vars(array(
 			'S_EDIT_SUB'	=> true,
 
-			'SUB_PACKAGE'	=> $subscription['package'],
+			'SUB_PACKAGE'	=> $subscription['package']['name'],
 			'SUB_USER'		=> $subscription['username'],
 
 			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
