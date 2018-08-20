@@ -12,7 +12,15 @@
 
 	<div class="column1">
 
-		<p>{% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
+		<div class="panel">
+
+		<div class="inner">
+
+			<p>{% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
+
+		</div>
+
+		</div>
 
 		{% if p.group %}
 		<table>
