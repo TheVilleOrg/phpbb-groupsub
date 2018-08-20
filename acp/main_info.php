@@ -19,7 +19,7 @@ class main_info
 	{
 		return array(
 			'filename'	=> '\stevotvr\groupsub\acp\main_module',
-			'title'		=> 'ACP_FLAIR_TITLE',
+			'title'		=> 'ACP_GROUPSUB_TITLE',
 			'modes'		=> array(
 				'settings'	=> array(
 					'title'	=> 'ACP_GROUPSUB_SETTINGS',
