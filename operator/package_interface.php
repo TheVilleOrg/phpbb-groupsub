@@ -32,9 +32,6 @@ interface package_interface
 	 *                           package \stevotvr\groupsub\entity\package_interface
 	 *                           terms   array
 	 *                           	\stevotvr\groupsub\entity\term_interface
-	 *                           groups  array
-	 *                           	id   int
-	 *                           	name string
 	 */
 	public function get_packages($name = false, $enabled = true);
 

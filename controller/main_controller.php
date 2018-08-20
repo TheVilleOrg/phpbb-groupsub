@@ -206,13 +206,6 @@ class main_controller
 
 			$this->template->assign_block_vars('package', $vars);
 
-			foreach ($groups as $group)
-			{
-				$this->template->assign_block_vars('package.group', array(
-					'NAME'	=> $group['name'],
-				));
-			}
-
 			foreach ($terms as $term)
 			{
 				$this->template->assign_block_vars('package.term', array(
@@ -270,13 +263,6 @@ class main_controller
 			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '?term_id=' . $term->get_id(),
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
 		));
-
-		foreach ($groups as $group)
-		{
-			$this->template->assign_block_vars('group', array(
-				'NAME'	=> $group,
-			));
-		}
 
 		return $this->helper->render('select_term.html', $package->get_name());
 	}

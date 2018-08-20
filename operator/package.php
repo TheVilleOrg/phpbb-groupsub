@@ -73,28 +73,6 @@ class package extends operator implements package_interface
 		}
 		$this->db->sql_freeresult();
 
-		$sql_ary = array(
-			'SELECT'	=> 's.pkg_id, g.group_id, g.group_name',
-			'FROM'		=> array($this->group_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array(GROUPS_TABLE => 'g'),
-					'ON'	=> 'g.group_id = s.group_id',
-				),
-			),
-			'WHERE'		=> $this->db->sql_in_set('s.pkg_id', array_keys($packages)),
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$packages[(int) $row['pkg_id']]['groups'][] = array(
-				'id'	=> (int) $row['group_id'],
-				'name'	=> $row['group_name'],
-			);
-		}
-		$this->db->sql_freeresult();
-
 		return $packages;
 	}
 
@@ -244,31 +222,10 @@ class package extends operator implements package_interface
 			return false;
 		}
 
-		$groups = array();
-		$sql_ary = array(
-			'SELECT'	=> 'g.group_id, g.group_name',
-			'FROM'		=> array($this->group_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array(GROUPS_TABLE => 'g'),
-					'ON'	=> 'g.group_id = s.group_id',
-				),
-			),
-			'WHERE'		=> 's.pkg_id = ' . (int) $row['pkg_id'],
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		while ($grouprow = $this->db->sql_fetchrow())
-		{
-			$groups[(int) $grouprow['group_id']] = $grouprow['group_name'];
-		}
-		$this->db->sql_freeresult();
-
 		try
 		{
 			return array(
 				'package'	=> $this->container->get('stevotvr.groupsub.entity.package')->import($row),
-				'groups'	=> $groups,
 				'term'		=> $this->container->get('stevotvr.groupsub.entity.term')->import($row),
 			);
 		}
