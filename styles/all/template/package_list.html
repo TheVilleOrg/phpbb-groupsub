@@ -26,38 +26,46 @@
 
 	<div class="column2">
 
-		<h4>{{ lang('GROUPSUB_CHOOSE_TERM', p.NAME) }}</h4>
+		<div class="panel">
 
-		<form action="{{ U_ACTION }}" method="post">
-			<fieldset>
-			{% if p.term|length == 1 %}
-			{% for t in p.term %}
-				<input type="hidden" name="term_id" value="{{ t.ID }}">
-				<p>{{ t.PRICE }} / {{ t.LENGTH }}</p>
-			{% endfor %}
-			{% elseif p.term|length > 6 %}
-				<p>
-					<select name="term_id">
-					{% for t in p.term %}
-						<option value="{{ t.ID }}">{{ t.PRICE }} / {{ t.LENGTH }}</option>
-					{% endfor %}
-					</select>
-				</p>
-			{% else %}
-				<p>
+		<div class="inner">
+
+			<h4>{{ lang('GROUPSUB_CHOOSE_TERM', p.NAME) }}</h4>
+
+			<form action="{{ U_ACTION }}" method="post">
+				<fieldset>
+				{% if p.term|length == 1 %}
 				{% for t in p.term %}
-					<label><input type="radio" name="term_id" value="{{ t.ID }}">{{ t.PRICE }} / {{ t.LENGTH }}</label><br>
+					<input type="hidden" name="term_id" value="{{ t.ID }}">
+					<p>{{ t.PRICE }} / {{ t.LENGTH }}</p>
 				{% endfor %}
-				</p>
-			{% endif %}
-			{% if p.S_ACTIVE %}
-				<p{% if p.S_WARNING %} style="color: #f00"{% endif %}>{{ lang('GROUPSUB_SUBSCRIBED_UNTIL', p.EXPIRES) }}</p>
-				<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_RENEW') }}">
-			{% else %}
-				<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_SUBSCRIBE') }}">
-			{% endif %}
-			</fieldset>
-		</form>
+				{% elseif p.term|length > 6 %}
+					<p>
+						<select name="term_id">
+						{% for t in p.term %}
+							<option value="{{ t.ID }}">{{ t.PRICE }} / {{ t.LENGTH }}</option>
+						{% endfor %}
+						</select>
+					</p>
+				{% else %}
+					<p>
+					{% for t in p.term %}
+						<label><input type="radio" name="term_id" value="{{ t.ID }}">{{ t.PRICE }} / {{ t.LENGTH }}</label><br>
+					{% endfor %}
+					</p>
+				{% endif %}
+				{% if p.S_ACTIVE %}
+					<p{% if p.S_WARNING %} style="color: #f00"{% endif %}>{{ lang('GROUPSUB_SUBSCRIBED_UNTIL', p.EXPIRES) }}</p>
+					<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_RENEW') }}">
+				{% else %}
+					<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_SUBSCRIBE') }}">
+				{% endif %}
+				</fieldset>
+			</form>
+
+		</div>
+
+		</div>
 
 	</div>
 
