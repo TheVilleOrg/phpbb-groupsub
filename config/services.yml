@@ -113,6 +113,11 @@ services:
             - '@template'
             - '@stevotvr.groupsub.operator.unit_helper'
             - '@user'
+        calls:
+            - method: set_path_info
+              arguments:
+                - '%core.root_path%'
+                - '%core.php_ext%'
     stevotvr.groupsub.controller.return:
         class: stevotvr\groupsub\controller\return_controller
         arguments:

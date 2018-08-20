@@ -83,6 +83,19 @@ class main_controller
 	protected $user;
 
 	/**
+	 * The root phpBB path.
+	 *
+	 * @var string
+	 */
+	protected $root_path;
+	/**
+	 * The script file extension.
+	 *
+	 * @var string
+	 */
+	protected $php_ext;
+
+	/**
 	 * @param \phpbb\auth\auth                                   $auth
 	 * @param \phpbb\config\config                               $config
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
@@ -111,6 +124,18 @@ class main_controller
 	}
 
 	/**
+	 * Set the phpBB installation path information.
+	 *
+	 * @param string $root_path The root phpBB path
+	 * @param string $php_ext   The script file extension
+	 */
+	public function set_path_info($root_path, $php_ext)
+	{
+		$this->root_path = $root_path;
+		$this->php_ext = $php_ext;
+	}
+
+	/**
 	 * Handle the /groupsub/{name} route.
 	 *
 	 * @param string|null $name The unique identifier of a package
@@ -122,6 +147,12 @@ class main_controller
 		if (!$this->config['stevotvr_groupsub_active'] && !$this->auth->acl_get('a_'))
 		{
 			trigger_error('NOT_FOUND');
+		}
+
+		if ($this->user->data['user_id'] == ANONYMOUS)
+		{
+			$u_redirect = $this->helper->route('stevotvr_groupsub_main', array('name' => $name));
+			redirect(append_sid($this->root_path . 'ucp.' . $this->php_ext, 'mode=login&amp;redirect=' . $u_redirect));
 		}
 
 		$term_id = $this->request->variable('term_id', 0);
