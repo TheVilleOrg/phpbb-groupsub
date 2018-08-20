@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\notification\type;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /**
  * Group Subscription expiration notification.
  */
@@ -42,10 +44,13 @@ class expired extends base_type
 
 	public function get_email_template_variables()
 	{
+		$params = array('name' => $this->get_data('pkg_ident'));
+		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::RELATIVE_PATH);
+
 		return array(
 			'SUB_NAME'		=> $this->get_data('pkg_name'),
 
-			'U_VIEW_SUB'	=> generate_board_url() . $this->get_url(),
+			'U_VIEW_SUB'	=> generate_board_url() . '/' . $u_view_sub,
 		);
 	}
 }
