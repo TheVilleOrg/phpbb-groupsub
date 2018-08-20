@@ -333,13 +333,14 @@ class subscription extends operator implements subscription_interface
 				WHERE sub_active = 1
 					AND sub_expires < ' . (time() - $this->grace);
 		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
+		$rows = $this->db->sql_fetchrowset();
+		$this->db->sql_freeresult();
+		foreach ($rows as $row)
 		{
 			$sub_ids[] = $row['sub_id'];
 			$this->remove_user_from_groups($row['user_id'], $row['sub_id']);
 			$this->dispatch_end_event($row['user_id'], $row['sub_id'], $row['pkg_id']);
 		}
-		$this->db->sql_freeresult();
 
 		if (empty($sub_ids))
 		{
@@ -369,13 +370,14 @@ class subscription extends operator implements subscription_interface
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
+		$rows = $this->db->sql_fetchrowset();
+		$this->db->sql_freeresult();
+		foreach ($rows as $row)
 		{
 			$sub_ids[] = (int) $row['sub_id'];
 			$this->notification_manager->delete_notifications('stevotvr.groupsub.notification.type.warn', (int) $row['sub_id']);
 			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
 		}
-		$this->db->sql_freeresult();
 
 		if (count($sub_ids))
 		{
@@ -392,12 +394,13 @@ class subscription extends operator implements subscription_interface
 			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . ' AND s.sub_expires < ' . (time() + $this->warn_time);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			$this->db->sql_query($sql);
-			while ($row = $this->db->sql_fetchrow())
+			$rows = $this->db->sql_fetchrowset();
+			$this->db->sql_freeresult();
+			foreach ($rows as $row)
 			{
 				$sub_ids[] = (int) $row['sub_id'];
 				$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.warn', $row);
 			}
-			$this->db->sql_freeresult();
 
 			if (count($sub_ids))
 			{
