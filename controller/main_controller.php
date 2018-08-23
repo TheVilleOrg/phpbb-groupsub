@@ -162,7 +162,7 @@ class main_controller
 		$term_id = $this->request->variable('term_id', 0);
 		if ($term_id)
 		{
-			return $this->select_term($term_id, $name);
+			return $this->select_term($term_id);
 		}
 
 		return $this->list_packages($name);
@@ -226,12 +226,11 @@ class main_controller
 	/**
 	 * Show the details of a package term.
 	 *
-	 * @param int         $term_id The term ID
-	 * @param string|null $name    The unique identifier of a package
+	 * @param int $term_id The term ID
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
 	 */
-	protected function select_term($term_id, $name)
+	protected function select_term($term_id)
 	{
 		$u_board = generate_board_url(true);
 		$sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
