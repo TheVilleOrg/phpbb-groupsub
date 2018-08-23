@@ -155,6 +155,10 @@ class main_controller
 			redirect(append_sid($this->root_path . 'ucp.' . $this->php_ext, 'mode=login&amp;redirect=' . $u_redirect));
 		}
 
+		$this->template->assign_vars(array(
+			'U_ACTION'	=> $this->helper->route('stevotvr_groupsub_main', array('name' => $name)),
+		));
+
 		$term_id = $this->request->variable('term_id', 0);
 		if ($term_id)
 		{
@@ -258,7 +262,6 @@ class main_controller
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
 			'TERM_LENGTH'			=> $this->unit_helper->get_formatted_timespan($term->get_length()),
 
-			'U_ACTION'			=> $this->helper->route('stevotvr_groupsub_main', array('name' => $name)),
 			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),
 			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '?term_id=' . $term->get_id(),
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
