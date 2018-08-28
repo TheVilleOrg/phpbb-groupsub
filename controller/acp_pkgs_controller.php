@@ -226,8 +226,6 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	protected function load_groups($package_id)
 	{
-		$groups = array();
-
 		$selected = $this->request->variable('pkg_groups', array(0));
 
 		if ($package_id && empty($selected))
@@ -237,25 +235,19 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . GROUPS_TABLE . '
-				WHERE group_type < ' . GROUP_SPECIAL;
+				WHERE group_type < ' . GROUP_SPECIAL . '
+				ORDER BY group_name ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
-			$groups[] = array(
+			$this->template->assign_block_vars('group', array(
 				'ID'	=> (int) $row['group_id'],
 				'NAME'	=> $row['group_name'],
 
 				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
-			);
+			));
 		}
 		$this->db->sql_freeresult();
-
-		$names = array_map('strtolower', array_column($groups, 'NAME'));
-		array_multisort($names, SORT_ASC, SORT_STRING, $groups);
-		foreach ($groups as $group)
-		{
-			$this->template->assign_block_vars('group', $group);
-		}
 	}
 
 	/**
