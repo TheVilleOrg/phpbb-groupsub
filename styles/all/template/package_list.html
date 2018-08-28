@@ -10,23 +10,23 @@
 
 	<h3>{{ p.NAME }}</h3>
 
-	<div class="column1">
+    <div class="column1">
 
-		<div class="panel">
+	    <div class="postbody">
 
-		<div class="inner">
+	    <div class="content">
 
-			<p>{% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}</p>
+	            {% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}
 
-		</div>
+	    </div>
 
-		</div>
+	    </div>
 
-	</div>
+    </div>
 
 	<div class="column2">
 
-		<div class="panel">
+        <div class="panel bg3">
 
 		<div class="inner">
 
