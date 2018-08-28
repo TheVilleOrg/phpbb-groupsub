@@ -459,20 +459,16 @@ class subscription extends operator implements subscription_interface
 			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
 		}
 
-		$data = array();
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $pkg_id;
-		$this->db->sql_query($sql);
-		$group_ids = array_column($this->db->sql_fetchrowset(), 'group_id');
-		$this->db->sql_freeresult();
-
-		foreach ($group_ids as $group_id)
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$data = array(
 				'sub_id'	=> $sub_id,
 				'user_id'	=> $user_id,
-				'group_id'	=> $group_id,
+				'group_id'	=> $row['group_id'],
 			);
 			$sql = 'INSERT INTO ' . $this->group_table . '
 					' . $this->db->sql_build_array('INSERT', $data);
@@ -480,6 +476,7 @@ class subscription extends operator implements subscription_interface
 
 			group_user_add($group_id, $user_id);
 		}
+		$this->db->sql_freeresult($result);
 	}
 
 	/**
@@ -490,11 +487,15 @@ class subscription extends operator implements subscription_interface
 	 */
 	protected function remove_user_from_groups($user_id, $sub_id)
 	{
+		$sub_groups = array();
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
 				WHERE sub_id = ' . (int) $sub_id;
 		$this->db->sql_query($sql);
-		$sub_groups = array_column($this->db->sql_fetchrowset(), 'group_id');
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$sub_groups[] = (int) $row['group_id'];
+		}
 		$this->db->sql_freeresult();
 
 		if (empty($sub_groups))
@@ -506,13 +507,17 @@ class subscription extends operator implements subscription_interface
 				WHERE sub_id = ' . (int) $sub_id;
 		$this->db->sql_query($sql);
 
+		$keep_groups = array();
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
 				WHERE user_id = ' . (int) $user_id . '
 					AND sub_id <> ' . (int) $sub_id . '
 					AND ' . $this->db->sql_in_set('group_id', $sub_groups);
 		$this->db->sql_query($sql);
-		$keep_groups = array_column($this->db->sql_fetchrowset(), 'group_id');
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$keep_groups[] = (int) $row['group_id'];
+		}
 		$this->db->sql_freeresult();
 
 		if (!function_exists('group_user_del'))
