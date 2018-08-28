@@ -474,7 +474,7 @@ class subscription extends operator implements subscription_interface
 					' . $this->db->sql_build_array('INSERT', $data);
 			$this->db->sql_query($sql);
 
-			group_user_add($group_id, $user_id);
+			group_user_add($row['group_id'], $user_id);
 		}
 		$this->db->sql_freeresult($result);
 	}
