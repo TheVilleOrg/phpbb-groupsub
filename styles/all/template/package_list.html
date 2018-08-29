@@ -55,8 +55,8 @@
 					</p>
 				{% endif %}
 				{% if p.S_ACTIVE %}
-					<p{% if p.S_WARNING %} style="color: #f00"{% endif %}>{{ lang('GROUPSUB_SUBSCRIBED_UNTIL', p.EXPIRES) }}</p>
-					<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_RENEW') }}">
+					<p{% if p.S_WARNING %} style="color: #f00"{% endif %}>{% if p.EXPIRES %}{{ lang('GROUPSUB_SUBSCRIBED_UNTIL', p.EXPIRES) }}{% else %}{{ lang('GROUPSUB_SUBSCRIBED') }}{% endif %}</p>
+					{% if p.EXPIRES %}<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_RENEW') }}">{% endif %}
 				{% else %}
 					<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_SUBSCRIBE') }}">
 				{% endif %}

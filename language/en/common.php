@@ -48,6 +48,7 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_SUBSCRIBE'		=> 'Subscribe',
 	'GROUPSUB_RENEW'			=> 'Renew subscription',
 	'GROUPSUB_CHOOSE_TERM'		=> 'Subscribe to %s',
+	'GROUPSUB_SUBSCRIBED'		=> 'You are subscribed',
 	'GROUPSUB_SUBSCRIBED_UNTIL'	=> 'You are subscribed until %s',
 	'GROUPSUB_CONFIRM'			=> 'Confirm subscription to %s',
 

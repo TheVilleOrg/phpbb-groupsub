@@ -202,9 +202,9 @@ class main_controller
 
 				$vars = array_merge($vars, array(
 					'S_ACTIVE'	=> true,
-					'S_WARNING'	=> ($expires - time()) < $warn,
+					'S_WARNING'	=> $expires && (($expires - time()) < $warn),
 
-					'EXPIRES'	=> $this->user->format_date($expires),
+					'EXPIRES'	=> $expires ? $this->user->format_date($expires) : 0,
 				));
 			}
 
