@@ -11,6 +11,7 @@ This is a extension for phpBB 3.2 that allows you to create paid subscriptions f
 * Supports multiple packages each with multiple price/length options
 * Subscription packages can be attached to one or more usergroups
 * Users are automatically added/removed from groups as their subscription starts/ends
+* Optionally set subscribers' default group
 * Notifications when a subscription is about to expire and has expired
 * Configurable warning time and grace period
 * Sandbox mode for testing
