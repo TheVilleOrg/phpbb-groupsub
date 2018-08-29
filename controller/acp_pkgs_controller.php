@@ -227,11 +227,14 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	protected function load_groups($package_id)
 	{
 		$selected = $this->request->variable('pkg_groups', array(0));
+		$default_group = $this->request->variable('pkg_default_group', 0);
 
 		if ($package_id && empty($selected))
 		{
-			$selected = $this->pkg_operator->get_groups($package_id);
+			$selected = $this->pkg_operator->get_groups($package_id, $default_group);
 		}
+
+		$this->template->assign_var('PKG_DEFAULT_GROUP', $default_group);
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . GROUPS_TABLE . '
@@ -263,10 +266,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		}
 
 		$group_ids = $this->request->variable('pkg_groups', array(0));
+		$default_group = $this->request->variable('pkg_default_group', 0);
 		$this->pkg_operator->remove_groups($package_id);
 		foreach ($group_ids as $group_id)
 		{
-			$this->pkg_operator->add_group($package_id, $group_id);
+			$this->pkg_operator->add_group($package_id, $group_id, $group_id === $default_group);
 		}
 	}
 

@@ -235,28 +235,33 @@ class package extends operator implements package_interface
 		}
 	}
 
-	public function get_groups($package_id)
+	public function get_groups($package_id, &$default = 0)
 	{
 		$ids = array();
 
-		$sql = 'SELECT group_id
+		$sql = 'SELECT group_id, group_default
 				FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
 			$ids[] = (int) $row['group_id'];
+			if ($row['group_default'])
+			{
+				$default = (int) $row['group_id'];
+			}
 		}
 		$this->db->sql_freeresult();
 
 		return $ids;
 	}
 
-	public function add_group($package_id, $group_id)
+	public function add_group($package_id, $group_id, $default)
 	{
 		$data = array(
-			'pkg_id'	=> (int) $package_id,
-			'group_id'	=> (int) $group_id,
+			'pkg_id'		=> (int) $package_id,
+			'group_id'		=> (int) $group_id,
+			'group_default'	=> (bool) $default,
 		);
 		$sql = 'INSERT INTO ' . $this->group_table . '
 				' . $this->db->sql_build_array('INSERT', $data);

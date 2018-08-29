@@ -52,9 +52,20 @@
 				<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
 				<dd>
 					<select name="pkg_groups[]" id="pkg_groups" multiple="multiple" size="10">
-						{% for g in group %}
-							<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected="selected"{% endif %}>{{ g.NAME }}</option>
-						{% endfor %}
+					{% for g in group %}
+						<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected="selected"{% endif %}>{{ g.NAME }}</option>
+					{% endfor %}
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="pkg_default_group">{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP_EXPLAIN') }}</span></dt>
+				<dd>
+					<select name="pkg_default_group" id="pkg_default_group">
+						<option value="0"></option>
+					{% for g in group %}
+						<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP %} selected="selected"{% endif %}>{{ g.NAME }}</option>
+					{% endfor %}
 					</select>
 				</dd>
 			</dl>

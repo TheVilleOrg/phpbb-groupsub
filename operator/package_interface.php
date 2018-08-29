@@ -98,18 +98,20 @@ interface package_interface
 	 * Get the groups assigned to a package.
 	 *
 	 * @param int $package_id The package ID
+	 * @param int &$default   Variable to populate with the default group
 	 *
 	 * @return array An array of group IDs
 	 */
-	public function get_groups($package_id);
+	public function get_groups($package_id, &$default = 0);
 
 	/**
 	 * Add a group to a package.
 	 *
-	 * @param int $package_id The package ID
-	 * @param int $group_id   The group ID
+	 * @param int     $package_id The package ID
+	 * @param int     $group_id   The group ID
+	 * @param boolean $default    Set as default group for users
 	 */
-	public function add_group($package_id, $group_id);
+	public function add_group($package_id, $group_id, $default);
 
 	/**
 	 * Remove a group from a package.

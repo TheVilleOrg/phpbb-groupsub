@@ -464,7 +464,7 @@ class subscription extends operator implements subscription_interface
 			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
 		}
 
-		$sql = 'SELECT group_id
+		$sql = 'SELECT group_id, group_default
 				FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $pkg_id;
 		$result = $this->db->sql_query($sql);
@@ -479,7 +479,7 @@ class subscription extends operator implements subscription_interface
 					' . $this->db->sql_build_array('INSERT', $data);
 			$this->db->sql_query($sql);
 
-			group_user_add($row['group_id'], $user_id);
+			group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
 		}
 		$this->db->sql_freeresult($result);
 	}
