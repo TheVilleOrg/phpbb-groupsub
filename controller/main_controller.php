@@ -215,7 +215,7 @@ class main_controller
 				$this->template->assign_block_vars('package.term', array(
 					'ID'		=> $term->get_id(),
 					'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
-					'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+					'LENGTH'	=> $term->get_length() ? $this->unit_helper->get_formatted_timespan($term->get_length()) : 0,
 				));
 			}
 		}
@@ -259,7 +259,7 @@ class main_controller
 			'TERM_PRICE'			=> $this->currency->format_value($currency, $price),
 			'TERM_CURRENCY'			=> $currency,
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
-			'TERM_LENGTH'			=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+			'TERM_LENGTH'			=> $term->get_length() ? $this->unit_helper->get_formatted_timespan($term->get_length()) : 0,
 
 			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),
 			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '?term_id=' . $term->get_id(),

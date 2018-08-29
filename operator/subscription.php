@@ -331,6 +331,7 @@ class subscription extends operator implements subscription_interface
 		$sql = 'SELECT sub_id, pkg_id, user_id
 				FROM ' . $this->sub_table . '
 				WHERE sub_active = 1
+					AND sub_expires <> 0
 					AND sub_expires < ' . (time() - $this->grace);
 		$this->db->sql_query($sql);
 		$rows = $this->db->sql_fetchrowset();
@@ -366,7 +367,9 @@ class subscription extends operator implements subscription_interface
 					'ON'	=> 's.pkg_id = p.pkg_id',
 				),
 			),
-			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . ' AND s.sub_expires < ' . time(),
+			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . '
+								AND s.sub_expires <> 0
+								AND s.sub_expires < ' . time(),
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$this->db->sql_query($sql);
@@ -391,7 +394,9 @@ class subscription extends operator implements subscription_interface
 		{
 			$sub_ids = array();
 
-			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . ' AND s.sub_expires < ' . (time() + $this->warn_time);
+			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . '
+									AND s.sub_expires <> 0
+									AND s.sub_expires < ' . (time() + $this->warn_time);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			$this->db->sql_query($sql);
 			$rows = $this->db->sql_fetchrowset();

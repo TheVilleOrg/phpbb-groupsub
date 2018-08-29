@@ -36,7 +36,7 @@
 					<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
 					<dd>{{ TERM_DISPLAY_PRICE }}</dd>
 					<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
-					<dd>{{ TERM_LENGTH }}</dd>
+					<dd>{% if TERM_LENGTH %}{{ TERM_LENGTH }}{% else %}<b>{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}</b>{% endif %}</dd>
 				</dl>
 
 			</div>

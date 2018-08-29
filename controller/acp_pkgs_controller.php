@@ -66,7 +66,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			{
 				$this->template->assign_block_vars('package.term', array(
 					'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
-					'LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+					'LENGTH'	=> $term->get_length() ? $this->unit_helper->get_formatted_timespan($term->get_length()) : 0,
 				));
 			}
 		}
@@ -281,13 +281,13 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$prices = $this->request->variable('pkg_price', array(''));
 			$currencies = $this->request->variable('pkg_currency', array(''));
-			$lengths = $this->request->variable('pkg_length', array(0));
+			$lengths = $this->request->variable('pkg_length', array(''));
 			$length_units = $this->request->variable('pkg_length_unit', array(''));
 
 			$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
 			for ($i = 0; $i < $count; $i++)
 			{
-				if ($lengths[$i] <= 0 || !is_numeric($prices[$i]))
+				if (!is_numeric($lengths[$i]) || $lengths[$i] < 0 || !is_numeric($prices[$i]) || $prices[$i] < 0)
 				{
 					continue;
 				}
@@ -338,13 +338,13 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		$prices = $this->request->variable('pkg_price', array(''));
 		$currencies = $this->request->variable('pkg_currency', array(''));
-		$lengths = $this->request->variable('pkg_length', array(0));
+		$lengths = $this->request->variable('pkg_length', array(''));
 		$length_units = $this->request->variable('pkg_length_unit', array(''));
 
 		$count = min(array_map('count', array($prices, $currencies, $lengths, $length_units)));
 		for ($i = 0; $i < $count; $i++)
 		{
-			if ($lengths[$i] <= 0 || !is_numeric($prices[$i]))
+			if (!is_numeric($lengths[$i]) || $lengths[$i] < 0 || !is_numeric($prices[$i]) || $prices[$i] < 0)
 			{
 				continue;
 			}

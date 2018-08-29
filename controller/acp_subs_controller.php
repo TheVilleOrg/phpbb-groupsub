@@ -271,11 +271,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			}
 
 			$parsed_data['expire'] = $this->parse_date($data['expire']);
-			if (!$parsed_data['expire'])
+			if ($parsed_data['expire'] === false)
 			{
 				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
 			}
-			else if ($parsed_data['expire'] < time())
+			else if (!empty($parsed_data['expire']) && $parsed_data['expire'] < time())
 			{
 				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
 			}
@@ -362,7 +362,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		else if ($entity->get_id())
 		{
 			$start = $this->user->format_date($entity->get_start(), 'Y-m-d');
-			$expire = $this->user->format_date($entity->get_expire(), 'Y-m-d');
+			$expire = $entity->get_expire() ? $this->user->format_date($entity->get_expire(), 'Y-m-d') : '';
 		}
 		else
 		{
@@ -411,7 +411,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$input = trim($input);
 		if ($input === '')
 		{
-			return false;
+			return 0;
 		}
 
 		if (preg_match('/^(\d{4})\-(\d{2})\-(\d{2})$/', $input, $date_parts))
