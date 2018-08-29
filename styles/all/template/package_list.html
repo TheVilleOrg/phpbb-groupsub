@@ -43,7 +43,7 @@
 					<p>
 						<select name="term_id">
 						{% for t in p.term %}
-							<option value="{{ t.ID }}">{{ t.PRICE }} / {% if t.LENGTH %}{{ t.LENGTH }}{% else %}<b>{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}</b>{% endif %}</option>
+							<option value="{{ t.ID }}">{{ t.PRICE }} / {% if t.LENGTH %}{{ t.LENGTH }}{% else %}{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}{% endif %}</option>
 						{% endfor %}
 						</select>
 					</p>
