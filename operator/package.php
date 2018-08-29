@@ -268,14 +268,6 @@ class package extends operator implements package_interface
 		$this->db->sql_query($sql);
 	}
 
-	public function remove_group($package_id, $group_id)
-	{
-		$sql = 'DELETE FROM ' . $this->group_table . '
-				WHERE pkg_id = ' . (int) $package_id . '
-					AND group_id = ' . (int) $group_id;
-		$this->db->sql_query($sql);
-	}
-
 	public function remove_groups($package_id)
 	{
 		$sql = 'DELETE FROM ' . $this->group_table . '

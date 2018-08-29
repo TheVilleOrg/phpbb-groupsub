@@ -114,14 +114,6 @@ interface package_interface
 	public function add_group($package_id, $group_id, $default);
 
 	/**
-	 * Remove a group from a package.
-	 *
-	 * @param int $package_id The package ID
-	 * @param int $group_id   The group ID
-	 */
-	public function remove_group($package_id, $group_id);
-
-	/**
 	 * Remove all groups from a package.
 	 *
 	 * @param int $package_id The package ID
