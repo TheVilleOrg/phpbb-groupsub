@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 (9/12/18)
+
+* Fixed events being fired too early
+* Fixed subscriptions not automatically expiring
+
 ## 0.2.0 (8/28/18)
 
 * Fixed styling issues with the package list
