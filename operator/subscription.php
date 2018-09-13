@@ -38,6 +38,7 @@ class subscription extends operator implements subscription_interface
 	 * @var string
 	 */
 	protected $root_path;
+
 	/**
 	 * The script file extension.
 	 *
@@ -139,6 +140,12 @@ class subscription extends operator implements subscription_interface
 		return $this;
 	}
 
+	public function set_active($active)
+	{
+		$this->filters['s.sub_active'] = $active;
+		return $this;
+	}
+
 	public function set_sort($field, $desc = false)
 	{
 		if (!$field)
@@ -156,12 +163,12 @@ class subscription extends operator implements subscription_interface
 		$where = array();
 		foreach ($this->filters as $key => $value)
 		{
-			if (!$value)
+			if (!is_bool($value) && !$value)
 			{
 				continue;
 			}
 
-			$where[] = $key . ' = ' . $value;
+			$where[] = $key . ' = ' . (int) $value;
 		}
 
 		return $this->get_subscription_rows(implode(' AND ', $where), $this->sort, $this->limit, $this->start);
@@ -306,6 +313,11 @@ class subscription extends operator implements subscription_interface
 
 	public function delete_subscription($sub_id)
 	{
+		$sql = 'UPDATE ' . $this->sub_table . '
+				SET sub_active = 0
+				WHERE sub_id = ' . (int) $sub_id;
+		$this->db->sql_query($sql);
+
 		$sql = 'SELECT pkg_id, user_id
 				FROM ' . $this->sub_table . '
 				WHERE sub_id = ' . (int) $sub_id;
@@ -315,13 +327,6 @@ class subscription extends operator implements subscription_interface
 
 		$this->remove_user_from_groups($row['user_id'], $sub_id);
 		$this->dispatch_end_event((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
-
-		$sql = 'UPDATE ' . $this->sub_table . '
-				SET sub_active = 0
-				WHERE sub_id = ' . (int) $sub_id;
-		$this->db->sql_query($sql);
-
-		return (bool) $this->db->sql_affectedrows();
 	}
 
 	public function process_expiring()
@@ -339,8 +344,6 @@ class subscription extends operator implements subscription_interface
 		foreach ($rows as $row)
 		{
 			$sub_ids[] = $row['sub_id'];
-			$this->remove_user_from_groups($row['user_id'], $row['sub_id']);
-			$this->dispatch_end_event($row['user_id'], $row['sub_id'], $row['pkg_id']);
 		}
 
 		if (empty($sub_ids))
@@ -352,6 +355,12 @@ class subscription extends operator implements subscription_interface
 				SET sub_active = 0
 				WHERE ' . $this->db->sql_in_set('sub_id', array_keys($sub_ids));
 		$this->db->sql_query($sql);
+
+		foreach ($rows as $row)
+		{
+			$this->remove_user_from_groups($row['user_id'], $row['sub_id']);
+			$this->dispatch_end_event($row['user_id'], $row['sub_id'], $row['pkg_id']);
+		}
 	}
 
 	public function notify_subscribers()

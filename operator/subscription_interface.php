@@ -49,6 +49,13 @@ interface subscription_interface
 	public function set_package($package_id);
 
 	/**
+	 * @param boolean $active Active status for which to query subscriptions
+	 *
+	 * @return \stevotvr\groupsub\operator\subscription_interface This object for chaining
+	 */
+	public function set_active($active);
+
+	/**
 	 * Set the sorting options for querying subscriptions.
 	 *
 	 * @param string  $field The name of the field by which to sort
@@ -116,8 +123,6 @@ interface subscription_interface
 	 * Delete a subscription.
 	 *
 	 * @param int $sub_id The subscription ID
-	 *
-	 * @return boolean The subscription was deleted
 	 */
 	public function delete_subscription($sub_id);
 
