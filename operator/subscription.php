@@ -353,7 +353,7 @@ class subscription extends operator implements subscription_interface
 
 		$sql = 'UPDATE ' . $this->sub_table . '
 				SET sub_active = 0
-				WHERE ' . $this->db->sql_in_set('sub_id', array_keys($sub_ids));
+				WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
 		$this->db->sql_query($sql);
 
 		foreach ($rows as $row)
