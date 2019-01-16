@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0 (1/16/19)
+
+* Initial stable release
+
 ## 0.2.1 (9/12/18)
 
 * Fixed events being fired too early
