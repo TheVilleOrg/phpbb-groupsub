@@ -53,7 +53,6 @@ class package extends operator implements package_interface
 			$packages[(int) $row['pkg_id']] = array(
 				'package'	=> $this->container->get('stevotvr.groupsub.entity.package')->import($row),
 				'terms'		=> array(),
-				'groups'	=> array(),
 			);
 		}
 		$this->db->sql_freeresult();
