@@ -138,8 +138,10 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 		{
 			case 'u':
 				return 'u.username';
+			break;
 			case 'a':
 				return 't.trans_amount';
+			break;
 		}
 
 		return 't.trans_time';

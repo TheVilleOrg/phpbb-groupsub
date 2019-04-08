@@ -26,6 +26,7 @@ class ext extends base
 				$phpbb_notifications->enable_notifications('stevotvr.groupsub.notification.type.warn');
 				$phpbb_notifications->enable_notifications('stevotvr.groupsub.notification.type.expired');
 				return 'notification';
+			break;
 			default:
 				return parent::enable_step($old_state);
 		}
@@ -40,6 +41,7 @@ class ext extends base
 				$phpbb_notifications->disable_notifications('stevotvr.groupsub.notification.type.warn');
 				$phpbb_notifications->disable_notifications('stevotvr.groupsub.notification.type.expired');
 				return 'notification';
+			break;
 			default:
 				return parent::disable_step($old_state);
 		}
@@ -54,6 +56,7 @@ class ext extends base
 				$phpbb_notifications->purge_notifications('stevotvr.groupsub.notification.type.warn');
 				$phpbb_notifications->purge_notifications('stevotvr.groupsub.notification.type.expired');
 				return 'notification';
+			break;
 			default:
 				return parent::purge_step($old_state);
 		}

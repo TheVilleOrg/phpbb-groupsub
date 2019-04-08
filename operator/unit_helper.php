@@ -55,12 +55,16 @@ class unit_helper extends operator implements unit_helper_interface
 		{
 			case 'days':
 				return $length;
+			break;
 			case 'weeks':
 				return $length * self::WEEK;
+			break;
 			case 'months':
 				return $length * self::MONTH;
+			break;
 			case 'years':
 				return $length * self::YEAR;
+			break;
 		}
 
 		throw new unexpected_value('unit');
