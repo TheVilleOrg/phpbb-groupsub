@@ -16,6 +16,7 @@ services:
             - '%stevotvr.groupsub.tables.subs%'
         tags:
             - { name: event.listener }
+
     stevotvr.groupsub.cron.task.main:
         class: stevotvr\groupsub\cron\task\main
         arguments:
@@ -27,6 +28,7 @@ services:
                 - cron.task.stevotvr.groupsub
         tags:
             - { name: cron.task }
+
     stevotvr.groupsub.notification.type:
         class: stevotvr\groupsub\notification\type\base_type
         abstract: true
@@ -36,18 +38,21 @@ services:
               arguments:
                 - '@controller.helper'
                 - '@user_loader'
+
     stevotvr.groupsub.notification.type.warn:
         class: stevotvr\groupsub\notification\type\warn
         shared: false
         parent: stevotvr.groupsub.notification.type
         tags:
             - { name: notification.type }
+
     stevotvr.groupsub.notification.type.expired:
         class: stevotvr\groupsub\notification\type\expired
         shared: false
         parent: stevotvr.groupsub.notification.type
         tags:
             - { name: notification.type }
+
     stevotvr.groupsub.controller.acp:
         class: stevotvr\groupsub\controller\acp_base_controller
         abstract: true
@@ -59,9 +64,11 @@ services:
             - '@language'
             - '@request'
             - '@template'
+
     stevotvr.groupsub.controller.acp.settings:
         class: stevotvr\groupsub\controller\acp_settings_controller
         parent: stevotvr.groupsub.controller.acp
+
     stevotvr.groupsub.controller.acp.package:
         class: stevotvr\groupsub\controller\acp_pkgs_controller
         parent: stevotvr.groupsub.controller.acp
@@ -70,6 +77,7 @@ services:
               arguments:
                 - '@stevotvr.groupsub.operator.package'
                 - '@stevotvr.groupsub.operator.unit_helper'
+
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller
         parent: stevotvr.groupsub.controller.acp
@@ -84,6 +92,7 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+
     stevotvr.groupsub.controller.acp.transaction:
         class: stevotvr\groupsub\controller\acp_trans_controller
         parent: stevotvr.groupsub.controller.acp
@@ -93,12 +102,14 @@ services:
                 - '@pagination'
                 - '@stevotvr.groupsub.operator.transaction'
                 - '@user'
+
     stevotvr.groupsub.controller.ipn:
         class: stevotvr\groupsub\controller\ipn_controller
         arguments:
             - '@config'
             - '@request'
             - '@stevotvr.groupsub.operator.transaction'
+
     stevotvr.groupsub.controller.main:
         class: stevotvr\groupsub\controller\main_controller
         arguments:
@@ -118,6 +129,7 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+
     stevotvr.groupsub.controller.return:
         class: stevotvr\groupsub\controller\return_controller
         arguments:
@@ -127,11 +139,13 @@ services:
             - '@request'
             - '@template'
             - '@stevotvr.groupsub.operator.unit_helper'
+
     stevotvr.groupsub.entity:
         class: stevotvr\groupsub\entity\entity
         abstract: true
         arguments:
             - '@dbal.conn'
+
     stevotvr.groupsub.entity.package:
         class: stevotvr\groupsub\entity\package
         parent: stevotvr.groupsub.entity
@@ -142,6 +156,7 @@ services:
             - method: setup
               arguments:
                 - '@config'
+
     stevotvr.groupsub.entity.term:
         class: stevotvr\groupsub\entity\term
         parent: stevotvr.groupsub.entity
@@ -152,12 +167,14 @@ services:
             - method: setup
               arguments:
                 - '%stevotvr.groupsub.currencies%'
+
     stevotvr.groupsub.entity.subscription:
         class: stevotvr\groupsub\entity\subscription
         parent: stevotvr.groupsub.entity
         shared: false
         arguments:
             - '%stevotvr.groupsub.tables.subs%'
+
     stevotvr.groupsub.operator:
         class: stevotvr\groupsub\operator\operator
         abstract: true
@@ -170,9 +187,11 @@ services:
             - '%stevotvr.groupsub.tables.groups%'
             - '%stevotvr.groupsub.tables.terms%'
             - '%stevotvr.groupsub.tables.subs%'
+
     stevotvr.groupsub.operator.package:
         class: stevotvr\groupsub\operator\package
         parent: stevotvr.groupsub.operator
+
     stevotvr.groupsub.operator.subscription:
         class: stevotvr\groupsub\operator\subscription
         parent: stevotvr.groupsub.operator
@@ -186,12 +205,15 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+
     stevotvr.groupsub.operator.unit_helper:
         class: stevotvr\groupsub\operator\unit_helper
         parent: stevotvr.groupsub.operator
+
     stevotvr.groupsub.operator.currency:
         class: stevotvr\groupsub\operator\currency
         parent: stevotvr.groupsub.operator
+
     stevotvr.groupsub.operator.transaction:
         class: stevotvr\groupsub\operator\transaction
         parent: stevotvr.groupsub.operator
