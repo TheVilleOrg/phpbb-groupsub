@@ -391,7 +391,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * @param string $username The username
 	 * @return int|boolean The user ID, or false if not found
 	 */
-	protected function parse_username(string $username)
+	protected function parse_username($username)
 	{
 		$sql = 'SELECT user_id
 				FROM ' . USERS_TABLE . "
