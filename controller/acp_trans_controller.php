@@ -48,6 +48,9 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 		$this->user = $user;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function display()
 	{
 		$sort_key = $sort_dir = '';

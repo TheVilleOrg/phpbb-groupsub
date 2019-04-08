@@ -116,36 +116,54 @@ class subscription extends operator implements subscription_interface
 		$this->php_ext = $php_ext;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_start($start)
 	{
 		$this->start = (int) $start;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_limit($limit)
 	{
 		$this->limit = (int) $limit;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_user($user_id)
 	{
 		$this->filters['s.user_id'] = (int) $user_id;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_package($package_id)
 	{
 		$this->filters['s.pkg_id'] = (int) $package_id;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_active($active)
 	{
 		$this->filters['s.sub_active'] = $active;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_sort($field, $desc = false)
 	{
 		if (!$field)
@@ -158,6 +176,9 @@ class subscription extends operator implements subscription_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_subscriptions()
 	{
 		$where = array();
@@ -174,6 +195,9 @@ class subscription extends operator implements subscription_interface
 		return $this->get_subscription_rows(implode(' AND ', $where), $this->sort, $this->limit, $this->start);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_subscription($sub_id)
 	{
 		$subscriptions = $this->get_subscription_rows('s.sub_active = 1 AND s.sub_id = ' . (int) $sub_id);
@@ -247,6 +271,9 @@ class subscription extends operator implements subscription_interface
 		return $subscriptions;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function count_subscriptions()
 	{
 		$sql = 'SELECT COUNT(sub_id) AS sub_count
@@ -258,6 +285,9 @@ class subscription extends operator implements subscription_interface
 		return (int) $count;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function add_subscription(entity $subscription)
 	{
 		$subscription->insert();
@@ -273,6 +303,9 @@ class subscription extends operator implements subscription_interface
 		return $subscription->get_id();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function create_subscription(term_entity $term, $user_id)
 	{
 		$length = $term->get_length() * 86400;
@@ -311,6 +344,9 @@ class subscription extends operator implements subscription_interface
 		return $this->add_subscription($subscription);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function delete_subscription($sub_id)
 	{
 		$sql = 'UPDATE ' . $this->sub_table . '
@@ -329,6 +365,9 @@ class subscription extends operator implements subscription_interface
 		$this->dispatch_end_event((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function process_expiring()
 	{
 		$sub_ids = array();
@@ -363,6 +402,9 @@ class subscription extends operator implements subscription_interface
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function notify_subscribers()
 	{
 		$sub_ids = array();
@@ -426,6 +468,9 @@ class subscription extends operator implements subscription_interface
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_conflict(entity $subscription)
 	{
 		$sql = 'SELECT sub_id
@@ -440,6 +485,9 @@ class subscription extends operator implements subscription_interface
 		return $sub_id ? (int) $sub_id : false;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_user_subscriptions($user_id)
 	{
 		$subscriptions = array();

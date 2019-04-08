@@ -49,11 +49,17 @@ class package extends entity implements package_interface
 		$this->config = $config;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_ident()
 	{
 		return isset($this->data['pkg_ident']) ? (string) $this->data['pkg_ident'] : '';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_ident($ident)
 	{
 		$ident = strtolower(utf8_clean_string((string) $ident));
@@ -90,11 +96,17 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_name()
 	{
 		return isset($this->data['pkg_name']) ? (string) $this->data['pkg_name'] : '';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_name($name)
 	{
 		$name = (string) $name;
@@ -114,6 +126,9 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_desc_for_edit()
 	{
 		$content = isset($this->data['pkg_desc']) ? $this->data['pkg_desc'] : '';
@@ -125,6 +140,9 @@ class package extends entity implements package_interface
 		return $content_data['text'];
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_desc_for_display()
 	{
 		$content = isset($this->data['pkg_desc']) ? $this->data['pkg_desc'] : '';
@@ -135,6 +153,9 @@ class package extends entity implements package_interface
 		return generate_text_for_display($content, $uid, $bitfield, $options);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_desc($desc)
 	{
 		$this->config['max_post_chars'] = 0;
@@ -149,6 +170,9 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function is_bbcode_enabled()
 	{
 		if (!isset($this->data['pkg_desc_bbcode_options']))
@@ -158,6 +182,9 @@ class package extends entity implements package_interface
 		return ($this->data['pkg_desc_bbcode_options'] & OPTION_FLAG_BBCODE);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_bbcode_enabled($enable)
 	{
 		$this->set_desc_option(OPTION_FLAG_BBCODE, $enable);
@@ -165,6 +192,9 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function is_magic_url_enabled()
 	{
 		if (!isset($this->data['pkg_desc_bbcode_options']))
@@ -174,6 +204,9 @@ class package extends entity implements package_interface
 		return ($this->data['pkg_desc_bbcode_options'] & OPTION_FLAG_LINKS);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_magic_url_enabled($enable)
 	{
 		$this->set_desc_option(OPTION_FLAG_LINKS, $enable);
@@ -181,6 +214,9 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function is_smilies_enabled()
 	{
 		if (!isset($this->data['pkg_desc_bbcode_options']))
@@ -190,6 +226,9 @@ class package extends entity implements package_interface
 		return ($this->data['pkg_desc_bbcode_options'] & OPTION_FLAG_SMILIES);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_smilies_enabled($enable)
 	{
 		$this->set_desc_option(OPTION_FLAG_SMILIES, $enable);
@@ -197,11 +236,17 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_order()
 	{
 		return isset($this->data['pkg_order']) ? (int) $this->data['pkg_order'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_order($order)
 	{
 		$order = (int) $order;
@@ -216,11 +261,17 @@ class package extends entity implements package_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function is_enabled()
 	{
 		return isset($this->data['pkg_enabled']) ? (bool) $this->data['pkg_enabled'] : false;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_enabled($enabled)
 	{
 		$this->data['pkg_enabled'] = (bool) $enabled;

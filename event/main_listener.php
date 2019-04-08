@@ -92,6 +92,9 @@ class main_listener implements EventSubscriberInterface
 		$this->sub_table = $sub_table;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	static public function getSubscribedEvents()
 	{
 		return array(

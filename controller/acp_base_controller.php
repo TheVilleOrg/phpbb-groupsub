@@ -85,6 +85,9 @@ abstract class acp_base_controller implements acp_base_interface
 		$this->template = $template;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_page_url($page_url)
 	{
 		$this->u_action = $page_url;

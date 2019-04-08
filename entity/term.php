@@ -46,11 +46,17 @@ class term extends entity implements term_interface
 		$this->currencies = $currencies;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_package()
 	{
 		return isset($this->data['pkg_id']) ? (int) $this->data['pkg_id'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_package($package_id)
 	{
 		$package_id = (int) $package_id;
@@ -65,11 +71,17 @@ class term extends entity implements term_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_price()
 	{
 		return isset($this->data['term_price']) ? (int) $this->data['term_price'] : null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_price($price)
 	{
 		$price = (int) $price;
@@ -84,11 +96,17 @@ class term extends entity implements term_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_currency()
 	{
 		return isset($this->data['term_currency']) ? (string) $this->data['term_currency'] : '';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_currency($currency)
 	{
 		$currency = strtoupper((string) $currency);
@@ -103,11 +121,17 @@ class term extends entity implements term_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_length()
 	{
 		return isset($this->data['term_length']) ? (int) $this->data['term_length'] : null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_length($length)
 	{
 		$length = (int) $length;
@@ -122,11 +146,17 @@ class term extends entity implements term_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_order()
 	{
 		return isset($this->data['term_order']) ? (int) $this->data['term_order'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_order($order)
 	{
 		$order = (int) $order;

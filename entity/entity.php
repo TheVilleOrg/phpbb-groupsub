@@ -62,6 +62,9 @@ abstract class entity implements entity_interface
 		$this->table_name = $table_name;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function load($id)
 	{
 		$sql = 'SELECT *
@@ -79,6 +82,9 @@ abstract class entity implements entity_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function import(array $data)
 	{
 		$this->data = array();
@@ -109,6 +115,9 @@ abstract class entity implements entity_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function insert()
 	{
 		if (!empty($this->data[$this->id_column]))
@@ -125,6 +134,9 @@ abstract class entity implements entity_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function save()
 	{
 		if (empty($this->data[$this->id_column]))
@@ -141,6 +153,9 @@ abstract class entity implements entity_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_id()
 	{
 		return isset($this->data[$this->id_column]) ? (int) $this->data[$this->id_column] : 0;

@@ -17,31 +17,49 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class expired extends base_type
 {
+	/**
+	 * @inheritDoc
+	 */
 	static public $notification_option = array(
 		'lang'	=> 'GROUPSUB_NOTIFICATION_TYPE_EXPIRED',
 		'group'	=> 'GROUPSUB_NOTIFICATION_GROUP',
 	);
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_type()
 	{
 		return 'stevotvr.groupsub.notification.type.expired';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_title()
 	{
 		return $this->language->lang('GROUPSUB_NOTIFICATION_EXPIRED_TITLE');
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_reference()
 	{
 		return $this->language->lang('GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE', $this->get_data('pkg_name'));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_email_template()
 	{
 		return '@stevotvr_groupsub/subscription_expired';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_email_template_variables()
 	{
 		$params = array('name' => $this->get_data('pkg_ident'));

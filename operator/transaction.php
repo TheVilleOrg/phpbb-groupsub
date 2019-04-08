@@ -64,6 +64,9 @@ class transaction extends operator implements transaction_interface
 		$this->trans_table = $trans_table;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function process_transaction()
 	{
 		$sandbox = (bool) $this->config['stevotvr_groupsub_pp_sandbox'];
@@ -118,6 +121,9 @@ class transaction extends operator implements transaction_interface
 		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_transactions($start, $limit, $sort_field, $sort_desc)
 	{
 		$sql_ary = array(
@@ -137,6 +143,9 @@ class transaction extends operator implements transaction_interface
 		return $rows;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function count_transactions()
 	{
 		$sql = 'SELECT COUNT(trans_id) AS trans_count

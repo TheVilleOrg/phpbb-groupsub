@@ -18,6 +18,9 @@ use stevotvr\groupsub\exception\base;
  */
 class package extends operator implements package_interface
 {
+	/**
+	 * @inheritDoc
+	 */
 	public function get_package_list()
 	{
 		$packages = array();
@@ -36,6 +39,9 @@ class package extends operator implements package_interface
 		return $packages;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_packages($name = false, $enabled = true)
 	{
 		$packages = array();
@@ -75,6 +81,9 @@ class package extends operator implements package_interface
 		return $packages;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function count_packages()
 	{
 		$sql = 'SELECT COUNT(pkg_id) AS pkg_count
@@ -87,6 +96,9 @@ class package extends operator implements package_interface
 		return (int) $count;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function add_package(entity $package)
 	{
 		$package->insert();
@@ -94,6 +106,9 @@ class package extends operator implements package_interface
 		return $package->load($package_id);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function delete_package($package_id)
 	{
 		$sql = 'DELETE FROM ' . $this->group_table . '
@@ -139,6 +154,9 @@ class package extends operator implements package_interface
 		return (bool) $this->db->sql_affectedrows();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function move_package($package_id, $offset)
 	{
 		$ids = array();
@@ -168,6 +186,9 @@ class package extends operator implements package_interface
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_terms($package_id = false)
 	{
 		$entities = array();
@@ -187,6 +208,9 @@ class package extends operator implements package_interface
 		return $entities;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_terms($package_id, array $terms)
 	{
 		$sql = 'DELETE FROM ' . $this->term_table . '
@@ -200,6 +224,9 @@ class package extends operator implements package_interface
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_package_term($term_id)
 	{
 		$sql_ary = array(
@@ -234,6 +261,9 @@ class package extends operator implements package_interface
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_groups($package_id, &$default = 0)
 	{
 		$ids = array();
@@ -255,6 +285,9 @@ class package extends operator implements package_interface
 		return $ids;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function add_group($package_id, $group_id, $default)
 	{
 		$data = array(

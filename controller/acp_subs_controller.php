@@ -84,6 +84,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->php_ext = $php_ext;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function display()
 	{
 		$sort_key = $sort_dir = '';
@@ -197,6 +200,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		return 'u.username';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function add()
 	{
 		$params = $this->parse_display_params();
@@ -213,6 +219,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function edit($id)
 	{
 		$params = $this->parse_display_params();
@@ -424,6 +433,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		return false;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function delete($id)
 	{
 		$sort_key = $sort_dir = '';

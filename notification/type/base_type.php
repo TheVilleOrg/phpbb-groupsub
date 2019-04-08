@@ -43,16 +43,25 @@ abstract class base_type extends base
 		$this->language->add_lang('notifications', 'stevotvr/groupsub');
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	static public function get_item_id($data)
 	{
 		return (int) $data['sub_id'];
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	static public function get_item_parent_id($data)
 	{
 		return 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function find_users_for_notification($data, $options = array())
 	{
 		$options = array_merge(array(
@@ -64,16 +73,25 @@ abstract class base_type extends base
 		return $this->check_user_notification_options((array) $data['user_id'], $options);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function users_to_query()
 	{
 		return array();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_url()
 	{
 		return $this->helper->route('stevotvr_groupsub_main', array('name' => $this->get_data('pkg_ident')));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function create_insert_array($data, $pre_create_data = array())
 	{
 		$this->set_data('pkg_ident', $data['pkg_ident']);

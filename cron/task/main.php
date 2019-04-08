@@ -42,6 +42,9 @@ class main extends base
 		$this->sub_operator = $sub_operator;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function run()
 	{
 		$this->sub_operator->process_expiring();
@@ -50,6 +53,9 @@ class main extends base
 		$this->config->set('stevotvr_groupsub_cron_last_run', time());
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function should_run()
 	{
 		return (time() - (int) $this->config['stevotvr_groupsub_cron_last_run']) > self::INTERVAL;

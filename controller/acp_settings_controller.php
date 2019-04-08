@@ -15,6 +15,9 @@ namespace stevotvr\groupsub\controller;
  */
 class acp_settings_controller extends acp_base_controller implements acp_settings_interface
 {
+	/**
+	 * @inheritDoc
+	 */
 	public function handle()
 	{
 		$errors = array();

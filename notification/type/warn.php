@@ -18,21 +18,33 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class warn extends base_type
 {
+	/**
+	 * @inheritDoc
+	 */
 	static public $notification_option = array(
 		'lang'	=> 'GROUPSUB_NOTIFICATION_TYPE_WARN',
 		'group'	=> 'GROUPSUB_NOTIFICATION_GROUP',
 	);
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_type()
 	{
 		return 'stevotvr.groupsub.notification.type.warn';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_title()
 	{
 		return $this->language->lang('GROUPSUB_NOTIFICATION_WARN_TITLE');
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_reference()
 	{
 		$date = $this->user->format_date($this->get_data('sub_expires'), '|M d|');
@@ -40,11 +52,17 @@ class warn extends base_type
 		return $this->language->lang('GROUPSUB_NOTIFICATION_WARN_REFERENCE', $this->get_data('pkg_name'), $date);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_email_template()
 	{
 		return '@stevotvr_groupsub/subscription_warn';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_email_template_variables()
 	{
 		$this->language->add_lang('common', 'stevotvr/groupsub');
@@ -69,11 +87,17 @@ class warn extends base_type
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function users_to_query()
 	{
 		return array($this->user_id);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function create_insert_array($data, $pre_create_data = array())
 	{
 		$this->set_data('sub_expires', (int) $data['sub_expires']);

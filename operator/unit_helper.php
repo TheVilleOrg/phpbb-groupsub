@@ -17,12 +17,18 @@ use stevotvr\groupsub\exception\unexpected_value;
  */
 class unit_helper extends operator implements unit_helper_interface
 {
+	/**
+	 * @inheritDoc
+	 */
 	public function get_formatted_timespan($days)
 	{
 		$parts = $this->get_timespan_parts($days);
 		return $parts['length'] . ' ' . $this->language->lang('GROUPSUB_' . strtoupper($parts['unit']), $parts['length']);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_timespan_parts($days)
 	{
 		$unit = 'days';
@@ -49,6 +55,9 @@ class unit_helper extends operator implements unit_helper_interface
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_days($length, $unit)
 	{
 		switch ($unit)

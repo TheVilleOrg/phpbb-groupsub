@@ -45,6 +45,9 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$this->language->add_lang('posting');
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function display()
 	{
 		$packages = $this->pkg_operator->get_packages(false, false);
@@ -76,6 +79,9 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function add()
 	{
 		$entity = $this->container->get('stevotvr.groupsub.entity.package')
@@ -88,6 +94,9 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function edit($id)
 	{
 		$entity = $this->container->get('stevotvr.groupsub.entity.package')->load($id);
@@ -377,6 +386,9 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		}
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function delete($id)
 	{
 		if (!confirm_box(true))
@@ -407,6 +419,9 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		trigger_error($this->language->lang('ACP_GROUPSUB_PKG_DELETE_SUCCESS') . adm_back_link($this->u_action));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function move($id, $offset)
 	{
 		$this->pkg_operator->move_package($id, $offset);

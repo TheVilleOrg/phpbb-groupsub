@@ -17,11 +17,17 @@ use phpbb\db\migration\migration;
  */
 class version_0_1_0 extends migration
 {
+	/**
+	 * @inheritDoc
+	 */
 	static public function depends_on()
 	{
 		return array('\phpbb\db\migration\data\v320\v320');
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function update_schema()
 	{
 		return array(
@@ -113,6 +119,9 @@ class version_0_1_0 extends migration
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function revert_schema()
 	{
 		return array(
@@ -126,6 +135,9 @@ class version_0_1_0 extends migration
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function update_data()
 	{
 		return array(

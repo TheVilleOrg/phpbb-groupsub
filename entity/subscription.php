@@ -27,11 +27,17 @@ class subscription extends entity implements subscription_interface
 
 	protected $id_column = 'sub_id';
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_package()
 	{
 		return isset($this->data['pkg_id']) ? (int) $this->data['pkg_id'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_package($package_id)
 	{
 		$package_id = (int) $package_id;
@@ -46,11 +52,17 @@ class subscription extends entity implements subscription_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_user()
 	{
 		return isset($this->data['user_id']) ? (int) $this->data['user_id'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_user($user_id)
 	{
 		$user_id = (int) $user_id;
@@ -65,11 +77,17 @@ class subscription extends entity implements subscription_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_start()
 	{
 		return isset($this->data['sub_start']) ? (int) $this->data['sub_start'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_start($start)
 	{
 		$start = (int) $start;
@@ -84,11 +102,17 @@ class subscription extends entity implements subscription_interface
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function get_expire()
 	{
 		return isset($this->data['sub_expires']) ? (int) $this->data['sub_expires'] : 0;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function set_expire($expire)
 	{
 		$expire = (int) $expire;

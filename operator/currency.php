@@ -17,11 +17,17 @@ use stevotvr\groupsub\exception\unexpected_value;
  */
 class currency extends operator implements currency_interface
 {
+	/**
+	 * @inheritDoc
+	 */
 	public function get_currencies()
 	{
 		return $this->currencies;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function format_value($currency_code, $value, $with_separator = false)
 	{
 		$value = (int) $value;
@@ -40,6 +46,9 @@ class currency extends operator implements currency_interface
 		return sprintf('%s%s%02d', $unit, $this->language->lang('GROUPSUB_DECIMAL_SEPARATOR'), $subunit);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function format_price($currency_code, $value)
 	{
 		$this->validate($currency_code);
@@ -51,6 +60,9 @@ class currency extends operator implements currency_interface
 		return sprintf($format, $currency['symbol'], $amount, $currency_code);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function parse_value($currency_code, $value)
 	{
 		$this->validate($currency_code);
@@ -83,6 +95,9 @@ class currency extends operator implements currency_interface
 		return ($unit * $currency['subunit_to_unit']) + $subunit;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function is_valid($currency_code)
 	{
 		return isset($this->currencies[$currency_code]);
