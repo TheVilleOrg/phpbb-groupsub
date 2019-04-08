@@ -361,7 +361,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$user = !$entity->get_id() ? $post['user'] : $entity->get_user();
 		$package = !$entity->get_id() ? $post['package'] : $entity->get_package();
 
-		$start = $expire = '';
 		if ($posted)
 		{
 			$start = $post['start'];
@@ -375,6 +374,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		else
 		{
 			$start = $this->user->format_date(time(), 'Y-m-d');
+			$expire = '';
 		}
 
 		$this->template->assign_vars(array(
