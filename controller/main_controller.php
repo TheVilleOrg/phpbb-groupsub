@@ -189,16 +189,15 @@ class main_controller
 
 		foreach ($packages as $package)
 		{
-			extract($package);
 			$vars = array(
-				'ID'	=> $package->get_id(),
-				'NAME'	=> $package->get_name(),
-				'DESC'	=> $package->get_desc_for_display(),
+				'ID'	=> $package['package']->get_id(),
+				'NAME'	=> $package['package']->get_name(),
+				'DESC'	=> $package['package']->get_desc_for_display(),
 			);
 
-			if (isset($subscriptions[$package->get_id()]))
+			if (isset($subscriptions[$package['package']->get_id()]))
 			{
-				$expires = $subscriptions[$package->get_id()]->get_expire();
+				$expires = $subscriptions[$package['package']->get_id()]->get_expire();
 
 				$vars = array_merge($vars, array(
 					'S_ACTIVE'	=> true,
@@ -210,7 +209,7 @@ class main_controller
 
 			$this->template->assign_block_vars('package', $vars);
 
-			foreach ($terms as $term)
+			foreach ($package['terms'] as $term)
 			{
 				$this->template->assign_block_vars('package.term', array(
 					'ID'		=> $term->get_id(),

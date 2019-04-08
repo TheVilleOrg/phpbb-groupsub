@@ -107,20 +107,19 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 		foreach ($subscriptions as $subscription)
 		{
-			extract($subscription);
 			$this->template->assign_block_vars('subscription', array(
-				'S_PACKAGE_DELETED'	=> $package['deleted'],
-				'S_ACTIVE'			=> $active,
+				'S_PACKAGE_DELETED'	=> $subscription['package']['deleted'],
+				'S_ACTIVE'			=> $subscription['active'],
 
-				'USER'		=> $username,
-				'PACKAGE'	=> $package['name'],
-				'STARTED'	=> $this->user->format_date($entity->get_start()),
-				'EXPIRES'	=> $entity->get_expire() ? $this->user->format_date($entity->get_expire()) : 0,
+				'USER'		=> $subscription['username'],
+				'PACKAGE'	=> $subscription['package']['name'],
+				'STARTED'	=> $this->user->format_date($subscription['entity']->get_start()),
+				'EXPIRES'	=> $subscription['entity']->get_expire() ? $this->user->format_date($subscription['entity']->get_expire()) : 0,
 
-				'U_MOVE_UP'		=> $this->u_action . $params . '&amp;action=move_up&amp;id=' . $entity->get_id(),
-				'U_MOVE_DOWN'	=> $this->u_action . $params . '&amp;action=move_down&amp;id=' . $entity->get_id(),
-				'U_EDIT'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $entity->get_id(),
-				'U_DELETE'		=> $this->u_action . $params . '&amp;action=delete&amp;id=' . $entity->get_id(),
+				'U_MOVE_UP'		=> $this->u_action . $params . '&amp;action=move_up&amp;id=' . $subscription['entity']->get_id(),
+				'U_MOVE_DOWN'	=> $this->u_action . $params . '&amp;action=move_down&amp;id=' . $subscription['entity']->get_id(),
+				'U_EDIT'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $subscription['entity']->get_id(),
+				'U_DELETE'		=> $this->u_action . $params . '&amp;action=delete&amp;id=' . $subscription['entity']->get_id(),
 			));
 		}
 

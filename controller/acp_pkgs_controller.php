@@ -51,18 +51,17 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		foreach ($packages as $package)
 		{
-			extract($package);
 			$this->template->assign_block_vars('package', array(
-				'IDENT'	=> $package->get_ident(),
-				'NAME'	=> $package->get_name(),
+				'IDENT'	=> $package['package']->get_ident(),
+				'NAME'	=> $package['package']->get_name(),
 
-				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $package->get_id(),
-				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $package->get_id(),
-				'U_EDIT'		=> $this->u_action . '&amp;action=edit&amp;id=' . $package->get_id(),
-				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $package->get_id(),
+				'U_MOVE_UP'		=> $this->u_action . '&amp;action=move_up&amp;id=' . $package['package']->get_id(),
+				'U_MOVE_DOWN'	=> $this->u_action . '&amp;action=move_down&amp;id=' . $package['package']->get_id(),
+				'U_EDIT'		=> $this->u_action . '&amp;action=edit&amp;id=' . $package['package']->get_id(),
+				'U_DELETE'		=> $this->u_action . '&amp;action=delete&amp;id=' . $package['package']->get_id(),
 			));
 
-			foreach ($terms as $term)
+			foreach ($package['terms'] as $term)
 			{
 				$this->template->assign_block_vars('package.term', array(
 					'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),

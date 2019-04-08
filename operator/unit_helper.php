@@ -19,8 +19,8 @@ class unit_helper extends operator implements unit_helper_interface
 {
 	public function get_formatted_timespan($days)
 	{
-		extract($this->get_timespan_parts($days));
-		return $length . ' ' . $this->language->lang('GROUPSUB_' . strtoupper($unit), $length);
+		$parts = $this->get_timespan_parts($days);
+		return $parts['length'] . ' ' . $this->language->lang('GROUPSUB_' . strtoupper($parts['unit']), $parts['length']);
 	}
 
 	public function get_timespan_parts($days)

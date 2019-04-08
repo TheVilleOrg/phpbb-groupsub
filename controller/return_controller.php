@@ -89,10 +89,9 @@ class return_controller
 			trigger_error('NOT_FOUND');
 		}
 
-		extract($term);
 		$this->template->assign_vars(array(
-			'PKG_NAME'		=> $package->get_name(),
-			'TERM_LENGTH'	=> $this->unit_helper->get_formatted_timespan($term->get_length()),
+			'PKG_NAME'		=> $term['package']->get_name(),
+			'TERM_LENGTH'	=> $this->unit_helper->get_formatted_timespan($term['term']->get_length()),
 		));
 
 		return $this->helper->render('payment_return.html', $this->language->lang('GROUPSUB_RETURN_TITLE'));
