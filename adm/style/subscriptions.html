@@ -95,12 +95,14 @@
 
 	<table class="table1 zebra-table responsive">
 		<thead>
-			<th>{{ lang('ACP_GROUPSUB_USER') }}</th>
-			<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
-			<th style="width: 15%">{{ lang('ACP_GROUPSUB_START') }}</th>
-			<th style="width: 15%">{{ lang('ACP_GROUPSUB_EXPIRES') }}</th>
-			<th style="width: 10%">{{ lang('ACP_GROUPSUB_STATUS') }}</th>
-			<th style="width: 10%">{{ lang('ACTION') }}</th>
+			<tr>
+				<th>{{ lang('ACP_GROUPSUB_USER') }}</th>
+				<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+				<th style="width: 15%">{{ lang('ACP_GROUPSUB_START') }}</th>
+				<th style="width: 15%">{{ lang('ACP_GROUPSUB_EXPIRES') }}</th>
+				<th style="width: 10%">{{ lang('ACP_GROUPSUB_STATUS') }}</th>
+				<th style="width: 10%">{{ lang('ACTION') }}</th>
+			</tr>
 		</thead>
 		<tbody>
 		{% for s in subscription %}

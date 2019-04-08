@@ -74,9 +74,11 @@
 			<legend>{{ lang('ACP_GROUPSUB_PKG_TERMS') }}</legend>
 			<table class="table1 zebra-table responsive" id="term_table">
 				<thead>
-					<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
-					<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
-					<th class="actions">{{ lang('ACTION') }}</th>
+					<tr>
+						<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
+						<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
+						<th class="actions">{{ lang('ACTION') }}</th>
+					</tr>
 				</thead>
 				<tbody>
 				{% for t in term %}
@@ -150,10 +152,12 @@
 
 	<table class="table1 zebra-table responsive">
 		<thead>
-			<th style="width: 10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
-			<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
-			<th style="width: 30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
-			<th style="width: 10%">{{ lang('ACTION') }}</th>
+			<tr>
+				<th style="width: 10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
+				<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
+				<th style="width: 30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
+				<th style="width: 10%">{{ lang('ACTION') }}</th>
+			</tr>
 		</thead>
 		<tbody>
 			{% for p in package %}

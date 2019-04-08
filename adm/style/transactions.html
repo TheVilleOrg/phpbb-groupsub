@@ -6,12 +6,14 @@
 
 <table class="table1 zebra-table responsive">
 	<thead>
-		<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_ID') }}</th>
-		<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_TYPE') }}</th>
-		<th width="16%">{{ lang('ACP_GROUPSUB_AMOUNT') }}</th>
-		<th width="16%">{{ lang('ACP_GROUPSUB_TIME') }}</th>
-		<th width="16%">{{ lang('ACP_GROUPSUB_USER') }}</th>
-		<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+		<tr>
+			<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_ID') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_TYPE') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_AMOUNT') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_TIME') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_USER') }}</th>
+			<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+		</tr>
 	</thead>
 	<tbody>
 	{% for t in transaction %}
