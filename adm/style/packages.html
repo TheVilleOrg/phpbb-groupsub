@@ -40,9 +40,9 @@
 				<dt><label for="pkg_desc">{{ lang('ACP_GROUPSUB_PKG_DESC') ~ lang('COLON') }}</label></dt>
 				<dd><textarea id="pkg_desc" name="pkg_desc" rows="5" cols="45" data-bbcode="true">{{ PKG_DESC }}</textarea></dd>
 				<dd>
-					<label><input type="checkbox" class="radio" name="parse_bbcode"{% if S_PARSE_BBCODE_CHECKED %} checked="checked"<{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
-					<label><input type="checkbox" class="radio" name="parse_smilies"<{% if S_PARSE_SMILIES_CHECKED %} checked="checked"<{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
-					<label><input type="checkbox" class="radio" name="parse_magic_url"<{% if S_PARSE_MAGIC_URL_CHECKED %} checked="checked"<{% endif %}> {{ lang('PARSE_URLS') }}</label>
+					<label><input type="checkbox" class="radio" name="parse_bbcode"{% if S_PARSE_BBCODE_CHECKED %} checked="checked"{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
+					<label><input type="checkbox" class="radio" name="parse_smilies"{% if S_PARSE_SMILIES_CHECKED %} checked="checked"{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
+					<label><input type="checkbox" class="radio" name="parse_magic_url"{% if S_PARSE_MAGIC_URL_CHECKED %} checked="checked"{% endif %}> {{ lang('PARSE_URLS') }}</label>
 				</dd>
 			</dl>
 		</fieldset>
