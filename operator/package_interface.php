@@ -29,6 +29,7 @@ interface package_interface
 	 * @param boolean $enabled Only show enabled packages
 	 *
 	 * @return array Associative array of package data
+	 *                           active  boolean
 	 *                           package \stevotvr\groupsub\entity\package_interface
 	 *                           terms   array
 	 *                           	\stevotvr\groupsub\entity\term_interface
