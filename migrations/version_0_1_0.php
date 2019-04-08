@@ -19,7 +19,7 @@ class version_0_1_0 extends migration
 {
 	static public function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v31x\v314');
+		return array('\phpbb\db\migration\data\v320\v320');
 	}
 
 	public function update_schema()
