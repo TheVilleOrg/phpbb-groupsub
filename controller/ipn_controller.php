@@ -68,7 +68,7 @@ class ipn_controller
 		if ($this->request->is_set_post('txn_id'))
 		{
 			$sandbox = (bool) $this->config['stevotvr_groupsub_pp_sandbox'];
-			if (self::verify($sandbox))
+			if ($this->verify($sandbox))
 			{
 				return new Response('', $this->trans_operator->process_transaction() ? 200 : 400);
 			}
@@ -86,7 +86,7 @@ class ipn_controller
 	 *
 	 * @return boolean The request was verified
 	 */
-	static protected function verify($sandbox)
+	protected function verify($sandbox)
 	{
 		$raw_post = file_get_contents('php://input');
 		$raw_post_ary = explode('&', $raw_post);
