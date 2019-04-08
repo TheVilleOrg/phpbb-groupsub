@@ -130,23 +130,18 @@ class ipn_controller
 			return false;
 		}
 
-		try
+		$meta = stream_get_meta_data($fp);
+		$http_response = $meta['wrapper_data'][0];
+		$http_code = (int) substr($http_response, strpos($http_response, ' ') + 1, 3);
+		if ($http_code !== 200)
 		{
-			$meta = stream_get_meta_data($fp);
-			$http_response = $meta['wrapper_data'][0];
-			$http_code = (int) substr($http_response, strpos($http_response, ' ') + 1, 3);
-			if ($http_code !== 200)
-			{
-				return false;
-			}
-
-			$response = fread($fp, 16);
-
-			return $response === self::VALID;
+			return false;
 		}
-		finally
-		{
-			fclose($fp);
-		}
+
+		$response = fread($fp, 16);
+
+		fclose($fp);
+
+		return $response === self::VALID;
 	}
 }
