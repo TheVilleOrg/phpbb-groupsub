@@ -1,6 +1,6 @@
 (function($) {
 
-'use strict'
+'use strict';
 
 var termTable = $('#term_table tbody'),
 	termHtml = termTable.html();
