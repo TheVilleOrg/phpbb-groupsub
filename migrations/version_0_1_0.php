@@ -49,7 +49,7 @@ class version_0_1_0 extends migration
 					'KEYS' => array(
 						'pkg_o'	=> array('INDEX', 'pkg_order'),
 						'pkg_e'	=> array('INDEX', 'pkg_enabled'),
-						'pkg_e'	=> array('INDEX', 'pkg_deleted'),
+						'pkg_d'	=> array('INDEX', 'pkg_deleted'),
 						'pkg_i'	=> array('UNIQUE', 'pkg_ident'),
 					),
 				),
