@@ -38,12 +38,12 @@
 		{{ lang('SORT_BY') ~ lang('COLON') }}
 		<select name="sk" id="sk">
 			{% for k in sort_key %}
-				<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected="selected"{% endif %}>{{ k.NAME }}</option>
+				<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected{% endif %}>{{ k.NAME }}</option>
 			{% endfor %}
 		</select>
 		<select name="sd" id="sd">
 			{% for d in sort_dir %}
-				<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected="selected"{% endif %}>{{ d.NAME }}</option>
+				<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected{% endif %}>{{ d.NAME }}</option>
 			{% endfor %}
 		</select>
 		{% if pagination %}

@@ -14,7 +14,7 @@
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PAYPAL') }}</legend>
 		<dl>
 			<dt><label for="pp_sandbox">{{ lang('ACP_GROUPSUB_PP_SANDBOX') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PP_SANDBOX_EXPLAIN') }}</span></dt>
-			<dd><label><input type="radio" id="pp_sandbox" name="pp_sandbox" value="1"{% if PP_SANDBOX %} checked="checked"{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pp_sandbox" value="0"{% if not PP_SANDBOX %} checked="checked"{% endif %}> {{ lang('NO') }}</label></dd>
+			<dd><label><input type="radio" id="pp_sandbox" name="pp_sandbox" value="1"{% if PP_SANDBOX %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pp_sandbox" value="0"{% if not PP_SANDBOX %} checked{% endif %}> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
 			<dt><label for="pp_sb_business">{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS_EXPLAIN') }}</span></dt>
@@ -32,7 +32,7 @@
 			<dd>
 				<select name="currency" id="currency">
 					{% for c in currency %}
-						<option value="{{ c.CURRENCY }}"{% if c.CURRENCY == CURRENCY %} selected="selected"{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
+						<option value="{{ c.CURRENCY }}"{% if c.CURRENCY == CURRENCY %} selected{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
 					{% endfor %}
 				</select>
 			</dd>

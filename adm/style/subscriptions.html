@@ -35,7 +35,7 @@
 						<select name="sub_package" id="sub_package">
 							<option value="0">{{ lang('ACP_GROUPSUB_SUB_SELECT_PACKAGE') }}</option>
 						{% for p in package %}
-							<option value="{{ p.ID }}"{% if p.ID == SUB_PACKAGE %} selected="selected"{% endif %}>{{ p.NAME }}</option>
+							<option value="{{ p.ID }}"{% if p.ID == SUB_PACKAGE %} selected{% endif %}>{{ p.NAME }}</option>
 						{% endfor %}
 						</select>
 					{% else %}
@@ -85,7 +85,7 @@
 				<select name="pkg_id" id="pkg_id">
 					<option value="0">{{ lang('ACP_GROUPSUB_ALL_PACKAGES') }}</option>
 					{% for p in package %}
-						<option value="{{ p.ID }}"{% if p.S_SELECTED %} selected="selected"{% endif %}>{{ p.NAME }}</option>
+						<option value="{{ p.ID }}"{% if p.S_SELECTED %} selected{% endif %}>{{ p.NAME }}</option>
 					{% endfor %}
 				</select>
 				<input class="button2" type="submit" name="filter" value="{{ lang('GO') }}">
@@ -132,12 +132,12 @@
 			{{ lang('SORT_BY') ~ lang('COLON') }}
 			<select name="sk" id="sk">
 				{% for k in sort_key %}
-					<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected="selected"{% endif %}>{{ k.NAME }}</option>
+					<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected{% endif %}>{{ k.NAME }}</option>
 				{% endfor %}
 			</select>
 			<select name="sd" id="sd">
 				{% for d in sort_dir %}
-					<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected="selected"{% endif %}>{{ d.NAME }}</option>
+					<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected{% endif %}>{{ d.NAME }}</option>
 				{% endfor %}
 			</select>
 			{% if pagination %}
