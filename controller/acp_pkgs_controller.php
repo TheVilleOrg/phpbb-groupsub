@@ -246,7 +246,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . GROUPS_TABLE . '
-				WHERE group_type < ' . GROUP_SPECIAL . '
+				WHERE ' . $this->db->sql_in_set('group_type', array(GROUP_OPEN, GROUP_CLOSED, GROUP_HIDDEN)) . '
 				ORDER BY group_name ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
