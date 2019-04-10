@@ -85,7 +85,7 @@
 					<tr>
 						<td>
 							<input type="text" name="pkg_price[]" value="{{ t.PRICE }}">
-							<select name="pkg_currency[]">
+							<select name="pkg_currency[]" id="pkg_currency{{ loop.index }}">
 							{% for c in currency %}
 							    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == t.CURRENCY %} selected{% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
 							{% endfor %}
@@ -93,7 +93,7 @@
 						</td>
 						<td>
 							<input type="text" name="pkg_length[]" value="{{ t.LENGTH }}">
-							<select name="pkg_length_unit[]">
+							<select name="pkg_length_unit[]" id="pkg_length_unit{{ loop.index }}">
 							{% for u in time_unit %}
 								<option value="{{ u.ID }}"{% if u.ID == t.LENGTH_UNIT %} selected{% endif %}>{{ u.NAME }}</option>
 							{% endfor %}
