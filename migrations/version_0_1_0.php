@@ -165,4 +165,12 @@ class version_0_1_0 extends migration
 			)),
 		);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function effectively_installed()
+	{
+		return isset($this->config['stevotvr_groupsub_active']);
+	}
 }

@@ -52,4 +52,12 @@ class version_0_2_0 extends migration
 			),
 		);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function effectively_installed()
+	{
+		return $this->db_tools->sql_column_exists($this->table_prefix . 'groupsub_groups', 'group_default');
+	}
 }
