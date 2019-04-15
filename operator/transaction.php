@@ -46,6 +46,13 @@ class transaction extends operator implements transaction_interface
 	protected $trans_table;
 
 	/**
+	 * The name of the phpBB users table.
+	 *
+	 * @var string
+	 */
+	protected $phpbb_users_table;
+
+	/**
 	 * Set up the operator.
 	 *
 	 * @param \phpbb\config\config                               $config
@@ -54,14 +61,16 @@ class transaction extends operator implements transaction_interface
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param string                                             $trans_table The name of the
 	 *                                                                        groupsub_trans table
+	 * @param string                                             $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(config $config, request_interface $request, currency_interface $currency, subscription_interface $sub_operator, $trans_table)
+	public function setup(config $config, request_interface $request, currency_interface $currency, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
 	{
 		$this->config = $config;
 		$this->request = $request;
 		$this->currency = $currency;
 		$this->sub_operator = $sub_operator;
 		$this->trans_table = $trans_table;
+		$this->phpbb_users_table = $phpbb_users_table;
 	}
 
 	/**
@@ -130,7 +139,7 @@ class transaction extends operator implements transaction_interface
 			'SELECT'	=> 't.*, u.username',
 			'FROM'		=> array(
 				$this->trans_table => 't',
-				USERS_TABLE => 'u',
+				$this->phpbb_users_table => 'u',
 			),
 			'WHERE'		=> 't.user_id = u.user_id',
 			'ORDER_BY'	=> $sort_field . ($sort_desc ? ' DESC' : ' ASC'),

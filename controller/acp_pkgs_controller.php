@@ -32,15 +32,24 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	protected $unit_helper;
 
 	/**
+	 * The name of the phpBB groups table.
+	 *
+	 * @var string
+	 */
+	protected $phpbb_groups_table;
+
+	/**
 	 * Set up the controller.
 	 *
 	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
+	 * @param string                                            $phpbb_groups_table The name of the phpBB groups table
 	 */
-	public function setup(pkg_operator $pkg_operator, unit_helper_interface $unit_helper)
+	public function setup(pkg_operator $pkg_operator, unit_helper_interface $unit_helper, $phpbb_groups_table)
 	{
 		$this->pkg_operator = $pkg_operator;
 		$this->unit_helper = $unit_helper;
+		$this->phpbb_groups_table = $phpbb_groups_table;
 
 		$this->language->add_lang('posting');
 	}
@@ -245,7 +254,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$this->template->assign_var('PKG_DEFAULT_GROUP', $default_group);
 
 		$sql = 'SELECT group_id, group_name
-				FROM ' . GROUPS_TABLE . '
+				FROM ' . $this->phpbb_groups_table . '
 				WHERE ' . $this->db->sql_in_set('group_type', array(GROUP_OPEN, GROUP_CLOSED, GROUP_HIDDEN)) . '
 				ORDER BY group_name ASC';
 		$this->db->sql_query($sql);

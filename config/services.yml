@@ -77,6 +77,7 @@ services:
               arguments:
                 - '@stevotvr.groupsub.operator.package'
                 - '@stevotvr.groupsub.operator.unit_helper'
+                - '%tables.groups%'
 
     stevotvr.groupsub.controller.acp.subscription:
         class: stevotvr\groupsub\controller\acp_subs_controller
@@ -88,6 +89,7 @@ services:
                 - '@stevotvr.groupsub.operator.subscription'
                 - '@pagination'
                 - '@user'
+                - '%tables.users%'
             - method: set_path_info
               arguments:
                 - '%core.root_path%'
@@ -201,6 +203,7 @@ services:
                 - '@config'
                 - '@notification_manager'
                 - '@dispatcher'
+                - '%tables.users%'
             - method: set_path_info
               arguments:
                 - '%core.root_path%'
@@ -225,3 +228,4 @@ services:
                 - '@stevotvr.groupsub.operator.currency'
                 - '@stevotvr.groupsub.operator.subscription'
                 - '%stevotvr.groupsub.tables.trans%'
+                - '%tables.users%'

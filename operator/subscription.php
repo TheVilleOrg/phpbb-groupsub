@@ -33,6 +33,13 @@ class subscription extends operator implements subscription_interface
 	protected $phpbb_dispatcher;
 
 	/**
+	 * The name of the phpBB users table.
+	 *
+	 * @var string
+	 */
+	protected $phpbb_users_table;
+
+	/**
 	 * The root phpBB path.
 	 *
 	 * @var string
@@ -94,11 +101,13 @@ class subscription extends operator implements subscription_interface
 	 * @param \phpbb\config\config              $config
 	 * @param \phpbb\notification\manager       $notification_manager
 	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
+	 * @param string                            $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(config $config, manager $notification_manager, dispatcher_interface $phpbb_dispatcher)
+	public function setup(config $config, manager $notification_manager, dispatcher_interface $phpbb_dispatcher, $phpbb_users_table)
 	{
 		$this->notification_manager = $notification_manager;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
+		$this->phpbb_users_table = $phpbb_users_table;
 
 		$this->warn_time = (int) $config['stevotvr_groupsub_warn_time'] * 86400;
 		$this->grace = (int) $config['stevotvr_groupsub_grace'] * 86400;
@@ -236,7 +245,7 @@ class subscription extends operator implements subscription_interface
 					'ON'	=> 's.pkg_id = p.pkg_id',
 				),
 				array(
-					'FROM'	=> array(USERS_TABLE => 'u'),
+					'FROM'	=> array($this->phpbb_users_table => 'u'),
 					'ON'	=> 's.user_id = u.user_id',
 				),
 			),

@@ -44,6 +44,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $pagination;
 
 	/**
+	 * The name of the phpBB users table.
+	 *
+	 * @var string
+	 */
+	protected $phpbb_users_table;
+
+	/**
 	 * The root phpBB path.
 	 *
 	 * @var string
@@ -63,13 +70,15 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param \phpbb\pagination                                  $pagination
 	 * @param \phpbb\user                                        $user
+	 * @param string                                             $phpbb_users_table The name of the phpBB users table
 	 */
-	public function setup(pkg_operator $pkg_operator, sub_operator $sub_operator, pagination $pagination, user $user)
+	public function setup(pkg_operator $pkg_operator, sub_operator $sub_operator, pagination $pagination, user $user, $phpbb_users_table)
 	{
 		$this->pkg_operator = $pkg_operator;
 		$this->sub_operator = $sub_operator;
 		$this->pagination = $pagination;
 		$this->user = $user;
+		$this->phpbb_users_table = $phpbb_users_table;
 	}
 
 	/**
@@ -394,7 +403,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected function parse_username($username)
 	{
 		$sql = 'SELECT user_id
-				FROM ' . USERS_TABLE . "
+				FROM ' . $this->phpbb_users_table . "
 				WHERE username_clean = '" . $this->db->sql_escape(utf8_clean_string($username)) . "'";
 		$this->db->sql_query($sql);
 		$userrow = $this->db->sql_fetchrow();
