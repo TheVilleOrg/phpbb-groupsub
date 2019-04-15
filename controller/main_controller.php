@@ -146,7 +146,7 @@ class main_controller
 	{
 		if (!$this->config['stevotvr_groupsub_active'] && !$this->auth->acl_get('a_'))
 		{
-			trigger_error('NOT_FOUND');
+			return $this->helper->error('NOT_FOUND', 404);
 		}
 
 		if ($this->user->data['user_id'] == ANONYMOUS)
@@ -181,7 +181,7 @@ class main_controller
 
 		if (empty($packages))
 		{
-			trigger_error('GROUPSUB_NO_PACKAGES');
+			return $this->helper->error('GROUPSUB_NO_PACKAGES', 404);
 		}
 
 		$subscriptions = $this->sub_operator->get_user_subscriptions($this->user->data['user_id']);
@@ -238,7 +238,7 @@ class main_controller
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
-			trigger_error('NOT_FOUND');
+			return $this->helper->error('NOT_FOUND', 404);
 		}
 
 		extract($term);

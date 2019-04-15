@@ -80,13 +80,13 @@ class return_controller
 		$term_id = $this->request->variable('term_id', 0);
 		if (!$term_id)
 		{
-			trigger_error('NOT_FOUND');
+			return $this->helper->error('NOT_FOUND', 404);
 		}
 
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
-			trigger_error('NOT_FOUND');
+			return $this->helper->error('NOT_FOUND', 404);
 		}
 
 		$this->template->assign_vars(array(
