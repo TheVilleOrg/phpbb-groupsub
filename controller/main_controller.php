@@ -146,7 +146,7 @@ class main_controller
 	{
 		if (!$this->config['stevotvr_groupsub_active'] && !$this->auth->acl_get('a_'))
 		{
-			return $this->helper->error('NOT_FOUND', 404);
+			return $this->helper->error('PAGE_NOT_FOUND', 404);
 		}
 
 		if ($this->user->data['user_id'] == ANONYMOUS)
@@ -238,7 +238,7 @@ class main_controller
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
-			return $this->helper->error('NOT_FOUND', 404);
+			return $this->helper->error('PAGE_NOT_FOUND', 404);
 		}
 
 		extract($term);
