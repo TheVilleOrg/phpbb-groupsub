@@ -82,16 +82,13 @@ class main_module
 			case 'add':
 				$this->page_title = 'ACP_GROUPSUB_PKG_ADD';
 				$controller->add();
-				return;
 			break;
 			case 'edit':
 				$this->page_title = 'ACP_GROUPSUB_PKG_EDIT';
 				$controller->edit($id);
-				return;
 			break;
 			case 'delete':
 				$controller->delete($id);
-				return;
 			break;
 			case 'move_up':
 				$controller->move($id, -1);
@@ -101,8 +98,11 @@ class main_module
 			break;
 		}
 
-		$this->page_title = 'ACP_GROUPSUB_MANAGE_PKGS';
-		$controller->display();
+		if (!in_array($action, array('add', 'edit', 'delete')))
+		{
+			$this->page_title = 'ACP_GROUPSUB_MANAGE_PKGS';
+			$controller->display();
+		}
 	}
 
 	/**
@@ -123,21 +123,21 @@ class main_module
 			case 'add':
 				$this->page_title = 'ACP_GROUPSUB_SUB_ADD';
 				$controller->add();
-				return;
 			break;
 			case 'edit':
 				$this->page_title = 'ACP_GROUPSUB_SUB_EDIT';
 				$controller->edit($id);
-				return;
 			break;
 			case 'delete':
 				$controller->delete($id);
-				return;
 			break;
 		}
 
-		$this->page_title = 'ACP_GROUPSUB_MANAGE_SUBS';
-		$controller->display();
+		if (!in_array($action, array('add', 'edit', 'delete')))
+		{
+			$this->page_title = 'ACP_GROUPSUB_MANAGE_SUBS';
+			$controller->display();
+		}
 	}
 
 	/**
