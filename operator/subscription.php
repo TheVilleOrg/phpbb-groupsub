@@ -305,8 +305,23 @@ class subscription extends operator implements subscription_interface
 
 		if ($subscription->get_id())
 		{
-			$this->add_user_to_groups($subscription->get_user(), $subscription->get_id(), $subscription->get_package());
-			$this->dispatch_start_event($subscription->get_user(), $subscription->get_id(), $subscription->get_package());
+			$user_id = $subscription->get_user();
+			$sub_id = $subscription->get_id();
+			$package_id = $subscription->get_package();
+
+			$this->add_user_to_groups($user_id, $sub_id, $package_id);
+
+			/**
+			 * Event triggered when a subscription is started.
+			 *
+			 * @event stevotvr.groupsub.subscription_started
+			 * @var int user_id    The user ID
+			 * @var int sub_id     The subscription ID
+			 * @var int package_id The package ID
+			 * @since 0.1.0
+			 */
+			$vars = array('user_id', 'sub_id', 'package_id');
+			extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
 		}
 
 		return $subscription->get_id();
@@ -370,8 +385,7 @@ class subscription extends operator implements subscription_interface
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
 
-		$this->remove_user_from_groups($row['user_id'], $sub_id);
-		$this->dispatch_end_event((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
+		$this->end_subscription((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
 	}
 
 	/**
@@ -406,8 +420,7 @@ class subscription extends operator implements subscription_interface
 
 		foreach ($rows as $row)
 		{
-			$this->remove_user_from_groups($row['user_id'], $row['sub_id']);
-			$this->dispatch_end_event($row['user_id'], $row['sub_id'], $row['pkg_id']);
+			$this->end_subscription($row['user_id'], $row['sub_id'], $row['pkg_id']);
 		}
 	}
 
@@ -517,6 +530,30 @@ class subscription extends operator implements subscription_interface
 	}
 
 	/**
+	 * End an active subscription.
+	 *
+	 * @param int $user_id    The user ID
+	 * @param int $sub_id     The subscription ID
+	 * @param int $package_id The package ID
+	 */
+	protected function end_subscription($user_id, $sub_id, $package_id)
+	{
+		$this->remove_user_from_groups($user_id, $sub_id);
+
+		/**
+		 * Event triggered when a subscription is ended.
+		 *
+		 * @event stevotvr.groupsub.subscription_ended
+		 * @var int user_id    The user ID
+		 * @var int sub_id     The subscription ID
+		 * @var int package_id The package ID
+		 * @since 0.1.0
+		 */
+		$vars = array('user_id', 'sub_id', 'package_id');
+		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_ended', compact($vars)));
+	}
+
+	/**
 	 * Add a user to the subscribed groups.
 	 *
 	 * @param int $user_id The user ID
@@ -600,50 +637,6 @@ class subscription extends operator implements subscription_interface
 		{
 			group_user_del($group_id, $user_id);
 		}
-	}
-
-	/**
-	 * Dispatch the event for a subscription starting.
-	 *
-	 * @param int $user_id    The user ID
-	 * @param int $sub_id     The subscription ID
-	 * @param int $package_id The package ID
-	 */
-	protected function dispatch_start_event($user_id, $sub_id, $package_id)
-	{
-		/**
-		 * Event triggered when a subscription is started.
-		 *
-		 * @event stevotvr.groupsub.subscription_started
-		 * @var int user_id    The user ID
-		 * @var int sub_id     The subscription ID
-		 * @var int package_id The package ID
-		 * @since 0.1.0
-		 */
-		$vars = array('user_id', 'sub_id', 'package_id');
-		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
-	}
-
-	/**
-	 * Dispatch the event for a subscription ending.
-	 *
-	 * @param int $user_id    The user ID
-	 * @param int $sub_id     The subscription ID
-	 * @param int $package_id The package ID
-	 */
-	protected function dispatch_end_event($user_id, $sub_id, $package_id)
-	{
-		/**
-		 * Event triggered when a subscription is ended.
-		 *
-		 * @event stevotvr.groupsub.subscription_ended
-		 * @var int user_id    The user ID
-		 * @var int sub_id     The subscription ID
-		 * @var int package_id The package ID
-		 * @since 0.1.0
-		 */
-		$vars = array('user_id', 'sub_id', 'package_id');
-		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_ended', compact($vars)));
 	}
 
 }
