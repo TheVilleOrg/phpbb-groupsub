@@ -38,6 +38,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
+	'EXCEPTION_MISSING_FIELD'		=> 'The required field "%s" is missing.',
 	'EXCEPTION_OUT_OF_BOUNDS'		=> 'The field `%s` received a value out of its range.',
 	'EXCEPTION_TOO_LONG'			=> 'The field `%s` received a value longer than its maximum length.',
 	'EXCEPTION_NOT_UNIQUE'			=> 'The field `%s` received a value that is not unique.',

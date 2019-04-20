@@ -16,12 +16,12 @@ namespace stevotvr\groupsub\exception;
 class missing_field extends base
 {
 	/**
-	 * @param string $field       The name of the required field
-	 * @param string $lang_string An optional language string for the message
+	 * @param string $field The name of the required field
 	 */
-	public function __construct($field, $lang_string = null)
+	public function __construct($field)
 	{
 		$message = sprintf('The required field "%s" is missing.', $field);
-		parent::__construct($message, $lang_string);
+		$lang_array = array('EXCEPTION_MISSING_FIELD', 'EXCEPTION_FIELD_' . strtoupper($field));
+		parent::__construct($message, $lang_array);
 	}
 }
