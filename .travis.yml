@@ -12,7 +12,6 @@ matrix:
       env: DB=mysql
     - php: 5.4
       env: DB=mariadb
-      dist: precise
     - php: 5.4
       env: DB=postgres
     - php: 5.4
@@ -25,13 +24,12 @@ matrix:
       env: DB=mysqli
     - php: 7.1
       env: DB=mysqli
-    - php: nightly
+    - php: 7.2
       env: DB=mysqli
-    - php: hhvm
+    - php: nightly
       env: DB=mysqli
   allow_failures:
     - php: nightly
-    - php: hhvm
   fast_finish: true
 
 env:
