@@ -38,10 +38,10 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'EXCEPTION_MISSING_FIELD'		=> 'The required field "%s" is missing.',
-	'EXCEPTION_OUT_OF_BOUNDS'		=> 'The field `%s` received a value out of its range.',
-	'EXCEPTION_TOO_LONG'			=> 'The field `%s` received a value longer than its maximum length.',
-	'EXCEPTION_NOT_UNIQUE'			=> 'The field `%s` received a value that is not unique.',
-	'EXCEPTION_INVALID_CURRENCY'	=> 'The field `%s` received an invalid currency code.',
-	'EXCEPTION_INVALID_IDENT'		=> 'The field `%s` must contain only a-z, 0-9, _, and begin with a letter.',
+	'EXCEPTION_MISSING_FIELD'		=> 'The required field “%s” is missing.',
+	'EXCEPTION_OUT_OF_BOUNDS'		=> 'The field “%s” received a value out of its range.',
+	'EXCEPTION_TOO_LONG'			=> 'The field “%s” received a value longer than its maximum length.',
+	'EXCEPTION_NOT_UNIQUE'			=> 'The field “%s” received a value that is not unique.',
+	'EXCEPTION_INVALID_CURRENCY'	=> 'The field “%s” received an invalid currency code.',
+	'EXCEPTION_INVALID_IDENT'		=> 'The field “%s” must contain only a-z, 0-9, _, and begin with a letter.',
 ));
