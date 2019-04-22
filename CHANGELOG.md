@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 (4/22/19)
+
+* Fixed some missing error messages
+* Fixed incompatibility with PHP 5.4
+* Cleaned up HTML and JavaScript output
+* Fixed duplicate database key
+
 ## 1.0.0 (1/16/19)
 
 * Initial stable release
