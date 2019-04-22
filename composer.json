@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "An extension to allow members to access usergroups via paid subscription",
 	"homepage": "https://github.com/stevotvr/phpbb-groupsub",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "GPL-2.0-only",
 	"authors": [
 		{
