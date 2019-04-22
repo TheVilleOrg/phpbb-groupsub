@@ -44,4 +44,10 @@ $lang = array_merge($lang, array(
 	'EXCEPTION_NOT_UNIQUE'			=> 'The field “%s” received a value that is not unique.',
 	'EXCEPTION_INVALID_CURRENCY'	=> 'The field “%s” received an invalid currency code.',
 	'EXCEPTION_INVALID_IDENT'		=> 'The field “%s” must contain only a-z, 0-9, _, and begin with a letter.',
+
+	'EXCEPTION_FIELD_PKG_IDENT'		=> 'Package identifier',
+	'EXCEPTION_FIELD_PKG_NAME'		=> 'Package name',
+	'EXCEPTION_FIELD_TERM_PRICE'	=> 'Subscription price',
+	'EXCEPTION_FIELD_TERM_CURRENCY'	=> 'Subscription price',
+	'EXCEPTION_FIELD_TERM_LENGTH'	=> 'Subscription length',
 ));
