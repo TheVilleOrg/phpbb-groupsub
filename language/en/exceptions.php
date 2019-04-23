@@ -48,6 +48,6 @@ $lang = array_merge($lang, array(
 	'EXCEPTION_FIELD_PKG_IDENT'		=> 'Package identifier',
 	'EXCEPTION_FIELD_PKG_NAME'		=> 'Package name',
 	'EXCEPTION_FIELD_TERM_PRICE'	=> 'Subscription price',
-	'EXCEPTION_FIELD_TERM_CURRENCY'	=> 'Subscription price',
+	'EXCEPTION_FIELD_TERM_CURRENCY'	=> 'Subscription currency',
 	'EXCEPTION_FIELD_TERM_LENGTH'	=> 'Subscription length',
 ));
