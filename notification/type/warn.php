@@ -73,7 +73,7 @@ class warn extends base_type
 		$datetime = new datetime($this->user, $time, $tz);
 
 		$params = array('name' => $this->get_data('pkg_ident'));
-		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::ABSOLUTE_URL);
+		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::RELATIVE_PATH);
 
 		$days_left = floor(((int) $this->get_data('sub_expires') - time()) / 86400);
 
@@ -83,7 +83,7 @@ class warn extends base_type
 			'EXPIRE_DATE'	=> $datetime->format('|M d, Y|'),
 			'SUB_NAME'		=> $this->get_data('pkg_name'),
 
-			'U_VIEW_SUB'	=> $u_view_sub,
+			'U_VIEW_SUB'	=> generate_board_url() . '/' . $u_view_sub,
 		);
 	}
 
