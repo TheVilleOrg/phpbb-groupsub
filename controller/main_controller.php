@@ -232,7 +232,6 @@ class main_controller
 	 */
 	protected function select_term($term_id)
 	{
-		$u_board = generate_board_url(true);
 		$sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
 		$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
 
