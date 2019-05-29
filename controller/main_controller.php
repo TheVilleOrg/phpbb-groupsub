@@ -21,6 +21,7 @@ use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\package_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 use stevotvr\groupsub\operator\unit_helper_interface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Group Subscription controller for the main user-facing interface.
@@ -244,6 +245,11 @@ class main_controller
 		$price = $term['term']->get_price();
 		$currency = $term['term']->get_currency();
 
+		$u_ipn = $this->helper->route('stevotvr_groupsub_ipn', array(), true, false, UrlGeneratorInterface::ABSOLUTE_URL);
+		$return_params = array('term_id' => $term['term']->get_id());
+		$u_return = $this->helper->route('stevotvr_groupsub_return', $return_params, true, false, UrlGeneratorInterface::ABSOLUTE_URL);
+		$u_main = $this->helper->route('stevotvr_groupsub_main', array(), true, false, UrlGeneratorInterface::ABSOLUTE_URL);
+
 		$this->template->assign_vars(array(
 			'S_PP_SANDBOX'	=> $sandbox,
 
@@ -258,9 +264,9 @@ class main_controller
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
 			'TERM_LENGTH'			=> $term['term']->get_length() ? $this->unit_helper->get_formatted_timespan($term['term']->get_length()) : 0,
 
-			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),
-			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '?term_id=' . $term['term']->get_id(),
-			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
+			'U_NOTIFY'			=> $u_ipn,
+			'U_RETURN'			=> $u_return,
+			'U_CANCEL_RETURN'	=> $u_main,
 		));
 
 		return $this->helper->render('select_term.html', $term['package']->get_name());
