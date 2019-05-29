@@ -441,6 +441,7 @@ class subscription extends operator implements subscription_interface
 				),
 			),
 			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . '
+								AND s.sub_active <> 0
 								AND s.sub_expires <> 0
 								AND s.sub_expires < ' . time(),
 		);
@@ -468,6 +469,7 @@ class subscription extends operator implements subscription_interface
 			$sub_ids = array();
 
 			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . '
+									AND s.sub_active <> 0
 									AND s.sub_expires <> 0
 									AND s.sub_expires < ' . (time() + $this->warn_time);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
