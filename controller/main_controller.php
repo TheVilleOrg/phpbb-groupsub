@@ -241,10 +241,8 @@ class main_controller
 			return $this->helper->error('PAGE_NOT_FOUND', 404);
 		}
 
-		extract($term);
-
-		$price = $term->get_price();
-		$currency = $term->get_currency();
+		$price = $term['term']->get_price();
+		$currency = $term['term']->get_currency();
 
 		$this->template->assign_vars(array(
 			'S_PP_SANDBOX'	=> $sandbox,
@@ -252,19 +250,19 @@ class main_controller
 			'USER_ID'		=> $this->user->data['user_id'],
 			'PP_BUSINESS'	=> $business,
 
-			'PKG_NAME'				=> $package->get_name(),
-			'PKG_DESC'				=> $package->get_desc_for_display(),
-			'TERM_ID'				=> $term->get_id(),
+			'PKG_NAME'				=> $term['package']->get_name(),
+			'PKG_DESC'				=> $term['package']->get_desc_for_display(),
+			'TERM_ID'				=> $term['term']->get_id(),
 			'TERM_PRICE'			=> $this->currency->format_value($currency, $price),
 			'TERM_CURRENCY'			=> $currency,
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
-			'TERM_LENGTH'			=> $term->get_length() ? $this->unit_helper->get_formatted_timespan($term->get_length()) : 0,
+			'TERM_LENGTH'			=> $term['term']->get_length() ? $this->unit_helper->get_formatted_timespan($term['term']->get_length()) : 0,
 
 			'U_NOTIFY'			=> $u_board . $this->helper->route('stevotvr_groupsub_ipn'),
-			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '?term_id=' . $term->get_id(),
+			'U_RETURN'			=> $u_board . $this->helper->route('stevotvr_groupsub_return') . '?term_id=' . $term['term']->get_id(),
 			'U_CANCEL_RETURN'	=> $u_board . $this->helper->route('stevotvr_groupsub_main'),
 		));
 
-		return $this->helper->render('select_term.html', $package->get_name());
+		return $this->helper->render('select_term.html', $term['package']->get_name());
 	}
 }
