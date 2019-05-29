@@ -2,6 +2,7 @@
 
 ## 1.0.2 (5/29/19)
 
+* Fixed notifications being sent about inactive subscriptions
 * Use strong tags instead of b tags in language strings
 * Optimize JavaScript event handling
 * Update code for phpBB extension validation compliance
