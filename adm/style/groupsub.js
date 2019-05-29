@@ -5,35 +5,30 @@
 var termTable = $('#term_table tbody'),
 	termHtml = termTable.html();
 
-var attachEvents = function() {
-	$('.move_term_up').click(function() {
-		var row = $(this).parents('tr'),
-			prev = row.prev();
-		row.insertBefore(prev);
+$(document).on('click', '.move_term_up', function() {
+	var row = $(this).parents('tr'),
+		prev = row.prev();
+	row.insertBefore(prev);
 
-		return false;
-	});
+	return false;
+});
 
-	$('.move_term_down').click(function() {
-		var row = $(this).parents('tr'),
-			next = row.next();
-		row.insertAfter(next);
+$(document).on('click', '.move_term_down', function() {
+	var row = $(this).parents('tr'),
+		next = row.next();
+	row.insertAfter(next);
 
-		return false;
-	});
+	return false;
+});
 
-	$('.delete_term').click(function() {
-		$(this).parents('tr').remove();
+$(document).on('click', '.delete_term', function() {
+	$(this).parents('tr').remove();
 
-		return false;
-	});
-};
+	return false;
+});
 
 $('#add_edit_pkg').on('reset', function() {
 	termTable.html(termHtml);
-	attachEvents();
 });
-
-attachEvents();
 
 }(jQuery));
