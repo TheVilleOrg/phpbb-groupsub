@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 (5/29/19)
+
+* Use strong tags instead of b tags in language strings
+* Optimize JavaScript event handling
+* Update code for phpBB extension validation compliance
+
 ## 1.0.1 (4/22/19)
 
 * Fixed some missing error messages
