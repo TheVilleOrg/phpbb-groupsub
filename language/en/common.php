@@ -54,7 +54,7 @@ $lang = array_merge($lang, array(
 
 	'GROUPSUB_RETURN_TITLE'		=> 'Thank You',
 	'GROUPSUB_RETURN'			=> 'Subscribed',
-	'GROUPSUB_RETURN_MESSAGE'	=> 'You have subscribed to <b>%1$s</b> for %2$s. Please allow a few minutes for your payment to be processed and your subscription to be activated.',
+	'GROUPSUB_RETURN_MESSAGE'	=> 'You have subscribed to <strong>%1$s</strong> for %2$s. Please allow a few minutes for your payment to be processed and your subscription to be activated.',
 
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
 	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',
