@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.2 (5/29/19)
+## 1.0.2 (6/5/19)
 
 * Fixed notifications being sent about inactive subscriptions
 * Use strong tags instead of b tags in language strings
