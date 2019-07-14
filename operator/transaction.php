@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\operator;
 
 use phpbb\config\config;
+use phpbb\event\dispatcher_interface;
 use phpbb\request\request_interface;
 use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\subscription_interface;
@@ -24,6 +25,11 @@ class transaction extends operator implements transaction_interface
 	 * @var \phpbb\config\config
 	 */
 	protected $config;
+
+	/**
+	 * @var \phpbb\event\dispatcher_interface
+	 */
+	protected $phpbb_dispatcher;
 
 	/**
 	 * @var \phpbb\request\request_interface
@@ -58,16 +64,18 @@ class transaction extends operator implements transaction_interface
 	 * @param \phpbb\config\config                               $config
 	 * @param \phpbb\request\request_interface                   $request
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
+	 * @param \phpbb\event\dispatcher_interface                  $phpbb_dispatcher
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
 	 * @param string                                             $trans_table The name of the
 	 *                                                                        groupsub_trans table
 	 * @param string                                             $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(config $config, request_interface $request, currency_interface $currency, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
+	public function setup(config $config, request_interface $request, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
 	{
 		$this->config = $config;
 		$this->request = $request;
 		$this->currency = $currency;
+		$this->phpbb_dispatcher = $phpbb_dispatcher;
 		$this->sub_operator = $sub_operator;
 		$this->trans_table = $trans_table;
 		$this->phpbb_users_table = $phpbb_users_table;
@@ -127,7 +135,7 @@ class transaction extends operator implements transaction_interface
 		$user_id = $this->request->variable('custom', 0);
 		$sub_id = $this->sub_operator->create_subscription($term, $user_id);
 
-		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id);
+		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross);
 	}
 
 	/**
@@ -175,10 +183,11 @@ class transaction extends operator implements transaction_interface
 	 * @param string  $currency The currency code
 	 * @param int     $user_id  The user ID
 	 * @param int     $sub_id   The subscription ID
+	 * @param string  $gross    The gross payment amount
 	 *
 	 * @return boolean The record was inserted successfully
 	 */
-	protected function insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id)
+	protected function insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross)
 	{
 		if (!preg_match('/^[A-Z0-9]{17}$/', $trans_id))
 		{
@@ -209,6 +218,27 @@ class transaction extends operator implements transaction_interface
 		$sql = 'INSERT INTO ' . $this->trans_table . '
 				' . $this->db->sql_build_array('INSERT', $data);
 		$this->db->sql_query($sql);
+
+		$txn_id = $trans_id;
+		$test_ipn = $sandbox;
+		$mc_currency = $currency;
+		$mc_gross = $gross;
+
+		/**
+		 * Event triggered when a payment is received.
+		 *
+		 * @event stevotvr.groupsub.payment_received
+		 * @var int     user_id     The user ID
+		 * @var int     sub_id      The subscription ID
+		 * @var string  txn_id      The PayPal transaction ID
+		 * @var string  payer_id    The PayPal payer ID
+		 * @var boolean test_ipn    True if sandbox mode is enabled, otherwise false
+		 * @var string  mc_currency The three character currency code
+		 * @var string  mc_gross    The gross amount of the payment
+		 * @since 1.1.0
+		 */
+		$vars = array('user_id', 'sub_id', 'txn_id', 'payer_id', 'test_ipn', 'mc_currency', 'mc_gross');
+		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.payment_received', compact($vars)));
 
 		return true;
 	}

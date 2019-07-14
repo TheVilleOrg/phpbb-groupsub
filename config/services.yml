@@ -226,6 +226,7 @@ services:
                 - '@config'
                 - '@request'
                 - '@stevotvr.groupsub.operator.currency'
+                - '@dispatcher'
                 - '@stevotvr.groupsub.operator.subscription'
                 - '%stevotvr.groupsub.tables.trans%'
                 - '%tables.users%'
