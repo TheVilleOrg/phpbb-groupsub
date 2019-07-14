@@ -237,7 +237,15 @@ class transaction extends operator implements transaction_interface
 		 * @var string  mc_gross    The gross amount of the payment
 		 * @since 1.1.0
 		 */
-		$vars = array('user_id', 'sub_id', 'txn_id', 'payer_id', 'test_ipn', 'mc_currency', 'mc_gross');
+		$vars = array(
+			'user_id',
+			'sub_id',
+			'txn_id',
+			'payer_id',
+			'test_ipn',
+			'mc_currency',
+			'mc_gross',
+		);
 		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.payment_received', compact($vars)));
 
 		return true;
