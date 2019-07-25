@@ -89,9 +89,12 @@ class return_controller
 			return $this->helper->error('PAGE_NOT_FOUND', 404);
 		}
 
+		$length = $term['term']->get_length();
+		$length = $length > 0 ? $this->unit_helper->get_formatted_timespan($length) : $this->language->lang('GROUPSUB_RETURN_UNLIMITED');
+
 		$this->template->assign_vars(array(
 			'PKG_NAME'		=> $term['package']->get_name(),
-			'TERM_LENGTH'	=> $this->unit_helper->get_formatted_timespan($term['term']->get_length()),
+			'TERM_LENGTH'	=> $length,
 		));
 
 		return $this->helper->render('payment_return.html', $this->language->lang('GROUPSUB_RETURN_TITLE'));
