@@ -113,11 +113,30 @@ class ipn_controller
 		}
 
 		$url = $sandbox ? self::SANDBOX_VERIFY_URI : self::VERIFY_URI;
+
+		if (function_exists('curl_init'))
+		{
+			return $this->request_curl($url, $req);
+		}
+
+		return $this->request_fopen($url, $req);
+	}
+
+	/**
+	 * Make a verification HTTP POST request using fopen.
+	 *
+	 * @param string $url     The URL to which to POST
+	 * @param string $content The body of the request
+	 *
+	 * @return boolean The request was verified
+	 */
+	private function request_fopen($url, $content)
+	{
 		$ctx = stream_context_create(array(
 			'http' => array(
 				'method'			=> 'POST',
 				'header'			=> 'Connection: Close',
-				'content'			=> $req,
+				'content'			=> $content,
 				'protocol_version'	=> 1.1,
 				'timeout'			=> 30.0,
 				'ignore_errors'		=> true,
@@ -141,6 +160,39 @@ class ipn_controller
 		$response = fread($fp, 16);
 
 		fclose($fp);
+
+		return $response === self::VALID;
+	}
+
+	/**
+	 * Make a verification HTTP POST request using cURL.
+	 *
+	 * @param string $url     The URL to which to POST
+	 * @param string $content The body of the request
+	 *
+	 * @return boolean The request was verified
+	 */
+	private function request_curl($url, $content)
+	{
+		$ch = curl_init($url);
+
+		if ($ch === false)
+		{
+			return false;
+		}
+
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+
+		$response = curl_exec($ch);
+
+		curl_close($ch);
 
 		return $response === self::VALID;
 	}
