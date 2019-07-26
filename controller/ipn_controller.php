@@ -32,6 +32,11 @@ class ipn_controller
 	const VALID = 'VERIFIED';
 
 	/**
+	 * The path to the certificate authority file
+	 */
+	const CAFILE = __DIR__ . '/../cacert.pem';
+
+	/**
 	 * @var \phpbb\config\config
 	 */
 	protected $config;
@@ -141,6 +146,9 @@ class ipn_controller
 				'timeout'			=> 30.0,
 				'ignore_errors'		=> true,
 			),
+			'ssl' => array(
+				'cafile'	=> self::CAFILE,
+			),
 		));
 		$fp = fopen($url, 'r', false, $ctx);
 
@@ -187,6 +195,7 @@ class ipn_controller
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_CAINFO, self::CAFILE);
 		curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
 
