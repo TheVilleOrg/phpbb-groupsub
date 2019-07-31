@@ -91,7 +91,7 @@ abstract class entity implements entity_interface
 
 		foreach ($this->columns as $column => $type)
 		{
-			if (!isset($data[$column]))
+			if (!array_key_exists($column, $data))
 			{
 				throw new missing_field($column);
 			}
