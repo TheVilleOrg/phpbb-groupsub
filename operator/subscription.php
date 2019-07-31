@@ -10,7 +10,6 @@
 
 namespace stevotvr\groupsub\operator;
 
-use phpbb\config\config;
 use phpbb\event\dispatcher_interface;
 use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;

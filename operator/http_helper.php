@@ -10,8 +10,6 @@
 
 namespace stevotvr\groupsub\operator;
 
-use stevotvr\groupsub\exception\unexpected_value;
-
 /**
  * Group Subscription HTTP helper operator.
  */
