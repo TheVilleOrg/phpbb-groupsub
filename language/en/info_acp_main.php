@@ -115,6 +115,8 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SUB_START'			=> 'Started',
 	'ACP_GROUPSUB_SUB_START_EXPLAIN'	=> 'Enter a starting date for this subscription.',
 
+	'ACP_GROUPSUB_ERROR_PP_SB_API'		=> 'The sandbox API credentials were incomplete.',
+	'ACP_GROUPSUB_ERROR_PP_API'			=> 'The live API credentials were incomplete.',
 	'ACP_GROUPSUB_ERROR_CURRENCY'		=> 'You must select a valid currency.',
 	'ACP_GROUPSUB_ERROR_NO_PKGS'		=> 'There are no packages for which to create a subscription.',
 	'ACP_GROUPSUB_ERROR_DATE_IN_PAST'	=> 'The expiration date entered was in the past.',
