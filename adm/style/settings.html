@@ -26,6 +26,43 @@
 		</dl>
 	</fieldset>
 	<fieldset>
+		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PAYPAL_API') }}</legend>
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PP_SB_API') }}</legend>
+			<dl>
+				<dt><label for="pp_sb_api_user">{{ lang('ACP_GROUPSUB_SETTINGS_PP_SB_API_USER') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="text" id="pp_sb_api_user" name="pp_sb_api_user" value="{{ PP_SB_API_USER }}"></dd>
+			</dl>
+			<dl>
+				<dt><label for="pp_sb_api_pass">{{ lang('ACP_GROUPSUB_SETTINGS_PP_SB_API_PASS') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="password" id="pp_sb_api_pass" name="pp_sb_api_pass" value="{{ PP_SB_API_PASS }}"></dd>
+			</dl>
+			<dl>
+				<dt><label for="pp_sb_api_sig">{{ lang('ACP_GROUPSUB_SETTINGS_PP_SB_API_SIG') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="password" id="pp_sb_api_sig" name="pp_sb_api_sig" value="{{ PP_SB_API_SIG }}"></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PP_API') }}</legend>
+			<dl>
+				<dt><label for="pp_api_user">{{ lang('ACP_GROUPSUB_SETTINGS_PP_API_USER') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="text" id="pp_api_user" name="pp_api_user" value="{{ PP_API_USER }}"></dd>
+			</dl>
+			<dl>
+				<dt><label for="pp_api_pass">{{ lang('ACP_GROUPSUB_SETTINGS_PP_API_PASS') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="password" id="pp_api_pass" name="pp_api_pass" value="{{ PP_API_PASS }}"></dd>
+			</dl>
+			<dl>
+				<dt><label for="pp_api_sig">{{ lang('ACP_GROUPSUB_SETTINGS_PP_API_SIG') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="password" id="pp_api_sig" name="pp_api_sig" value="{{ PP_API_SIG }}"></dd>
+			</dl>
+		</fieldset>
+		<dl>
+			<dt><label for="allow_auto_renew">{{ lang('ACP_GROUPSUB_ALLOW_AUTO_RENEW') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_ALLOW_AUTO_RENEW_EXPLAIN') }}</span></dt>
+			<dd><label><input type="radio" id="allow_auto_renew" name="allow_auto_renew" value="1"{% if ALLOW_AUTO_RENEW %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="allow_auto_renew" value="0"{% if not ALLOW_AUTO_RENEW %} checked{% endif %}> {{ lang('NO') }}</label></dd>
+		</dl>
+	</fieldset>
+	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_DEFAULTS') }}</legend>
 		<dl>
 			<dt><label for="currency">{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY_EXPLAIN') }}</span></dt>

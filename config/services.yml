@@ -109,6 +109,7 @@ services:
         class: stevotvr\groupsub\controller\ipn_controller
         arguments:
             - '@config'
+            - '@stevotvr.groupsub.operator.http_helper'
             - '@request'
             - '@stevotvr.groupsub.operator.transaction'
 
@@ -181,6 +182,7 @@ services:
         class: stevotvr\groupsub\operator\operator
         abstract: true
         arguments:
+            - '@config'
             - '@service_container'
             - '@dbal.conn'
             - '@language'
@@ -200,7 +202,7 @@ services:
         calls:
             - method: setup
               arguments:
-                - '@config'
+                - '@stevotvr.groupsub.operator.http_helper'
                 - '@notification_manager'
                 - '@dispatcher'
                 - '%tables.users%'
@@ -223,10 +225,13 @@ services:
         calls:
             - method: setup
               arguments:
-                - '@config'
                 - '@request'
                 - '@stevotvr.groupsub.operator.currency'
                 - '@dispatcher'
                 - '@stevotvr.groupsub.operator.subscription'
                 - '%stevotvr.groupsub.tables.trans%'
                 - '%tables.users%'
+
+    stevotvr.groupsub.operator.http_helper:
+        class: stevotvr\groupsub\operator\http_helper
+        parent: stevotvr.groupsub.operator

@@ -70,4 +70,16 @@ interface subscription_interface extends entity_interface
 	 * @throws \stevotvr\groupsub\exception\out_of_bounds
 	 */
 	public function set_expire($expire);
+
+	/**
+	 * @return string The PayPal subscription ID
+	 */
+	public function get_paypal_id();
+
+	/**
+	 * @param string $paypal_id The PayPal subscription ID
+	 *
+	 * @return subscription_interface This object for chaining
+	 */
+	public function set_paypal_id($paypal_id);
 }

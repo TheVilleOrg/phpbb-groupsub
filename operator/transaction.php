@@ -10,7 +10,6 @@
 
 namespace stevotvr\groupsub\operator;
 
-use phpbb\config\config;
 use phpbb\event\dispatcher_interface;
 use phpbb\request\request_interface;
 use stevotvr\groupsub\operator\currency_interface;
@@ -21,11 +20,6 @@ use stevotvr\groupsub\operator\subscription_interface;
  */
 class transaction extends operator implements transaction_interface
 {
-	/**
-	 * @var \phpbb\config\config
-	 */
-	protected $config;
-
 	/**
 	 * @var \phpbb\event\dispatcher_interface
 	 */
@@ -61,7 +55,6 @@ class transaction extends operator implements transaction_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\config\config                               $config
 	 * @param \phpbb\request\request_interface                   $request
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \phpbb\event\dispatcher_interface                  $phpbb_dispatcher
@@ -70,9 +63,8 @@ class transaction extends operator implements transaction_interface
 	 *                                                                        groupsub_trans table
 	 * @param string                                             $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(config $config, request_interface $request, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
+	public function setup(request_interface $request, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
 	{
-		$this->config = $config;
 		$this->request = $request;
 		$this->currency = $currency;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
@@ -86,6 +78,12 @@ class transaction extends operator implements transaction_interface
 	 */
 	public function process_transaction()
 	{
+		$txn_type = $this->request->variable('txn_type', '');
+		if (!in_array($txn_type, array('web_accept', 'subscr_payment')))
+		{
+			return false;
+		}
+
 		$sandbox = (bool) $this->config['stevotvr_groupsub_pp_sandbox'];
 		if ($sandbox !== $this->request->variable('test_ipn', false))
 		{
@@ -132,8 +130,14 @@ class transaction extends operator implements transaction_interface
 			return false;
 		}
 
+		$paypal_id = null;
+		if ($txn_type === 'subscr_payment')
+		{
+			$paypal_id = $this->request->variable('subscr_id', '');
+		}
+
 		$user_id = $this->request->variable('custom', 0);
-		$sub_id = $this->sub_operator->create_subscription($term, $user_id);
+		$sub_id = $this->sub_operator->create_subscription($term, $user_id, $paypal_id);
 
 		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross);
 	}

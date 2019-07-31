@@ -12,6 +12,7 @@ namespace stevotvr\groupsub\controller;
 
 use phpbb\config\config;
 use phpbb\request\request_interface;
+use stevotvr\groupsub\operator\http_helper_interface;
 use stevotvr\groupsub\operator\transaction_interface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,14 +33,14 @@ class ipn_controller
 	const VALID = 'VERIFIED';
 
 	/**
-	 * The path to the certificate authority file
-	 */
-	const CAFILE = __DIR__ . '/../cacert.pem';
-
-	/**
 	 * @var \phpbb\config\config
 	 */
 	protected $config;
+
+	/**
+	 * @var \stevotvr\groupsub\operator\http_helper_interface
+	 */
+	protected $http_helper;
 
 	/**
 	 * @var \phpbb\request\request_interface
@@ -52,13 +53,15 @@ class ipn_controller
 	protected $trans_operator;
 
 	/**
-	 * @param \phpbb\config\config                               $config
-	 * @param \phpbb\request\request_interface                   $request
-	 * @param \stevotvr\groupsub\operator\transaction_interface  $trans_operator
+	 * @param \phpbb\config\config                              $config
+	 * @param \stevotvr\groupsub\operator\http_helper_interface $http_helper
+	 * @param \phpbb\request\request_interface                  $request
+	 * @param \stevotvr\groupsub\operator\transaction_interface $trans_operator
 	 */
-	public function __construct(config $config, request_interface $request, transaction_interface $trans_operator)
+	public function __construct(config $config, http_helper_interface $http_helper, request_interface $request, transaction_interface $trans_operator)
 	{
 		$this->config = $config;
+		$this->http_helper = $http_helper;
 		$this->request = $request;
 		$this->trans_operator = $trans_operator;
 	}
@@ -119,90 +122,6 @@ class ipn_controller
 
 		$url = $sandbox ? self::SANDBOX_VERIFY_URI : self::VERIFY_URI;
 
-		if (function_exists('curl_init'))
-		{
-			return $this->request_curl($url, $req);
-		}
-
-		return $this->request_fopen($url, $req);
-	}
-
-	/**
-	 * Make a verification HTTP POST request using fopen.
-	 *
-	 * @param string $url     The URL to which to POST
-	 * @param string $content The body of the request
-	 *
-	 * @return boolean The request was verified
-	 */
-	private function request_fopen($url, $content)
-	{
-		$ctx = stream_context_create(array(
-			'http' => array(
-				'method'			=> 'POST',
-				'header'			=> 'Connection: Close',
-				'content'			=> $content,
-				'protocol_version'	=> 1.1,
-				'timeout'			=> 30.0,
-				'ignore_errors'		=> true,
-			),
-			'ssl' => array(
-				'cafile'	=> self::CAFILE,
-			),
-		));
-		$fp = fopen($url, 'r', false, $ctx);
-
-		if ($fp === false)
-		{
-			return false;
-		}
-
-		$meta = stream_get_meta_data($fp);
-		$http_response = $meta['wrapper_data'][0];
-		$http_code = (int) substr($http_response, strpos($http_response, ' ') + 1, 3);
-		if ($http_code !== 200)
-		{
-			return false;
-		}
-
-		$response = fread($fp, 16);
-
-		fclose($fp);
-
-		return $response === self::VALID;
-	}
-
-	/**
-	 * Make a verification HTTP POST request using cURL.
-	 *
-	 * @param string $url     The URL to which to POST
-	 * @param string $content The body of the request
-	 *
-	 * @return boolean The request was verified
-	 */
-	private function request_curl($url, $content)
-	{
-		$ch = curl_init($url);
-
-		if ($ch === false)
-		{
-			return false;
-		}
-
-		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-		curl_setopt($ch, CURLOPT_CAINFO, self::CAFILE);
-		curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
-
-		$response = curl_exec($ch);
-
-		curl_close($ch);
-
-		return $response === self::VALID;
+		return $this->http_helper->post($url, $req) === self::VALID;
 	}
 }

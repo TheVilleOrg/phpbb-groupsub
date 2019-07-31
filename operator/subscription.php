@@ -16,12 +16,18 @@ use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\entity\term_interface as term_entity;
 use stevotvr\groupsub\exception\out_of_bounds;
+use stevotvr\groupsub\operator\http_helper_interface;
 
 /**
  * Group Subscription subscription operator.
  */
 class subscription extends operator implements subscription_interface
 {
+	/**
+	 * @var \stevotvr\groupsub\operator\http_helper_interface
+	 */
+	protected $http_helper;
+
 	/**
 	 * @var \phpbb\notification\manager
 	 */
@@ -98,19 +104,20 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\config\config              $config
-	 * @param \phpbb\notification\manager       $notification_manager
-	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
-	 * @param string                            $phpbb_users_table    The name of the phpBB users table
+	 * @param \stevotvr\groupsub\operator\http_helper_interface $http_helper
+	 * @param \phpbb\notification\manager                       $notification_manager
+	 * @param \phpbb\event\dispatcher_interface                 $phpbb_dispatcher
+	 * @param string                                            $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(config $config, manager $notification_manager, dispatcher_interface $phpbb_dispatcher, $phpbb_users_table)
+	public function setup(http_helper_interface $http_helper, manager $notification_manager, dispatcher_interface $phpbb_dispatcher, $phpbb_users_table)
 	{
+		$this->http_helper = $http_helper;
 		$this->notification_manager = $notification_manager;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
 		$this->phpbb_users_table = $phpbb_users_table;
 
-		$this->warn_time = (int) $config['stevotvr_groupsub_warn_time'] * 86400;
-		$this->grace = (int) $config['stevotvr_groupsub_grace'] * 86400;
+		$this->warn_time = (int) $this->config['stevotvr_groupsub_warn_time'] * 86400;
+		$this->grace = (int) $this->config['stevotvr_groupsub_grace'] * 86400;
 	}
 
 	/**
@@ -330,7 +337,7 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function create_subscription(term_entity $term, $user_id)
+	public function create_subscription(term_entity $term, $user_id, $paypal_id = null)
 	{
 		$length = $term->get_length() * 86400;
 
@@ -364,7 +371,8 @@ class subscription extends operator implements subscription_interface
 							->set_package($term->get_package())
 							->set_user((int) $user_id)
 							->set_start(time())
-							->set_expire(time() + $length);
+							->set_expire(time() + $length)
+							->set_paypal_id($paypal_id);
 		return $this->add_subscription($subscription);
 	}
 
@@ -378,14 +386,14 @@ class subscription extends operator implements subscription_interface
 				WHERE sub_id = ' . (int) $sub_id;
 		$this->db->sql_query($sql);
 
-		$sql = 'SELECT pkg_id, user_id
+		$sql = 'SELECT pkg_id, user_id, sub_paypal_id
 				FROM ' . $this->sub_table . '
 				WHERE sub_id = ' . (int) $sub_id;
 		$this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
 
-		$this->end_subscription((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
+		$this->end_subscription((int) $row['user_id'], $sub_id, (int) $row['pkg_id'], $row['sub_paypal_id']);
 	}
 
 	/**
@@ -395,7 +403,7 @@ class subscription extends operator implements subscription_interface
 	{
 		$sub_ids = array();
 
-		$sql = 'SELECT sub_id, pkg_id, user_id
+		$sql = 'SELECT sub_id, pkg_id, user_id, sub_paypal_id
 				FROM ' . $this->sub_table . '
 				WHERE sub_active = 1
 					AND sub_expires <> 0
@@ -420,7 +428,7 @@ class subscription extends operator implements subscription_interface
 
 		foreach ($rows as $row)
 		{
-			$this->end_subscription($row['user_id'], $row['sub_id'], $row['pkg_id']);
+			$this->end_subscription($row['user_id'], $row['sub_id'], $row['pkg_id'], $row['sub_paypal_id']);
 		}
 	}
 
@@ -534,13 +542,36 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * End an active subscription.
 	 *
-	 * @param int $user_id    The user ID
-	 * @param int $sub_id     The subscription ID
-	 * @param int $package_id The package ID
+	 * @param int    $user_id    The user ID
+	 * @param int    $sub_id     The subscription ID
+	 * @param int    $package_id The package ID
+	 * @param string $paypal_id  The PayPal subscription ID
 	 */
-	protected function end_subscription($user_id, $sub_id, $package_id)
+	protected function end_subscription($user_id, $sub_id, $package_id, $paypal_id)
 	{
 		$this->remove_user_from_groups($user_id, $sub_id);
+
+		if (isset($paypal_id))
+		{
+			$sandbox = (bool) $this->config['stevotvr_groupsub_pp_sandbox'];
+			$api_user = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_api_user' : 'stevotvr_groupsub_pp_api_user'];
+			$api_pass= $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_api_pass' : 'stevotvr_groupsub_pp_api_pass'];
+			$api_sig = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_api_sig' : 'stevotvr_groupsub_pp_api_sig'];
+
+			if (!empty($api_user) && !empty($api_pass) && !empty($api_sig))
+			{
+				$content = http_build_query(array(
+					'USER'		=> $api_user,
+					'PWD'		=> $api_pass,
+					'SIGNATURE'	=> $api_sig,
+					'METHOD'	=> 'ManageRecurringPaymentsProfileStatus',
+					'VERSION'	=> 204,
+					'PROFILEID'	=> $paypal_id,
+					'ACTION'	=> 'Cancel',
+				));
+				$response = $this->http_helper->post($sandbox ? self::PP_SANDBOX_NVP_URI : self::PP_NVP_URI, $content);
+			}
+		}
 
 		/**
 		 * Event triggered when a subscription is ended.
