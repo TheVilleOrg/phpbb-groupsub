@@ -349,9 +349,13 @@ class subscription extends operator implements subscription_interface
 
 		if ($row)
 		{
-			$expires = (int) $row['sub_expires'] + $length;
+			$data = array(
+				'sub_paypal_id'		=> $paypal_id,
+				'sub_expires'		=> (int) $row['sub_expires'] + $length,
+				'sub_notify_status'	=> 0,
+			);
 			$sql = 'UPDATE ' . $this->sub_table . '
-					SET sub_expires = ' . $expires . ', sub_notify_status = 0
+					SET ' . $this->db->sql_build_array('UPDATE', $data) . '
 					WHERE sub_id = ' . (int) $row['sub_id'];
 			$this->db->sql_query($sql);
 
