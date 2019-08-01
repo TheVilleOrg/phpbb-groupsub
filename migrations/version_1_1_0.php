@@ -35,6 +35,9 @@ class version_1_1_0 extends migration
 				$this->table_prefix . 'groupsub_subs' => array(
 					'sub_paypal_id'	=> array('VCHAR:17', null),
 				),
+				$this->table_prefix . 'groupsub_trans' => array(
+					'trans_subscr_id'	=> array('VCHAR:17', null),
+				),
 			),
 		);
 	}
@@ -48,6 +51,9 @@ class version_1_1_0 extends migration
 			'drop_columns' => array(
 				$this->table_prefix . 'groupsub_subs' => array(
 					'sub_paypal_id',
+				),
+				$this->table_prefix . 'groupsub_trans' => array(
+					'trans_subscr_id',
 				),
 			),
 		);

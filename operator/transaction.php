@@ -130,16 +130,16 @@ class transaction extends operator implements transaction_interface
 			return false;
 		}
 
-		$paypal_id = null;
+		$subscr_id = null;
 		if ($txn_type === 'subscr_payment')
 		{
-			$paypal_id = $this->request->variable('subscr_id', '');
+			$subscr_id = $this->request->variable('subscr_id', '');
 		}
 
 		$user_id = $this->request->variable('custom', 0);
-		$sub_id = $this->sub_operator->create_subscription($term, $user_id, $paypal_id);
+		$sub_id = $this->sub_operator->create_subscription($term, $user_id, $subscr_id);
 
-		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross);
+		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross, $subscr_id);
 	}
 
 	/**
@@ -181,17 +181,18 @@ class transaction extends operator implements transaction_interface
 	/**
 	 * Insert a transaction into the database.
 	 *
-	 * @param string  $trans_id The transaction ID
-	 * @param boolean $sandbox  Sandbox mode is enabled
-	 * @param int     $amount   The payment amount in the currency subunit
-	 * @param string  $currency The currency code
-	 * @param int     $user_id  The user ID
-	 * @param int     $sub_id   The subscription ID
-	 * @param string  $gross    The gross payment amount
+	 * @param string  $trans_id  The transaction ID
+	 * @param boolean $sandbox   Sandbox mode is enabled
+	 * @param int     $amount    The payment amount in the currency subunit
+	 * @param string  $currency  The currency code
+	 * @param int     $user_id   The user ID
+	 * @param int     $sub_id    The subscription ID
+	 * @param string  $gross     The gross payment amount
+	 * @param string  $subscr_id The PayPal subscription ID
 	 *
 	 * @return boolean The record was inserted successfully
 	 */
-	protected function insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross)
+	protected function insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross, $subscr_id)
 	{
 		if (!preg_match('/^[A-Z0-9]{17}$/', $trans_id))
 		{
@@ -216,6 +217,7 @@ class transaction extends operator implements transaction_interface
 			'trans_amount'		=> (int) $amount,
 			'trans_currency'	=> $currency,
 			'trans_time'		=> time(),
+			'trans_subscr_id'	=> $subscr_id,
 			'user_id'			=> (int) $user_id,
 			'sub_id'			=> (int) $sub_id,
 		);

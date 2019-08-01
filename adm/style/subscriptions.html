@@ -53,6 +53,12 @@
 					<dt>{{ lang('ACP_GROUPSUB_SUB_PACKAGE') ~ lang('COLON') }}</dt>
 					<dd>{{ SUB_PACKAGE }}</dd>
 				</dl>
+				{% if SUBSCR_ID %}
+					<dl>
+						<dt>{{ lang('ACP_GROUPSUB_SUBSCR_ID') ~ lang('COLON') }}</dt>
+						<dd>{{ SUBSCR_ID }}</dd>
+					</dl>
+				{% endif %}
 			{% endif %}
 			<dl>
 				<dt><label for="sub_start">{{ lang('ACP_GROUPSUB_SUB_START') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_START_EXPLAIN') }}</span></dt>
@@ -98,6 +104,7 @@
 			<tr>
 				<th>{{ lang('ACP_GROUPSUB_USER') }}</th>
 				<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
+				<th>{{ lang('ACP_GROUPSUB_SUBSCR_ID') }}</th>
 				<th style="width: 15%">{{ lang('ACP_GROUPSUB_START') }}</th>
 				<th style="width: 15%">{{ lang('ACP_GROUPSUB_EXPIRES') }}</th>
 				<th style="width: 10%">{{ lang('ACP_GROUPSUB_STATUS') }}</th>
@@ -109,6 +116,7 @@
 			<tr>
 				<td>{{ s.USER }}</td>
 				<td>{% if s.S_PACKAGE_DELETED %}<i>{{ s.PACKAGE }} ({{ lang('ACP_GROUPSUB_DELETED') }})</i>{% else %}{{ s.PACKAGE }}{% endif %}</td>
+				<td>{{ s.SUBSCR_ID }}</td>
 				<td>{{ s.STARTED }}</td>
 				<td>{% if s.EXPIRES %}{{ s.EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_NEVER') }}</i>{% endif %}</td>
 				<td>{% if s.S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}</td>
