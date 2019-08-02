@@ -161,6 +161,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$options = array(
 			'u'	=> $this->language->lang('ACP_GROUPSUB_USER'),
 			'p'	=> $this->language->lang('ACP_GROUPSUB_SUB'),
+			's'	=> $this->language->lang('ACP_GROUPSUB_START'),
 			'e'	=> $this->language->lang('ACP_GROUPSUB_EXPIRES'),
 		);
 		foreach ($options as $key => $name)
@@ -199,6 +200,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		switch ($sort_key)
 		{
+			case 'u':
+				return 'u.username';
+			break;
 			case 'p':
 				return 'p.pkg_name';
 			break;
@@ -207,7 +211,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			break;
 		}
 
-		return 'u.username';
+		return 's.sub_start';
 	}
 
 	/**
@@ -503,8 +507,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	protected function parse_display_params(&$sort_key = '', &$sort_dir = '', &$start = 0, &$limit = 0, &$package_id = 0)
 	{
-		$sort_key = $this->request->variable('sk', 'u');
-		$sort_dir = $this->request->variable('sd', 'a');
+		$sort_key = $this->request->variable('sk', 's');
+		$sort_dir = $this->request->variable('sd', 'd');
 		$start = $this->request->variable('start', 0);
 		$limit = min(100, $this->request->variable('limit', (int) $this->config['topics_per_page']));
 		$package_id = $this->request->variable('pkg_id', 0);
