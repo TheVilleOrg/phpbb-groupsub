@@ -167,15 +167,23 @@
 					<td>
 					{% if p.term %}
 						<table>
+							<thead style="display: none;">
+								<tr>
+									<th width="50%">{{ lang('ACP_GROUPSUB_PRICE') }}</th>
+									<th width="50%">{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
+								</tr>
+							</thead>
+							<tbody>
 						{% for t in p.term|slice(0, 4) %}
-							<tr>
-								<td>{{ t.PRICE }}</td>
-								<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
-							</tr>
+								<tr>
+									<td width="50%">{{ t.PRICE }}</td>
+									<td width="50%">{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
+								</tr>
 						{% endfor %}
 						{% if p.term|length > 4 %}
-							<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
+								<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
 						{% endif %}
+							</tbody>
 						</table>
 					{% endif %}
 					</td>
