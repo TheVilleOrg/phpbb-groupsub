@@ -16,6 +16,11 @@ namespace stevotvr\groupsub\entity;
 interface subscription_interface extends entity_interface
 {
 	/**
+	 * @return boolean True if the subscription is active, False otherwise
+	 */
+	public function is_active();
+
+	/**
 	 * @return int The package ID
 	 */
 	public function get_package();

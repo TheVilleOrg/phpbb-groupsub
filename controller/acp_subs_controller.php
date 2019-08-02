@@ -121,7 +121,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		{
 			$this->template->assign_block_vars('subscription', array(
 				'S_PACKAGE_DELETED'	=> $subscription['package']['deleted'],
-				'S_ACTIVE'			=> $subscription['active'],
+				'S_ACTIVE'			=> $subscription['entity']->is_active(),
 
 				'USER'		=> $subscription['username'],
 				'PACKAGE'	=> $subscription['package']['name'],
@@ -240,6 +240,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 		$this->template->assign_vars(array(
 			'S_EDIT_SUB'	=> true,
+			'S_ACTIVE'		=> $subscription['entity']->is_active(),
 
 			'SUB_PACKAGE'	=> $subscription['package']['name'],
 			'SUB_USER'		=> $subscription['username'],
@@ -283,20 +284,23 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			}
 			$parsed_data = array();
 
-			$parsed_data['start'] = $this->parse_date($data['start']);
-			if (!$parsed_data['start'])
+			if (!$entity->get_id() || $entity->is_active())
 			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
-			}
+				$parsed_data['start'] = $this->parse_date($data['start']);
+				if (!$parsed_data['start'])
+				{
+					$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
+				}
 
-			$parsed_data['expire'] = $this->parse_date($data['expire']);
-			if ($parsed_data['expire'] === false)
-			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
-			}
-			else if (!empty($parsed_data['expire']) && $parsed_data['expire'] < time())
-			{
-				$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
+				$parsed_data['expire'] = $this->parse_date($data['expire']);
+				if ($parsed_data['expire'] === false)
+				{
+					$errors[] = 'ACP_GROUPSUB_ERROR_INVALID_DATE';
+				}
+				else if (!empty($parsed_data['expire']) && $parsed_data['expire'] < time())
+				{
+					$errors[] = 'ACP_GROUPSUB_ERROR_DATE_IN_PAST';
+				}
 			}
 
 			if (!$entity->get_id())

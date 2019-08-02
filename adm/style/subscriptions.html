@@ -46,6 +46,10 @@
 				</dl>
 			{% else %}
 				<dl>
+					<dt>{{ lang('ACP_GROUPSUB_STATUS') ~ lang('COLON') }}</dt>
+					<dd>{% if S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}</dd>
+				</dl>
+				<dl>
 					<dt>{{ lang('ACP_GROUPSUB_SUB_USER') ~ lang('COLON') }}</dt>
 					<dd>{{ SUB_USER }}</dd>
 				</dl>
@@ -60,16 +64,27 @@
 					</dl>
 				{% endif %}
 			{% endif %}
-			<dl>
-				<dt><label for="sub_start">{{ lang('ACP_GROUPSUB_SUB_START') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_START_EXPLAIN') }}</span></dt>
-				<dd><input class="text medium" type="text" id="sub_start" name="sub_start" value="{{ SUB_START }}" maxlength="255"></dd>
-				<dd><label for="sub_start">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
-			</dl>
-			<dl>
-				<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN') }}</span></dt>
-				<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255"></dd>
-				<dd><label for="sub_expire">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
-			</dl>
+			{% if S_ACTIVE or S_ADD_SUB %}
+				<dl>
+					<dt><label for="sub_start">{{ lang('ACP_GROUPSUB_SUB_START') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_START_EXPLAIN') }}</span></dt>
+					<dd><input class="text medium" type="text" id="sub_start" name="sub_start" value="{{ SUB_START }}" maxlength="255"></dd>
+					<dd><label for="sub_start">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
+				</dl>
+				<dl>
+					<dt><label for="sub_expire">{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_EXPIRE_EXPLAIN') }}</span></dt>
+					<dd><input class="text medium" type="text" id="sub_expire" name="sub_expire" value="{{ SUB_EXPIRE }}" maxlength="255"></dd>
+					<dd><label for="sub_expire">{{ lang('YEAR_MONTH_DAY') }}</label></dd>
+				</dl>
+			{% else %}
+				<dl>
+					<dt>{{ lang('ACP_GROUPSUB_SUB_START') ~ lang('COLON') }}</dt>
+					<dd>{{ SUB_START }}</dd>
+				</dl>
+				<dl>
+					<dt>{{ lang('ACP_GROUPSUB_SUB_EXPIRE') ~ lang('COLON') }}</dt>
+					<dd>{{ SUB_EXPIRE }}</dd>
+				</dl>
+			{% endif %}
 		</fieldset>
 		<fieldset class="submit-buttons">
 			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
@@ -121,9 +136,11 @@
 				<td>{% if s.EXPIRES %}{{ s.EXPIRES }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_NEVER') }}</i>{% endif %}</td>
 				<td>{% if s.S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}</td>
 				<td class="actions">
-				{% if s.S_ACTIVE %}
 					<a href="{{ s.U_EDIT }}">{{ ICON_EDIT }}</a>
+				{% if s.S_ACTIVE %}
 					<a href="{{ s.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
+				{% else %}
+					<a>{{ ICON_DELETE_DISABLED }}</a>
 				{% endif %}
 				</td>
 			</tr>

@@ -21,12 +21,21 @@ class subscription extends entity implements subscription_interface
 		'sub_id'			=> 'integer',
 		'pkg_id'			=> 'integer',
 		'user_id'			=> 'integer',
+		'sub_active'		=> 'boolean',
 		'sub_start'			=> 'set_start',
 		'sub_expires'		=> 'set_expire',
 		'sub_paypal_id'		=> 'set_paypal_id',
 	);
 
 	protected $id_column = 'sub_id';
+
+	/**
+	 * @inheritDoc
+	 */
+	public function is_active()
+	{
+		return (bool) $this->data['sub_active'];
+	}
 
 	/**
 	 * @inheritDoc
