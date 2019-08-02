@@ -153,10 +153,10 @@
 	<table class="table1 zebra-table responsive">
 		<thead>
 			<tr>
-				<th style="width: 10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
+				<th width="10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
 				<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
-				<th style="width: 30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
-				<th style="width: 10%">{{ lang('ACTION') }}</th>
+				<th width="30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
+				<th width="10%">{{ lang('ACTION') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -169,7 +169,7 @@
 						<table>
 						{% for t in p.term|slice(0, 4) %}
 							<tr>
-								<td>{{ t.PRICE }}</td>
+								<td width="50%">{{ t.PRICE }}</td>
 								<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
 							</tr>
 						{% endfor %}
