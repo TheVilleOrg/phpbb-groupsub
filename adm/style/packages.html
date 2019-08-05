@@ -166,20 +166,27 @@
 					<td valign="top"><strong><a href="{{ p.U_EDIT }}">{{ p.NAME }}</a></strong></td>
 					<td>
 					{% if p.term %}
-						<table>
+						<table class="terms">
+							<thead style="display: none;">
+								<tr>
+									<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
+									<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
+								</tr>
+							</thead>
+							<tbody>
 						{% for t in p.term|slice(0, 4) %}
-							<tr>
-								<td width="50%">{{ t.PRICE }}</td>
-								<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
-							</tr>
+								<tr>
+									<td width="50%">{{ t.PRICE }}</td>
+									<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
+								</tr>
 						{% endfor %}
 						{% if p.term|length > 4 %}
-							<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
+								<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
 						{% endif %}
+							</tbody>
 						</table>
 					{% endif %}
-					</td>
-					<td class="actions">
+					</td>					<td class="actions">
 						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
 						<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
 						<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
