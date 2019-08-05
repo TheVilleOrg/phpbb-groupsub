@@ -20,10 +20,6 @@ interface subscription_interface
 	const NOTIFY_WARN		= 1;
 	const NOTIFY_EXPIRED	= 2;
 
-	/* PayPal API URLs */
-	const PP_NVP_URI = 'https://api-3t.paypal.com/nvp';
-	const PP_SANDBOX_NVP_URI = 'https://api-3t.sandbox.paypal.com/nvp';
-
 	/**
 	 * @param int $start The offset for querying subscriptions
 	 *
@@ -118,11 +114,10 @@ interface subscription_interface
 	 *
 	 * @param \stevotvr\groupsub\entity\term_interface $term
 	 * @param int                                      $user_id   The user ID
-	 * @param string                                   $paypal_id The PayPal subscription ID
 	 *
 	 * @return int The subscription ID
 	 */
-	public function create_subscription(\stevotvr\groupsub\entity\term_interface $term, $user_id, $paypal_id = null);
+	public function create_subscription(\stevotvr\groupsub\entity\term_interface $term, $user_id);
 
 	/**
 	 * Delete a subscription.

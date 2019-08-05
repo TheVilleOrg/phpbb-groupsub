@@ -73,7 +73,6 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 				'ID'		=> $transaction['trans_id'],
 				'TEST'		=> (bool) $transaction['trans_test'],
 				'AMOUNT'	=> $this->currency->format_price($transaction['trans_currency'], $transaction['trans_amount']),
-				'SUBSCR_ID'	=> $transaction['trans_subscr_id'],
 				'TIME'		=> $this->user->format_date($transaction['trans_time']),
 				'USER'		=> $transaction['username'],
 

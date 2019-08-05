@@ -202,7 +202,6 @@ services:
         calls:
             - method: setup
               arguments:
-                - '@stevotvr.groupsub.operator.http_helper'
                 - '@notification_manager'
                 - '@dispatcher'
                 - '%tables.users%'

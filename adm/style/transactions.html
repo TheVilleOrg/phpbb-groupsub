@@ -7,12 +7,11 @@
 <table class="table1 zebra-table responsive">
 	<thead>
 		<tr>
-			<th width="15%">{{ lang('ACP_GROUPSUB_TRANS_ID') }}</th>
-			<th width="15%">{{ lang('ACP_GROUPSUB_TRANS_TYPE') }}</th>
-			<th width="15%">{{ lang('ACP_GROUPSUB_AMOUNT') }}</th>
-			<th width="15%">{{ lang('ACP_GROUPSUB_SUBSCR_ID') }}</th>
-			<th width="15%">{{ lang('ACP_GROUPSUB_TIME') }}</th>
-			<th width="15%">{{ lang('ACP_GROUPSUB_USER') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_ID') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_TRANS_TYPE') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_AMOUNT') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_TIME') }}</th>
+			<th width="16%">{{ lang('ACP_GROUPSUB_USER') }}</th>
 			<th>{{ lang('ACP_GROUPSUB_SUB') }}</th>
 		</tr>
 	</thead>
@@ -22,7 +21,6 @@
 			<td>{{ t.ID }}</td>
 			<td>{% if t.TEST %}{{ lang('ACP_GROUPSUB_SB') }}{% else %}{{ lang('ACP_GROUPSUB_LIVE') }}{% endif %}</td>
 			<td>{{ t.AMOUNT }}</td>
-			<td>{{ t.SUBSCR_ID }}</td>
 			<td>{{ t.TIME }}</td>
 			<td>{{ t.USER }}</td>
 			<td><a href="{{ t.U_SUBSCRIPTION }}">{{ lang('ACP_GROUPSUB_VIEW') }}</a></td>

@@ -51,9 +51,6 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_SUBSCRIBED'		=> 'You are subscribed',
 	'GROUPSUB_SUBSCRIBED_UNTIL'	=> 'You are subscribed until %s',
 	'GROUPSUB_CONFIRM'			=> 'Confirm subscription to %s',
-	'GROUPSUB_RENEW_TYPE'		=> 'Renewal type',
-	'GROUPSUB_MANUAL_RENEW'		=> 'Manual renewal',
-	'GROUPSUB_AUTOMATIC_RENEW'	=> 'Automatic renewal',
 
 	'GROUPSUB_RETURN_TITLE'		=> 'Thank You',
 	'GROUPSUB_RETURN'			=> 'Subscribed',
@@ -62,7 +59,6 @@ $lang = array_merge($lang, array(
 
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
 	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',
-	'GROUPSUB_PP_SUBSCRIBE'	=> 'Subscribe',
 
 	'GROUPSUB_DECIMAL_SEPARATOR'	=> '.',
 	'GROUPSUB_THOUSANDS_SEPARATOR'	=> ',',

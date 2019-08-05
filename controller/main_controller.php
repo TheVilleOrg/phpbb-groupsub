@@ -249,12 +249,8 @@ class main_controller
 		$u_return = $this->helper->route('stevotvr_groupsub_return', $return_params, true, false, UrlGeneratorInterface::ABSOLUTE_URL);
 		$u_main = $this->helper->route('stevotvr_groupsub_main', array(), true, false, UrlGeneratorInterface::ABSOLUTE_URL);
 
-		$length = $term['term']->get_length();
-		$length_parts = $this->unit_helper->get_timespan_parts($length);
-
 		$this->template->assign_vars(array(
-			'S_PP_SANDBOX'		=> $sandbox,
-			'S_SHOW_RENEW_TYPE'	=> $this->config['stevotvr_groupsub_allow_auto_renew'],
+			'S_PP_SANDBOX'	=> $sandbox,
 
 			'USER_ID'		=> $this->user->data['user_id'],
 			'PP_BUSINESS'	=> $business,
@@ -265,9 +261,7 @@ class main_controller
 			'TERM_PRICE'			=> $this->currency->format_value($currency, $price),
 			'TERM_CURRENCY'			=> $currency,
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
-			'TERM_LENGTH'			=> $length ? $this->unit_helper->get_formatted_timespan($length) : 0,
-			'TERM_DURATION'			=> $length_parts['length'],
-			'TERM_DURATION_UNIT'	=> strtoupper(substr($length_parts['unit'], 0, 1)),
+			'TERM_LENGTH'			=> $term['term']->get_length() ? $this->unit_helper->get_formatted_timespan($term['term']->get_length()) : 0,
 
 			'U_NOTIFY'			=> $u_ipn,
 			'U_RETURN'			=> $u_return,

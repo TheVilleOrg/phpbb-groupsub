@@ -125,7 +125,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 				'USER'		=> $subscription['username'],
 				'PACKAGE'	=> $subscription['package']['name'],
-				'SUBSCR_ID'	=> $subscription['entity']->get_paypal_id(),
 				'STARTED'	=> $this->user->format_date($subscription['entity']->get_start()),
 				'EXPIRES'	=> $subscription['entity']->get_expire() ? $this->user->format_date($subscription['entity']->get_expire()) : 0,
 
@@ -248,7 +247,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 			'SUB_PACKAGE'	=> $subscription['package']['name'],
 			'SUB_USER'		=> $subscription['username'],
-			'SUBSCR_ID'		=> $subscription['entity']->get_paypal_id(),
 
 			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
 		));
