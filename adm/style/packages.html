@@ -6,208 +6,207 @@
 
 	{% INCLUDEJS '@stevotvr_groupsub/groupsub.js' %}
 
-	<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
 
 	{% if ERROR_MSG %}
-		<div class="errorbox">
-			<h3>{{ lang('WARNING') }}</h3>
-			<p>{{ ERROR_MSG }}</p>
-		</div>
+<div class="errorbox">
+	<h3>{{ lang('WARNING') }}</h3>
+	<p>{{ ERROR_MSG }}</p>
+</div>
 	{% endif %}
 
 	{% if S_ADD_PKG %}
-		<h1>{{ lang('ACP_GROUPSUB_PKG_ADD') }}</h1>
+<h1>{{ lang('ACP_GROUPSUB_PKG_ADD') }}</h1>
 	{% else %}
-		<h1>{{ lang('ACP_GROUPSUB_PKG_EDIT') }} :: {{ PKG_NAME }}</h1>
+<h1>{{ lang('ACP_GROUPSUB_PKG_EDIT') }} :: {{ PKG_NAME }}</h1>
 	{% endif %}
 
-	<form id="add_edit_pkg" method="post" action="{{ U_ACTION }}">
+<form id="add_edit_pkg" method="post" action="{{ U_ACTION }}">
+	<fieldset>
+		<legend>{{ lang('ACP_GROUPSUB_PKG_DETAILS')}}</legend>
+		<dl>
+			<dt><label for="pkg_enabled">{{ lang('ACP_GROUPSUB_PKG_ENABLE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_ENABLE_EXPLAIN') }}</span></dt>
+			<dd><label><input type="radio" id="pkg_enabled" name="pkg_enabled" value="1"{% if PKG_ENABLED %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pkg_enabled" value="0"{% if not PKG_ENABLED %} checked{% endif %}> {{ lang('NO') }}</label></dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_name">{{ lang('ACP_GROUPSUB_PKG_NAME') ~ lang('COLON') }}</label></dt>
+			<dd><input class="text medium" type="text" id="pkg_name" name="pkg_name" value="{{ PKG_NAME }}" maxlength="255"></dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>
+			<dd><input class="text medium{% if not S_ADD_PKG %} disabled{% endif %}" type="text" id="pkg_ident" name="pkg_ident" value="{{ PKG_IDENT }}" width="20" maxlength="30"{% if not S_ADD_PKG %} disabled{% endif %}></dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_desc">{{ lang('ACP_GROUPSUB_PKG_DESC') ~ lang('COLON') }}</label></dt>
+			<dd><textarea id="pkg_desc" name="pkg_desc" rows="5" cols="45" data-bbcode="true">{{ PKG_DESC }}</textarea></dd>
+			<dd>
+				<label><input type="checkbox" class="radio" name="parse_bbcode"{% if S_PARSE_BBCODE_CHECKED %} checked{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
+				<label><input type="checkbox" class="radio" name="parse_smilies"{% if S_PARSE_SMILIES_CHECKED %} checked{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
+				<label><input type="checkbox" class="radio" name="parse_magic_url"{% if S_PARSE_MAGIC_URL_CHECKED %} checked{% endif %}> {{ lang('PARSE_URLS') }}</label>
+			</dd>
+		</dl>
+	</fieldset>
+	<fieldset>
+		<legend>{{ lang('ACP_GROUPSUB_PKG_GROUPS')}}</legend>
+		<dl>
+			<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups[]" id="pkg_groups" multiple size="10">
+	{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected{% endif %}>{{ g.NAME }}</option>
+	{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_default_group">{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_default_group" id="pkg_default_group">
+					<option value="0"></option>
+	{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP %} selected{% endif %}>{{ g.NAME }}</option>
+	{% endfor %}
+				</select>
+			</dd>
+		</dl>
+	</fieldset>
+	<fieldset>
+		<legend>{{ lang('ACP_GROUPSUB_PKG_TERMS') }}</legend>
+		<table class="table1 zebra-table responsive" id="term_table">
+			<thead>
+				<tr>
+					<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
+					<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
+					<th class="actions">{{ lang('ACTION') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+	{% for t in term %}
+				<tr>
+					<td>
+						<input type="text" name="pkg_price[]" value="{{ t.PRICE }}">
+						<select name="pkg_currency[]" id="pkg_currency{{ loop.index }}">
+		{% for c in currency %}
+						    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == t.CURRENCY %} selected{% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
+		{% endfor %}
+						</select>
+					</td>
+					<td>
+						<input type="text" name="pkg_length[]" value="{{ t.LENGTH }}">
+						<select name="pkg_length_unit[]" id="pkg_length_unit{{ loop.index }}">
+		{% for u in time_unit %}
+							<option value="{{ u.ID }}"{% if u.ID == t.LENGTH_UNIT %} selected{% endif %}>{{ u.NAME }}</option>
+		{% endfor %}
+						</select>
+					</td>
+					<td class="actions">
+						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
+						<span class="up"><a class="move_term_up" href="#">{{ ICON_MOVE_UP }}</a></span>
+						<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
+						<span class="down"><a class="move_term_down" href="#">{{ ICON_MOVE_DOWN }}</a></span>
+						<a class="delete_term" href="#">{{ ICON_DELETE }}</a>
+					</td>
+				</tr>
+	{% endfor %}
+			</tbody>
+		</table>
 		<fieldset>
-			<legend>{{ lang('ACP_GROUPSUB_PKG_DETAILS')}}</legend>
+			<legend>{{ lang('ACP_GROUPSUB_PKG_TERM_ADD')}}</legend>
 			<dl>
-				<dt><label for="pkg_enabled">{{ lang('ACP_GROUPSUB_PKG_ENABLE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_ENABLE_EXPLAIN') }}</span></dt>
-				<dd><label><input type="radio" id="pkg_enabled" name="pkg_enabled" value="1"{% if PKG_ENABLED %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pkg_enabled" value="0"{% if not PKG_ENABLED %} checked{% endif %}> {{ lang('NO') }}</label></dd>
-			</dl>
-			<dl>
-				<dt><label for="pkg_name">{{ lang('ACP_GROUPSUB_PKG_NAME') ~ lang('COLON') }}</label></dt>
-				<dd><input class="text medium" type="text" id="pkg_name" name="pkg_name" value="{{ PKG_NAME }}" maxlength="255"></dd>
-			</dl>
-			<dl>
-				<dt><label for="pkg_ident">{{ lang('ACP_GROUPSUB_PKG_IDENT') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_IDENT_EXPLAIN') }}</span></dt>
-				<dd><input class="text medium{% if not S_ADD_PKG %} disabled{% endif %}" type="text" id="pkg_ident" name="pkg_ident" value="{{ PKG_IDENT }}" width="20" maxlength="30"{% if not S_ADD_PKG %} disabled{% endif %}></dd>
-			</dl>
-			<dl>
-				<dt><label for="pkg_desc">{{ lang('ACP_GROUPSUB_PKG_DESC') ~ lang('COLON') }}</label></dt>
-				<dd><textarea id="pkg_desc" name="pkg_desc" rows="5" cols="45" data-bbcode="true">{{ PKG_DESC }}</textarea></dd>
+				<dt><label for="pkg_price">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
 				<dd>
-					<label><input type="checkbox" class="radio" name="parse_bbcode"{% if S_PARSE_BBCODE_CHECKED %} checked{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
-					<label><input type="checkbox" class="radio" name="parse_smilies"{% if S_PARSE_SMILIES_CHECKED %} checked{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
-					<label><input type="checkbox" class="radio" name="parse_magic_url"{% if S_PARSE_MAGIC_URL_CHECKED %} checked{% endif %}> {{ lang('PARSE_URLS') }}</label>
-				</dd>
-			</dl>
-		</fieldset>
-		<fieldset>
-			<legend>{{ lang('ACP_GROUPSUB_PKG_GROUPS')}}</legend>
-			<dl>
-				<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
-				<dd>
-					<select name="pkg_groups[]" id="pkg_groups" multiple size="10">
-					{% for g in group %}
-						<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected{% endif %}>{{ g.NAME }}</option>
-					{% endfor %}
+					<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="4" maxlength="10" value="{{ PKG_PRICE }}">&nbsp;
+					<select name="pkg_currency[]" id="pkg_currency">
+	{% for c in currency %}
+							<option value="{{ c.CURRENCY }}"{% if c.S_DEFAULT %} selected{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
+	{% endfor %}
 					</select>
 				</dd>
 			</dl>
 			<dl>
-				<dt><label for="pkg_default_group">{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP_EXPLAIN') }}</span></dt>
+				<dt><label for="pkg_length">{{ lang('ACP_GROUPSUB_PKG_LENGTH') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_LENGTH_EXPLAIN') }}</span></dt>
 				<dd>
-					<select name="pkg_default_group" id="pkg_default_group">
-						<option value="0"></option>
-					{% for g in group %}
-						<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP %} selected{% endif %}>{{ g.NAME }}</option>
-					{% endfor %}
+					<input class="text" type="text" id="pkg_length" name="pkg_length[]" size="4" maxlength="10" value="{{ PKG_LENGTH }}">&nbsp;
+					<select name="pkg_length_unit[]" id="pkg_length_unit">
+	{% for u in time_unit %}
+							<option value="{{ u.ID }}">{{ u.NAME }}</option>
+	{% endfor %}
 					</select>
 				</dd>
 			</dl>
+			<input class="button2" type="submit" name="add_term" value="{{ lang('ACP_GROUPSUB_PKG_TERM_ADD') }}">
 		</fieldset>
-		<fieldset>
-			<legend>{{ lang('ACP_GROUPSUB_PKG_TERMS') }}</legend>
-			<table class="table1 zebra-table responsive" id="term_table">
-				<thead>
-					<tr>
-						<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
-						<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
-						<th class="actions">{{ lang('ACTION') }}</th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for t in term %}
-					<tr>
-						<td>
-							<input type="text" name="pkg_price[]" value="{{ t.PRICE }}">
-							<select name="pkg_currency[]" id="pkg_currency{{ loop.index }}">
-							{% for c in currency %}
-							    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == t.CURRENCY %} selected{% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
-							{% endfor %}
-							</select>
-						</td>
-						<td>
-							<input type="text" name="pkg_length[]" value="{{ t.LENGTH }}">
-							<select name="pkg_length_unit[]" id="pkg_length_unit{{ loop.index }}">
-							{% for u in time_unit %}
-								<option value="{{ u.ID }}"{% if u.ID == t.LENGTH_UNIT %} selected{% endif %}>{{ u.NAME }}</option>
-							{% endfor %}
-							</select>
-						</td>
-						<td class="actions">
-							<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
-							<span class="up"><a class="move_term_up" href="#">{{ ICON_MOVE_UP }}</a></span>
-							<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
-							<span class="down"><a class="move_term_down" href="#">{{ ICON_MOVE_DOWN }}</a></span>
-							<a class="delete_term" href="#">{{ ICON_DELETE }}</a>
-						</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-			<fieldset>
-				<legend>{{ lang('ACP_GROUPSUB_PKG_TERM_ADD')}}</legend>
-				<dl>
-					<dt><label for="pkg_price">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
-					<dd>
-						<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="4" maxlength="10" value="{{ PKG_PRICE }}">&nbsp;
-						<select name="pkg_currency[]" id="pkg_currency">
-							{% for c in currency %}
-								<option value="{{ c.CURRENCY }}"{% if c.S_DEFAULT %} selected{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
-							{% endfor %}
-						</select>
-					</dd>
-				</dl>
-				<dl>
-					<dt><label for="pkg_length">{{ lang('ACP_GROUPSUB_PKG_LENGTH') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_LENGTH_EXPLAIN') }}</span></dt>
-					<dd>
-						<input class="text" type="text" id="pkg_length" name="pkg_length[]" size="4" maxlength="10" value="{{ PKG_LENGTH }}">&nbsp;
-						<select name="pkg_length_unit[]" id="pkg_length_unit">
-							{% for u in time_unit %}
-								<option value="{{ u.ID }}">{{ u.NAME }}</option>
-							{% endfor %}
-						</select>
-					</dd>
-				</dl>
-				<input class="button2" type="submit" name="add_term" value="{{ lang('ACP_GROUPSUB_PKG_TERM_ADD') }}">
-			</fieldset>
-		</fieldset>
-		<fieldset class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
-			<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
-			{{ S_FORM_TOKEN }}
-		</fieldset>
-	</form>
+	</fieldset>
+	<fieldset class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
 
 {% else %}
 
-	<h1>{{ lang('ACP_GROUPSUB_MANAGE_PKGS_TITLE') }}</h1>
+<h1>{{ lang('ACP_GROUPSUB_MANAGE_PKGS_TITLE') }}</h1>
 
-	<p>{{ lang('ACP_GROUPSUB_MANAGE_PKGS_EXPLAIN') }}</p>
+<p>{{ lang('ACP_GROUPSUB_MANAGE_PKGS_EXPLAIN') }}</p>
 
-	<table class="table1 zebra-table responsive">
-		<thead>
-			<tr>
-				<th width="10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
-				<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
-				<th width="30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
-				<th width="10%">{{ lang('ACTION') }}</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for p in package %}
-				<tr>
-					<td valign="top">{{ p.IDENT }}</td>
-					<td valign="top"><strong><a href="{{ p.U_EDIT }}">{{ p.NAME }}</a></strong></td>
-					<td>
-					{% if p.term %}
-						<table class="terms">
-							<thead style="display: none;">
-								<tr>
-									<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
-									<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
-								</tr>
-							</thead>
-							<tbody>
-						{% for t in p.term|slice(0, 4) %}
-								<tr>
-									<td width="50%">{{ t.PRICE }}</td>
-									<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
-								</tr>
-						{% endfor %}
-						{% if p.term|length > 4 %}
-								<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
-						{% endif %}
-							</tbody>
-						</table>
-					{% endif %}
-					</td>					<td class="actions">
-						<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
-						<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
-						<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
-						<span class="down"><a href="{{ p.U_MOVE_DOWN }}" data-ajax="row_down">{{ ICON_MOVE_DOWN }}</a></span>
-						<a href="{{ p.U_EDIT }}">{{ ICON_EDIT }}</a>
-						<a href="{{ p.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="4" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_PKGS') }}</td>
-				</tr>
+<table class="table1 zebra-table responsive">
+	<thead>
+		<tr>
+			<th width="10%">{{ lang('ACP_GROUPSUB_PKG') }}</th>
+			<th>{{ lang('ACP_GROUPSUB_NAME') }}</th>
+			<th width="30%">{{ lang('ACP_GROUPSUB_TERMS') }}</th>
+			<th width="10%">{{ lang('ACTION') }}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for p in package %}
+		<tr>
+			<td valign="top">{{ p.IDENT }}</td>
+			<td valign="top"><strong><a href="{{ p.U_EDIT }}">{{ p.NAME }}</a></strong></td>
+			<td>
+		{% if p.term %}
+				<table class="terms">
+					<thead style="display: none;">
+						<tr>
+							<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
+							<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
+						</tr>
+					</thead>
+					<tbody>
+			{% for t in p.term|slice(0, 4) %}
+						<tr>
+							<td width="50%">{{ t.PRICE }}</td>
+							<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
+						</tr>
 			{% endfor %}
-		</tbody>
-	</table>
+			{% if p.term|length > 4 %}
+						<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
+			{% endif %}
+					</tbody>
+				</table>
+		{% endif %}
+			</td>
+			<td class="actions">
+				<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
+				<span class="up"><a href="{{ p.U_MOVE_UP }}" data-ajax="row_up">{{ ICON_MOVE_UP }}</a></span>
+				<span class="down-disabled" style="display:none;">{{ ICON_MOVE_DOWN_DISABLED }}</span>
+				<span class="down"><a href="{{ p.U_MOVE_DOWN }}" data-ajax="row_down">{{ ICON_MOVE_DOWN }}</a></span>
+				<a href="{{ p.U_EDIT }}">{{ ICON_EDIT }}</a>
+				<a href="{{ p.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
+			</td>
+		</tr>
+	{% else %}
+		<tr><td colspan="4" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_PKGS') }}</td></tr>
+	{% endfor %}
+	</tbody>
+</table>
 
-	<form id="pkg_add" method="post" action="{{ U_ADD_PKG }}">
-		<fieldset class="quick">
-			<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_PKG_ADD') }}">
-		</fieldset>
-	</form>
+<form id="pkg_add" method="post" action="{{ U_ADD_PKG }}">
+	<fieldset class="quick">
+		<input class="button2" type="submit" name="add" value="{{ lang('ACP_GROUPSUB_PKG_ADD') }}">
+	</fieldset>
+</form>
 
 {% endif %}
 

@@ -16,7 +16,7 @@
 
 	    <div class="content">
 
-	            {% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}
+            {% if p.DESC %}{{ p.DESC }}{% else %}<i>{{ lang('GROUPSUB_NO_DESC') }}</i>{% endif %}
 
 	    </div>
 
@@ -34,32 +34,32 @@
 
 			<form action="{{ U_ACTION }}" method="post">
 				<fieldset>
-				{% if p.term|length == 1 %}
-				{% for t in p.term %}
+	{% if p.term|length == 1 %}
+		{% for t in p.term %}
 					<input type="hidden" name="term_id" value="{{ t.ID }}">
 					<p>{{ t.PRICE }} / {% if t.LENGTH %}{{ t.LENGTH }}{% else %}<b>{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}</b>{% endif %}</p>
-				{% endfor %}
-				{% elseif p.term|length > 6 %}
+		{% endfor %}
+	{% elseif p.term|length > 6 %}
 					<p>
 						<select name="term_id">
-						{% for t in p.term %}
+		{% for t in p.term %}
 							<option value="{{ t.ID }}">{{ t.PRICE }} / {% if t.LENGTH %}{{ t.LENGTH }}{% else %}{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}{% endif %}</option>
-						{% endfor %}
+		{% endfor %}
 						</select>
 					</p>
-				{% else %}
+	{% else %}
 					<p>
-					{% for t in p.term %}
+		{% for t in p.term %}
 						<label><input type="radio" name="term_id" value="{{ t.ID }}">{{ t.PRICE }} / {% if t.LENGTH %}{{ t.LENGTH }}{% else %}<b>{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}</b>{% endif %}</label><br>
-					{% endfor %}
+		{% endfor %}
 					</p>
-				{% endif %}
-				{% if p.S_ACTIVE %}
+	{% endif %}
+	{% if p.S_ACTIVE %}
 					<p{% if p.S_WARNING %} style="color: #f00"{% endif %}>{% if p.EXPIRES %}{{ lang('GROUPSUB_SUBSCRIBED_UNTIL', p.EXPIRES) }}{% else %}{{ lang('GROUPSUB_SUBSCRIBED') }}{% endif %}</p>
 					{% if p.EXPIRES %}<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_RENEW') }}">{% endif %}
-				{% else %}
+	{% else %}
 					<input class="button1" type="submit" name="submit" value="{{ lang('GROUPSUB_SUBSCRIBE') }}">
-				{% endif %}
+	{% endif %}
 				</fieldset>
 			</form>
 

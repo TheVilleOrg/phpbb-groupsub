@@ -3,10 +3,10 @@
 <h1>{{ lang('SETTINGS') }}</h1>
 
 {% if ERROR_MSG %}
-	<div class="errorbox">
-		<h3>{{ lang('WARNING') }}</h3>
-		<p>{{ ERROR_MSG }}</p>
-	</div>
+<div class="errorbox">
+	<h3>{{ lang('WARNING') }}</h3>
+	<p>{{ ERROR_MSG }}</p>
+</div>
 {% endif %}
 
 <form id="settings" method="post" action="{{ U_ACTION }}">

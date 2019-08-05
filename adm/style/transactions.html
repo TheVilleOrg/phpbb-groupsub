@@ -17,7 +17,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	{% for t in transaction %}
+{% for t in transaction %}
 		<tr>
 			<td>{{ t.ID }}</td>
 			<td>{% if t.TEST %}{{ lang('ACP_GROUPSUB_SB') }}{% else %}{{ lang('ACP_GROUPSUB_LIVE') }}{% endif %}</td>
@@ -27,11 +27,11 @@
 			<td>{{ t.USER }}</td>
 			<td><a href="{{ t.U_SUBSCRIPTION }}">{{ lang('ACP_GROUPSUB_VIEW') }}</a></td>
 		</tr>
-	{% else %}
+{% else %}
 		<tr>
 			<td colspan="6" style="text-align: center;">{{ lang('ACP_GROUPSUB_NO_TRANS') }}</td>
 		</tr>
-	{% endfor %}
+{% endfor %}
 	</tbody>
 </table>
 
@@ -39,19 +39,19 @@
 	<fieldset class="display-options">
 		{{ lang('SORT_BY') ~ lang('COLON') }}
 		<select name="sk" id="sk">
-			{% for k in sort_key %}
-				<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected{% endif %}>{{ k.NAME }}</option>
-			{% endfor %}
+{% for k in sort_key %}
+			<option value="{{ k.KEY }}"{% if k.S_SELECTED %} selected{% endif %}>{{ k.NAME }}</option>
+{% endfor %}
 		</select>
 		<select name="sd" id="sd">
-			{% for d in sort_dir %}
-				<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected{% endif %}>{{ d.NAME }}</option>
-			{% endfor %}
+{% for d in sort_dir %}
+			<option value="{{ d.KEY }}"{% if d.S_SELECTED %} selected{% endif %}>{{ d.NAME }}</option>
+{% endfor %}
 		</select>
-		{% if pagination %}
-			{{ lang('ACP_GROUPSUB_TRANS_PER_PAGE') ~ lang('COLON') }}
-			<input class="inputbox autowidth" type="number" name="limit" id="limit" min="0" max="100" value="{{ LIMIT }}">
-		{% endif %}
+{% if pagination %}
+		{{ lang('ACP_GROUPSUB_TRANS_PER_PAGE') ~ lang('COLON') }}
+		<input class="inputbox autowidth" type="number" name="limit" id="limit" min="0" max="100" value="{{ LIMIT }}">
+{% endif %}
 		<input class="button2" type="submit" name="sort" value="{{ lang('GO') }}">
 	</fieldset>
 </form>
@@ -59,9 +59,9 @@
 <hr>
 
 {% if pagination %}
-	<div class="pagination">
-		{% include 'pagination.html' %}
-	</div>
+<div class="pagination">
+	{% include 'pagination.html' %}
+</div>
 {% endif %}
 
 {% include 'overall_footer.html' %}
