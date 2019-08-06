@@ -12,6 +12,7 @@ namespace stevotvr\groupsub\controller;
 
 use phpbb\auth\auth;
 use phpbb\config\config;
+use phpbb\config\db_text;
 use phpbb\controller\helper;
 use phpbb\language\language;
 use phpbb\request\request_interface;
@@ -37,6 +38,11 @@ class main_controller
 	 * @var \phpbb\config\config
 	 */
 	protected $config;
+
+	/**
+	 * @var \phpbb\config\db_text
+	 */
+	protected $config_text;
 
 	/**
 	 * @var \stevotvr\groupsub\operator\currency_interface
@@ -99,6 +105,7 @@ class main_controller
 	/**
 	 * @param \phpbb\auth\auth                                   $auth
 	 * @param \phpbb\config\config                               $config
+	 * @param \phpbb\config\db_text                              $config_text
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \phpbb\controller\helper                           $helper
 	 * @param \phpbb\language\language                           $language
@@ -109,10 +116,11 @@ class main_controller
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
 	 * @param \phpbb\user                                        $user
 	 */
-	public function __construct(auth $auth, config $config, currency_interface $currency, helper $helper, language $language, package_interface $pkg_operator, request_interface $request, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
+	public function __construct(auth $auth, config $config, db_text $config_text, currency_interface $currency, helper $helper, language $language, package_interface $pkg_operator, request_interface $request, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
+		$this->config_text = $config_text;
 		$this->currency = $currency;
 		$this->helper = $helper;
 		$this->language = $language;
@@ -158,6 +166,21 @@ class main_controller
 
 		$this->template->assign_vars(array(
 			'U_ACTION'	=> $this->helper->route('stevotvr_groupsub_main', array('name' => $name)),
+		));
+
+		$header_uid = $this->config['stevotvr_groupsub_header_bbcode_uid'];
+		$header_bitfield = $this->config['stevotvr_groupsub_header_bbcode_bitfield'];
+		$header_options = $this->config['stevotvr_groupsub_header_bbcode_options'];
+		$header = generate_text_for_display($this->config_text->get('stevotvr_groupsub_header'), $header_uid, $header_bitfield, $header_options);
+
+		$footer_uid = $this->config['stevotvr_groupsub_footer_bbcode_uid'];
+		$footer_bitfield = $this->config['stevotvr_groupsub_footer_bbcode_bitfield'];
+		$footer_options = $this->config['stevotvr_groupsub_footer_bbcode_options'];
+		$footer = generate_text_for_display($this->config_text->get('stevotvr_groupsub_footer'), $footer_uid, $footer_bitfield, $footer_options);
+
+		$this->template->assign_vars(array(
+			'HEADER'	=> $header,
+			'FOOTER'	=> $footer,
 		));
 
 		$term_id = $this->request->variable('term_id', 0);

@@ -2,6 +2,24 @@
 
 <h2>{{ lang('GROUPSUB_PACKAGE_LIST') }}</h2>
 
+{% if HEADER %}
+
+<div class="panel bg2">
+
+<div class="inner">
+
+	<div class="postbody">
+
+	<div class="content">{{ HEADER }}</div>
+
+	</div>
+
+</div>
+
+</div>
+
+{% endif %}
+
 {% for p in package %}
 
 <div class="panel bg{% if loop.index is odd %}1{% else %}2{% endif %}">
@@ -86,5 +104,23 @@
 </div>
 
 {% endfor %}
+
+{% if FOOTER %}
+
+<div class="panel bg2">
+
+<div class="inner">
+
+	<div class="postbody">
+
+	<div class="content">{{ FOOTER }}</div>
+
+	</div>
+
+</div>
+
+</div>
+
+{% endif %}
 
 {% include 'overall_footer.html' %}

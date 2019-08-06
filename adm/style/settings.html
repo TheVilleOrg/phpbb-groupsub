@@ -26,6 +26,27 @@
 		</dl>
 	</fieldset>
 	<fieldset>
+		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_GENERAL') }}</legend>
+		<dl>
+			<dt><label for="header">{{ lang('ACP_GROUPSUB_HEADER') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_HEADER_EXPLAIN') }}</span></dt>
+			<dd><textarea id="header" name="header" rows="5" cols="45" data-bbcode="true">{{ HEADER }}</textarea></dd>
+			<dd>
+				<label><input type="checkbox" class="radio" name="header_parse_bbcode"{% if S_HEADER_PARSE_BBCODE_CHECKED %} checked{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
+				<label><input type="checkbox" class="radio" name="header_parse_smilies"{% if S_HEADER_PARSE_SMILIES_CHECKED %} checked{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
+				<label><input type="checkbox" class="radio" name="header_parse_magic_url"{% if S_HEADER_PARSE_MAGIC_URL_CHECKED %} checked{% endif %}> {{ lang('PARSE_URLS') }}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="footer">{{ lang('ACP_GROUPSUB_FOOTER') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_FOOTER_EXPLAIN') }}</span></dt>
+			<dd><textarea id="footer" name="footer" rows="5" cols="45" data-bbcode="true">{{ FOOTER }}</textarea></dd>
+			<dd>
+				<label><input type="checkbox" class="radio" name="footer_parse_bbcode"{% if S_FOOTER_PARSE_BBCODE_CHECKED %} checked{% endif %}> {{ lang('PARSE_BBCODE') }}</label>
+				<label><input type="checkbox" class="radio" name="footer_parse_smilies"{% if S_FOOTER_PARSE_SMILIES_CHECKED %} checked{% endif %}> {{ lang('PARSE_SMILIES') }}</label>
+				<label><input type="checkbox" class="radio" name="footer_parse_magic_url"{% if S_FOOTER_PARSE_MAGIC_URL_CHECKED %} checked{% endif %}> {{ lang('PARSE_URLS') }}</label>
+			</dd>
+		</dl>
+	</fieldset>
+	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_DEFAULTS') }}</legend>
 		<dl>
 			<dt><label for="currency">{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_DEFAULT_CURRENCY_EXPLAIN') }}</span></dt>

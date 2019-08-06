@@ -4,6 +4,24 @@
 
 	<h2>{{ lang('GROUPSUB_PACKAGE_LIST') }}</h2>
 
+{% if HEADER %}
+
+	<div class="panel bg2">
+
+	<div class="inner">
+
+		<div class="postbody">
+
+		<div class="content">{{ HEADER }}</div>
+
+		</div>
+
+	</div>
+
+	</div>
+
+{% endif %}
+
 	<div class="panel bg1">
 
 	<div class="inner">
@@ -70,6 +88,24 @@
 	</div>
 
 	</div>
+
+{% if FOOTER %}
+
+	<div class="panel bg2">
+
+	<div class="inner">
+
+		<div class="postbody">
+
+		<div class="content">{{ FOOTER }}</div>
+
+		</div>
+
+	</div>
+
+	</div>
+
+{% endif %}
 
 </form>
 

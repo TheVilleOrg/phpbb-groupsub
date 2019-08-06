@@ -68,6 +68,10 @@ services:
     stevotvr.groupsub.controller.acp.settings:
         class: stevotvr\groupsub\controller\acp_settings_controller
         parent: stevotvr.groupsub.controller.acp
+        calls:
+            - method: setup
+              arguments:
+                - '@config_text'
 
     stevotvr.groupsub.controller.acp.package:
         class: stevotvr\groupsub\controller\acp_pkgs_controller
@@ -118,6 +122,7 @@ services:
         arguments:
             - '@auth'
             - '@config'
+            - '@config_text'
             - '@stevotvr.groupsub.operator.currency'
             - '@controller.helper'
             - '@language'
