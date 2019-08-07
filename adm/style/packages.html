@@ -150,29 +150,7 @@
 
 <p>{{ lang('ACP_GROUPSUB_MANAGE_PKGS_EXPLAIN') }}</p>
 
-<style>
-.divtable {
-	border: 1px solid #000000;
-	border-radius: 5px;
-}
-.divtr {
-	border-bottom: 1px solid #000000;
-}
-.divtrtd {
-	padding: 5px;
-	display:block;
-}
-.divtd {
-	padding: 5px;
-	display:inline-block;
-}
-.divtd1 {
-	width:50%;
-}
-.divtd2 {
-	border-left: 1px solid #000000;
-}
-</style>
+{% INCLUDECSS '@stevotvr_groupsub/packagesterm.css' %}
 
 <table class="table1 zebra-table responsive">
 	<thead>
@@ -191,15 +169,15 @@
 			<td>
 			{% if p.term %}
 				<div class="divtable">
-					{% for t in p.term|slice(0, 4) %}
-						<div class="divtr">
-							<div class="divtd divtd1">{{ t.PRICE }}</div>
-							<div class="divtd divtd2">{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</div>
-						</div>
-					{% endfor %}
-					{% if p.term|length > 4 %}
-						<div class="divtr divtrtd">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</div>
-					{% endif %}
+				{% for t in p.term|slice(0, 4) %}
+					<div class="divtr">
+						<div class="divtd divtd1">{{ t.PRICE }}</div>
+						<div class="divtd divtd2">{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</div>
+					</div>
+				{% endfor %}
+				{% if p.term|length > 4 %}
+					<div class="divtr divtrtd">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</div>
+				{% endif %}
 				</div>
 			{% endif %}
 			</td>
