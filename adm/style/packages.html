@@ -80,21 +80,21 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="pkg_groups_remove_temp">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_TEMP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_TEMP_EXPLAIN') }}</span></dt>
+			<dt><label for="pkg_groups_rem_temp">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REM_TEMP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REM_TEMP_EXPLAIN') }}</span></dt>
 			<dd>
-				<select name="pkg_groups_remove_temp[]" id="pkg_groups_remove_temp" multiple size="10">
+				<select name="pkg_groups_rem_temp[]" id="pkg_groups_rem_temp" multiple size="10">
 				{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.S_SELECTED_REMOVE_TEMP %} selected{% endif %}>{{ g.NAME }}</option>
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_REM_TEMP %} selected{% endif %}>{{ g.NAME }}</option>
 				{% endfor %}
 				</select>
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="pkg_groups_remove_perm">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_PERM') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_PERM_EXPLAIN') }}</span></dt>
+			<dt><label for="pkg_groups_rem_perm">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REM_PERM') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REM_PERM_EXPLAIN') }}</span></dt>
 			<dd>
-				<select name="pkg_groups_remove_perm[]" id="pkg_groups_remove_perm" multiple size="10">
+				<select name="pkg_groups_rem_perm[]" id="pkg_groups_rem_perm" multiple size="10">
 				{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.S_SELECTED_REMOVE_PERM %} selected{% endif %}>{{ g.NAME }}</option>
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_REM_PERM %} selected{% endif %}>{{ g.NAME }}</option>
 				{% endfor %}
 				</select>
 			</dd>

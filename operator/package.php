@@ -264,7 +264,7 @@ class package extends operator implements package_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function get_groups($package_id, &$default = 0, $type)
+	public function get_groups($package_id, $type, &$default = 0)
 	{
 		$ids = array();
 

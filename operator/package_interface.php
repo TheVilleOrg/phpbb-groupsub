@@ -104,7 +104,7 @@ interface package_interface
 	 *
 	 * @return array An array of group IDs
 	 */
-	public function get_groups($package_id, &$default = 0, $type);
+	public function get_groups($package_id, $type, &$default = 0);
 
 	/**
 	 * Add a group to a package.
