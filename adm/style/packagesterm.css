@@ -1,0 +1,30 @@
+.divtable {
+	border: 1px solid #000000;
+	border-radius: 5px;
+}
+
+.divtr {
+	border-bottom: 1px solid #000000;
+}
+
+.divtr:last-child {
+	border-bottom: none;
+}
+
+.divtrtd {
+	display:block;
+	padding: 3px;
+}
+
+.divtd {
+	display:inline-block;
+	padding: 3px;
+}
+
+.divtd1 {
+	width:50%;
+}
+
+.divtd2 {
+	border-left: 1px solid #000000;
+}
