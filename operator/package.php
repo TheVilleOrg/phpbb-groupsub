@@ -264,13 +264,13 @@ class package extends operator implements package_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function get_groups($package_id, &$default = 0)
+	public function get_groups($package_id, &$default = 0, $type)
 	{
 		$ids = array();
 
 		$sql = 'SELECT group_id, group_default
 				FROM ' . $this->group_table . '
-				WHERE pkg_id = ' . (int) $package_id;
+				WHERE pkg_id = ' . (int) $package_id . ' AND group_type = ' . (int) $type;
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
@@ -288,12 +288,13 @@ class package extends operator implements package_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function add_group($package_id, $group_id, $default)
+	public function add_group($package_id, $group_id, $default, $type)
 	{
 		$data = array(
 			'pkg_id'		=> (int) $package_id,
 			'group_id'		=> (int) $group_id,
 			'group_default'	=> (bool) $default,
+			'group_type'	=> (int) $type,
 		);
 		$sql = 'INSERT INTO ' . $this->group_table . '
 				' . $this->db->sql_build_array('INSERT', $data);

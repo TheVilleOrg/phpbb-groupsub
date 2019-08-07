@@ -49,12 +49,22 @@
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_PKG_GROUPS')}}</legend>
 		<dl>
-			<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
+			<dt><label for="pkg_groups_add_perm">{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD_PERM') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD_PERM_EXPLAIN') }}</span></dt>
 			<dd>
-				<select name="pkg_groups[]" id="pkg_groups" multiple size="10">
-	{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected{% endif %}>{{ g.NAME }}</option>
-	{% endfor %}
+				<select name="pkg_groups_add_perm[]" id="pkg_groups_add_perm" multiple size="10">
+				{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_ADD_PERM %} selected{% endif %}>{{ g.NAME }}</option>
+				{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_groups_add_temp">{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD_TEMP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD_TEMP_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups_add_temp[]" id="pkg_groups_add_temp" multiple size="10">
+				{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_ADD_TEMP %} selected{% endif %}>{{ g.NAME }}</option>
+				{% endfor %}
 				</select>
 			</dd>
 		</dl>
@@ -63,9 +73,29 @@
 			<dd>
 				<select name="pkg_default_group" id="pkg_default_group">
 					<option value="0"></option>
-	{% for g in group %}
+					{% for g in group %}
 					<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP %} selected{% endif %}>{{ g.NAME }}</option>
-	{% endfor %}
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_groups_remove_temp">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_TEMP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_TEMP_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups_remove_temp[]" id="pkg_groups_remove_temp" multiple size="10">
+				{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_REMOVE_TEMP %} selected{% endif %}>{{ g.NAME }}</option>
+				{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_groups_remove_perm">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_PERM') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_PERM_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups_remove_perm[]" id="pkg_groups_remove_perm" multiple size="10">
+				{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_REMOVE_PERM %} selected{% endif %}>{{ g.NAME }}</option>
+				{% endfor %}
 				</select>
 			</dd>
 		</dl>
