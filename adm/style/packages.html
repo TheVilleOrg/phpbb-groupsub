@@ -180,6 +180,8 @@
 
 <p>{{ lang('ACP_GROUPSUB_MANAGE_PKGS_EXPLAIN') }}</p>
 
+{% INCLUDECSS '@stevotvr_groupsub/packagesterm.css' %}
+
 <table class="table1 zebra-table responsive">
 	<thead>
 		<tr>
@@ -195,27 +197,19 @@
 			<td valign="top">{{ p.IDENT }}</td>
 			<td valign="top"><strong><a href="{{ p.U_EDIT }}">{{ p.NAME }}</a></strong></td>
 			<td>
-		{% if p.term %}
-				<table class="terms">
-					<thead style="display: none;">
-						<tr>
-							<th>{{ lang('ACP_GROUPSUB_PRICE') }}</th>
-							<th>{{ lang('ACP_GROUPSUB_LENGTH') }}</th>
-						</tr>
-					</thead>
-					<tbody>
-			{% for t in p.term|slice(0, 4) %}
-						<tr>
-							<td width="50%">{{ t.PRICE }}</td>
-							<td>{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</td>
-						</tr>
-			{% endfor %}
-			{% if p.term|length > 4 %}
-						<tr><td colspan="2">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</td></tr>
+			{% if p.term %}
+				<div class="divtable">
+				{% for t in p.term|slice(0, 4) %}
+					<div class="divtr">
+						<div class="divtd divtd1">{{ t.PRICE }}</div>
+						<div class="divtd divtd2">{% if t.LENGTH %}{{ t.LENGTH }}{% else %}<i>{{ lang('ACP_GROUPSUB_EXPIRES_UNLIMITED') }}</i>{% endif %}</div>
+					</div>
+				{% endfor %}
+				{% if p.term|length > 4 %}
+					<div class="divtr divtrtd">{{ lang('ACP_GROUPSUB_MORE', p.term|length - 4) }}</div>
+				{% endif %}
+				</div>
 			{% endif %}
-					</tbody>
-				</table>
-		{% endif %}
 			</td>
 			<td class="actions">
 				<span class="up-disabled" style="display:none;">{{ ICON_MOVE_UP_DISABLED }}</span>
