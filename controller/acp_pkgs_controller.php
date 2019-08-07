@@ -243,12 +243,18 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	protected function load_groups($package_id)
 	{
-		$selected = $this->request->variable('pkg_groups', array(0));
+		$selected_add_perm = $this->request->variable('pkg_groups_add_perm', array(0));
+		$selected_add_temp = $this->request->variable('pkg_groups_add_temp', array(0));
+		$selected_rem_temp = $this->request->variable('pkg_groups_rem_temp', array(0));
+		$selected_rem_perm = $this->request->variable('pkg_groups_rem_perm', array(0));
 		$default_group = $this->request->variable('pkg_default_group', 0);
 
-		if ($package_id && empty($selected))
+		if ($package_id)
 		{
-			$selected = $this->pkg_operator->get_groups($package_id, $default_group);
+			$selected_add_perm = (empty($selected_add_perm)) ? $this->pkg_operator->get_groups($package_id, 1, $default_group) : $selected_add_perm ;
+			$selected_add_temp = (empty($selected_add_temp)) ? $this->pkg_operator->get_groups($package_id, 2, $default_group) : $selected_add_temp ;
+			$selected_rem_temp = (empty($selected_rem_temp)) ? $this->pkg_operator->get_groups($package_id, 3, $default_group) : $selected_rem_temp ;
+			$selected_rem_perm = (empty($selected_rem_perm)) ? $this->pkg_operator->get_groups($package_id, 4, $default_group) : $selected_rem_perm ;
 		}
 
 		$this->template->assign_var('PKG_DEFAULT_GROUP', $default_group);
@@ -264,7 +270,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				'ID'	=> (int) $row['group_id'],
 				'NAME'	=> $row['group_name'],
 
-				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
+				'S_SELECTED_ADD_PERM'	=> in_array((int) $row['group_id'], $selected_add_perm),
+				'S_SELECTED_ADD_TEMP'	=> in_array((int) $row['group_id'], $selected_add_temp),
+				'S_SELECTED_REM_TEMP'	=> in_array((int) $row['group_id'], $selected_rem_temp),
+				'S_SELECTED_REM_PERM'	=> in_array((int) $row['group_id'], $selected_rem_perm),
 			));
 		}
 		$this->db->sql_freeresult();
@@ -282,12 +291,30 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			return;
 		}
 
-		$group_ids = $this->request->variable('pkg_groups', array(0));
+		$group_ids_add_perm = $this->request->variable('pkg_groups_add_perm', array(0));
+		$group_ids_add_temp = $this->request->variable('pkg_groups_add_temp', array(0));
+		$group_ids_rem_temp = $this->request->variable('pkg_groups_rem_temp', array(0));
+		$group_ids_rem_perm = $this->request->variable('pkg_groups_rem_perm', array(0));
 		$default_group = $this->request->variable('pkg_default_group', 0);
+		$group_ids_add_temp = array_diff($group_ids_add_temp, $group_ids_add_perm);
+		$group_ids_rem_temp = array_diff($group_ids_rem_temp, $group_ids_add_temp, $group_ids_add_perm);
+		$group_ids_rem_perm = array_diff($group_ids_rem_perm, $group_ids_rem_temp, $group_ids_add_temp, $group_ids_add_perm);
 		$this->pkg_operator->remove_groups($package_id);
-		foreach ($group_ids as $group_id)
+		foreach ($group_ids_add_perm as $group_id)
 		{
-			$this->pkg_operator->add_group($package_id, $group_id, $group_id === $default_group);
+			$this->pkg_operator->add_group($package_id, $group_id, 1, $group_id === $default_group);
+		}
+		foreach ($group_ids_add_temp as $group_id)
+		{
+			$this->pkg_operator->add_group($package_id, $group_id, 2, $group_id === $default_group);
+		}
+		foreach ($group_ids_rem_temp as $group_id)
+		{
+			$this->pkg_operator->add_group($package_id, $group_id, 3, false);
+		}
+		foreach ($group_ids_rem_perm as $group_id)
+		{
+			$this->pkg_operator->add_group($package_id, $group_id, 4, false);
 		}
 	}
 
