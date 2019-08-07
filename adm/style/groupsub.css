@@ -12,17 +12,17 @@
 }
 
 .divtrtd {
-	display:block;
+	display: block;
 	padding: 3px;
 }
 
 .divtd {
-	display:inline-block;
+	display: inline-block;
 	padding: 3px;
 }
 
 .divtd1 {
-	width:50%;
+	width: 50%;
 }
 
 .divtd2 {
