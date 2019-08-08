@@ -243,15 +243,20 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	protected function load_groups($package_id)
 	{
+		$selected_perm = $this->request->variable('pkg_groups_perm', array(0));
 		$selected = $this->request->variable('pkg_groups', array(0));
 		$default_group = $this->request->variable('pkg_default_group', 0);
+		$new_group = $this->request->variable('pkg_new_group', false);
 
-		if ($package_id && empty($selected))
+		if ($package_id)
 		{
-			$selected = $this->pkg_operator->get_groups($package_id, $default_group);
+			$selected_perm = (empty($selected_perm)) ? $this->pkg_operator->get_groups($package_id, 1, $default_group) : $selected_perm ;
+			$selected = (empty($selected)) ? $this->pkg_operator->get_groups($package_id, 2, $default_group) : $selected ;
+			$new_group = (empty($new_group)) ? !empty($this->pkg_operator->get_groups($package_id, 3, $default_group)) : $new_group ;
 		}
 
 		$this->template->assign_var('PKG_DEFAULT_GROUP', $default_group);
+		$this->template->assign_var('PKG_NEW_GROUP', $new_group);
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . $this->phpbb_groups_table . '
@@ -264,7 +269,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				'ID'	=> (int) $row['group_id'],
 				'NAME'	=> $row['group_name'],
 
-				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
+				'S_SELECTED_PERM'	=> in_array((int) $row['group_id'], $selected_perm),
+				'S_SELECTED'		=> in_array((int) $row['group_id'], $selected),
 			));
 		}
 		$this->db->sql_freeresult();
@@ -282,12 +288,34 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			return;
 		}
 
+		$group_ids_perm = $this->request->variable('pkg_groups_perm', array(0));
 		$group_ids = $this->request->variable('pkg_groups', array(0));
 		$default_group = $this->request->variable('pkg_default_group', 0);
+		$new_group = $this->request->variable('pkg_new_group', false);
+
+		$group_ids = array_diff($group_ids, $group_ids_perm);
 		$this->pkg_operator->remove_groups($package_id);
+
+		if ($new_group == true)
+		{
+			$sql = 'SELECT group_id
+					FROM ' . GROUPS_TABLE . "
+					WHERE group_name = 'NEWLY_REGISTERED'
+						AND group_type = " . GROUP_SPECIAL;
+			$result = $this->db->sql_query($sql);
+			$new_group_id = (int) $this->db->sql_fetchfield('group_id');
+			$this->db->sql_freeresult($result);
+			$this->pkg_operator->add_group($package_id, $new_group_id, 3, false);
+		}
+
+		foreach ($group_ids_perm as $group_id)
+		{
+			$this->pkg_operator->add_group($package_id, $group_id, 1, $group_id === $default_group);
+		}
+
 		foreach ($group_ids as $group_id)
 		{
-			$this->pkg_operator->add_group($package_id, $group_id, $group_id === $default_group);
+			$this->pkg_operator->add_group($package_id, $group_id, 2, $group_id === $default_group);
 		}
 	}
 

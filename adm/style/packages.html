@@ -49,12 +49,22 @@
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_PKG_GROUPS')}}</legend>
 		<dl>
+			<dt><label for="pkg_groups_perm">{{ lang('ACP_GROUPSUB_PKG_GROUPS_PERM') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_PERM_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups_perm[]" id="pkg_groups_perm" multiple size="10">
+				{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_PERM %} selected{% endif %}>{{ g.NAME }}</option>
+				{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
 			<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
 			<dd>
 				<select name="pkg_groups[]" id="pkg_groups" multiple size="10">
-	{% for g in group %}
+				{% for g in group %}
 					<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected{% endif %}>{{ g.NAME }}</option>
-	{% endfor %}
+				{% endfor %}
 				</select>
 			</dd>
 		</dl>
@@ -63,11 +73,15 @@
 			<dd>
 				<select name="pkg_default_group" id="pkg_default_group">
 					<option value="0"></option>
-	{% for g in group %}
+					{% for g in group %}
 					<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP %} selected{% endif %}>{{ g.NAME }}</option>
-	{% endfor %}
+					{% endfor %}
 				</select>
 			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_new_group">{{ lang('ACP_GROUPSUB_PKG_GROUPS_NEW') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_NEW_EXPLAIN') }}</span></dt>
+			<dd><label><input type="radio" id="pkg_new_group" name="pkg_new_group" value="1"{% if PKG_NEW_GROUP %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pkg_new_group" value="0"{% if not PKG_NEW_GROUP %} checked{% endif %}> {{ lang('NO') }}</label></dd>
 		</dl>
 	</fieldset>
 	<fieldset>

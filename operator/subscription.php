@@ -574,22 +574,35 @@ class subscription extends operator implements subscription_interface
 			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
 		}
 
-		$sql = 'SELECT group_id, group_default
+		$sql = 'SELECT group_id, group_default, group_type
 				FROM ' . $this->group_table . '
 				WHERE pkg_id = ' . (int) $pkg_id;
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$data = array(
-				'sub_id'	=> $sub_id,
-				'user_id'	=> $user_id,
-				'group_id'	=> $row['group_id'],
+				'sub_id'		=> $sub_id,
+				'user_id'		=> $user_id,
+				'group_id'		=> $row['group_id'],
+				'group_type'	=> $row['group_type'],
 			);
-			$sql = 'INSERT INTO ' . $this->group_table . '
-					' . $this->db->sql_build_array('INSERT', $data);
-			$this->db->sql_query($sql);
 
-			group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
+			if ($row['group_type'] == 1)
+			{
+				group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
+			}
+			else if ($row['group_type'] == 2)
+			{
+				$sql = 'INSERT INTO ' . $this->group_table . '
+						' . $this->db->sql_build_array('INSERT', $data);
+				$this->db->sql_query($sql);
+
+				group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
+			}
+			else if ($row['group_type'] == 3)
+			{
+				group_user_del($row['group_id'], $user_id);
+			}
 		}
 		$this->db->sql_freeresult($result);
 	}
@@ -603,15 +616,17 @@ class subscription extends operator implements subscription_interface
 	protected function remove_user_from_groups($user_id, $sub_id)
 	{
 		$sub_groups = array();
+
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
-				WHERE sub_id = ' . (int) $sub_id;
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
+				WHERE sub_id = ' . (int) $sub_id . '
+					AND group_type = 2';
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$sub_groups[] = (int) $row['group_id'];
 		}
-		$this->db->sql_freeresult();
+		$this->db->sql_freeresult($result);
 
 		if (empty($sub_groups))
 		{
@@ -627,13 +642,14 @@ class subscription extends operator implements subscription_interface
 				FROM ' . $this->group_table . '
 				WHERE user_id = ' . (int) $user_id . '
 					AND sub_id <> ' . (int) $sub_id . '
+					AND group_type = 2
 					AND ' . $this->db->sql_in_set('group_id', $sub_groups);
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$keep_groups[] = (int) $row['group_id'];
 		}
-		$this->db->sql_freeresult();
+		$this->db->sql_freeresult($result);
 
 		if (!function_exists('group_user_del'))
 		{
