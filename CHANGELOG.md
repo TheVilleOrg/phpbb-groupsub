@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0-beta (8/11/19)
+
+* Added support for the cURL extension
+* Added local certificate authority file
+* Added page header and footer options
+* Added event `stevotvr.groupsub.payment_received`
+* Fixed unlimited terms being shown as 0 years on the return page
+* Fixed error when attempting to view inactive subscriptions
+
 ## 1.0.2 (6/5/19)
 
 * Fixed notifications being sent about inactive subscriptions
