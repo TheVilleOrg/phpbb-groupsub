@@ -11,7 +11,7 @@
 namespace stevotvr\groupsub\migrations;
 
 use phpbb\db\migration\migration;
-use stevotvr\groupsub\operator\package as pkg;
+use stevotvr\groupsub\operator\package_interface as pkg_operator;
 
 /**
  * Group Subscription migration for version 1.1.1.
@@ -77,7 +77,7 @@ class version_1_1_1 extends migration
 	{
 		$groupsub_groups = $this->table_prefix . 'groupsub_groups';
 
-		$sql = 'UPDATE '. $groupsub_groups . ' SET group_type = ' . (int) pkg::GROUP_TYPE_SUBSCRIPTION;
+		$sql = 'UPDATE '. $groupsub_groups . ' SET group_type = ' . (int) pkg_operator::GROUP_TYPE_SUBSCRIPTION;
 		$this->db->sql_query($sql);
 	}
 }

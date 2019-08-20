@@ -16,6 +16,27 @@ namespace stevotvr\groupsub\operator;
 interface package_interface
 {
 	/**
+	 * The group type of Package add permanent group.
+	 *
+	 * @var int Constant group type
+	 */
+	const GROUP_TYPE_PERMANENT = 1;
+
+	/**
+	 * The group type of subscription group.
+	 *
+	 * @var int Constant group type
+	 */
+	const GROUP_TYPE_SUBSCRIPTION = 2;
+
+	/**
+	 * The group type of remove newly registered user group.
+	 *
+	 * @var int Constant group type
+	 */
+	const GROUP_TYPE_NEWLY_REGISTERED = 3;
+
+	/**
 	 * Get a list of package names.
 	 *
 	 * @return array Array of package names keyed by package IDs

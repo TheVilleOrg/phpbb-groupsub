@@ -15,7 +15,6 @@ use stevotvr\groupsub\entity\package_interface as pkg_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\package_interface as pkg_operator;
 use stevotvr\groupsub\operator\unit_helper_interface;
-use stevotvr\groupsub\operator\package as pkg;
 
 /**
  * Group Subscription package management ACP controller.
@@ -251,9 +250,9 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		if ($package_id)
 		{
-			$selected_perm = (empty($selected_perm)) ? $this->pkg_operator->get_groups($package_id, pkg::GROUP_TYPE_PERMANENT, $default_group) : $selected_perm ;
-			$selected = (empty($selected)) ? $this->pkg_operator->get_groups($package_id, pkg::GROUP_TYPE_SUBSCRIPTION, $default_group) : $selected ;
-			$new_group = (empty($new_group)) ? !empty($this->pkg_operator->get_groups($package_id, pkg::GROUP_TYPE_NEWLY_REGISTERED, $default_group)) : $new_group ;
+			$selected_perm = (empty($selected_perm)) ? $this->pkg_operator->get_groups($package_id, pkg_operator::GROUP_TYPE_PERMANENT, $default_group) : $selected_perm ;
+			$selected = (empty($selected)) ? $this->pkg_operator->get_groups($package_id, pkg_operator::GROUP_TYPE_SUBSCRIPTION, $default_group) : $selected ;
+			$new_group = (empty($new_group)) ? !empty($this->pkg_operator->get_groups($package_id, pkg_operator::GROUP_TYPE_NEWLY_REGISTERED, $default_group)) : $new_group ;
 		}
 
 		$this->template->assign_var('PKG_DEFAULT_GROUP', $default_group);
@@ -306,17 +305,17 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 			$result = $this->db->sql_query($sql);
 			$new_group_id = (int) $this->db->sql_fetchfield('group_id');
 			$this->db->sql_freeresult($result);
-			$this->pkg_operator->add_group($package_id, $new_group_id, pkg::GROUP_TYPE_NEWLY_REGISTERED, false);
+			$this->pkg_operator->add_group($package_id, $new_group_id, pkg_operator::GROUP_TYPE_NEWLY_REGISTERED, false);
 		}
 
 		foreach ($group_ids_perm as $group_id)
 		{
-			$this->pkg_operator->add_group($package_id, $group_id, pkg::GROUP_TYPE_PERMANENT, $group_id === $default_group);
+			$this->pkg_operator->add_group($package_id, $group_id, pkg_operator::GROUP_TYPE_PERMANENT, $group_id === $default_group);
 		}
 
 		foreach ($group_ids as $group_id)
 		{
-			$this->pkg_operator->add_group($package_id, $group_id, pkg::GROUP_TYPE_SUBSCRIPTION, $group_id === $default_group);
+			$this->pkg_operator->add_group($package_id, $group_id, pkg_operator::GROUP_TYPE_SUBSCRIPTION, $group_id === $default_group);
 		}
 	}
 

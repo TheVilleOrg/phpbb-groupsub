@@ -19,27 +19,6 @@ use stevotvr\groupsub\exception\base;
 class package extends operator implements package_interface
 {
 	/**
-	 * The group type of Package add permanent group.
-	 *
-	 * @var int
-	 */
-	const GROUP_TYPE_PERMANENT = 1;
-
-	/**
-	 * The group type of subscription group.
-	 *
-	 * @var int
-	 */
-	const GROUP_TYPE_SUBSCRIPTION = 2;
-
-	/**
-	 * The group type of remove newly registered user group.
-	 *
-	 * @var int
-	 */
-	const GROUP_TYPE_NEWLY_REGISTERED = 3;
-
-	/**
 	 * @inheritDoc
 	 */
 	public function get_package_list()

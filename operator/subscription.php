@@ -15,7 +15,7 @@ use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\entity\term_interface as term_entity;
 use stevotvr\groupsub\exception\out_of_bounds;
-use stevotvr\groupsub\operator\package as pkg;
+use stevotvr\groupsub\operator\package_interface as pkg_operator;
 
 /**
  * Group Subscription subscription operator.
@@ -588,11 +588,11 @@ class subscription extends operator implements subscription_interface
 				'group_type'	=> $row['group_type'],
 			);
 
-			if ($row['group_type'] == pkg::GROUP_TYPE_PERMANENT)
+			if ($row['group_type'] == pkg_operator::GROUP_TYPE_PERMANENT)
 			{
 				group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
 			}
-			else if ($row['group_type'] == pkg::GROUP_TYPE_SUBSCRIPTION)
+			else if ($row['group_type'] == pkg_operator::GROUP_TYPE_SUBSCRIPTION)
 			{
 				$sql = 'INSERT INTO ' . $this->group_table . '
 						' . $this->db->sql_build_array('INSERT', $data);
@@ -600,7 +600,7 @@ class subscription extends operator implements subscription_interface
 
 				group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
 			}
-			else if ($row['group_type'] == pkg::GROUP_TYPE_NEWLY_REGISTERED)
+			else if ($row['group_type'] == pkg_operator::GROUP_TYPE_NEWLY_REGISTERED)
 			{
 				group_user_del($row['group_id'], $user_id);
 			}
@@ -621,7 +621,7 @@ class subscription extends operator implements subscription_interface
 		$sql = 'SELECT group_id
 				FROM ' . $this->group_table . '
 				WHERE sub_id = ' . (int) $sub_id . '
-					AND group_type = ' . (int) pkg::GROUP_TYPE_SUBSCRIPTION;
+					AND group_type = ' . (int) pkg_operator::GROUP_TYPE_SUBSCRIPTION;
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -643,7 +643,7 @@ class subscription extends operator implements subscription_interface
 				FROM ' . $this->group_table . '
 				WHERE user_id = ' . (int) $user_id . '
 					AND sub_id <> ' . (int) $sub_id . '
-					AND group_type = ' . (int) pkg::GROUP_TYPE_SUBSCRIPTION . '
+					AND group_type = ' . (int) pkg_operator::GROUP_TYPE_SUBSCRIPTION . '
 					AND ' . $this->db->sql_in_set('group_id', $sub_groups);
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
