@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\migrations;
 
 use phpbb\db\migration\migration;
+use stevotvr\groupsub\operator\package as pkg;
 
 /**
  * Group Subscription migration for version 1.1.1.
@@ -31,11 +32,6 @@ class version_1_1_1 extends migration
 	public function update_schema()
 	{
 		return array(
-			'add_columns' => array(
-				$this->table_prefix . 'groupsub_groups' => array(
-					'group_type'	=> array('UINT', null),
-				),
-			),
 			'add_columns' => array(
 				$this->table_prefix . 'groupsub_groups' => array(
 					'group_type'	=> array('UINT', null),
@@ -81,7 +77,7 @@ class version_1_1_1 extends migration
 	{
 		$groupsub_groups = $this->table_prefix . 'groupsub_groups';
 
-		$sql = 'UPDATE '. $groupsub_groups . ' SET group_type = 2';
+		$sql = 'UPDATE '. $groupsub_groups . ' SET group_type = ' . (int) pkg::GROUP_TYPE_SUBSCRIPTION;
 		$this->db->sql_query($sql);
 	}
 }
