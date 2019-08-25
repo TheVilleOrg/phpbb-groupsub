@@ -121,8 +121,7 @@ class package extends operator implements package_interface
 
 		$sql = 'SELECT 1
 				FROM ' . $this->sub_table . '
-				WHERE pkg_id = ' . (int) $package_id . '
-				LIMIT 1';
+				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
