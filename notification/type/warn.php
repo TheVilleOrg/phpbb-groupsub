@@ -10,7 +10,6 @@
 
 namespace stevotvr\groupsub\notification\type;
 
-use phpbb\datetime;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
