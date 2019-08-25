@@ -2,7 +2,7 @@ Subject: Your subscription expires in {{ DAYS_LEFT }} {{ DAYS }}
 
 Hello {{ USERNAME }},
 
-Your subscription to "{{ SUB_NAME }}" on "{{ SITENAME }}" will expire {{ EXPIRE_DATE }}.
+Your subscription to "{{ SUB_NAME }}" on "{{ SITENAME }}" will expire in {{ DAYS_LEFT }} {{ DAYS }}.
 
 You can view your subscription status by clicking on the following link:
 
