@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0 (8/25/19)
+
+* Fixed expiration warning email errors
+
 ## 1.1.0-beta (8/11/19)
 
 * Added support for the cURL extension
