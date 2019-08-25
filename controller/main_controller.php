@@ -14,6 +14,7 @@ use phpbb\auth\auth;
 use phpbb\config\config;
 use phpbb\config\db_text;
 use phpbb\controller\helper;
+use phpbb\exception\http_exception;
 use phpbb\language\language;
 use phpbb\request\request_interface;
 use phpbb\template\template;
@@ -155,7 +156,7 @@ class main_controller
 	{
 		if (!$this->config['stevotvr_groupsub_active'] && !$this->auth->acl_get('a_'))
 		{
-			return $this->helper->error('PAGE_NOT_FOUND', 404);
+			throw new http_exception(404, 'PAGE_NOT_FOUND');
 		}
 
 		if ($this->user->data['user_id'] == ANONYMOUS)
@@ -205,7 +206,7 @@ class main_controller
 
 		if (empty($packages))
 		{
-			return $this->helper->error('GROUPSUB_NO_PACKAGES', 404);
+			throw new http_exception(404, 'GROUPSUB_NO_PACKAGES');
 		}
 
 		$subscriptions = $this->sub_operator->get_user_subscriptions($this->user->data['user_id']);
@@ -261,7 +262,7 @@ class main_controller
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
-			return $this->helper->error('PAGE_NOT_FOUND', 404);
+			throw new http_exception(404, 'PAGE_NOT_FOUND');
 		}
 
 		$price = $term['term']->get_price();

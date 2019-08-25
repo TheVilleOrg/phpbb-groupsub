@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\controller;
 
 use phpbb\controller\helper;
+use phpbb\exception\http_exception;
 use phpbb\language\language;
 use phpbb\request\request_interface;
 use phpbb\template\template;
@@ -80,13 +81,13 @@ class return_controller
 		$term_id = $this->request->variable('term_id', 0);
 		if (!$term_id)
 		{
-			return $this->helper->error('PAGE_NOT_FOUND', 404);
+			throw new http_exception(404, 'PAGE_NOT_FOUND');
 		}
 
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
-			return $this->helper->error('PAGE_NOT_FOUND', 404);
+			throw new http_exception(404, 'PAGE_NOT_FOUND');
 		}
 
 		$length = $term['term']->get_length();
