@@ -83,6 +83,8 @@ abstract class acp_base_controller implements acp_base_interface
 		$this->language = $language;
 		$this->request = $request;
 		$this->template = $template;
+
+		$this->language->add_lang('acp_common', 'stevotvr/groupsub');
 	}
 
 	/**

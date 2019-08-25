@@ -46,6 +46,8 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 		$this->pagination = $pagination;
 		$this->trans_operator = $trans_operator;
 		$this->user = $user;
+
+		$this->language->add_lang('acp_transactions', 'stevotvr/groupsub');
 	}
 
 	/**

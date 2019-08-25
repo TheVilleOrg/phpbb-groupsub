@@ -52,6 +52,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$this->phpbb_groups_table = $phpbb_groups_table;
 
 		$this->language->add_lang('posting');
+		$this->language->add_lang('acp_packages', 'stevotvr/groupsub');
 	}
 
 	/**

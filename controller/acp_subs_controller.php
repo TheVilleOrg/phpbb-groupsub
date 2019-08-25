@@ -79,6 +79,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->pagination = $pagination;
 		$this->user = $user;
 		$this->phpbb_users_table = $phpbb_users_table;
+
+		$this->language->add_lang('acp_subscriptions', 'stevotvr/groupsub');
 	}
 
 	/**
