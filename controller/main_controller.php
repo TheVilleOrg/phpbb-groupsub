@@ -244,7 +244,7 @@ class main_controller
 			}
 		}
 
-		return $this->helper->render('package_list.html', $this->language->lang('GROUPSUB_PACKAGE_LIST'));
+		return $this->helper->render('@stevotvr_groupsub/package_list.html', $this->language->lang('GROUPSUB_PACKAGE_LIST'));
 	}
 
 	/**
@@ -292,6 +292,6 @@ class main_controller
 			'U_CANCEL_RETURN'	=> $u_main,
 		));
 
-		return $this->helper->render('select_term.html', $term['package']->get_name());
+		return $this->helper->render('@stevotvr_groupsub/select_term.html', $term['package']->get_name());
 	}
 }

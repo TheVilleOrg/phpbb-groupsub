@@ -98,6 +98,6 @@ class return_controller
 			'TERM_LENGTH'	=> $length,
 		));
 
-		return $this->helper->render('payment_return.html', $this->language->lang('GROUPSUB_RETURN_TITLE'));
+		return $this->helper->render('@stevotvr_groupsub/payment_return.html', $this->language->lang('GROUPSUB_RETURN_TITLE'));
 	}
 }
