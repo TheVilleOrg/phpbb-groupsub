@@ -18,7 +18,7 @@ This is a extension for phpBB 3.2 that allows you to create paid subscriptions f
 
 ## Install
 
-1. [Download the latest release](https://github.com/stevotvr/phpbb-groupsub/releases).
+1. [Download the latest validated release](https://www.phpbb.com/customise/db/extension/groupsub/).
 2. Unzip the downloaded release and copy it to the `ext` directory of your phpBB board.
 3. Navigate in the ACP to `Customise -> Manage extensions`.
 4. Look for `Group Subscription` under the Disabled Extensions list, and click its `Enable` link.
@@ -34,6 +34,11 @@ This is a extension for phpBB 3.2 that allows you to create paid subscriptions f
 
 * **Important: Only official release versions validated by the phpBB Extensions Team should be installed on a live forum. Pre-release (beta, RC) versions downloaded from this repository are only to be used for testing on offline/development forums and are not officially supported.**
 * Report bugs and other issues to our [Issue Tracker](https://github.com/stevotvr/phpbb-groupsub/issues).
+* Support requests should be posted and discussed in the [Group Subscription topic at phpBB.com](https://www.phpbb.com/customise/db/extension/groupsub/support).
+
+## Translations
+
+* Translations should be posted to the [Group Subscription topic at phpBB.com](https://www.phpbb.com/customise/db/extension/groupsub/support/topic/207181).
 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
