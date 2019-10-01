@@ -30,6 +30,14 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 	public function setup(db_text $config_text)
 	{
 		$this->config_text = $config_text;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function add_lang()
+	{
+		parent::add_lang();
 
 		$this->language->add_lang('acp_settings', 'stevotvr/groupsub');
 	}
@@ -39,6 +47,8 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 	 */
 	public function handle()
 	{
+		$this->add_lang();
+
 		$errors = array();
 
 		add_form_key('stevotvr_groupsub_settings');

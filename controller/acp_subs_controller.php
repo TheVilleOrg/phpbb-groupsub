@@ -79,8 +79,6 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$this->pagination = $pagination;
 		$this->user = $user;
 		$this->phpbb_users_table = $phpbb_users_table;
-
-		$this->language->add_lang('acp_subscriptions', 'stevotvr/groupsub');
 	}
 
 	/**
@@ -98,8 +96,20 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * @inheritDoc
 	 */
+	public function add_lang()
+	{
+		parent::add_lang();
+
+		$this->language->add_lang('acp_subscriptions', 'stevotvr/groupsub');
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function display()
 	{
+		$this->add_lang();
+
 		$sort_key = $sort_dir = '';
 		$start = $limit = $pkg_id = 0;
 		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);
@@ -262,6 +272,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	protected function add_edit_sub_data(sub_entity $entity, $params)
 	{
+		$this->add_lang();
+
 		$errors = array();
 
 		$submit = $this->request->is_set_post('submit');
@@ -457,6 +469,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	public function delete($id)
 	{
+		$this->add_lang();
+
 		$sort_key = $sort_dir = '';
 		$start = $limit = $pkg_id = 0;
 		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);

@@ -46,6 +46,14 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 		$this->pagination = $pagination;
 		$this->trans_operator = $trans_operator;
 		$this->user = $user;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function add_lang()
+	{
+		parent::add_lang();
 
 		$this->language->add_lang('acp_transactions', 'stevotvr/groupsub');
 	}
@@ -55,6 +63,8 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 	 */
 	public function display()
 	{
+		$this->add_lang();
+
 		$sort_key = $sort_dir = '';
 		$start = $limit = 0;
 		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit);

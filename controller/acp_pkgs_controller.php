@@ -50,6 +50,14 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		$this->pkg_operator = $pkg_operator;
 		$this->unit_helper = $unit_helper;
 		$this->phpbb_groups_table = $phpbb_groups_table;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function add_lang()
+	{
+		parent::add_lang();
 
 		$this->language->add_lang('posting');
 		$this->language->add_lang('acp_packages', 'stevotvr/groupsub');
@@ -60,6 +68,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	public function display()
 	{
+		$this->add_lang();
+
 		$packages = $this->pkg_operator->get_packages(false, false);
 
 		foreach ($packages as $package)
@@ -125,6 +135,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	protected function add_edit_pkg_data(pkg_entity $entity)
 	{
+		$this->add_lang();
+
 		$errors = array();
 
 		$submit = $this->request->is_set_post('submit');
@@ -401,6 +413,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 */
 	public function delete($id)
 	{
+		$this->add_lang();
+
 		if (!confirm_box(true))
 		{
 			$hidden_fields = build_hidden_fields(array(

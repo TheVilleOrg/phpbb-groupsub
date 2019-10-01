@@ -19,4 +19,9 @@ interface acp_base_interface
 	 * @param string $page_url The URL for the current page
 	 */
 	public function set_page_url($page_url);
+
+	/**
+	 * Add the required languages for the controller
+	 */
+	public function add_lang();
 }
