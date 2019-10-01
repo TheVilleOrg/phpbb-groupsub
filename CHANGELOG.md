@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 (10/1/19)
+
+* Fixed issue with language loading in the ACP
+* Removed local certificate authority file
+
 ## 1.1.0 (8/25/19)
 
 * Fixed expiration warning email errors
