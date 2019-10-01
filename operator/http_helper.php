@@ -42,9 +42,6 @@ class http_helper extends operator implements http_helper_interface
 				'timeout'			=> 30.0,
 				'ignore_errors'		=> true,
 			),
-			'ssl' => array(
-				'cafile'	=> self::CAFILE,
-			),
 		));
 		$fp = fopen($url, 'r', false, $ctx);
 
@@ -91,7 +88,6 @@ class http_helper extends operator implements http_helper_interface
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-		curl_setopt($ch, CURLOPT_CAINFO, self::CAFILE);
 		curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
 
