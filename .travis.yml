@@ -6,7 +6,7 @@ matrix:
     - php: 5.5
       env: DB=none;NOTESTS=1
     - php: 5.4
-      env: DB=mysqli #myisam
+      env: DB=mysqli
     - php: 5.4
       env: DB=mysql
     - php: 5.4
@@ -23,15 +23,6 @@ matrix:
       env: DB=mysqli
     - php: 7.1
       env: DB=mysqli
-    - php: 7.2
-      env: DB=mysqli
-    - php: 7.3
-      env: DB=mysqli
-    - php: nightly
-      env: DB=mysqli
-  allow_failures:
-    - php: nightly
-    - php: hhvm
   fast_finish: true
 
 env:
