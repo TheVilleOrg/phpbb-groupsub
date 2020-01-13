@@ -12,7 +12,7 @@ services:
             - '@controller.helper'
             - '@stevotvr.groupsub.operator.package'
             - '@template'
-            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.actions%'
             - '%stevotvr.groupsub.tables.subs%'
         tags:
             - { name: event.listener }
@@ -193,7 +193,7 @@ services:
             - '@language'
             - '%stevotvr.groupsub.currencies%'
             - '%stevotvr.groupsub.tables.packages%'
-            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.actions%'
             - '%stevotvr.groupsub.tables.terms%'
             - '%stevotvr.groupsub.tables.subs%'
 
@@ -209,6 +209,7 @@ services:
               arguments:
                 - '@notification_manager'
                 - '@dispatcher'
+                - '@stevotvr.groupsub.operator.package'
                 - '%tables.users%'
             - method: set_path_info
               arguments:

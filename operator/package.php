@@ -111,7 +111,7 @@ class package extends operator implements package_interface
 	 */
 	public function delete_package($package_id)
 	{
-		$sql = 'DELETE FROM ' . $this->group_table . '
+		$sql = 'DELETE FROM ' . $this->action_table . '
 				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 
@@ -263,46 +263,92 @@ class package extends operator implements package_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function get_groups($package_id, &$default = 0)
+	public function get_start_actions($package_id)
 	{
-		$ids = array();
-
-		$sql = 'SELECT group_id, group_default
-				FROM ' . $this->group_table . '
-				WHERE pkg_id = ' . (int) $package_id;
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$ids[] = (int) $row['group_id'];
-			if ($row['group_default'])
-			{
-				$default = (int) $row['group_id'];
-			}
-		}
-		$this->db->sql_freeresult();
-
-		return $ids;
+		return $this->get_actions($package_id, 0);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function add_group($package_id, $group_id, $default)
+	public function add_start_action($package_id, $action, $param)
 	{
-		$data = array(
-			'pkg_id'		=> (int) $package_id,
-			'group_id'		=> (int) $group_id,
-			'group_default'	=> (bool) $default,
-		);
-		$sql = 'INSERT INTO ' . $this->group_table . '
-				' . $this->db->sql_build_array('INSERT', $data);
+		$this->add_action($package_id, 0, $action, $param);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function get_end_actions($package_id)
+	{
+		return $this->get_actions($package_id, 1);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function add_end_action($package_id, $action, $param)
+	{
+		$this->add_action($package_id, 1, $action, $param);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function remove_actions($package_id)
+	{
+		$sql = 'DELETE FROM ' . $this->action_table . '
+				WHERE pkg_id = ' . (int) $package_id;
 		$this->db->sql_query($sql);
 	}
 
-	public function remove_groups($package_id)
+	/**
+	 * Get the subscription actions for a package.
+	 *
+	 * @param int $package_id The package ID
+	 * @param int $event      The action event
+	 *
+	 * @return array An array of subscription actions for the specified event
+	 */
+	protected function get_actions($package_id, $event)
 	{
-		$sql = 'DELETE FROM ' . $this->group_table . '
-				WHERE pkg_id = ' . (int) $package_id;
+		$actions = array();
+
+		$sql = 'SELECT act_name, act_param
+				FROM ' . $this->action_table . '
+				WHERE pkg_id = ' . (int) $package_id . '
+					AND pkg_event = ' . (int) $event;
+		$this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow())
+		{
+			$actions[] = array(
+				'name'	=> $row['act_name'],
+				'param'	=> $row['act_param'],
+			);
+		}
+		$this->db->sql_freeresult();
+
+		return $actions;
+	}
+
+	/**
+	 * Add a subscription action to a package.
+	 *
+	 * @param int    $package_id The package ID
+	 * @param int    $event      The action event
+	 * @param string $action     The name of the action
+	 * @param string $param      The parameter for the action
+	 */
+	protected function add_action($package_id, $event, $action, $param)
+	{
+		$data = array(
+			'pkg_id'		=> (int) $package_id,
+			'act_event'		=> (int) $event,
+			'act_name'	=> $action,
+			'act_param'	=> $param,
+		);
+		$sql = 'INSERT INTO ' . $this->action_table . '
+				' . $this->db->sql_build_array('INSERT', $data);
 		$this->db->sql_query($sql);
 	}
 }
