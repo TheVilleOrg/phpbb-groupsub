@@ -341,7 +341,7 @@ class subscription extends operator implements subscription_interface
 		if ($row)
 		{
 			$data = array(
-				'sub_expires'		=> (int) $row['sub_expires'] + $length,
+				'sub_expires'		=> $length > 0 ? (int) $row['sub_expires'] + $length : 0,
 				'sub_notify_status'	=> 0,
 			);
 			$sql = 'UPDATE ' . $this->sub_table . '
@@ -364,7 +364,7 @@ class subscription extends operator implements subscription_interface
 							->set_package($term->get_package())
 							->set_user((int) $user_id)
 							->set_start(time())
-							->set_expire(time() + $length);
+							->set_expire($length > 0 ? time() + $length : 0);
 		return $this->add_subscription($subscription);
 	}
 
