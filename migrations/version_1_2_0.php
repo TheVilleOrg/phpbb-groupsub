@@ -82,7 +82,10 @@ class version_1_2_0 extends migration
 	 */
 	public function update_groups()
 	{
-		$this->db->sql_query('SELECT pkg_id, group_id, group_default FROM ' . $this->table_prefix . 'groupsub_groups WHERE pkg_id IS NOT NULL');
+		$groups_table = $this->table_prefix . 'groupsub_groups';
+		$actions_table = $this->table_prefix . 'groupsub_actions';
+
+		$this->db->sql_query('SELECT pkg_id, group_id, group_default FROM ' . $groups_table . ' WHERE pkg_id IS NOT NULL');
 		$rows = $this->db->sql_fetchrowset();
 		$this->db->sql_freeresult();
 
@@ -94,19 +97,25 @@ class version_1_2_0 extends migration
 				'act_name'	=> 'gs_add_group',
 				'act_param'	=> $row['group_id'],
 			);
-			$this->db->sql_insert($this->table_prefix . 'groupsub_actions', $data);
+			$sql = 'INSERT INTO ' . $actions_table . '
+			' . $this->db->sql_build_array('INSERT', $data);
+			$this->db->sql_query($sql);
 
 			if ($row['group_default'])
 			{
 				$data['act_name'] = 'gs_default_group';
-				$this->db->sql_insert($this->table_prefix . 'groupsub_actions', $data);
+				$sql = 'INSERT INTO ' . $actions_table . '
+				' . $this->db->sql_build_array('INSERT', $data);
+				$this->db->sql_query($sql);
 			}
 
 			$data['act_event'] = 1;
 			$data['act_name'] = 'gs_remove_group';
-			$this->db->sql_insert($this->table_prefix . 'groupsub_actions', $data);
+			$sql = 'INSERT INTO ' . $actions_table . '
+			' . $this->db->sql_build_array('INSERT', $data);
+			$this->db->sql_query($sql);
 		}
 
-		$this->db_tools->sql_table_drop($this->table_prefix . 'groupsub_groups');
+		$this->db_tools->sql_table_drop($groups_table);
 	}
 }
