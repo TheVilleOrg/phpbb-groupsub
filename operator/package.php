@@ -317,7 +317,7 @@ class package extends operator implements package_interface
 		$sql = 'SELECT act_name, act_param
 				FROM ' . $this->action_table . '
 				WHERE pkg_id = ' . (int) $package_id . '
-					AND pkg_event = ' . (int) $event;
+					AND act_event = ' . (int) $event;
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
