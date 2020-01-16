@@ -598,7 +598,7 @@ class subscription extends operator implements subscription_interface
 					$group_id = (int) $action['param'];
 					if (!isset($groups_add[$group_id]))
 					{
-						$groups[$group_id] = true;
+						$groups_remove[$group_id] = true;
 					}
 				break;
 				case 'gs_default_group':
