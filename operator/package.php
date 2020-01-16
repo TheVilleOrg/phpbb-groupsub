@@ -342,8 +342,8 @@ class package extends operator implements package_interface
 	protected function add_action($package_id, $event, $action, $param)
 	{
 		$data = array(
-			'pkg_id'		=> (int) $package_id,
-			'act_event'		=> (int) $event,
+			'pkg_id'	=> (int) $package_id,
+			'act_event'	=> (int) $event,
 			'act_name'	=> $action,
 			'act_param'	=> $param,
 		);
