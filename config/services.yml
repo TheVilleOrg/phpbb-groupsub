@@ -80,6 +80,7 @@ services:
             - method: setup
               arguments:
                 - '@stevotvr.groupsub.operator.package'
+                - '@dispatcher'
                 - '@stevotvr.groupsub.operator.unit_helper'
                 - '%tables.groups%'
 
