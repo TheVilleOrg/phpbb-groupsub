@@ -641,6 +641,7 @@ class subscription extends operator implements subscription_interface
 									AND ' . $this->db->sql_in_set('a.act_name', array('gs_add_group', 'gs_default_group')),
 			);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+			$this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow())
 			{
 				unset($groups_remove[(int) $row['act_param']]);
