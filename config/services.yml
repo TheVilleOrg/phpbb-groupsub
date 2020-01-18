@@ -81,6 +81,7 @@ services:
               arguments:
                 - '@stevotvr.groupsub.operator.package'
                 - '@dispatcher'
+                - '@group_helper'
                 - '@stevotvr.groupsub.operator.unit_helper'
                 - '%tables.groups%'
 

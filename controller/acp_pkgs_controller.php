@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\controller;
 
 use phpbb\event\dispatcher_interface;
+use phpbb\group\helper;
 use phpbb\json_response;
 use stevotvr\groupsub\entity\package_interface as pkg_entity;
 use stevotvr\groupsub\exception\base;
@@ -33,6 +34,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	protected $phpbb_dispatcher;
 
 	/**
+	 * @var \phpbb\group\helper
+	 */
+	protected $group_helper;
+
+	/**
 	 * @var \stevotvr\groupsub\operator\unit_helper_interface
 	 */
 	protected $unit_helper;
@@ -49,13 +55,15 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 *
 	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
 	 * @param \phpbb\event\dispatcher_interface                 $phpbb_dispatcher
+	 * @param \phpbb\group\helper                               $group_helper
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 * @param string                                            $phpbb_groups_table The name of the phpBB groups table
 	 */
-	public function setup(pkg_operator $pkg_operator, dispatcher_interface $phpbb_dispatcher, unit_helper_interface $unit_helper, $phpbb_groups_table)
+	public function setup(pkg_operator $pkg_operator, dispatcher_interface $phpbb_dispatcher, helper $group_helper, unit_helper_interface $unit_helper, $phpbb_groups_table)
 	{
 		$this->pkg_operator = $pkg_operator;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
+		$this->group_helper = $group_helper;
 		$this->unit_helper = $unit_helper;
 		$this->phpbb_groups_table = $phpbb_groups_table;
 	}
@@ -331,14 +339,13 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . $this->phpbb_groups_table . '
-				WHERE ' . $this->db->sql_in_set('group_type', array(GROUP_OPEN, GROUP_CLOSED, GROUP_HIDDEN)) . '
 				ORDER BY group_name ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
 			$this->template->assign_block_vars('group', array(
 				'ID'	=> (int) $row['group_id'],
-				'NAME'	=> $row['group_name'],
+				'NAME'	=> $this->group_helper->get_name($row['group_name']),
 
 				'S_SELECTED_START_ADD'		=> in_array((int) $row['group_id'], $groups_start_add),
 				'S_SELECTED_START_REMOVE'	=> in_array((int) $row['group_id'], $groups_start_remove),
