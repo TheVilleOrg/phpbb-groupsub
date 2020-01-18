@@ -349,8 +349,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 
 				'S_SELECTED_START_ADD'		=> in_array((int) $row['group_id'], $groups_start_add),
 				'S_SELECTED_START_REMOVE'	=> in_array((int) $row['group_id'], $groups_start_remove),
+				'S_SELECTED_START_DEFAULT'	=> (int) $row['group_id'] == $default_group_start,
 				'S_SELECTED_END_ADD'		=> in_array((int) $row['group_id'], $groups_end_add),
 				'S_SELECTED_END_REMOVE'		=> in_array((int) $row['group_id'], $groups_end_remove),
+				'S_SELECTED_END_DEFAULT'	=> (int) $row['group_id'] == $default_group_end,
 			));
 		}
 		$this->db->sql_freeresult();
@@ -416,7 +418,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$start_actions[] = array(
 				'action'	=> 'gs_default_group',
-				'param'		=> $group_id,
+				'param'		=> $default_group_start,
 			);
 		}
 
@@ -424,7 +426,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$end_actions[] = array(
 				'action'	=> 'gs_default_group',
-				'param'		=> $group_id,
+				'param'		=> $default_group_end,
 			);
 		}
 

@@ -74,7 +74,7 @@
 				<select name="pkg_default_group_start" id="pkg_default_group_start">
 					<option value="0"></option>
 	{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP_START %} selected{% endif %}>{{ g.NAME }}</option>
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_START_DEFAULT %} selected{% endif %}>{{ g.NAME }}</option>
 	{% endfor %}
 				</select>
 			</dd>
@@ -109,7 +109,7 @@
 				<select name="pkg_default_group_end" id="pkg_default_group_end">
 					<option value="0"></option>
 	{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP_START %} selected{% endif %}>{{ g.NAME }}</option>
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_END_DEFAULT %} selected{% endif %}>{{ g.NAME }}</option>
 	{% endfor %}
 				</select>
 			</dd>
