@@ -61,12 +61,13 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			}
 
 			$data = array(
-				'pp_sandbox'				=> $this->request->variable('pp_sandbox', true),
-				'pp_sb_business'			=> $this->request->variable('pp_sb_business', ''),
-				'pp_business'				=> $this->request->variable('pp_business', ''),
-				'currency'					=> $this->request->variable('currency', ''),
-				'warn_time'					=> max(0, $this->request->variable('warn_time', 0)),
-				'grace'						=> max(0, $this->request->variable('grace', 0)),
+				'pp_sandbox'		=> $this->request->variable('pp_sandbox', true),
+				'pp_sb_business'	=> $this->request->variable('pp_sb_business', ''),
+				'pp_business'		=> $this->request->variable('pp_business', ''),
+				'collapse_terms'	=> max(2, $this->request->variable('collapse_terms', 0)),
+				'currency'			=> $this->request->variable('currency', ''),
+				'warn_time'			=> max(0, $this->request->variable('warn_time', 0)),
+				'grace'				=> max(0, $this->request->variable('grace', 0)),
 			);
 
 			$header = $this->request->variable('header', '');
@@ -139,6 +140,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			'CURRENCY'			=> $this->config['stevotvr_groupsub_currency'],
 			'HEADER'			=> $header['text'],
 			'FOOTER'			=> $footer['text'],
+			'COLLAPSE_TERMS'	=> $this->config['stevotvr_groupsub_collapse_terms'],
 			'WARN_TIME'			=> $this->config['stevotvr_groupsub_warn_time'],
 			'GRACE'				=> $this->config['stevotvr_groupsub_grace'],
 

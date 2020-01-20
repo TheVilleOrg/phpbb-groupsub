@@ -45,6 +45,10 @@
 				<label><input type="checkbox" class="radio" name="footer_magic_url"{% if S_FOOTER_MAGIC_URL_CHECKED %} checked{% endif %}> {{ lang('PARSE_URLS') }}</label>
 			</dd>
 		</dl>
+		<dl>
+			<dt><label for="collapse_terms">{{ lang('ACP_GROUPSUB_COLLAPSE_TERMS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_COLLAPSE_TERMS_EXPLAIN') }}</span></dt>
+			<dd><input class="text" type="number" id="collapse_terms" name="collapse_terms" size="4" min="2" value="{{ COLLAPSE_TERMS }}"></dd>
+		</dl>
 	</fieldset>
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_DEFAULTS') }}</legend>
