@@ -327,6 +327,17 @@ class subscription extends operator implements subscription_interface
 			 */
 			$vars = array('user_id', 'sub_id', 'package_id');
 			extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
+
+			$sql = 'SELECT pkg_ident, pkg_name
+					FROM ' . $this->package_table . '
+					WHERE pkg_id = ' . (int) $subscription->get_package();
+			$this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow();
+			$this->db->sql_freeresult();
+
+			$row['user_id'] = $subscription->get_user();
+
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.started', $row);
 		}
 
 		return $subscription->get_id();

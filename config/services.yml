@@ -53,6 +53,13 @@ services:
         tags:
             - { name: notification.type }
 
+    stevotvr.groupsub.notification.type.started:
+        class: stevotvr\groupsub\notification\type\started
+        shared: false
+        parent: stevotvr.groupsub.notification.type
+        tags:
+            - { name: notification.type }
+
     stevotvr.groupsub.controller.acp:
         class: stevotvr\groupsub\controller\acp_base_controller
         abstract: true

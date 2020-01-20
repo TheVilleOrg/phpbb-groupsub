@@ -25,6 +25,7 @@ class ext extends base
 				$phpbb_notifications = $this->container->get('notification_manager');
 				$phpbb_notifications->enable_notifications('stevotvr.groupsub.notification.type.warn');
 				$phpbb_notifications->enable_notifications('stevotvr.groupsub.notification.type.expired');
+				$phpbb_notifications->enable_notifications('stevotvr.groupsub.notification.type.started');
 				return 'notification';
 			break;
 			default:
@@ -40,6 +41,7 @@ class ext extends base
 				$phpbb_notifications = $this->container->get('notification_manager');
 				$phpbb_notifications->disable_notifications('stevotvr.groupsub.notification.type.warn');
 				$phpbb_notifications->disable_notifications('stevotvr.groupsub.notification.type.expired');
+				$phpbb_notifications->disable_notifications('stevotvr.groupsub.notification.type.started');
 				return 'notification';
 			break;
 			default:
@@ -55,6 +57,7 @@ class ext extends base
 				$phpbb_notifications = $this->container->get('notification_manager');
 				$phpbb_notifications->purge_notifications('stevotvr.groupsub.notification.type.warn');
 				$phpbb_notifications->purge_notifications('stevotvr.groupsub.notification.type.expired');
+				$phpbb_notifications->purge_notifications('stevotvr.groupsub.notification.type.started');
 				return 'notification';
 			break;
 			default:
