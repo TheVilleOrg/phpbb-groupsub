@@ -580,6 +580,7 @@ class subscription extends operator implements subscription_interface
 
 		$groups_add = array();
 		$groups_remove = array();
+		$groups_default = array();
 		$custom = array();
 
 		foreach ($actions as $action)
@@ -590,7 +591,7 @@ class subscription extends operator implements subscription_interface
 					$group_id = (int) $action['param'];
 					if (!isset($groups_add[$group_id]))
 					{
-						$groups_add[$group_id] = false;
+						$groups_add[$group_id] = true;
 						unset($groups_remove[$group_id]);
 					}
 				break;
@@ -603,8 +604,7 @@ class subscription extends operator implements subscription_interface
 				break;
 				case 'gs_default_group':
 					$group_id = (int) $action['param'];
-					$groups_add[$group_id] = true;
-					unset($groups_remove[$group_id]);
+					$groups_default[$group_id] = true;
 				break;
 				default:
 					$custom[] = $action;
@@ -618,9 +618,9 @@ class subscription extends operator implements subscription_interface
 				include $this->root_path . 'includes/functions_user.' . $this->php_ext;
 			}
 
-			foreach ($groups_add as $group_id => $default)
+			foreach (array_keys($groups_add) as $group_id)
 			{
-				group_user_add($group_id, $user_id, false, false, $default);
+				group_user_add($group_id, $user_id);
 			}
 		}
 
@@ -661,6 +661,19 @@ class subscription extends operator implements subscription_interface
 			foreach ($groups_remove as $group_id)
 			{
 				group_user_del($group_id, $user_id);
+			}
+		}
+
+		if (!empty($groups_default))
+		{
+			if (!function_exists('group_set_user_default'))
+			{
+				include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+			}
+
+			foreach (array_keys($groups_default) as $group_id)
+			{
+				group_set_user_default($group_id, array($user_id));
 			}
 		}
 
