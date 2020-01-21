@@ -391,9 +391,19 @@ class subscription extends operator implements subscription_interface
 	 */
 	public function delete_subscription($sub_id)
 	{
-		$sql = 'SELECT pkg_id, user_id
-				FROM ' . $this->sub_table . '
-				WHERE sub_active <> 0 AND sub_id = ' . (int) $sub_id;
+		$sql_ary = array(
+			'SELECT'	=> 's.sub_id, s.pkg_id, s.user_id, p.pkg_ident, p.pkg_name',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->package_table => 'p'),
+					'ON'	=> 's.pkg_id = p.pkg_id',
+				),
+			),
+			'WHERE'		=> 's.sub_active <> 0
+								AND s.sub_id = ' . (int) $sub_id,
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
@@ -409,6 +419,9 @@ class subscription extends operator implements subscription_interface
 		$this->db->sql_query($sql);
 
 		$this->end_subscription((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
+
+		$row['cancelled'] = true;
+		$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
 	}
 
 	/**
@@ -418,11 +431,20 @@ class subscription extends operator implements subscription_interface
 	{
 		$sub_ids = array();
 
-		$sql = 'SELECT sub_id, pkg_id, user_id
-				FROM ' . $this->sub_table . '
-				WHERE sub_active = 1
-					AND sub_expires <> 0
-					AND sub_expires < ' . (time() - $this->grace);
+		$sql_ary = array(
+			'SELECT'	=> 's.sub_id, s.pkg_id, s.user_id, p.pkg_ident, p.pkg_name',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->package_table => 'p'),
+					'ON'	=> 's.pkg_id = p.pkg_id',
+				),
+			),
+			'WHERE'		=> 's.sub_active = 1
+								AND s.sub_expires <> 0
+								AND s.sub_expires < ' . (time() - $this->grace),
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$this->db->sql_query($sql);
 		$rows = $this->db->sql_fetchrowset();
 		$this->db->sql_freeresult();
@@ -444,6 +466,8 @@ class subscription extends operator implements subscription_interface
 		foreach ($rows as $row)
 		{
 			$this->end_subscription($row['user_id'], $row['sub_id'], $row['pkg_id']);
+
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
 		}
 	}
 
@@ -452,49 +476,24 @@ class subscription extends operator implements subscription_interface
 	 */
 	public function notify_subscribers()
 	{
-		$sub_ids = array();
-
-		$sql_ary = array(
-			'SELECT'	=> 's.sub_id, s.user_id, s.sub_expires, p.pkg_ident, p.pkg_name',
-			'FROM'		=> array($this->sub_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array($this->package_table => 'p'),
-					'ON'	=> 's.pkg_id = p.pkg_id',
-				),
-			),
-			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . '
-								AND s.sub_active <> 0
-								AND s.sub_expires <> 0
-								AND s.sub_expires < ' . time(),
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		$rows = $this->db->sql_fetchrowset();
-		$this->db->sql_freeresult();
-		foreach ($rows as $row)
-		{
-			$sub_ids[] = (int) $row['sub_id'];
-			$this->notification_manager->delete_notifications('stevotvr.groupsub.notification.type.warn', (int) $row['sub_id']);
-			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
-		}
-
-		if (count($sub_ids))
-		{
-			$sql = 'UPDATE ' . $this->sub_table . '
-					SET sub_notify_status = ' . subscription_interface::NOTIFY_EXPIRED . '
-					WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
-			$this->db->sql_query($sql);
-		}
-
 		if ($this->warn_time)
 		{
 			$sub_ids = array();
 
-			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . '
+			$sql_ary = array(
+				'SELECT'	=> 's.sub_id, s.user_id, s.sub_expires, p.pkg_ident, p.pkg_name',
+				'FROM'		=> array($this->sub_table => 's'),
+				'LEFT_JOIN'	=> array(
+					array(
+						'FROM'	=> array($this->package_table => 'p'),
+						'ON'	=> 's.pkg_id = p.pkg_id',
+					),
+				),
+				'WHERE'		=> 's.sub_notify_status = 0
 									AND s.sub_active <> 0
 									AND s.sub_expires <> 0
-									AND s.sub_expires < ' . (time() + $this->warn_time);
+									AND s.sub_expires < ' . (time() + $this->warn_time),
+			);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			$this->db->sql_query($sql);
 			$rows = $this->db->sql_fetchrowset();
@@ -508,7 +507,7 @@ class subscription extends operator implements subscription_interface
 			if (count($sub_ids))
 			{
 				$sql = 'UPDATE ' . $this->sub_table . '
-						SET sub_notify_status = ' . subscription_interface::NOTIFY_WARN . '
+						SET sub_notify_status = 1
 						WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
 				$this->db->sql_query($sql);
 			}

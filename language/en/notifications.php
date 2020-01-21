@@ -49,6 +49,9 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_NOTIFICATION_EXPIRED_TITLE'		=> 'Subscription expired',
 	'GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE'	=> '<strong>%s</strong> has expired.',
 
+	'GROUPSUB_NOTIFICATION_CANCELLED_TITLE'		=> 'Subscription cancelled',
+	'GROUPSUB_NOTIFICATION_CANCELLED_REFERENCE'	=> '<strong>%s</strong> has been cancelled.',
+
 	'GROUPSUB_NOTIFICATION_STARTED_TITLE'		=> 'Subscription started',
 	'GROUPSUB_NOTIFICATION_STARTED_REFERENCE'	=> '<strong>%s</strong> has started.',
 ));

@@ -38,6 +38,11 @@ class expired extends base_type
 	 */
 	public function get_title()
 	{
+		if ($this->get_data('cancelled'))
+		{
+			return $this->language->lang('GROUPSUB_NOTIFICATION_CANCELLED_TITLE');
+		}
+
 		return $this->language->lang('GROUPSUB_NOTIFICATION_EXPIRED_TITLE');
 	}
 
@@ -46,6 +51,11 @@ class expired extends base_type
 	 */
 	public function get_reference()
 	{
+		if ($this->get_data('cancelled'))
+		{
+			return $this->language->lang('GROUPSUB_NOTIFICATION_CANCELLED_REFERENCE', $this->get_data('pkg_name'));
+		}
+
 		return $this->language->lang('GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE', $this->get_data('pkg_name'));
 	}
 
@@ -54,6 +64,11 @@ class expired extends base_type
 	 */
 	public function get_email_template()
 	{
+		if ($this->get_data('cancelled'))
+		{
+			return '@stevotvr_groupsub/subscription_cancelled';
+		}
+
 		return '@stevotvr_groupsub/subscription_expired';
 	}
 
@@ -70,5 +85,15 @@ class expired extends base_type
 
 			'U_VIEW_SUB'	=> generate_board_url() . '/' . $u_view_sub,
 		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function create_insert_array($data, $pre_create_data = array())
+	{
+		$this->set_data('cancelled', isset($data['cancelled']) && $data['cancelled']);
+
+		parent::create_insert_array($data, $pre_create_data);
 	}
 }
