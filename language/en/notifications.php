@@ -44,14 +44,14 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_NOTIFICATION_TYPE_STARTED'	=> 'A subscription has started',
 
 	'GROUPSUB_NOTIFICATION_WARN_TITLE'		=> 'Subscription expiring',
-	'GROUPSUB_NOTIFICATION_WARN_REFERENCE'	=> '<strong>%1$s</strong> expires %2$s.',
+	'GROUPSUB_NOTIFICATION_WARN_REFERENCE'	=> 'Your subscription to <strong>%1$s</strong> expires %2$s.',
 
 	'GROUPSUB_NOTIFICATION_EXPIRED_TITLE'		=> 'Subscription expired',
-	'GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE'	=> '<strong>%s</strong> has expired.',
+	'GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE'	=> 'Your subscription to <strong>%s</strong> has expired.',
 
 	'GROUPSUB_NOTIFICATION_CANCELLED_TITLE'		=> 'Subscription cancelled',
-	'GROUPSUB_NOTIFICATION_CANCELLED_REFERENCE'	=> '<strong>%s</strong> has been cancelled.',
+	'GROUPSUB_NOTIFICATION_CANCELLED_REFERENCE'	=> 'Your subscription to <strong>%s</strong> has been cancelled.',
 
 	'GROUPSUB_NOTIFICATION_STARTED_TITLE'		=> 'Subscription started',
-	'GROUPSUB_NOTIFICATION_STARTED_REFERENCE'	=> '<strong>%s</strong> has started.',
+	'GROUPSUB_NOTIFICATION_STARTED_REFERENCE'	=> 'Your subscription to <strong>%s</strong> has started.',
 ));
