@@ -335,6 +335,7 @@ class subscription extends operator implements subscription_interface
 			$row = $this->db->sql_fetchrow();
 			$this->db->sql_freeresult();
 
+			$row['sub_id'] = $subscription->get_id();
 			$row['user_id'] = $subscription->get_user();
 
 			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.started', $row);
