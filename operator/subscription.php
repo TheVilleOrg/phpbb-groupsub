@@ -339,6 +339,7 @@ class subscription extends operator implements subscription_interface
 			$row['user_id'] = $subscription->get_user();
 
 			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.started', $row);
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.admin_started', $row);
 		}
 
 		return $subscription->get_id();

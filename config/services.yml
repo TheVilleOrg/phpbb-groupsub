@@ -39,6 +39,18 @@ services:
                 - '@controller.helper'
                 - '@user_loader'
 
+    stevotvr.groupsub.notification.admin_type:
+        class: stevotvr\groupsub\notification\type\admin_base_type
+        abstract: true
+        parent: stevotvr.groupsub.notification.type
+
+    stevotvr.groupsub.notification.type.admin_started:
+        class: stevotvr\groupsub\notification\type\admin_started
+        shared: false
+        parent: stevotvr.groupsub.notification.admin_type
+        tags:
+            - { name: notification.type }
+
     stevotvr.groupsub.notification.type.warn:
         class: stevotvr\groupsub\notification\type\warn
         shared: false
