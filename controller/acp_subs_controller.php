@@ -56,6 +56,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 * @var string
 	 */
 	protected $root_path;
+
 	/**
 	 * The script file extension.
 	 *
