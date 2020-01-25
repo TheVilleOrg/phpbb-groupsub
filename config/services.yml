@@ -43,6 +43,10 @@ services:
         class: stevotvr\groupsub\notification\type\admin_base_type
         abstract: true
         parent: stevotvr.groupsub.notification.type
+        calls:
+            - method: set_config
+              arguments:
+                - '@config'
 
     stevotvr.groupsub.notification.type.admin_started:
         class: stevotvr\groupsub\notification\type\admin_started

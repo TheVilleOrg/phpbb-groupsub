@@ -10,17 +10,32 @@
 
 namespace stevotvr\groupsub\notification\type;
 
+use phpbb\config\config;
+
 /**
- * Group Subscription base notification.
+ * Group Subscription base admin notification.
  */
 abstract class admin_base_type extends base_type
 {
+	/**
+	 * @var \phpbb\config\config
+	 */
+	protected $config;
+
+	/**
+	 * @param \phpbb\config\config $config
+	 */
+	public function set_config(config $config)
+	{
+		$this->config = $config;
+	}
+
 	/**
 	* {@inheritdoc}
 	*/
 	public function is_available()
 	{
-		return $this->auth->acl_get('a_board');
+		return $this->config['stevotvr_groupsub_notify_admins'] && $this->auth->acl_get('a_board');
 	}
 
 	/**

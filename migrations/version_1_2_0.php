@@ -66,6 +66,7 @@ class version_1_2_0 extends migration
 	{
 		return array(
 			array('config.add', array('stevotvr_groupsub_collapse_terms', 6)),
+			array('config.add', array('stevotvr_groupsub_notify_admins', false)),
 			array('custom', array(array($this, 'update_groups'))),
 		);
 	}

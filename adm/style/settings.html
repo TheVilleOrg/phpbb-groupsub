@@ -28,6 +28,10 @@
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_GENERAL') }}</legend>
 		<dl>
+			<dt><label for="notify_admins">{{ lang('ACP_GROUPSUB_NOTIFY_ADMINS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_NOTIFY_ADMINS_EXPLAIN') }}</span></dt>
+			<dd><label><input type="radio" id="notify_admins" name="notify_admins" value="1"{% if NOTIFY_ADMINS %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="notify_admins" value="0"{% if not NOTIFY_ADMINS %} checked{% endif %}> {{ lang('NO') }}</label></dd>
+		</dl>
+		<dl>
 			<dt><label for="header">{{ lang('ACP_GROUPSUB_HEADER') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_HEADER_EXPLAIN') }}</span></dt>
 			<dd><textarea id="header" name="header" rows="5" cols="45" data-bbcode="true">{{ HEADER }}</textarea></dd>
 			<dd>
