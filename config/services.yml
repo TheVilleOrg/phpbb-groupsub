@@ -116,6 +116,7 @@ services:
               arguments:
                 - '@stevotvr.groupsub.operator.package'
                 - '@stevotvr.groupsub.operator.subscription'
+                - '@auth'
                 - '@pagination'
                 - '@user'
                 - '%tables.users%'

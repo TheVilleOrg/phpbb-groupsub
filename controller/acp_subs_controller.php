@@ -10,6 +10,7 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\auth\auth;
 use phpbb\json_response;
 use phpbb\pagination;
 use phpbb\user;
@@ -34,14 +35,19 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $sub_operator;
 
 	/**
-	 * @var \phpbb\user
+	 * @var \phpbb\auth\auth
 	 */
-	protected $user;
+	protected $auth;
 
 	/**
 	 * @var \phpbb\pagination
 	 */
 	protected $pagination;
+
+	/**
+	 * @var \phpbb\user
+	 */
+	protected $user;
 
 	/**
 	 * The name of the phpBB users table.
@@ -69,14 +75,16 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 *
 	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
+	 * @param \phpbb\auth\auth                                   $auth
 	 * @param \phpbb\pagination                                  $pagination
 	 * @param \phpbb\user                                        $user
 	 * @param string                                             $phpbb_users_table The name of the phpBB users table
 	 */
-	public function setup(pkg_operator $pkg_operator, sub_operator $sub_operator, pagination $pagination, user $user, $phpbb_users_table)
+	public function setup(pkg_operator $pkg_operator, sub_operator $sub_operator, auth $auth, pagination $pagination, user $user, $phpbb_users_table)
 	{
 		$this->pkg_operator = $pkg_operator;
 		$this->sub_operator = $sub_operator;
+		$this->auth = $auth;
 		$this->pagination = $pagination;
 		$this->user = $user;
 		$this->phpbb_users_table = $phpbb_users_table;
@@ -156,6 +164,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'U_ADD_SUB'	=> $this->u_action . $params . '&amp;action=add',
 
 			'S_SHOW_ADD'	=> (bool) $pkg_count,
+			'S_READ_ONLY'	=> !$this->auth->acl_get('a_groupsub_subscriptions_edit'),
 		));
 
 		$total = $this->sub_operator->count_subscriptions();
@@ -262,6 +271,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'SUB_USER'		=> $subscription['username'],
 
 			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
+
+			'S_READ_ONLY'	=> !$this->auth->acl_get('a_groupsub_subscriptions_edit'),
 		));
 	}
 
@@ -293,7 +304,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			trigger_error($this->language->lang('ACP_GROUPSUB_ERROR_NO_PKGS') . adm_back_link($this->u_action . $params), E_USER_WARNING);
 		}
 
-		if ($submit)
+		if ($submit && $this->auth->acl_get('a_groupsub_subscriptions_edit'))
 		{
 			if (!check_form_key('add_edit_sub'))
 			{
@@ -470,6 +481,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	 */
 	public function delete($id)
 	{
+		if (!$this->auth->acl_get('a_groupsub_subscriptions_edit'))
+		{
+			return;
+		}
+
 		$this->add_lang();
 
 		$sort_key = $sort_dir = '';

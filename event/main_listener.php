@@ -98,10 +98,31 @@ class main_listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
+			'core.permissions'			=> 'permissions',
 			'core.user_setup'			=> 'user_setup',
 			'core.delete_group_after'	=> 'delete_group_after',
 			'core.delete_user_after'	=> 'delete_user_after',
 		);
+	}
+
+	/**
+	 * Loads the permissions.
+	 *
+	 * @param \phpbb\event\data $event The event data
+	 */
+	public function permissions(data $event)
+	{
+		$categories = $event['categories'];
+		$categories['groupsub'] = 'ACL_CAT_GROUPSUB';
+		$event['categories'] = $categories;
+
+		$permissions = $event['permissions'];
+		$permissions['a_groupsub_settings'] = array('lang' => 'ACL_A_GROUPSUB_SETTINGS', 'cat' => 'groupsub');
+		$permissions['a_groupsub_packages'] = array('lang' => 'ACL_A_GROUPSUB_PACKAGES', 'cat' => 'groupsub');
+		$permissions['a_groupsub_subscriptions'] = array('lang' => 'ACL_A_GROUPSUB_SUBSCRIPTIONS', 'cat' => 'groupsub');
+		$permissions['a_groupsub_subscriptions_edit'] = array('lang' => 'ACL_A_GROUPSUB_SUBSCRIPTIONS_EDIT', 'cat' => 'groupsub');
+		$permissions['a_groupsub_transactions'] = array('lang' => 'ACL_A_GROUPSUB_TRANSACTIONS', 'cat' => 'groupsub');
+		$event['permissions'] = $permissions;
 	}
 
 	/**

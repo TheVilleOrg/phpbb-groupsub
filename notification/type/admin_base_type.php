@@ -35,7 +35,7 @@ abstract class admin_base_type extends base_type
 	*/
 	public function is_available()
 	{
-		return $this->config['stevotvr_groupsub_notify_admins'] && $this->auth->acl_get('a_board');
+		return $this->config['stevotvr_groupsub_notify_admins'] && $this->auth->acl_get('a_groupsub_subscriptions');
 	}
 
 	/**
@@ -47,8 +47,8 @@ abstract class admin_base_type extends base_type
 			'ignore_users'	=> array(),
 		), $options);
 
-		$admin_ary = $this->auth->acl_get_list(false, 'a_board', false);
-		$users = (!empty($admin_ary[0]['a_board'])) ? $admin_ary[0]['a_board'] : array();
+		$admin_ary = $this->auth->acl_get_list(false, 'a_groupsub_subscriptions', false);
+		$users = (!empty($admin_ary[0]['a_groupsub_subscriptions'])) ? $admin_ary[0]['a_groupsub_subscriptions'] : array();
 
 		$sql = 'SELECT user_id
 				FROM ' . USERS_TABLE . '

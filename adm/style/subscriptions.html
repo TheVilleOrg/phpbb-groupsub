@@ -58,7 +58,7 @@
 			<dd>{{ SUB_PACKAGE }}</dd>
 		</dl>
 	{% endif %}
-	{% if S_ACTIVE or S_ADD_SUB %}
+	{% if (S_ACTIVE or S_ADD_SUB) and not S_READ_ONLY %}
 		<dl>
 			<dt><label for="sub_start">{{ lang('ACP_GROUPSUB_SUB_START') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_SUB_START_EXPLAIN') }}</span></dt>
 			<dd><input class="text medium" type="text" id="sub_start" name="sub_start" value="{{ SUB_START }}" maxlength="255"></dd>
@@ -80,18 +80,24 @@
 		</dl>
 	{% endif %}
 	</fieldset>
+	{% if not S_READ_ONLY %}
 	<fieldset class="submit-buttons">
 		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
 		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
 		{{ S_FORM_TOKEN }}
 	</fieldset>
+	{% endif %}
 </form>
 
 {% else %}
 
 <h1>{{ lang('ACP_GROUPSUB_MANAGE_SUBS') }}{% if PKG_NAME %} :: {{ PKG_NAME }}{% endif %}</h1>
 
+	{% if S_READ_ONLY %}
+<p>{{ lang('ACP_GROUPSUB_MANAGE_SUBS_EXPLAIN_READONLY') }}</p>
+	{% else %}
 <p>{{ lang('ACP_GROUPSUB_MANAGE_SUBS_EXPLAIN') }}</p>
+	{% endif %}
 
 	{% if package|length > 1 %}
 <form id="sub_filter" method="post" action="{{ U_ACTION }}">
@@ -129,7 +135,7 @@
 			<td>{% if s.S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}</td>
 			<td class="actions">
 				<a href="{{ s.U_EDIT }}">{{ ICON_EDIT }}</a>
-		{% if s.S_ACTIVE %}
+		{% if not S_READ_ONLY and s.S_ACTIVE %}
 				<a href="{{ s.U_DELETE }}" data-ajax="row_delete">{{ ICON_DELETE }}</a>
 		{% else %}
 				<a>{{ ICON_DELETE_DISABLED }}</a>
@@ -171,7 +177,7 @@
 </div>
 	{% endif %}
 
-	{% if S_SHOW_ADD %}
+	{% if not S_READ_ONLY and S_SHOW_ADD %}
 <form id="sub_add" method="post" action="{{ U_ADD_SUB }}">
 	<fieldset class="quick">
 		<input type="hidden" name="sub_package" value="{{ PKG_ID }}">

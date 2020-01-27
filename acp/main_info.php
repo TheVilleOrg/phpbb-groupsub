@@ -23,22 +23,22 @@ class main_info
 			'modes'		=> array(
 				'settings'	=> array(
 					'title'	=> 'ACP_GROUPSUB_SETTINGS',
-					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
+					'auth'	=> 'ext_stevotvr/groupsub && acl_a_groupsub_settings',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),
 				'packages'	=> array(
 					'title'	=> 'ACP_GROUPSUB_MANAGE_PKGS',
-					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
+					'auth'	=> 'ext_stevotvr/groupsub && acl_a_groupsub_packages',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),
 				'subscriptions'	=> array(
 					'title'	=> 'ACP_GROUPSUB_MANAGE_SUBS',
-					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
+					'auth'	=> 'ext_stevotvr/groupsub && acl_a_groupsub_subscriptions',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),
 				'transactions'	=> array(
 					'title'	=> 'ACP_GROUPSUB_TRANSACTIONS',
-					'auth'	=> 'ext_stevotvr/groupsub && acl_a_board',
+					'auth'	=> 'ext_stevotvr/groupsub && acl_a_groupsub_transactions',
 					'cat'	=> array('ACP_GROUPSUB_TITLE'),
 				),
 			),
