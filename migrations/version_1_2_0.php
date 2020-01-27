@@ -53,6 +53,20 @@ class version_1_2_0 extends migration
 	public function revert_schema()
 	{
 		return array(
+			'add_tables' => array(
+				$this->table_prefix . 'groupsub_groups' => array(
+					'COLUMNS' => array(
+						'pkg_id'	=> array('UINT', null),
+						'sub_id'	=> array('UINT', null),
+						'user_id'	=> array('UINT', null),
+						'group_id'	=> array('UINT', 0),
+						'group_default'	=> array('BOOL', 0),
+					),
+					'KEYS' => array(
+						'k'	=> array('UNIQUE', array('pkg_id', 'sub_id', 'user_id', 'group_id')),
+					),
+				),
+			),
 			'drop_tables'   => array(
 				$this->table_prefix . 'groupsub_actions',
 			),
