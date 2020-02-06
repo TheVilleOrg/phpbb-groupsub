@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 (2/6/20)
+
+* Fixed unlimited subscriptions
+
 ## 1.1.1 (10/1/19)
 
 * Fixed issue with language loading in the ACP
