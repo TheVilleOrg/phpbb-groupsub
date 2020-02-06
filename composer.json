@@ -21,7 +21,7 @@
 		"phing/phing": "2.*"
 	},
 	"extra": {
-		"display-name": "Group Subscription",
+		"display-name": "Group Subscription (PayPal)",
 		"soft-require": {
 			"phpbb/phpbb": ">=3.2.0"
 		}
