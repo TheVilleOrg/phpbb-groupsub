@@ -88,24 +88,6 @@ class version_1_2_0 extends migration
 			array('permission.add', array('a_groupsub_subscriptions_edit', true, 'a_board')),
 			array('permission.add', array('a_groupsub_transactions', true, 'a_board')),
 
-			array('module.remove', array(
-				'acp',
-				'ACP_GROUPSUB_TITLE',
-				array(
-					'module_basename'	=> '\stevotvr\groupsub\acp\main_module',
-					'modes'				=> array('settings', 'packages', 'subscriptions', 'transactions'),
-				),
-			)),
-
-			array('module.add', array(
-				'acp',
-				'ACP_GROUPSUB_TITLE',
-				array(
-					'module_basename'	=> '\stevotvr\groupsub\acp\main_module',
-					'modes'				=> array('settings', 'packages', 'subscriptions', 'transactions'),
-				),
-			)),
-
 			array('custom', array(array($this, 'update_groups'))),
 		);
 	}
