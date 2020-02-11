@@ -243,7 +243,7 @@ class subscription extends operator implements subscription_interface
 		$subscriptions = array();
 
 		$sql_ary = array(
-			'SELECT'	=> 's.*, p.pkg_name, p.pkg_deleted, u.username',
+			'SELECT'	=> 's.*, p.pkg_name, p.pkg_deleted, u.username, u.user_colour',
 			'FROM'		=> array($this->sub_table => 's'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -276,8 +276,10 @@ class subscription extends operator implements subscription_interface
 					'name'		=> $row['pkg_name'],
 					'deleted'	=> (bool) $row['pkg_deleted'],
 				),
-				'username'	=> $row['username'],
-				'entity'	=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
+				'username'		=> $row['username'],
+				'user_id'		=> $row['user_id'],
+				'user_colour'	=> $row['user_colour'],
+				'entity'		=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
 			);
 		}
 		$this->db->sql_freeresult();

@@ -71,6 +71,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $php_ext;
 
 	/**
+	 * Admin root path.
+	 *
+	 * @var string
+	 */
+	protected $admin_path;
+
+	/**
 	 * Set up the controller.
 	 *
 	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
@@ -93,13 +100,15 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Set the phpBB installation path information.
 	 *
-	 * @param string $root_path The root phpBB path
-	 * @param string $php_ext   The script file extension
+	 * @param string $root_path         The root phpBB path
+	 * @param string $php_ext           The script file extension
+	 * @param string $adm_relative_path The relative admin root path
 	 */
-	public function set_path_info($root_path, $php_ext)
+	public function set_path_info($root_path, $php_ext, $adm_relative_path)
 	{
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
+		$this->admin_path = $this->root_path . $adm_relative_path;
 	}
 
 	/**
@@ -138,13 +147,14 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 							->set_package($pkg_id)
 							->get_subscriptions();
 
+		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
 		foreach ($subscriptions as $subscription)
 		{
 			$this->template->assign_block_vars('subscription', array(
 				'S_PACKAGE_DELETED'	=> $subscription['package']['deleted'],
 				'S_ACTIVE'			=> $subscription['entity']->is_active(),
 
-				'USER'		=> $subscription['username'],
+				'USER'		=> get_username_string('full', $subscription['user_id'], $subscription['username'], $subscription['user_colour'], false, $profile_url),
 				'PACKAGE'	=> $subscription['package']['name'],
 				'STARTED'	=> $this->user->format_date($subscription['entity']->get_start()),
 				'EXPIRES'	=> $subscription['entity']->get_expire() ? $this->user->format_date($subscription['entity']->get_expire()) : 0,

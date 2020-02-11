@@ -124,6 +124,7 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+                - '%core.adm_relative_path%'
 
     stevotvr.groupsub.controller.acp.transaction:
         class: stevotvr\groupsub\controller\acp_trans_controller
@@ -134,6 +135,11 @@ services:
                 - '@pagination'
                 - '@stevotvr.groupsub.operator.transaction'
                 - '@user'
+            - method: set_path_info
+              arguments:
+                - '%core.root_path%'
+                - '%core.php_ext%'
+                - '%core.adm_relative_path%'
 
     stevotvr.groupsub.controller.ipn:
         class: stevotvr\groupsub\controller\ipn_controller

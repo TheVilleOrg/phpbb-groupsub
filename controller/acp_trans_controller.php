@@ -35,6 +35,27 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 	protected $user;
 
 	/**
+	 * The root phpBB path.
+	 *
+	 * @var string
+	 */
+	protected $root_path;
+
+	/**
+	 * The script file extension.
+	 *
+	 * @var string
+	 */
+	protected $php_ext;
+
+	/**
+	 * Admin root path.
+	 *
+	 * @var string
+	 */
+	protected $admin_path;
+
+	/**
 	 * Set up the controller.
 	 *
 	 * @param \phpbb\pagination                                 $pagination
@@ -46,6 +67,20 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 		$this->pagination = $pagination;
 		$this->trans_operator = $trans_operator;
 		$this->user = $user;
+	}
+
+	/**
+	 * Set the phpBB installation path information.
+	 *
+	 * @param string $root_path         The root phpBB path
+	 * @param string $php_ext           The script file extension
+	 * @param string $adm_relative_path The relative admin root path
+	 */
+	public function set_path_info($root_path, $php_ext, $adm_relative_path)
+	{
+		$this->root_path = $root_path;
+		$this->php_ext = $php_ext;
+		$this->admin_path = $this->root_path . $adm_relative_path;
 	}
 
 	/**
@@ -79,6 +114,7 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 
 		$u_sub = str_replace('mode=transactions', 'mode=subscriptions&amp;action=edit&amp;id=', $this->u_action);
 		$transactions = $this->trans_operator->get_transactions($start, $limit, $this->get_sort_field($sort_key), ($sort_dir === 'd'));
+		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
 		foreach ($transactions as $transaction)
 		{
 			$this->template->assign_block_vars('transaction', array(
@@ -86,7 +122,7 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 				'TEST'		=> (bool) $transaction['trans_test'],
 				'AMOUNT'	=> $this->currency->format_price($transaction['trans_currency'], $transaction['trans_amount']),
 				'TIME'		=> $this->user->format_date($transaction['trans_time']),
-				'USER'		=> $transaction['username'],
+				'USER'		=> get_username_string('full', $transaction['user_id'], $transaction['username'], $transaction['user_colour'], false, $profile_url),
 
 				'U_SUBSCRIPTION'	=> $u_sub . $transaction['sub_id'],
 			));
