@@ -271,6 +271,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		$params = $this->parse_display_params();
 		$subscription = $this->sub_operator->get_subscription($id);
+		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
 		$this->add_edit_sub_data($subscription['entity'], $params);
 
 		$this->template->assign_vars(array(
@@ -278,7 +279,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'S_ACTIVE'		=> $subscription['entity']->is_active(),
 
 			'SUB_PACKAGE'	=> $subscription['package']['name'],
-			'SUB_USER'		=> $subscription['username'],
+			'SUB_USER'		=> get_username_string('full', $subscription['user_id'], $subscription['username'], $subscription['user_colour'], false, $profile_url),
 
 			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
 
