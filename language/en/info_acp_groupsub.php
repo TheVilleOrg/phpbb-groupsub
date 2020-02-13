@@ -43,4 +43,6 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_MANAGE_PKGS'	=> 'Manage packages',
 	'ACP_GROUPSUB_MANAGE_SUBS'	=> 'Manage subscriptions',
 	'ACP_GROUPSUB_TRANSACTIONS'	=> 'View transactions',
+
+	'ACP_USER_GROUPSUB'	=> 'Subscriptions',
 ));

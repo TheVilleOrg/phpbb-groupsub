@@ -16,6 +16,13 @@ namespace stevotvr\groupsub\controller;
 interface acp_subs_interface extends acp_base_interface
 {
 	/**
+	 * Set the user ID for single user mode.
+	 *
+	 * @param int $user_id The user ID
+	 */
+	public function set_user($user_id);
+
+	/**
 	 * Display all items.
 	 */
 	public function display();

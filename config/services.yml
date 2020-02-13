@@ -3,7 +3,7 @@ imports:
     - { resource: currencies.yml }
 
 services:
-    stevotvr.groupsub.listener:
+    stevotvr.groupsub.listener.main:
         class: stevotvr\groupsub\event\main_listener
         arguments:
             - '@auth'
@@ -14,6 +14,15 @@ services:
             - '@template'
             - '%stevotvr.groupsub.tables.actions%'
             - '%stevotvr.groupsub.tables.subs%'
+        tags:
+            - { name: event.listener }
+
+    stevotvr.groupsub.listener.acp:
+        class: stevotvr\groupsub\event\acp_listener
+        arguments:
+            - '@auth'
+            - '@request'
+            - '@stevotvr.groupsub.controller.acp.subscription'
         tags:
             - { name: event.listener }
 

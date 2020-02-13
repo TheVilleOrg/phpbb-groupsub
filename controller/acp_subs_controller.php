@@ -78,6 +78,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	protected $admin_path;
 
 	/**
+	 * The user ID for single user mode.
+	 *
+	 * @var int
+	 */
+	protected $user_id;
+
+	/**
 	 * Set up the controller.
 	 *
 	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
@@ -124,6 +131,17 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * @inheritDoc
 	 */
+	public function set_user($user_id)
+	{
+		$this->user_id = $user_id;
+		$this->u_action = append_sid($this->admin_path . 'index.' . $this->php_ext,
+										'i=users&amp;mode=groupsub&amp;u=' . $user_id);
+		$this->template->assign_var('USER_ID', $user_id);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function display()
 	{
 		$this->add_lang();
@@ -145,6 +163,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 							->set_start($start)
 							->set_sort($this->get_sort_field($sort_key), ($sort_dir === 'd'))
 							->set_package($pkg_id)
+							->set_user($this->user_id)
 							->get_subscriptions();
 
 		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
@@ -175,6 +194,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 			'S_SHOW_ADD'	=> (bool) $pkg_count,
 			'S_READ_ONLY'	=> !$this->auth->acl_get('a_groupsub_subscriptions_edit'),
+			'S_SHOW_USER'	=> !$this->user_id,
 		));
 
 		$total = $this->sub_operator->count_subscriptions();
@@ -251,7 +271,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	public function add()
 	{
 		$params = $this->parse_display_params();
-		$entity = $this->container->get('stevotvr.groupsub.entity.subscription');
+		$entity = $this->container->get('stevotvr.groupsub.entity.subscription')->set_user($this->user_id);
 		$this->add_edit_sub_data($entity, $params);
 
 		$u_find_username = append_sid($this->root_path . 'memberlist.' . $this->php_ext,
@@ -344,7 +364,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 
 			if (!$entity->get_id())
 			{
-				$parsed_data['user'] = $this->parse_username($data['user']);
+				$parsed_data['user'] = isset($this->user_id) ? $this->user_id : $this->parse_username($data['user']);
 				if (!$parsed_data['user'])
 				{
 					$errors[] = 'NO_USER';
@@ -412,7 +432,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		$posted = $this->request->is_set_post('submit');
 
-		$user = !$entity->get_id() ? $post['user'] : $entity->get_user();
+		$user = !$entity->get_user() ? $post['user'] : $entity->get_user();
 		$package = !$entity->get_id() ? $post['package'] : $entity->get_package();
 
 		if ($posted)
@@ -436,6 +456,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'SUB_PACKAGE'	=> $package,
 			'SUB_START'		=> $start,
 			'SUB_EXPIRE'	=> $expire,
+
+			'S_SHOW_USER'	=> !$this->user_id,
 		));
 	}
 
@@ -507,7 +529,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
-				'mode'		=> 'subscriptions',
+				'mode'		=> $this->request->variable('mode', ''),
 				'sk'		=> $sort_key,
 				'sd'		=> $sort_dir,
 				'start'		=> $start,

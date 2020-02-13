@@ -1,0 +1,18 @@
+{% if USER_ID %}
+	{% if S_ADD_SUB or S_EDIT_SUB %}
+
+		{% if ERROR_MSG %}
+<div class="errorbox">
+	<h3>{{ lang('WARNING') }}</h3>
+	<p>{{ ERROR_MSG }}</p>
+</div>
+		{% endif %}
+
+	{% include '@stevotvr_groupsub/subscription_form.html' %}
+
+	{% else %}
+
+	{% include '@stevotvr_groupsub/subscription_list.html' %}
+
+	{% endif %}
+{% endif %}
