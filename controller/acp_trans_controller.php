@@ -114,7 +114,7 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 
 		$u_sub = str_replace('mode=transactions', 'mode=subscriptions&amp;action=edit&amp;id=', $this->u_action);
 		$transactions = $this->trans_operator->get_transactions($start, $limit, $this->get_sort_field($sort_key), ($sort_dir === 'd'));
-		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
+		$profile_url = append_sid($this->admin_path . 'index.' . $this->php_ext, 'i=users&amp;mode=overview');
 		foreach ($transactions as $transaction)
 		{
 			$this->template->assign_block_vars('transaction', array(

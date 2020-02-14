@@ -134,8 +134,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	public function set_user($user_id)
 	{
 		$this->user_id = $user_id;
-		$this->u_action = append_sid($this->admin_path . 'index.' . $this->php_ext,
-										'i=users&amp;mode=groupsub&amp;u=' . $user_id);
+		$this->u_action = append_sid($this->admin_path . 'index.' . $this->php_ext, 'i=users&amp;mode=groupsub&amp;u=' . $user_id);
 		$this->template->assign_var('USER_ID', $user_id);
 	}
 
@@ -166,7 +165,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 							->set_user($this->user_id)
 							->get_subscriptions();
 
-		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
+		$profile_url = append_sid($this->admin_path . 'index.' . $this->php_ext, 'i=users&amp;mode=overview');
 		foreach ($subscriptions as $subscription)
 		{
 			$this->template->assign_block_vars('subscription', array(
@@ -274,8 +273,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$entity = $this->container->get('stevotvr.groupsub.entity.subscription')->set_user($this->user_id);
 		$this->add_edit_sub_data($entity, $params);
 
-		$u_find_username = append_sid($this->root_path . 'memberlist.' . $this->php_ext,
-			'mode=searchuser&amp;form=add_edit_sub&amp;field=sub_user&amp;select_single=true');
+		$u_find_username = append_sid($this->root_path . 'memberlist.' . $this->php_ext, 'mode=searchuser&amp;form=add_edit_sub&amp;field=sub_user&amp;select_single=true');
 		$this->template->assign_vars(array(
 			'S_ADD_SUB'	=> true,
 
@@ -291,7 +289,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		$params = $this->parse_display_params();
 		$subscription = $this->sub_operator->get_subscription($id);
-		$profile_url = append_sid("{$this->admin_path}index.{$this->php_ext}", 'i=users&amp;mode=overview');
+		$profile_url = append_sid($this->admin_path . 'index.' . $this->php_ext, 'i=users&amp;mode=overview');
 		$this->add_edit_sub_data($subscription['entity'], $params);
 
 		$this->template->assign_vars(array(
