@@ -432,7 +432,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		$posted = $this->request->is_set_post('submit');
 
-		$user = !$entity->get_user() ? $post['user'] : $entity->get_user();
+		$user = !$entity->get_id() ? $post['user'] : $entity->get_user();
 		$package = !$entity->get_id() ? $post['package'] : $entity->get_package();
 
 		if ($posted)

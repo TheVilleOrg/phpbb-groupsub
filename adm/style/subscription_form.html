@@ -8,8 +8,6 @@
 			<dd><input class="text medium" type="text" id="sub_user" name="sub_user" value="{{ SUB_USER }}" maxlength="255" autocomplete="off"></dd>
 			<dd>[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]</dd>
 		</dl>
-	{% else %}
-		<input type="hidden" id="sub_user" name="sub_user" value="{{ SUB_USER }}">
 	{% endif %}
 		<dl>
 			<dt><label for="sub_package">{{ lang('ACP_GROUPSUB_SUB_PACKAGE') ~ lang('COLON') }}</label></dt>
