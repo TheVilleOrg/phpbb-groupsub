@@ -126,7 +126,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 		$footer = generate_text_for_edit($this->config_text->get('stevotvr_groupsub_footer'), $footer_uid, $footer_options);
 
 		$this->template->assign_vars(array(
-			'ERROR_MSG'	=> implode('<br>', $errors),
+			'ERROR_MESSAGE'	=> implode('<br>', $errors),
 
 			'S_HEADER_BBCODE_CHECKED'		=> $header_options & OPTION_FLAG_BBCODE,
 			'S_HEADER_SMILIES_CHECKED'		=> $header_options & OPTION_FLAG_SMILIES,

@@ -1,10 +1,10 @@
 {% if USER_ID %}
 	{% if S_ADD_SUB or S_EDIT_SUB %}
 
-		{% if ERROR_MSG %}
+		{% if ERROR_MESSAGE %}
 <div class="errorbox">
 	<h3>{{ lang('WARNING') }}</h3>
-	<p>{{ ERROR_MSG }}</p>
+	<p>{{ ERROR_MESSAGE }}</p>
 </div>
 		{% endif %}
 

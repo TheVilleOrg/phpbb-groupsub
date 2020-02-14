@@ -222,7 +222,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$errors = array_map(array($this->language, 'lang'), $errors);
 			$this->template->assign_vars(array(
-				'ERROR_MSG'	=> implode('<br>', $errors),
+				'ERROR_MESSAGE'	=> implode('<br>', $errors),
 			));
 		}
 
