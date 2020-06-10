@@ -26,12 +26,13 @@ interface currency_interface
 	 * @param string  $currency_code  The currency code
 	 * @param int     $value          The value in the subunit of the currency
 	 * @param boolean $with_separator Include the thousands separator
+	 * @param boolean $localized      Localize the thousands and decimal separators
 	 *
 	 * @return string The formatted value
 	 *
 	 * @throws \stevotvr\groupsub\exception\unexpected_value
 	 */
-	public function format_value($currency_code, $value, $with_separator = false);
+	public function format_value($currency_code, $value, $with_separator = false, $localized = true);
 
 	/**
 	 * Format a price.
