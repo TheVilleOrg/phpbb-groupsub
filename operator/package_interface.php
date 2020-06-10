@@ -96,28 +96,45 @@ interface package_interface
 	public function get_package_term($term_id);
 
 	/**
-	 * Get the groups assigned to a package.
+	 * Get the subscription start actions for a package.
 	 *
 	 * @param int $package_id The package ID
-	 * @param int &$default   Variable to populate with the default group
 	 *
-	 * @return array An array of group IDs
+	 * @return array An array of actions to be performed when a subscription starts
 	 */
-	public function get_groups($package_id, &$default = 0);
+	public function get_start_actions($package_id);
 
 	/**
-	 * Add a group to a package.
+	 * Add a subscription start action to a package.
 	 *
-	 * @param int     $package_id The package ID
-	 * @param int     $group_id   The group ID
-	 * @param boolean $default    Set as default group for users
+	 * @param int    $package_id The package ID
+	 * @param string $action     The action to perform when a subscription starts
+	 * @param string $param      The parameter for the action
 	 */
-	public function add_group($package_id, $group_id, $default);
+	public function add_start_action($package_id, $action, $param);
 
 	/**
-	 * Remove all groups from a package.
+	 * Get the subscription end actions for a package.
+	 *
+	 * @param int $package_id The package ID
+	 *
+	 * @return array An array of actions to be performed when a subscription ends
+	 */
+	public function get_end_actions($package_id);
+
+	/**
+	 * Add a subscription end action to a package.
+	 *
+	 * @param int    $package_id The package ID
+	 * @param string $action     The action to perform when a subscription ends
+	 * @param string $param      The parameter for the action
+	 */
+	public function add_end_action($package_id, $action, $param);
+
+	/**
+	 * Remove all subscription actions from a package.
 	 *
 	 * @param int $package_id The package ID
 	 */
-	public function remove_groups($package_id);
+	public function remove_actions($package_id);
 }

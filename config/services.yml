@@ -3,7 +3,7 @@ imports:
     - { resource: currencies.yml }
 
 services:
-    stevotvr.groupsub.listener:
+    stevotvr.groupsub.listener.main:
         class: stevotvr\groupsub\event\main_listener
         arguments:
             - '@auth'
@@ -12,8 +12,17 @@ services:
             - '@controller.helper'
             - '@stevotvr.groupsub.operator.package'
             - '@template'
-            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.actions%'
             - '%stevotvr.groupsub.tables.subs%'
+        tags:
+            - { name: event.listener }
+
+    stevotvr.groupsub.listener.acp:
+        class: stevotvr\groupsub\event\acp_listener
+        arguments:
+            - '@auth'
+            - '@request'
+            - '@stevotvr.groupsub.controller.acp.subscription'
         tags:
             - { name: event.listener }
 
@@ -39,6 +48,22 @@ services:
                 - '@controller.helper'
                 - '@user_loader'
 
+    stevotvr.groupsub.notification.admin_type:
+        class: stevotvr\groupsub\notification\type\admin_base_type
+        abstract: true
+        parent: stevotvr.groupsub.notification.type
+        calls:
+            - method: set_config
+              arguments:
+                - '@config'
+
+    stevotvr.groupsub.notification.type.admin_started:
+        class: stevotvr\groupsub\notification\type\admin_started
+        shared: false
+        parent: stevotvr.groupsub.notification.admin_type
+        tags:
+            - { name: notification.type }
+
     stevotvr.groupsub.notification.type.warn:
         class: stevotvr\groupsub\notification\type\warn
         shared: false
@@ -48,6 +73,13 @@ services:
 
     stevotvr.groupsub.notification.type.expired:
         class: stevotvr\groupsub\notification\type\expired
+        shared: false
+        parent: stevotvr.groupsub.notification.type
+        tags:
+            - { name: notification.type }
+
+    stevotvr.groupsub.notification.type.started:
+        class: stevotvr\groupsub\notification\type\started
         shared: false
         parent: stevotvr.groupsub.notification.type
         tags:
@@ -80,6 +112,8 @@ services:
             - method: setup
               arguments:
                 - '@stevotvr.groupsub.operator.package'
+                - '@dispatcher'
+                - '@group_helper'
                 - '@stevotvr.groupsub.operator.unit_helper'
                 - '%tables.groups%'
 
@@ -91,6 +125,7 @@ services:
               arguments:
                 - '@stevotvr.groupsub.operator.package'
                 - '@stevotvr.groupsub.operator.subscription'
+                - '@auth'
                 - '@pagination'
                 - '@user'
                 - '%tables.users%'
@@ -98,6 +133,7 @@ services:
               arguments:
                 - '%core.root_path%'
                 - '%core.php_ext%'
+                - '%core.adm_relative_path%'
 
     stevotvr.groupsub.controller.acp.transaction:
         class: stevotvr\groupsub\controller\acp_trans_controller
@@ -108,6 +144,11 @@ services:
                 - '@pagination'
                 - '@stevotvr.groupsub.operator.transaction'
                 - '@user'
+            - method: set_path_info
+              arguments:
+                - '%core.root_path%'
+                - '%core.php_ext%'
+                - '%core.adm_relative_path%'
 
     stevotvr.groupsub.controller.ipn:
         class: stevotvr\groupsub\controller\ipn_controller
@@ -193,7 +234,7 @@ services:
             - '@language'
             - '%stevotvr.groupsub.currencies%'
             - '%stevotvr.groupsub.tables.packages%'
-            - '%stevotvr.groupsub.tables.groups%'
+            - '%stevotvr.groupsub.tables.actions%'
             - '%stevotvr.groupsub.tables.terms%'
             - '%stevotvr.groupsub.tables.subs%'
 
@@ -209,6 +250,7 @@ services:
               arguments:
                 - '@notification_manager'
                 - '@dispatcher'
+                - '@stevotvr.groupsub.operator.package'
                 - '%tables.users%'
             - method: set_path_info
               arguments:

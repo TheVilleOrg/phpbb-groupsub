@@ -28,7 +28,7 @@ class currency extends operator implements currency_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function format_value($currency_code, $value, $with_separator = false)
+	public function format_value($currency_code, $value, $with_separator = false, $localized = true)
 	{
 		$value = (int) $value;
 
@@ -40,10 +40,10 @@ class currency extends operator implements currency_interface
 
 		if ($with_separator)
 		{
-			$unit = number_format($unit, 0, '', $this->language->lang('GROUPSUB_THOUSANDS_SEPARATOR'));
+			$unit = number_format($unit, 0, '', $localized ? $this->language->lang('GROUPSUB_THOUSANDS_SEPARATOR') : ',');
 		}
 
-		return sprintf('%s%s%02d', $unit, $this->language->lang('GROUPSUB_DECIMAL_SEPARATOR'), $subunit);
+		return sprintf('%s%s%02d', $unit, $localized ? $this->language->lang('GROUPSUB_DECIMAL_SEPARATOR') : '.', $subunit);
 	}
 
 	/**

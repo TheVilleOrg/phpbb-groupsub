@@ -209,6 +209,8 @@ class main_controller
 			throw new http_exception(404, 'GROUPSUB_NO_PACKAGES');
 		}
 
+		$this->template->assign_var('COLLAPSE_TERMS', $this->config['stevotvr_groupsub_collapse_terms']);
+
 		$subscriptions = $this->sub_operator->get_user_subscriptions($this->user->data['user_id']);
 		$warn = $this->config['stevotvr_groupsub_warn_time'] * 86400;
 
@@ -282,7 +284,7 @@ class main_controller
 			'PKG_NAME'				=> $term['package']->get_name(),
 			'PKG_DESC'				=> $term['package']->get_desc_for_display(),
 			'TERM_ID'				=> $term['term']->get_id(),
-			'TERM_PRICE'			=> $this->currency->format_value($currency, $price),
+			'TERM_PRICE'			=> $this->currency->format_value($currency, $price, false, false),
 			'TERM_CURRENCY'			=> $currency,
 			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
 			'TERM_LENGTH'			=> $term['term']->get_length() ? $this->unit_helper->get_formatted_timespan($term['term']->get_length()) : 0,

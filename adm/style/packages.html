@@ -8,10 +8,10 @@
 
 <a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
 
-	{% if ERROR_MSG %}
+	{% if ERROR_MESSAGE %}
 <div class="errorbox">
 	<h3>{{ lang('WARNING') }}</h3>
-	<p>{{ ERROR_MSG }}</p>
+	<p>{{ ERROR_MESSAGE }}</p>
 </div>
 	{% endif %}
 
@@ -47,28 +47,74 @@
 		</dl>
 	</fieldset>
 	<fieldset>
-		<legend>{{ lang('ACP_GROUPSUB_PKG_GROUPS')}}</legend>
+		<legend>{{ lang('ACP_GROUPSUB_PKG_START')}}</legend>
 		<dl>
-			<dt><label for="pkg_groups">{{ lang('ACP_GROUPSUB_PKG_GROUPS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_EXPLAIN') }}</span></dt>
+			<dt><label for="pkg_groups_start_add">{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD_EXPLAIN') }}</span></dt>
 			<dd>
-				<select name="pkg_groups[]" id="pkg_groups" multiple size="10">
+				<select name="pkg_groups_start_add[]" id="pkg_groups_start_add" multiple size="10">
 	{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.S_SELECTED %} selected{% endif %}>{{ g.NAME }}</option>
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_START_ADD %} selected{% endif %}>{{ g.NAME }}</option>
 	{% endfor %}
 				</select>
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="pkg_default_group">{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP_EXPLAIN') }}</span></dt>
+			<dt><label for="pkg_groups_start_remove">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_EXPLAIN') }}</span></dt>
 			<dd>
-				<select name="pkg_default_group" id="pkg_default_group">
+				<select name="pkg_groups_start_remove[]" id="pkg_groups_start_remove" multiple size="10">
+	{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_START_REMOVE %} selected{% endif %}>{{ g.NAME }}</option>
+	{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_default_group_start">{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_default_group_start" id="pkg_default_group_start">
 					<option value="0"></option>
 	{% for g in group %}
-					<option value="{{ g.ID }}"{% if g.ID == PKG_DEFAULT_GROUP %} selected{% endif %}>{{ g.NAME }}</option>
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_START_DEFAULT %} selected{% endif %}>{{ g.NAME }}</option>
 	{% endfor %}
 				</select>
 			</dd>
 		</dl>
+		<!-- EVENT stevotvr_groupsub_acp_start_actions_after -->
+	</fieldset>
+	<fieldset>
+		<legend>{{ lang('ACP_GROUPSUB_PKG_END')}}</legend>
+		<dl>
+			<dt><label for="pkg_groups_end_add">{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_ADD_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups_end_add[]" id="pkg_groups_end_add" multiple size="10">
+	{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_END_ADD %} selected{% endif %}>{{ g.NAME }}</option>
+	{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_groups_end_remove">{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_GROUPS_REMOVE_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_groups_end_remove[]" id="pkg_groups_end_remove" multiple size="10">
+	{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_END_REMOVE %} selected{% endif %}>{{ g.NAME }}</option>
+	{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="pkg_default_group_end">{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_DEFAULT_GROUP_EXPLAIN') }}</span></dt>
+			<dd>
+				<select name="pkg_default_group_end" id="pkg_default_group_end">
+					<option value="0"></option>
+	{% for g in group %}
+					<option value="{{ g.ID }}"{% if g.S_SELECTED_END_DEFAULT %} selected{% endif %}>{{ g.NAME }}</option>
+	{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<!-- EVENT stevotvr_groupsub_acp_end_actions_after -->
 	</fieldset>
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_PKG_TERMS') }}</legend>
@@ -84,7 +130,7 @@
 	{% for t in term %}
 				<tr>
 					<td>
-						<input type="text" name="pkg_price[]" value="{{ t.PRICE }}">
+						<input class="text" type="text" name="pkg_price[]" size="6" maxlength="10" value="{{ t.PRICE }}">
 						<select name="pkg_currency[]" id="pkg_currency{{ loop.index }}">
 		{% for c in currency %}
 						    <option value="{{ c.CURRENCY }}"{% if c.CURRENCY == t.CURRENCY %} selected{% endif %}>{{ c.CURRENCY }} {{ c.SYMBOL }}</option>
@@ -92,7 +138,7 @@
 						</select>
 					</td>
 					<td>
-						<input type="text" name="pkg_length[]" value="{{ t.LENGTH }}">
+						<input class="text" type="number" name="pkg_length[]" size="4" min="0" value="{{ t.LENGTH }}">
 						<select name="pkg_length_unit[]" id="pkg_length_unit{{ loop.index }}">
 		{% for u in time_unit %}
 							<option value="{{ u.ID }}"{% if u.ID == t.LENGTH_UNIT %} selected{% endif %}>{{ u.NAME }}</option>
@@ -115,7 +161,7 @@
 			<dl>
 				<dt><label for="pkg_price">{{ lang('ACP_GROUPSUB_PKG_PRICE') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_PRICE_EXPLAIN') }}</span></dt>
 				<dd>
-					<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="4" maxlength="10" value="{{ PKG_PRICE }}">&nbsp;
+					<input class="text" type="text" id="pkg_price" name="pkg_price[]" size="6" maxlength="10" value="{{ PKG_PRICE }}">&nbsp;
 					<select name="pkg_currency[]" id="pkg_currency">
 	{% for c in currency %}
 							<option value="{{ c.CURRENCY }}"{% if c.S_DEFAULT %} selected{% endif %}>{{ c.CURRENCY }} ({{ c.SYMBOL }})</option>
@@ -126,7 +172,7 @@
 			<dl>
 				<dt><label for="pkg_length">{{ lang('ACP_GROUPSUB_PKG_LENGTH') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PKG_LENGTH_EXPLAIN') }}</span></dt>
 				<dd>
-					<input class="text" type="text" id="pkg_length" name="pkg_length[]" size="4" maxlength="10" value="{{ PKG_LENGTH }}">&nbsp;
+					<input class="text" type="number" id="pkg_length" name="pkg_length[]" size="4" min="0" value="{{ PKG_LENGTH }}">&nbsp;
 					<select name="pkg_length_unit[]" id="pkg_length_unit">
 	{% for u in time_unit %}
 							<option value="{{ u.ID }}">{{ u.NAME }}</option>

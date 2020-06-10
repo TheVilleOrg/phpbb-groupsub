@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\controller;
 
+use phpbb\event\dispatcher_interface;
+use phpbb\group\helper;
 use phpbb\json_response;
 use stevotvr\groupsub\entity\package_interface as pkg_entity;
 use stevotvr\groupsub\exception\base;
@@ -27,6 +29,16 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	protected $pkg_operator;
 
 	/**
+	 * @var \phpbb\event\dispatcher_interface
+	 */
+	protected $phpbb_dispatcher;
+
+	/**
+	 * @var \phpbb\group\helper
+	 */
+	protected $group_helper;
+
+	/**
 	 * @var \stevotvr\groupsub\operator\unit_helper_interface
 	 */
 	protected $unit_helper;
@@ -42,12 +54,16 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 * Set up the controller.
 	 *
 	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
+	 * @param \phpbb\event\dispatcher_interface                 $phpbb_dispatcher
+	 * @param \phpbb\group\helper                               $group_helper
 	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 * @param string                                            $phpbb_groups_table The name of the phpBB groups table
 	 */
-	public function setup(pkg_operator $pkg_operator, unit_helper_interface $unit_helper, $phpbb_groups_table)
+	public function setup(pkg_operator $pkg_operator, dispatcher_interface $phpbb_dispatcher, helper $group_helper, unit_helper_interface $unit_helper, $phpbb_groups_table)
 	{
 		$this->pkg_operator = $pkg_operator;
+		$this->phpbb_dispatcher = $phpbb_dispatcher;
+		$this->group_helper = $group_helper;
 		$this->unit_helper = $unit_helper;
 		$this->phpbb_groups_table = $phpbb_groups_table;
 	}
@@ -196,7 +212,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 				}
 
 				$this->pkg_operator->set_terms($entity->get_id(), $terms);
-				$this->parse_groups($entity->get_id());
+				$this->parse_actions($entity->get_id());
 
 				trigger_error($this->language->lang($message) . adm_back_link($this->u_action));
 			}
@@ -206,11 +222,11 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		{
 			$errors = array_map(array($this->language, 'lang'), $errors);
 			$this->template->assign_vars(array(
-				'ERROR_MSG'	=> implode('<br>', $errors),
+				'ERROR_MESSAGE'	=> implode('<br>', $errors),
 			));
 		}
 
-		$this->load_groups($entity->get_id());
+		$this->load_actions($entity->get_id(), $submit);
 		$this->load_terms($entity->get_id());
 		$this->assign_tpl_vars($entity, $data);
 		$this->assign_currency_vars();
@@ -250,57 +266,190 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	}
 
 	/**
-	 * Load the list of groups into template block variables.
+	 * Load the lists of groups into template block variables.
 	 *
-	 * @param int $package_id The package ID
+	 * @param int  $package_id The package ID
+	 * @param bool $submit     True if the form was submitted, false otherwise
 	 */
-	protected function load_groups($package_id)
+	protected function load_actions($package_id, $submit)
 	{
-		$selected = $this->request->variable('pkg_groups', array(0));
-		$default_group = $this->request->variable('pkg_default_group', 0);
+		$start_actions = array();
+		$end_actions = array();
 
-		if ($package_id && empty($selected))
+		if ($package_id)
 		{
-			$selected = $this->pkg_operator->get_groups($package_id, $default_group);
+			$start_actions = $this->pkg_operator->get_start_actions($package_id);
+			$end_actions = $this->pkg_operator->get_end_actions($package_id);
 		}
 
-		$this->template->assign_var('PKG_DEFAULT_GROUP', $default_group);
+		/**
+		 * Event triggered when the actions are loaded into the package edit form.
+		 *
+		 * @event stevotvr.groupsub.acp_load_actions
+		 * @var int   package_id    The package ID
+		 * @var array start_actions The subscription start actions assigned to the package
+		 * @var array end_actions   The subscription end actions assigned to the package
+		 * @var bool  submit        True if the form was submitted, false otherwise
+		 * @since 1.2.0
+		 */
+		$vars = array('package_id', 'start_actions', 'end_actions', 'submit');
+		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.acp_view_actions', compact($vars)));
+
+		$groups_start_add = $this->request->variable('pkg_groups_start_add', array(0));
+		$groups_start_remove = $this->request->variable('pkg_groups_start_remove', array(0));
+		$groups_end_add = $this->request->variable('pkg_groups_end_add', array(0));
+		$groups_end_remove = $this->request->variable('pkg_groups_end_remove', array(0));
+		$default_group_start = $this->request->variable('pkg_default_group_start', 0);
+		$default_group_end = $this->request->variable('pkg_default_group_end', 0);
+
+		if (!$submit)
+		{
+			foreach ($start_actions as $action)
+			{
+				if ($action['name'] === 'gs_add_group')
+				{
+					$groups_start_add[] = (int) $action['param'];
+				}
+				else if ($action['name'] === 'gs_remove_group')
+				{
+					$groups_start_remove[] = (int) $action['param'];
+				}
+				else if ($action['name'] === 'gs_default_group')
+				{
+					$default_group_start = (int) $action['param'];
+				}
+			}
+
+			foreach ($end_actions as $action)
+			{
+				if ($action['name'] === 'gs_add_group')
+				{
+					$groups_end_add[] = (int) $action['param'];
+				}
+				else if ($action['name'] === 'gs_remove_group')
+				{
+					$groups_end_remove[] = (int) $action['param'];
+				}
+				else if ($action['name'] === 'gs_default_group')
+				{
+					$default_group_end = (int) $action['param'];
+				}
+			}
+		}
 
 		$sql = 'SELECT group_id, group_name
 				FROM ' . $this->phpbb_groups_table . '
-				WHERE ' . $this->db->sql_in_set('group_type', array(GROUP_OPEN, GROUP_CLOSED, GROUP_HIDDEN)) . '
 				ORDER BY group_name ASC';
 		$this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow())
 		{
 			$this->template->assign_block_vars('group', array(
 				'ID'	=> (int) $row['group_id'],
-				'NAME'	=> $row['group_name'],
+				'NAME'	=> $this->group_helper->get_name($row['group_name']),
 
-				'S_SELECTED'	=> in_array((int) $row['group_id'], $selected),
+				'S_SELECTED_START_ADD'		=> in_array((int) $row['group_id'], $groups_start_add),
+				'S_SELECTED_START_REMOVE'	=> in_array((int) $row['group_id'], $groups_start_remove),
+				'S_SELECTED_START_DEFAULT'	=> (int) $row['group_id'] == $default_group_start,
+				'S_SELECTED_END_ADD'		=> in_array((int) $row['group_id'], $groups_end_add),
+				'S_SELECTED_END_REMOVE'		=> in_array((int) $row['group_id'], $groups_end_remove),
+				'S_SELECTED_END_DEFAULT'	=> (int) $row['group_id'] == $default_group_end,
 			));
 		}
 		$this->db->sql_freeresult();
 	}
 
 	/**
-	 * Parse the group list from the input.
+	 * Parse the group lists from the input.
 	 *
 	 * @param int $package_id The package ID
 	 */
-	protected function parse_groups($package_id)
+	protected function parse_actions($package_id)
 	{
 		if (!$package_id)
 		{
 			return;
 		}
 
-		$group_ids = $this->request->variable('pkg_groups', array(0));
-		$default_group = $this->request->variable('pkg_default_group', 0);
-		$this->pkg_operator->remove_groups($package_id);
-		foreach ($group_ids as $group_id)
+		$groups_start_add = $this->request->variable('pkg_groups_start_add', array(0));
+		$groups_start_remove = $this->request->variable('pkg_groups_start_remove', array(0));
+		$groups_end_add = $this->request->variable('pkg_groups_end_add', array(0));
+		$groups_end_remove = $this->request->variable('pkg_groups_end_remove', array(0));
+		$default_group_start = $this->request->variable('pkg_default_group_start', 0);
+		$default_group_end = $this->request->variable('pkg_default_group_end', 0);
+
+		$this->pkg_operator->remove_actions($package_id);
+
+		$start_actions = array();
+		$end_actions = array();
+
+		foreach ($groups_start_add as $group_id)
 		{
-			$this->pkg_operator->add_group($package_id, $group_id, $group_id === $default_group);
+			$start_actions[] = array(
+				'action'	=> 'gs_add_group',
+				'param'		=> $group_id,
+			);
+		}
+
+		foreach ($groups_start_remove as $group_id)
+		{
+			$start_actions[] = array(
+				'action'	=> 'gs_remove_group',
+				'param'		=> $group_id,
+			);
+		}
+
+		foreach ($groups_end_add as $group_id)
+		{
+			$end_actions[] = array(
+				'action'	=> 'gs_add_group',
+				'param'		=> $group_id,
+			);
+		}
+
+		foreach ($groups_end_remove as $group_id)
+		{
+			$end_actions[] = array(
+				'action'	=> 'gs_remove_group',
+				'param'		=> $group_id,
+			);
+		}
+
+		if ($default_group_start)
+		{
+			$start_actions[] = array(
+				'action'	=> 'gs_default_group',
+				'param'		=> $default_group_start,
+			);
+		}
+
+		if ($default_group_end)
+		{
+			$end_actions[] = array(
+				'action'	=> 'gs_default_group',
+				'param'		=> $default_group_end,
+			);
+		}
+
+		/**
+		 * Event triggered when the actions are parsed from the package edit form.
+		 *
+		 * @event stevotvr.groupsub.acp_modify_actions
+		 * @var int   package_id    The package ID
+		 * @var array start_actions The subscription start actions to assign to the package
+		 * @var array end_actions   The subscription end actions to assign to the package
+		 * @since 1.2.0
+		 */
+		$vars = array('package_id', 'start_actions', 'end_actions');
+		extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.acp_modify_actions', compact($vars)));
+
+		foreach ($start_actions as $action)
+		{
+			$this->pkg_operator->add_start_action($package_id, $action['action'], $action['param']);
+		}
+
+		foreach ($end_actions as $action)
+		{
+			$this->pkg_operator->add_end_action($package_id, $action['action'], $action['param']);
 		}
 	}
 

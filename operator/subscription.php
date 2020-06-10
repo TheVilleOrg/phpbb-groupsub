@@ -14,6 +14,7 @@ use phpbb\event\dispatcher_interface;
 use phpbb\notification\manager;
 use stevotvr\groupsub\entity\subscription_interface as entity;
 use stevotvr\groupsub\entity\term_interface as term_entity;
+use stevotvr\groupsub\operator\package_interface as pkg_operator;
 use stevotvr\groupsub\exception\out_of_bounds;
 
 /**
@@ -30,6 +31,11 @@ class subscription extends operator implements subscription_interface
 	 * @var \phpbb\event\dispatcher_interface
 	 */
 	protected $phpbb_dispatcher;
+
+	/**
+	 * @var \stevotvr\groupsub\operator\package_interface
+	 */
+	protected $pkg_operator;
 
 	/**
 	 * The name of the phpBB users table.
@@ -97,14 +103,16 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\notification\manager       $notification_manager
-	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
-	 * @param string                            $phpbb_users_table    The name of the phpBB users table
+	 * @param \phpbb\notification\manager                   $notification_manager
+	 * @param \phpbb\event\dispatcher_interface             $phpbb_dispatcher
+	 * @param \stevotvr\groupsub\operator\package_interface $pkg_operator
+	 * @param string                                        $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(manager $notification_manager, dispatcher_interface $phpbb_dispatcher, $phpbb_users_table)
+	public function setup(manager $notification_manager, dispatcher_interface $phpbb_dispatcher, pkg_operator $pkg_operator, $phpbb_users_table)
 	{
 		$this->notification_manager = $notification_manager;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
+		$this->pkg_operator = $pkg_operator;
 		$this->phpbb_users_table = $phpbb_users_table;
 
 		$this->warn_time = (int) $this->config['stevotvr_groupsub_warn_time'] * 86400;
@@ -235,7 +243,7 @@ class subscription extends operator implements subscription_interface
 		$subscriptions = array();
 
 		$sql_ary = array(
-			'SELECT'	=> 's.*, p.pkg_name, p.pkg_deleted, u.username',
+			'SELECT'	=> 's.*, p.pkg_name, p.pkg_deleted, u.username, u.user_colour',
 			'FROM'		=> array($this->sub_table => 's'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -268,8 +276,10 @@ class subscription extends operator implements subscription_interface
 					'name'		=> $row['pkg_name'],
 					'deleted'	=> (bool) $row['pkg_deleted'],
 				),
-				'username'	=> $row['username'],
-				'entity'	=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
+				'username'		=> $row['username'],
+				'user_id'		=> $row['user_id'],
+				'user_colour'	=> $row['user_colour'],
+				'entity'		=> $this->container->get('stevotvr.groupsub.entity.subscription')->import($row),
 			);
 		}
 		$this->db->sql_freeresult();
@@ -306,7 +316,7 @@ class subscription extends operator implements subscription_interface
 			$sub_id = $subscription->get_id();
 			$package_id = $subscription->get_package();
 
-			$this->add_user_to_groups($user_id, $sub_id, $package_id);
+			$this->execute_actions($user_id, $package_id);
 
 			/**
 			 * Event triggered when a subscription is started.
@@ -319,6 +329,23 @@ class subscription extends operator implements subscription_interface
 			 */
 			$vars = array('user_id', 'sub_id', 'package_id');
 			extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
+
+			$sql = 'SELECT pkg_ident, pkg_name
+					FROM ' . $this->package_table . '
+					WHERE pkg_id = ' . (int) $subscription->get_package();
+			$this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow();
+			$this->db->sql_freeresult();
+
+			$row['sub_id'] = $subscription->get_id();
+			$row['user_id'] = $subscription->get_user();
+
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.started', $row);
+
+			if ($this->config['stevotvr_groupsub_notify_admins'])
+			{
+				$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.admin_started', $row);
+			}
 		}
 
 		return $subscription->get_id();
@@ -354,8 +381,7 @@ class subscription extends operator implements subscription_interface
 				'stevotvr.groupsub.notification.type.expired',
 			), (int) $row['sub_id']);
 
-			$this->remove_user_from_groups($user_id, $row['sub_id']);
-			$this->add_user_to_groups($user_id, $row['sub_id'], $term->get_package());
+			$this->execute_actions($user_id, $term->get_package());
 
 			return (int) $row['sub_id'];
 		}
@@ -373,9 +399,19 @@ class subscription extends operator implements subscription_interface
 	 */
 	public function delete_subscription($sub_id)
 	{
-		$sql = 'SELECT pkg_id, user_id
-				FROM ' . $this->sub_table . '
-				WHERE sub_active <> 0 AND sub_id = ' . (int) $sub_id;
+		$sql_ary = array(
+			'SELECT'	=> 's.sub_id, s.pkg_id, s.user_id, p.pkg_ident, p.pkg_name',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->package_table => 'p'),
+					'ON'	=> 's.pkg_id = p.pkg_id',
+				),
+			),
+			'WHERE'		=> 's.sub_active <> 0
+								AND s.sub_id = ' . (int) $sub_id,
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow();
 		$this->db->sql_freeresult();
@@ -391,6 +427,9 @@ class subscription extends operator implements subscription_interface
 		$this->db->sql_query($sql);
 
 		$this->end_subscription((int) $row['user_id'], $sub_id, (int) $row['pkg_id']);
+
+		$row['cancelled'] = true;
+		$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
 	}
 
 	/**
@@ -400,11 +439,20 @@ class subscription extends operator implements subscription_interface
 	{
 		$sub_ids = array();
 
-		$sql = 'SELECT sub_id, pkg_id, user_id
-				FROM ' . $this->sub_table . '
-				WHERE sub_active = 1
-					AND sub_expires <> 0
-					AND sub_expires < ' . (time() - $this->grace);
+		$sql_ary = array(
+			'SELECT'	=> 's.sub_id, s.pkg_id, s.user_id, p.pkg_ident, p.pkg_name',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->package_table => 'p'),
+					'ON'	=> 's.pkg_id = p.pkg_id',
+				),
+			),
+			'WHERE'		=> 's.sub_active = 1
+								AND s.sub_expires <> 0
+								AND s.sub_expires < ' . (time() - $this->grace),
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$this->db->sql_query($sql);
 		$rows = $this->db->sql_fetchrowset();
 		$this->db->sql_freeresult();
@@ -426,6 +474,8 @@ class subscription extends operator implements subscription_interface
 		foreach ($rows as $row)
 		{
 			$this->end_subscription($row['user_id'], $row['sub_id'], $row['pkg_id']);
+
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
 		}
 	}
 
@@ -434,49 +484,24 @@ class subscription extends operator implements subscription_interface
 	 */
 	public function notify_subscribers()
 	{
-		$sub_ids = array();
-
-		$sql_ary = array(
-			'SELECT'	=> 's.sub_id, s.user_id, s.sub_expires, p.pkg_ident, p.pkg_name',
-			'FROM'		=> array($this->sub_table => 's'),
-			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array($this->package_table => 'p'),
-					'ON'	=> 's.pkg_id = p.pkg_id',
-				),
-			),
-			'WHERE'		=> 's.sub_notify_status < ' . subscription_interface::NOTIFY_EXPIRED . '
-								AND s.sub_active <> 0
-								AND s.sub_expires <> 0
-								AND s.sub_expires < ' . time(),
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$this->db->sql_query($sql);
-		$rows = $this->db->sql_fetchrowset();
-		$this->db->sql_freeresult();
-		foreach ($rows as $row)
-		{
-			$sub_ids[] = (int) $row['sub_id'];
-			$this->notification_manager->delete_notifications('stevotvr.groupsub.notification.type.warn', (int) $row['sub_id']);
-			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.expired', $row);
-		}
-
-		if (count($sub_ids))
-		{
-			$sql = 'UPDATE ' . $this->sub_table . '
-					SET sub_notify_status = ' . subscription_interface::NOTIFY_EXPIRED . '
-					WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
-			$this->db->sql_query($sql);
-		}
-
 		if ($this->warn_time)
 		{
 			$sub_ids = array();
 
-			$sql_ary['WHERE'] = 's.sub_notify_status < ' . subscription_interface::NOTIFY_WARN . '
+			$sql_ary = array(
+				'SELECT'	=> 's.sub_id, s.user_id, s.sub_expires, p.pkg_ident, p.pkg_name',
+				'FROM'		=> array($this->sub_table => 's'),
+				'LEFT_JOIN'	=> array(
+					array(
+						'FROM'	=> array($this->package_table => 'p'),
+						'ON'	=> 's.pkg_id = p.pkg_id',
+					),
+				),
+				'WHERE'		=> 's.sub_notify_status = 0
 									AND s.sub_active <> 0
 									AND s.sub_expires <> 0
-									AND s.sub_expires < ' . (time() + $this->warn_time);
+									AND s.sub_expires < ' . (time() + $this->warn_time),
+			);
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			$this->db->sql_query($sql);
 			$rows = $this->db->sql_fetchrowset();
@@ -490,7 +515,7 @@ class subscription extends operator implements subscription_interface
 			if (count($sub_ids))
 			{
 				$sql = 'UPDATE ' . $this->sub_table . '
-						SET sub_notify_status = ' . subscription_interface::NOTIFY_WARN . '
+						SET sub_notify_status = 1
 						WHERE ' . $this->db->sql_in_set('sub_id', $sub_ids);
 				$this->db->sql_query($sql);
 			}
@@ -545,7 +570,7 @@ class subscription extends operator implements subscription_interface
 	 */
 	protected function end_subscription($user_id, $sub_id, $package_id)
 	{
-		$this->remove_user_from_groups($user_id, $sub_id);
+		$this->execute_actions($user_id, $package_id, true);
 
 		/**
 		 * Event triggered when a subscription is ended.
@@ -561,89 +586,131 @@ class subscription extends operator implements subscription_interface
 	}
 
 	/**
-	 * Add a user to the subscribed groups.
+	 * Execute the subscription actions for a user.
 	 *
-	 * @param int $user_id The user ID
-	 * @param int $sub_id  The subscription ID
-	 * @param int $pkg_id  The package ID
+	 * @param int  $user_id The user ID
+	 * @param int  $pkg_id  The package ID
+	 * @param bool $end     True to execute the end actions, false to execute the start actions
 	 */
-	protected function add_user_to_groups($user_id, $sub_id, $pkg_id)
+	protected function execute_actions($user_id, $pkg_id, $end = false)
 	{
-		if (!function_exists('group_user_add'))
+		$actions = $end ? $this->pkg_operator->get_end_actions($pkg_id) : $this->pkg_operator->get_start_actions($pkg_id);
+
+		$groups_add = array();
+		$groups_remove = array();
+		$groups_default = array();
+		$custom = array();
+
+		foreach ($actions as $action)
 		{
-			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+			switch ($action['name'])
+			{
+				case 'gs_add_group':
+					$group_id = (int) $action['param'];
+					if (!isset($groups_add[$group_id]))
+					{
+						$groups_add[$group_id] = true;
+						unset($groups_remove[$group_id]);
+					}
+				break;
+				case 'gs_remove_group':
+					$group_id = (int) $action['param'];
+					if (!isset($groups_add[$group_id]))
+					{
+						$groups_remove[$group_id] = true;
+					}
+				break;
+				case 'gs_default_group':
+					$group_id = (int) $action['param'];
+					$groups_default[$group_id] = true;
+				break;
+				default:
+					$custom[] = $action;
+			}
 		}
 
-		$sql = 'SELECT group_id, group_default
-				FROM ' . $this->group_table . '
-				WHERE pkg_id = ' . (int) $pkg_id;
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		if (!empty($groups_add))
 		{
-			$data = array(
-				'sub_id'	=> $sub_id,
-				'user_id'	=> $user_id,
-				'group_id'	=> $row['group_id'],
+			if (!function_exists('group_user_add'))
+			{
+				include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+			}
+
+			foreach (array_keys($groups_add) as $group_id)
+			{
+				group_user_add($group_id, $user_id);
+			}
+		}
+
+		if (!empty($groups_remove))
+		{
+			$sql_ary = array(
+				'SELECT'	=> 'a.act_param',
+				'FROM'		=> array($this->sub_table => 's'),
+				'LEFT_JOIN'	=> array(
+					array(
+						'FROM'	=> array($this->action_table => 'a'),
+						'ON'	=> 's.pkg_id = a.pkg_id',
+					),
+				),
+				'WHERE'		=> 's.sub_active = 1
+									AND s.user_id = ' . $user_id . '
+									AND a.pkg_id <> ' . (int) $pkg_id . '
+									AND ' . $this->db->sql_in_set('a.act_name', array('gs_add_group', 'gs_default_group')),
 			);
-			$sql = 'INSERT INTO ' . $this->group_table . '
-					' . $this->db->sql_build_array('INSERT', $data);
+			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			$this->db->sql_query($sql);
+			while ($row = $this->db->sql_fetchrow())
+			{
+				unset($groups_remove[(int) $row['act_param']]);
+			}
+			$this->db->sql_freeresult();
 
-			group_user_add($row['group_id'], $user_id, false, false, (bool) $row['group_default']);
-		}
-		$this->db->sql_freeresult($result);
-	}
-
-	/**
-	 * Remove a user from the subscribed groups.
-	 *
-	 * @param int $user_id The user ID
-	 * @param int $sub_id  The subscription ID
-	 */
-	protected function remove_user_from_groups($user_id, $sub_id)
-	{
-		$sub_groups = array();
-		$sql = 'SELECT group_id
-				FROM ' . $this->group_table . '
-				WHERE sub_id = ' . (int) $sub_id;
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
-		{
-			$sub_groups[] = (int) $row['group_id'];
-		}
-		$this->db->sql_freeresult();
-
-		if (empty($sub_groups))
-		{
-			return;
+			$groups_remove = array_keys($groups_remove);
 		}
 
-		$sql = 'DELETE FROM ' . $this->group_table . '
-				WHERE sub_id = ' . (int) $sub_id;
-		$this->db->sql_query($sql);
-
-		$keep_groups = array();
-		$sql = 'SELECT group_id
-				FROM ' . $this->group_table . '
-				WHERE user_id = ' . (int) $user_id . '
-					AND sub_id <> ' . (int) $sub_id . '
-					AND ' . $this->db->sql_in_set('group_id', $sub_groups);
-		$this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow())
+		if (!empty($groups_remove))
 		{
-			$keep_groups[] = (int) $row['group_id'];
-		}
-		$this->db->sql_freeresult();
+			if (!function_exists('group_user_del'))
+			{
+				include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+			}
 
-		if (!function_exists('group_user_del'))
-		{
-			include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+			foreach ($groups_remove as $group_id)
+			{
+				group_user_del($group_id, $user_id);
+			}
 		}
 
-		foreach (array_diff($sub_groups, $keep_groups) as $group_id)
+		if (!empty($groups_default))
 		{
-			group_user_del($group_id, $user_id);
+			if (!function_exists('group_set_user_default'))
+			{
+				include $this->root_path . 'includes/functions_user.' . $this->php_ext;
+			}
+
+			foreach (array_keys($groups_default) as $group_id)
+			{
+				group_set_user_default($group_id, array($user_id));
+			}
+		}
+
+		foreach ($custom as $action)
+		{
+			$param = $action['param'];
+			$action = $action['name'];
+
+			/**
+			 * Event triggered when a custom subscription action is executed.
+			 *
+			 * @event stevotvr.groupsub.action
+			 * @var int    user_id The user ID
+			 * @var string action  The name of the action to execute
+			 * @var string param   The parameter for the action
+			 * @since 1.2.0
+			 */
+			$vars = array('user_id', 'action', 'param');
+			extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.action', compact($vars)));
 		}
 	}
-
 }

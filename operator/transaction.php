@@ -141,7 +141,7 @@ class transaction extends operator implements transaction_interface
 	public function get_transactions($start, $limit, $sort_field, $sort_desc)
 	{
 		$sql_ary = array(
-			'SELECT'	=> 't.*, u.username',
+			'SELECT'	=> 't.*, u.username, u.user_colour',
 			'FROM'		=> array(
 				$this->trans_table => 't',
 				$this->phpbb_users_table => 'u',

@@ -76,7 +76,7 @@ class subscription extends entity implements subscription_interface
 	{
 		$user_id = (int) $user_id;
 
-		if ($user_id <= 0)
+		if ($user_id < 0)
 		{
 			throw new out_of_bounds('user_id');
 		}

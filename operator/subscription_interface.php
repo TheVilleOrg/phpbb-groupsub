@@ -15,11 +15,6 @@ namespace stevotvr\groupsub\operator;
  */
 interface subscription_interface
 {
-	/* Notification statuses */
-	const NOTIFY_NONE		= 0;
-	const NOTIFY_WARN		= 1;
-	const NOTIFY_EXPIRED	= 2;
-
 	/**
 	 * @param int $start The offset for querying subscriptions
 	 *

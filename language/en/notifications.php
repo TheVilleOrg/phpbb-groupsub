@@ -38,13 +38,24 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'GROUPSUB_NOTIFICATION_GROUP'			=> 'Group Subscription Notifications',
-	'GROUPSUB_NOTIFICATION_TYPE_WARN'		=> 'A subscription is about to expire',
-	'GROUPSUB_NOTIFICATION_TYPE_EXPIRED'	=> 'A subscription has expired',
+	'GROUPSUB_NOTIFICATION_GROUP'				=> 'Group Subscription Notifications',
+	'GROUPSUB_NOTIFICATION_TYPE_WARN'			=> 'Your subscription is about to expire',
+	'GROUPSUB_NOTIFICATION_TYPE_EXPIRED'		=> 'Your subscription has expired',
+	'GROUPSUB_NOTIFICATION_TYPE_STARTED'		=> 'Your subscription has started',
+	'GROUPSUB_NOTIFICATION_TYPE_ADMIN_STARTED'	=> 'A user’s subscription has started',
 
 	'GROUPSUB_NOTIFICATION_WARN_TITLE'		=> 'Subscription expiring',
-	'GROUPSUB_NOTIFICATION_WARN_REFERENCE'	=> '<strong>%1$s</strong> expires %2$s.',
+	'GROUPSUB_NOTIFICATION_WARN_REFERENCE'	=> 'Your subscription to <strong>%1$s</strong> expires %2$s.',
 
 	'GROUPSUB_NOTIFICATION_EXPIRED_TITLE'		=> 'Subscription expired',
-	'GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE'	=> '<strong>%s</strong> has expired.',
+	'GROUPSUB_NOTIFICATION_EXPIRED_REFERENCE'	=> 'Your subscription to <strong>%s</strong> has expired.',
+
+	'GROUPSUB_NOTIFICATION_CANCELLED_TITLE'		=> 'Subscription cancelled',
+	'GROUPSUB_NOTIFICATION_CANCELLED_REFERENCE'	=> 'Your subscription to <strong>%s</strong> has been cancelled.',
+
+	'GROUPSUB_NOTIFICATION_STARTED_TITLE'		=> 'Subscription started',
+	'GROUPSUB_NOTIFICATION_STARTED_REFERENCE'	=> 'Your subscription to <strong>%s</strong> has started.',
+
+	'GROUPSUB_NOTIFICATION_ADMIN_STARTED_TITLE'		=> 'User’s subscription started',
+	'GROUPSUB_NOTIFICATION_ADMIN_STARTED_REFERENCE'	=> '%s has subscribed to <strong>%s</strong>.',
 ));

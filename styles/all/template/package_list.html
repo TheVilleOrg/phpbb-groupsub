@@ -57,7 +57,7 @@
 					<input type="hidden" name="term_id" value="{{ t.ID }}">
 					<p>{{ t.PRICE }} / {% if t.LENGTH %}{{ t.LENGTH }}{% else %}<b>{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}</b>{% endif %}</p>
 		{% endfor %}
-	{% elseif p.term|length > 6 %}
+	{% elseif p.term|length > COLLAPSE_TERMS %}
 					<p>
 						<select name="term_id">
 		{% for t in p.term %}

@@ -55,11 +55,11 @@ class main_listener implements EventSubscriberInterface
 	protected $template;
 
 	/**
-	 * The name of the groupsub_groups table.
+	 * The name of the groupsub_actions table.
 	 *
 	 * @var string
 	 */
-	protected $group_table;
+	protected $action_table;
 
 	/**
 	 * The name of the groupsub_subs table.
@@ -75,12 +75,12 @@ class main_listener implements EventSubscriberInterface
 	 * @param \phpbb\controller\helper                      $helper
 	 * @param \stevotvr\groupsub\operator\package_interface $pkg_operator
 	 * @param \phpbb\template\template                      $template
-	 * @param string                                        $group_table   The name of the
-	 *                                                                     groupsub_groups table
+	 * @param string                                        $action_table  The name of the
+	 *                                                                     groupsub_actions table
 	 * @param string                                        $sub_table     The name of the
 	 *                                                                     groupsub_subs table
 	 */
-	public function __construct(auth $auth, config $config, driver_interface $db, helper $helper, package_interface $pkg_operator, template $template, $group_table, $sub_table)
+	public function __construct(auth $auth, config $config, driver_interface $db, helper $helper, package_interface $pkg_operator, template $template, $action_table, $sub_table)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
@@ -88,7 +88,7 @@ class main_listener implements EventSubscriberInterface
 		$this->helper = $helper;
 		$this->pkg_operator = $pkg_operator;
 		$this->template = $template;
-		$this->group_table = $group_table;
+		$this->action_table = $action_table;
 		$this->sub_table = $sub_table;
 	}
 
@@ -98,11 +98,31 @@ class main_listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'				=> 'user_setup',
-			'core.delete_group_after'		=> 'delete_group_after',
-			'core.delete_user_after'		=> 'delete_user_after',
-			'core.group_delete_user_after'	=> 'group_delete_user_after',
+			'core.permissions'			=> 'permissions',
+			'core.user_setup'			=> 'user_setup',
+			'core.delete_group_after'	=> 'delete_group_after',
+			'core.delete_user_after'	=> 'delete_user_after',
 		);
+	}
+
+	/**
+	 * Loads the permissions.
+	 *
+	 * @param \phpbb\event\data $event The event data
+	 */
+	public function permissions(data $event)
+	{
+		$categories = $event['categories'];
+		$categories['groupsub'] = 'ACL_CAT_GROUPSUB';
+		$event['categories'] = $categories;
+
+		$permissions = $event['permissions'];
+		$permissions['a_groupsub_settings'] = array('lang' => 'ACL_A_GROUPSUB_SETTINGS', 'cat' => 'groupsub');
+		$permissions['a_groupsub_packages'] = array('lang' => 'ACL_A_GROUPSUB_PACKAGES', 'cat' => 'groupsub');
+		$permissions['a_groupsub_subscriptions'] = array('lang' => 'ACL_A_GROUPSUB_SUBSCRIPTIONS', 'cat' => 'groupsub');
+		$permissions['a_groupsub_subscriptions_edit'] = array('lang' => 'ACL_A_GROUPSUB_SUBSCRIPTIONS_EDIT', 'cat' => 'groupsub');
+		$permissions['a_groupsub_transactions'] = array('lang' => 'ACL_A_GROUPSUB_TRANSACTIONS', 'cat' => 'groupsub');
+		$event['permissions'] = $permissions;
 	}
 
 	/**
@@ -132,8 +152,14 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function delete_group_after(data $event)
 	{
-		$sql = 'DELETE FROM ' . $this->group_table . '
-				WHERE group_id = ' . (int) $event['group_id'];
+		$actions = array(
+			'gs_add_group',
+			'gs_remove_group',
+			'gs_default_group',
+		);
+		$sql = 'DELETE FROM ' . $this->action_table . '
+				WHERE ' . $this->db->sql_in_set('act_name', $actions) . '
+					AND act_param = ' . (int) $event['group_id'];
 		$this->db->sql_query($sql);
 	}
 
@@ -144,25 +170,8 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function delete_user_after(data $event)
 	{
-		$sql = 'DELETE FROM ' . $this->group_table . '
-				WHERE ' . $this->db->sql_in_set('user_id', $event['user_ids']);
-		$this->db->sql_query($sql);
-
 		$sql = 'DELETE FROM ' . $this->sub_table . '
 				WHERE ' . $this->db->sql_in_set('user_id', $event['user_ids']);
-		$this->db->sql_query($sql);
-	}
-
-	/**
-	 * Remove references to users after they are deleted from a group.
-	 *
-	 * @param \phpbb\event\data	$event The event data
-	 */
-	public function group_delete_user_after(data $event)
-	{
-		$sql = 'DELETE FROM ' . $this->group_table . '
-				WHERE group_id = ' . (int) $event['group_id'] . '
-					AND ' . $this->db->sql_in_set('user_id', $event['user_id_ary']);
 		$this->db->sql_query($sql);
 	}
 }

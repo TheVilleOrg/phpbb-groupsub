@@ -61,12 +61,14 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			}
 
 			$data = array(
-				'pp_sandbox'				=> $this->request->variable('pp_sandbox', true),
-				'pp_sb_business'			=> $this->request->variable('pp_sb_business', ''),
-				'pp_business'				=> $this->request->variable('pp_business', ''),
-				'currency'					=> $this->request->variable('currency', ''),
-				'warn_time'					=> max(0, $this->request->variable('warn_time', 0)),
-				'grace'						=> max(0, $this->request->variable('grace', 0)),
+				'pp_sandbox'		=> $this->request->variable('pp_sandbox', true),
+				'pp_sb_business'	=> $this->request->variable('pp_sb_business', ''),
+				'pp_business'		=> $this->request->variable('pp_business', ''),
+				'notify_admins'		=> $this->request->variable('notify_admins', false),
+				'collapse_terms'	=> max(2, $this->request->variable('collapse_terms', 0)),
+				'currency'			=> $this->request->variable('currency', ''),
+				'warn_time'			=> max(0, $this->request->variable('warn_time', 0)),
+				'grace'				=> max(0, $this->request->variable('grace', 0)),
 			);
 
 			$header = $this->request->variable('header', '');
@@ -124,7 +126,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 		$footer = generate_text_for_edit($this->config_text->get('stevotvr_groupsub_footer'), $footer_uid, $footer_options);
 
 		$this->template->assign_vars(array(
-			'ERROR_MSG'	=> implode('<br>', $errors),
+			'ERROR_MESSAGE'	=> implode('<br>', $errors),
 
 			'S_HEADER_BBCODE_CHECKED'		=> $header_options & OPTION_FLAG_BBCODE,
 			'S_HEADER_SMILIES_CHECKED'		=> $header_options & OPTION_FLAG_SMILIES,
@@ -137,8 +139,10 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			'PP_SB_BUSINESS'	=> $this->config['stevotvr_groupsub_pp_sb_business'],
 			'PP_BUSINESS'		=> $this->config['stevotvr_groupsub_pp_business'],
 			'CURRENCY'			=> $this->config['stevotvr_groupsub_currency'],
+			'NOTIFY_ADMINS'		=> $this->config['stevotvr_groupsub_notify_admins'],
 			'HEADER'			=> $header['text'],
 			'FOOTER'			=> $footer['text'],
+			'COLLAPSE_TERMS'	=> $this->config['stevotvr_groupsub_collapse_terms'],
 			'WARN_TIME'			=> $this->config['stevotvr_groupsub_warn_time'],
 			'GRACE'				=> $this->config['stevotvr_groupsub_grace'],
 
