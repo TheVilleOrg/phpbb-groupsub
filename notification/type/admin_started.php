@@ -10,8 +10,6 @@
 
 namespace stevotvr\groupsub\notification\type;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 /**
  * Group Subscription start notification.
  */
