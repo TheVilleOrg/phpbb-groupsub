@@ -654,7 +654,7 @@ class subscription extends operator implements subscription_interface
 					),
 				),
 				'WHERE'		=> 's.sub_active = 1
-									AND s.user_id = ' . $user_id . '
+									AND s.user_id = ' . (int) $user_id . '
 									AND a.pkg_id <> ' . (int) $pkg_id . '
 									AND ' . $this->db->sql_in_set('a.act_name', array('gs_add_group', 'gs_default_group')),
 			);
