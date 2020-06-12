@@ -90,7 +90,7 @@ class transaction extends operator implements transaction_interface
 		}
 
 		$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
-		if ($business !== $this->request->variable('business', ''))
+		if (strcasecmp($business,$this->request->variable('business', '')) !== 0)
 		{
 			return false;
 		}
