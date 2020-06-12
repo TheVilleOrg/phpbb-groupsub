@@ -285,7 +285,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 		/**
 		 * Event triggered when the actions are loaded into the package edit form.
 		 *
-		 * @event stevotvr.groupsub.acp_load_actions
+		 * @event stevotvr.groupsub.acp_view_actions
 		 * @var int   package_id    The package ID
 		 * @var array start_actions The subscription start actions assigned to the package
 		 * @var array end_actions   The subscription end actions assigned to the package
