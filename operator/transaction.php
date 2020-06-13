@@ -101,7 +101,9 @@ class transaction extends operator implements transaction_interface
 		}
 
 		$term_id = $this->request->variable('item_number', 0);
-		if(!($term = $this->container->get('stevotvr.groupsub.entity.term')->load($term_id))) {
+		$term = $this->container->get('stevotvr.groupsub.entity.term')->load($term_id);
+		if (!$term)
+		{
 			error_log("process_transaction: failed to get term for term_id=".$term_id);
 			return false;
 		}
