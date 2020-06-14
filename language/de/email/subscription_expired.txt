@@ -1,0 +1,13 @@
+Subject: Deine Subscription ist abgelaufen
+
+Hallo {{ USERNAME }},
+
+Deine Subscription für "{{ SUB_NAME }}" auf "{{ SITENAME }}" ist abgelaufen.
+
+Du kannst deinen Subscription-Status einsehen durch Klick auf folgenden link:
+
+{{ U_VIEW_SUB }}
+
+Du hast angefordert, über dieses Ereignis informiert zu werden. Denk dran, dass du jederzeit in deinen Profil-Einstellungen die Email-Informationen ausschalten kannst.
+
+{{ EMAIL_SIG }}
