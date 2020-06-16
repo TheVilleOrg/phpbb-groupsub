@@ -16,6 +16,7 @@ use phpbb\language\language;
 use phpbb\request\request_interface;
 use phpbb\template\template;
 use stevotvr\groupsub\operator\currency_interface;
+use stevotvr\groupsub\operator\unit_helper_interface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,6 +60,11 @@ abstract class acp_base_controller implements acp_base_interface
 	protected $template;
 
 	/**
+	 * @var \stevotvr\groupsub\operator\unit_helper_interface
+	 */
+	protected $unit_helper;
+
+	/**
 	 * The URL for the current page.
 	 *
 	 * @var string
@@ -73,8 +79,9 @@ abstract class acp_base_controller implements acp_base_interface
 	 * @param \phpbb\language\language                       $language
 	 * @param \phpbb\request\request_interface               $request
 	 * @param \phpbb\template\template                       $template
+	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 */
-	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, driver_interface $db, language $language, request_interface $request, template $template)
+	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, driver_interface $db, language $language, request_interface $request, template $template, unit_helper_interface $unit_helper)
 	{
 		$this->config = $config;
 		$this->container = $container;
@@ -83,6 +90,7 @@ abstract class acp_base_controller implements acp_base_interface
 		$this->language = $language;
 		$this->request = $request;
 		$this->template = $template;
+		$this->unit_helper = $unit_helper;
 	}
 
 	/**

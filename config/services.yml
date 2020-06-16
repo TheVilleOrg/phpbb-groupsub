@@ -96,6 +96,7 @@ services:
             - '@language'
             - '@request'
             - '@template'
+            - '@stevotvr.groupsub.operator.unit_helper'
 
     stevotvr.groupsub.controller.acp.settings:
         class: stevotvr\groupsub\controller\acp_settings_controller
@@ -114,7 +115,6 @@ services:
                 - '@stevotvr.groupsub.operator.package'
                 - '@dispatcher'
                 - '@group_helper'
-                - '@stevotvr.groupsub.operator.unit_helper'
                 - '%tables.groups%'
 
     stevotvr.groupsub.controller.acp.subscription:

@@ -418,6 +418,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		));
 
 		$this->assign_tpl_vars($entity, $data);
+		$this->load_terms();
 	}
 
 	/**
@@ -603,5 +604,30 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 
 		return count($packages);
+	}
+
+	/**
+	 * Load the list of available terms into template block variables.
+	 */
+	protected function load_terms()
+	{
+		$packages = $this->pkg_operator->get_terms();
+
+		$data = array();
+		foreach ($packages as $terms)
+		{
+			foreach ($terms as $term)
+			{
+				$data[$term->get_package()] = isset($data[$term->get_package()]) ? $data[$term->get_package()] : array();
+				$data[$term->get_package()][$term->get_order()] = array(
+					'ID'		=> $term->get_id(),
+					'PRICE'		=> $this->currency->format_price($term->get_currency(), $term->get_price()),
+					'DAYS'		=> $term->get_length(),
+					'LENGTH'	=> $term->get_length() ? $this->unit_helper->get_formatted_timespan($term->get_length()) : 0,
+				);
+			}
+		}
+
+		$this->template->assign_var('TERMS_JSON', json_encode($data));
 	}
 }

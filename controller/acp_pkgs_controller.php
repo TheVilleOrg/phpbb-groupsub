@@ -16,7 +16,6 @@ use phpbb\json_response;
 use stevotvr\groupsub\entity\package_interface as pkg_entity;
 use stevotvr\groupsub\exception\base;
 use stevotvr\groupsub\operator\package_interface as pkg_operator;
-use stevotvr\groupsub\operator\unit_helper_interface;
 
 /**
  * Group Subscription package management ACP controller.
@@ -39,11 +38,6 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	protected $group_helper;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\unit_helper_interface
-	 */
-	protected $unit_helper;
-
-	/**
 	 * The name of the phpBB groups table.
 	 *
 	 * @var string
@@ -56,15 +50,13 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
 	 * @param \phpbb\event\dispatcher_interface                 $phpbb_dispatcher
 	 * @param \phpbb\group\helper                               $group_helper
-	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
 	 * @param string                                            $phpbb_groups_table The name of the phpBB groups table
 	 */
-	public function setup(pkg_operator $pkg_operator, dispatcher_interface $phpbb_dispatcher, helper $group_helper, unit_helper_interface $unit_helper, $phpbb_groups_table)
+	public function setup(pkg_operator $pkg_operator, dispatcher_interface $phpbb_dispatcher, helper $group_helper, $phpbb_groups_table)
 	{
 		$this->pkg_operator = $pkg_operator;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
 		$this->group_helper = $group_helper;
-		$this->unit_helper = $unit_helper;
 		$this->phpbb_groups_table = $phpbb_groups_table;
 	}
 
