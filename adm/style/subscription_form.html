@@ -38,7 +38,10 @@
 	{% endif %}
 		<dl>
 			<dt>{{ lang('ACP_GROUPSUB_SUB_PACKAGE') ~ lang('COLON') }}</dt>
-			<dd>{{ SUB_PACKAGE }}</dd>
+			<dd>
+				<input type="hidden" name="sub_package" id="sub_package" value="{{ SUB_PACKAGE }}">
+				{{ SUB_PACKAGE_NAME }}
+			</dd>
 		</dl>
 {% endif %}
 {% if (S_ACTIVE or S_ADD_SUB) and not S_READ_ONLY %}

@@ -296,10 +296,10 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'S_EDIT_SUB'	=> true,
 			'S_ACTIVE'		=> $subscription['entity']->is_active(),
 
-			'SUB_PACKAGE'	=> $subscription['package']['name'],
-			'SUB_USER'		=> get_username_string('full', $subscription['user_id'], $subscription['username'], $subscription['user_colour'], false, $profile_url),
+			'SUB_PACKAGE_NAME'	=> $subscription['package']['name'],
+			'SUB_USER'			=> get_username_string('full', $subscription['user_id'], $subscription['username'], $subscription['user_colour'], false, $profile_url),
 
-			'U_ACTION'		=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
+			'U_ACTION'	=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
 
 			'S_READ_ONLY'	=> !$this->auth->acl_get('a_groupsub_subscriptions_edit'),
 		));
