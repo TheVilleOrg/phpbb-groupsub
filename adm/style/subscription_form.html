@@ -67,7 +67,7 @@
 		</dl>
 {% endif %}
 	</fieldset>
-{% if not S_READ_ONLY %}
+{% if (S_ACTIVE or S_ADD_SUB) and not S_READ_ONLY %}
 	<fieldset class="submit-buttons">
 		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
 		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
