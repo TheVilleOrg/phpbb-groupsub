@@ -115,6 +115,20 @@ interface subscription_interface
 	public function create_subscription(\stevotvr\groupsub\entity\term_interface $term, $user_id);
 
 	/**
+	 * Start a subscription.
+	 *
+	 * @param int $sub_id The subscription ID
+	 */
+	public function start_subscription($sub_id);
+
+	/**
+	 * Restart a subscription.
+	 *
+	 * @param int $sub_id The subscription ID
+	 */
+	public function restart_subscription($sub_id);
+
+	/**
 	 * Delete a subscription.
 	 *
 	 * @param int $sub_id The subscription ID
