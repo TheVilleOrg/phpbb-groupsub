@@ -28,7 +28,12 @@
 {% else %}
 		<dl>
 			<dt>{{ lang('ACP_GROUPSUB_STATUS') ~ lang('COLON') }}</dt>
-			<dd>{% if S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}</dd>
+			<dd>
+				{% if S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}
+				<br><br>
+				{% if U_DELETE %}<a href="{{ U_DELETE }}">{{ lang('ACP_GROUPSUB_SUB_DELETE') }}</a>{% else %}<a disabled>{{ lang('ACP_GROUPSUB_SUB_DELETE') }}</a>{% endif %}&nbsp;
+				{% if U_RESTART %}<a href="{{ U_RESTART }}">{{ lang('ACP_GROUPSUB_SUB_RESTART') }}</a>{% else %}<a disabled>{{ lang('ACP_GROUPSUB_SUB_RESTART') }}</a>{% endif %}
+			</dd>
 		</dl>
 	{% if S_SHOW_USER %}
 		<dl>

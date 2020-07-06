@@ -45,4 +45,11 @@ interface acp_subs_interface extends acp_base_interface
 	 * @param int $id The item ID
 	 */
 	public function delete($id);
+
+	/**
+	 * Restart an item.
+	 *
+	 * @param int $id The item ID
+	 */
+	public function restart($id);
 }

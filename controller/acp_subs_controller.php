@@ -302,6 +302,9 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 			'U_ACTION'	=> $this->u_action . $params . '&amp;action=edit&amp;id=' . $id,
 
 			'S_READ_ONLY'	=> !$this->auth->acl_get('a_groupsub_subscriptions_edit'),
+
+			'U_DELETE'		=> $subscription['entity']->is_active() ? $this->u_action . $params . '&amp;action=delete&amp;id=' . $subscription['entity']->get_id() : false,
+			'U_RESTART'		=> !$subscription['entity']->is_active() && $this->parse_date($subscription['entity']->get_expire()) < time() ? $this->u_action . $params . '&amp;action=restart&amp;id=' . $subscription['entity']->get_id() : false,
 		));
 	}
 
@@ -506,6 +509,55 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		}
 
 		return false;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function restart($id)
+	{
+		if (!$this->auth->acl_get('a_groupsub_subscriptions_edit'))
+		{
+			return;
+		}
+
+		$this->add_lang();
+
+		$sort_key = $sort_dir = '';
+		$start = $limit = $pkg_id = 0;
+		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);
+
+		if (!confirm_box(true))
+		{
+			$hidden_fields = build_hidden_fields(array(
+				'id'		=> $id,
+				'mode'		=> $this->request->variable('mode', ''),
+				'sk'		=> $sort_key,
+				'sd'		=> $sort_dir,
+				'start'		=> $start,
+				'limit'		=> $limit,
+				'pkg_id'	=> $pkg_id,
+				'action'	=> 'restart',
+			));
+			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_RESTART_CONFIRM'), $hidden_fields);
+			return;
+		}
+
+		$this->sub_operator->restart_subscription($id);
+
+		if ($this->request->is_ajax())
+		{
+			$json_response = new json_response();
+			$json_response->send(array(
+				'MESSAGE_TITLE'	=> $this->language->lang('INFORMATION'),
+				'MESSAGE_TEXT'	=> $this->language->lang('ACP_GROUPSUB_SUB_RESTART_SUCCESS'),
+				'REFRESH_DATA'	=> array(
+					'time'	=> 3
+				),
+			));
+		}
+
+		trigger_error($this->language->lang('ACP_GROUPSUB_SUB_RESTART_SUCCESS') . adm_back_link($this->u_action . $params));
 	}
 
 	/**
