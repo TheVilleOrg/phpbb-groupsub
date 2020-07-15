@@ -307,46 +307,9 @@ class subscription extends operator implements subscription_interface
 	public function add_subscription(entity $subscription)
 	{
 		$subscription->insert();
-		$subscription_id = $subscription->get_id();
-		$subscription->load($subscription_id);
+		$sub_id = $subscription->get_id();
 
-		if ($subscription->get_id())
-		{
-			$user_id = $subscription->get_user();
-			$sub_id = $subscription->get_id();
-			$package_id = $subscription->get_package();
-
-			$this->execute_actions($user_id, $package_id);
-
-			/**
-			 * Event triggered when a subscription is started.
-			 *
-			 * @event stevotvr.groupsub.subscription_started
-			 * @var int user_id    The user ID
-			 * @var int sub_id     The subscription ID
-			 * @var int package_id The package ID
-			 * @since 0.1.0
-			 */
-			$vars = array('user_id', 'sub_id', 'package_id');
-			extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
-
-			$sql = 'SELECT pkg_ident, pkg_name
-					FROM ' . $this->package_table . '
-					WHERE pkg_id = ' . (int) $subscription->get_package();
-			$this->db->sql_query($sql);
-			$row = $this->db->sql_fetchrow();
-			$this->db->sql_freeresult();
-
-			$row['sub_id'] = $subscription->get_id();
-			$row['user_id'] = $subscription->get_user();
-
-			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.started', $row);
-
-			if ($this->config['stevotvr_groupsub_notify_admins'])
-			{
-				$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.admin_started', $row);
-			}
-		}
+		$this->start_subscription($sub_id);
 
 		return $subscription->get_id();
 	}
@@ -392,6 +355,87 @@ class subscription extends operator implements subscription_interface
 							->set_start(time())
 							->set_expire($length > 0 ? time() + $length : 0);
 		return $this->add_subscription($subscription);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function start_subscription($sub_id)
+	{
+		$subscription = $this->container->get('stevotvr.groupsub.entity.subscription')->load($sub_id);
+
+		if ($subscription->get_id())
+		{
+			$user_id = $subscription->get_user();
+			$sub_id = $subscription->get_id();
+			$package_id = $subscription->get_package();
+
+			$this->execute_actions($user_id, $package_id);
+
+			/**
+			 * Event triggered when a subscription is started.
+			 *
+			 * @event stevotvr.groupsub.subscription_started
+			 * @var int user_id    The user ID
+			 * @var int sub_id     The subscription ID
+			 * @var int package_id The package ID
+			 * @since 0.1.0
+			 */
+			$vars = array('user_id', 'sub_id', 'package_id');
+			extract($this->phpbb_dispatcher->trigger_event('stevotvr.groupsub.subscription_started', compact($vars)));
+
+			$sql = 'SELECT pkg_ident, pkg_name
+					FROM ' . $this->package_table . '
+					WHERE pkg_id = ' . (int) $subscription->get_package();
+			$this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow();
+			$this->db->sql_freeresult();
+
+			$row['sub_id'] = $subscription->get_id();
+			$row['user_id'] = $subscription->get_user();
+
+			$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.started', $row);
+
+			if ($this->config['stevotvr_groupsub_notify_admins'])
+			{
+				$this->notification_manager->add_notifications('stevotvr.groupsub.notification.type.admin_started', $row);
+			}
+		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function restart_subscription($sub_id)
+	{
+		$sql_ary = array(
+			'SELECT'	=> 's.sub_id, s.pkg_id, s.user_id, p.pkg_ident, p.pkg_name',
+			'FROM'		=> array($this->sub_table => 's'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array($this->package_table => 'p'),
+					'ON'	=> 's.pkg_id = p.pkg_id',
+				),
+			),
+			'WHERE'		=> 's.sub_active <> 1
+								AND s.sub_id = ' . (int) $sub_id,
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+		$this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow();
+		$this->db->sql_freeresult();
+
+		if (!$row)
+		{
+			return;
+		}
+
+		$sql = 'UPDATE ' . $this->sub_table . '
+				SET sub_active = 1
+				WHERE sub_id = ' . (int) $sub_id;
+		$this->db->sql_query($sql);
+
+		$this->start_subscription($sub_id);
 	}
 
 	/**

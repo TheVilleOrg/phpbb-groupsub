@@ -131,9 +131,12 @@ class main_module
 			case 'delete':
 				$controller->delete($id);
 			break;
+			case 'restart':
+				$controller->restart($id);
+			break;
 		}
 
-		if (!in_array($action, array('add', 'edit', 'delete')))
+		if (!in_array($action, array('add', 'edit', 'delete', 'restart')))
 		{
 			$this->page_title = 'ACP_GROUPSUB_MANAGE_SUBS';
 			$controller->display();
