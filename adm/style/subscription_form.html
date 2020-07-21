@@ -18,7 +18,7 @@
 		{% for p in package %}
 					<option value="{{ p.ID }}"{% if p.ID == SUB_PACKAGE %} selected{% endif %}>{{ p.NAME }}</option>
 		{% endfor %}
-					</select>
+				</select>
 	{% else %}
 				<input type="hidden" name="sub_package" id="sub_package" value="{{ package[0].ID }}">
 				{{ package[0].NAME }}
@@ -30,9 +30,9 @@
 			<dt>{{ lang('ACP_GROUPSUB_STATUS') ~ lang('COLON') }}</dt>
 			<dd>
 				{% if S_ACTIVE %}<b style="color: #00d600;">{{ lang('ACP_GROUPSUB_ACTIVE') }}</b>{% else %}<i style="color: #f00;">{{ lang('ACP_GROUPSUB_ENDED') }}</i>{% endif %}
-				<br><br>
-				{% if U_DELETE %}<a href="{{ U_DELETE }}">{{ lang('ACP_GROUPSUB_SUB_DELETE') }}</a>{% else %}<a disabled>{{ lang('ACP_GROUPSUB_SUB_DELETE') }}</a>{% endif %}&nbsp;
-				{% if U_RESTART %}<a href="{{ U_RESTART }}">{{ lang('ACP_GROUPSUB_SUB_RESTART') }}</a>{% else %}<a disabled>{{ lang('ACP_GROUPSUB_SUB_RESTART') }}</a>{% endif %}
+				&nbsp;
+				{% if U_DELETE %}<a href="{{ U_DELETE }}">{{ lang('ACP_GROUPSUB_SUB_DELETE') }}</a>{% endif %}
+				{% if U_RESTART %}<a href="{{ U_RESTART }}">{{ lang('ACP_GROUPSUB_SUB_RESTART') }}</a>{% endif %}
 			</dd>
 		</dl>
 	{% if S_SHOW_USER %}
