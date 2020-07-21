@@ -272,6 +272,7 @@ services:
             - method: setup
               arguments:
                 - '@request'
+                - '@log'
                 - '@stevotvr.groupsub.operator.currency'
                 - '@dispatcher'
                 - '@stevotvr.groupsub.operator.subscription'

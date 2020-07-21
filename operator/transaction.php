@@ -11,6 +11,7 @@
 namespace stevotvr\groupsub\operator;
 
 use phpbb\event\dispatcher_interface;
+use phpbb\log\log_interface;
 use phpbb\request\request_interface;
 use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\subscription_interface;
@@ -29,6 +30,11 @@ class transaction extends operator implements transaction_interface
 	 * @var \phpbb\request\request_interface
 	 */
 	protected $request;
+
+	/**
+	 * @var \phpbb\log\log_interface
+	 */
+	protected $log;
 
 	/**
 	 * @var \stevotvr\groupsub\operator\currency_interface
@@ -56,6 +62,7 @@ class transaction extends operator implements transaction_interface
 	 * Set up the operator.
 	 *
 	 * @param \phpbb\request\request_interface                   $request
+	 * @param \phpbb\log\log_interface                           $log
 	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
 	 * @param \phpbb\event\dispatcher_interface                  $phpbb_dispatcher
 	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
@@ -63,9 +70,10 @@ class transaction extends operator implements transaction_interface
 	 *                                                                        groupsub_trans table
 	 * @param string                                             $phpbb_users_table    The name of the phpBB users table
 	 */
-	public function setup(request_interface $request, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
+	public function setup(request_interface $request, log_interface $log, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
 	{
 		$this->request = $request;
+		$this->log = $log;
 		$this->currency = $currency;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
 		$this->sub_operator = $sub_operator;
@@ -104,7 +112,7 @@ class transaction extends operator implements transaction_interface
 		$term = $this->container->get('stevotvr.groupsub.entity.term')->load($term_id);
 		if (!$term)
 		{
-			error_log("process_transaction: failed to get term for term_id=".$term_id);
+			$this->log->add('critical', ANONYMOUS, false, 'LOG_GROUPSUB_TRANS_NO_TERM', false, array($term_id));
 			return false;
 		}
 

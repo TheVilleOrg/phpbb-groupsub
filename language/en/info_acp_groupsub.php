@@ -45,4 +45,6 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_TRANSACTIONS'	=> 'View transactions',
 
 	'ACP_USER_GROUPSUB'	=> 'Subscriptions',
+
+	'LOG_GROUPSUB_TRANS_NO_TERM'	=> 'process_transaction: failed to get term for term_id=%d',
 ));
