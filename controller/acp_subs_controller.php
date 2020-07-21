@@ -527,7 +527,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$start = $limit = $pkg_id = 0;
 		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);
 
-		if (!confirm_box(true))
+		if (confirm_box(true))
+		{
+			$this->sub_operator->restart_subscription($id);
+
+			trigger_error($this->language->lang('ACP_GROUPSUB_SUB_RESTART_SUCCESS') . adm_back_link($this->u_action . $params));
+		}
+		else
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
@@ -539,25 +545,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 				'pkg_id'	=> $pkg_id,
 				'action'	=> 'restart',
 			));
+
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_RESTART_CONFIRM'), $hidden_fields);
-			return;
 		}
 
-		$this->sub_operator->restart_subscription($id);
-
-		if ($this->request->is_ajax())
-		{
-			$json_response = new json_response();
-			$json_response->send(array(
-				'MESSAGE_TITLE'	=> $this->language->lang('INFORMATION'),
-				'MESSAGE_TEXT'	=> $this->language->lang('ACP_GROUPSUB_SUB_RESTART_SUCCESS'),
-				'REFRESH_DATA'	=> array(
-					'time'	=> 3
-				),
-			));
-		}
-
-		trigger_error($this->language->lang('ACP_GROUPSUB_SUB_RESTART_SUCCESS') . adm_back_link($this->u_action . $params));
+		$this->display();
 	}
 
 	/**
@@ -576,7 +568,13 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 		$start = $limit = $pkg_id = 0;
 		$params = $this->parse_display_params($sort_key, $sort_dir, $start, $limit, $pkg_id);
 
-		if (!confirm_box(true))
+		if (confirm_box(true))
+		{
+			$this->sub_operator->delete_subscription($id);
+
+			trigger_error($this->language->lang('ACP_GROUPSUB_SUB_DELETE_SUCCESS') . adm_back_link($this->u_action . $params));
+		}
+		else
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
@@ -588,25 +586,11 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 				'pkg_id'	=> $pkg_id,
 				'action'	=> 'delete',
 			));
+
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_SUB_DELETE_CONFIRM'), $hidden_fields);
-			return;
 		}
 
-		$this->sub_operator->delete_subscription($id);
-
-		if ($this->request->is_ajax())
-		{
-			$json_response = new json_response();
-			$json_response->send(array(
-				'MESSAGE_TITLE'	=> $this->language->lang('INFORMATION'),
-				'MESSAGE_TEXT'	=> $this->language->lang('ACP_GROUPSUB_SUB_DELETE_SUCCESS'),
-				'REFRESH_DATA'	=> array(
-					'time'	=> 3
-				),
-			));
-		}
-
-		trigger_error($this->language->lang('ACP_GROUPSUB_SUB_DELETE_SUCCESS') . adm_back_link($this->u_action . $params));
+		$this->display();
 	}
 
 	/**

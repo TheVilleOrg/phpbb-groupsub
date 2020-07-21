@@ -556,32 +556,24 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	{
 		$this->add_lang();
 
-		if (!confirm_box(true))
+		if (confirm_box(true))
+		{
+			$this->pkg_operator->delete_package($id);
+
+			trigger_error($this->language->lang('ACP_GROUPSUB_PKG_DELETE_SUCCESS') . adm_back_link($this->u_action));
+		}
+		else
 		{
 			$hidden_fields = build_hidden_fields(array(
 				'id'		=> $id,
 				'mode'		=> 'packages',
 				'action'	=> 'delete',
 			));
+
 			confirm_box(false, $this->language->lang('ACP_GROUPSUB_PKG_DELETE_CONFIRM'), $hidden_fields);
-			return;
 		}
 
-		$this->pkg_operator->delete_package($id);
-
-		if ($this->request->is_ajax())
-		{
-			$json_response = new json_response();
-			$json_response->send(array(
-				'MESSAGE_TITLE'	=> $this->language->lang('INFORMATION'),
-				'MESSAGE_TEXT'	=> $this->language->lang('ACP_GROUPSUB_PKG_DELETE_SUCCESS'),
-				'REFRESH_DATA'	=> array(
-					'time'	=> 3
-				),
-			));
-		}
-
-		trigger_error($this->language->lang('ACP_GROUPSUB_PKG_DELETE_SUCCESS') . adm_back_link($this->u_action));
+		$this->display();
 	}
 
 	/**
