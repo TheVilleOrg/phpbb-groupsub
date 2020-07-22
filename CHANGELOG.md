@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.0-beta (7/21/20)
+
+* Replaced group associations with subscriptions start and end actions
+* Added term selection when adding or editing subscriptions
+* Added ability to reactivate a cancelled subscription
+* Added notification for a subscription starting
+* Added notification for a subscription being cancelled by an administrator
+* Added more granular permissions
+* Added subscriptions to the user administration module
+* Added error logging for transaction errors
+* Added option to change the number of terms listed as radio inputs
+* Fixed localized prices causing PayPal buttons to fail
+* Fixed out-of-bounds error when creating a subscription
+* Fixed confirmation box logic
+* Fixed user selection input field
+* Fixed business names being case-sensitive
+
 ## 1.1.2 (2/6/20)
 
 * Fixed unlimited subscriptions
