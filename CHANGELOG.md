@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 (12/26/20)
+
+* No changes
+
 ## 1.2.0-beta (7/21/20)
 
 * Replaced group associations with subscriptions start and end actions
