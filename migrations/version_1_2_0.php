@@ -96,7 +96,7 @@ class version_1_2_0 extends migration
 					'module_basename'	=> 'acp_users',
 					'module_langname'	=> 'ACP_GROUPSUB_MANAGE_SUBS',
 					'module_mode'		=> 'groupsub',
-					'module_auth'		=> 'acl_a_groupsub_subscriptions && ext_stevotvr/groupsub',
+					'module_auth'		=> 'ext_stevotvr/groupsub && acl_a_groupsub_subscriptions',
 				),
 			)),
 
