@@ -278,8 +278,8 @@ class main_controller
 		$this->template->assign_vars(array(
 			'S_PP_SANDBOX'	=> $sandbox,
 
-			'USER_ID'		=> $this->user->data['user_id'],
-			'PP_BUSINESS'	=> $business,
+			'GROUPSUB_USER_ID'	=> $this->user->data['user_id'],
+			'PP_BUSINESS'		=> $business,
 
 			'PKG_NAME'				=> $term['package']->get_name(),
 			'PKG_DESC'				=> $term['package']->get_desc_for_display(),

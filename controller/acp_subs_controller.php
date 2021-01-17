@@ -134,7 +134,7 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	{
 		$this->user_id = $user_id;
 		$this->u_action = append_sid($this->admin_path . 'index.' . $this->php_ext, 'i=users&amp;mode=groupsub&amp;u=' . $user_id);
-		$this->template->assign_var('USER_ID', $user_id);
+		$this->template->assign_var('GROUPSUB_USER_ID', $user_id);
 	}
 
 	/**
