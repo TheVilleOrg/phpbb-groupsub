@@ -76,7 +76,7 @@ abstract class admin_base_type extends base_type
 	public function get_url()
 	{
 		return append_sid($this->phpbb_root_path . 'adm/index.' . $this->php_ext ,
-			'i=-stevotvr-groupsub-acp-main_module&mode=subscriptions&action=edit&id=' . $this->get_data('sub_id'),
+			'i=-stevotvr-groupsub-acp-main_module&amp;mode=subscriptions&amp;action=edit&amp;id=' . $this->get_data('sub_id'),
 			true, $this->user->session_id);
 	}
 
