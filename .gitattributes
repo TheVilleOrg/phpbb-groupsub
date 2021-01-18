@@ -1,3 +1,4 @@
+tests/		export-ignore
 .github/		export-ignore
 .gitignore		export-ignore
 .gitattributes	export-ignore
@@ -8,15 +9,3 @@ build.xml		export-ignore
 .jscsrc		export-ignore
 .jshintrc		export-ignore
 .codeclimate.yml	export-ignore
-
-# Set the default behavior for files detected as text to have LF line endings on checkout.
-* text	eol=lf
-
-# Declare files that will always have LF line endings on checkout.
-*.php	text eol=lf
-*.html	text eol=lf
-*.css	text eol=lf
-*.js	text eol=lf
-*.json	text eol=lf
-*.yml	text eol=lf
-*.md	text eol=lf
