@@ -20,12 +20,12 @@ class main_module
 	public $page_title;
 
 	/**
-	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
+	 * @var ContainerInterface
 	 */
 	protected $container;
 
 	/**
-	 * @var \phpbb\request\request
+	 * @var request
 	 */
 	protected $request;
 

@@ -44,7 +44,7 @@ class base extends \Exception
 	/**
 	 * Get the translated message.
 	 *
-	 * @param \phpbb\language\language $language
+	 * @param language $language
 	 *
 	 * @return string The translated message
 	 */
@@ -64,7 +64,7 @@ class base extends \Exception
 	/**
 	 * Load the exceptions language file.
 	 *
-	 * @param \phpbb\language\language $language
+	 * @param language $language
 	 */
 	protected function add_lang(language $language)
 	{
@@ -81,7 +81,7 @@ class base extends \Exception
 	/**
 	 * Translate the parameters of the language array.
 	 *
-	 * @param \phpbb\language\language $language
+	 * @param language $language
 	 *
 	 * @return array The translated language parameters
 	 */

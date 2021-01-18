@@ -10,6 +10,9 @@
 
 namespace stevotvr\groupsub\entity;
 
+use stevotvr\groupsub\exception\out_of_bounds;
+use stevotvr\groupsub\exception\unexpected_value;
+
 /**
  * Group Subscription term entity interface.
  */
@@ -25,7 +28,7 @@ interface term_interface extends entity_interface
 	 *
 	 * @return term_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_package($package_id);
 
@@ -39,7 +42,7 @@ interface term_interface extends entity_interface
 	 *
 	 * @return term_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_price($price);
 
@@ -53,7 +56,7 @@ interface term_interface extends entity_interface
 	 *
 	 * @return term_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 * @throws unexpected_value
 	 */
 	public function set_currency($currency);
 
@@ -67,7 +70,7 @@ interface term_interface extends entity_interface
 	 *
 	 * @return term_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_length($length);
 
@@ -81,7 +84,7 @@ interface term_interface extends entity_interface
 	 *
 	 * @return term_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_order($order);
 }

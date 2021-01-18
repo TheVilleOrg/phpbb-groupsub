@@ -31,62 +31,62 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class main_controller
 {
 	/**
-	 * @var \phpbb\auth\auth
+	 * @var auth
 	 */
 	protected $auth;
 
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @var \phpbb\config\db_text
+	 * @var db_text
 	 */
 	protected $config_text;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\currency_interface
+	 * @var currency_interface
 	 */
 	protected $currency;
 
 	/**
-	 * @var \phpbb\controller\helper
+	 * @var helper
 	 */
 	protected $helper;
 
 	/**
-	 * @var \phpbb\language\language
+	 * @var language
 	 */
 	protected $language;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\package_interface
+	 * @var package_interface
 	 */
 	protected $pkg_operator;
 
 	/**
-	 * @var \phpbb\request\request_interface
+	 * @var request_interface
 	 */
 	protected $request;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\subscription_interface
+	 * @var subscription_interface
 	 */
 	protected $sub_operator;
 
 	/**
-	 * @var \phpbb\template\template
+	 * @var template
 	 */
 	protected $template;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\unit_helper_interface
+	 * @var unit_helper_interface
 	 */
 	protected $unit_helper;
 
 	/**
-	 * @var \phpbb\user
+	 * @var user
 	 */
 	protected $user;
 
@@ -104,18 +104,18 @@ class main_controller
 	protected $php_ext;
 
 	/**
-	 * @param \phpbb\auth\auth                                   $auth
-	 * @param \phpbb\config\config                               $config
-	 * @param \phpbb\config\db_text                              $config_text
-	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
-	 * @param \phpbb\controller\helper                           $helper
-	 * @param \phpbb\language\language                           $language
-	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
-	 * @param \phpbb\request\request_interface                   $request
-	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
-	 * @param \phpbb\template\template                           $template
-	 * @param \stevotvr\groupsub\operator\unit_helper_interface  $unit_helper
-	 * @param \phpbb\user                                        $user
+	 * @param auth                   $auth
+	 * @param config                 $config
+	 * @param db_text                $config_text
+	 * @param currency_interface     $currency
+	 * @param helper                 $helper
+	 * @param language               $language
+	 * @param package_interface      $pkg_operator
+	 * @param request_interface      $request
+	 * @param subscription_interface $sub_operator
+	 * @param template               $template
+	 * @param unit_helper_interface  $unit_helper
+	 * @param user                   $user
 	 */
 	public function __construct(auth $auth, config $config, db_text $config_text, currency_interface $currency, helper $helper, language $language, package_interface $pkg_operator, request_interface $request, subscription_interface $sub_operator, template $template, unit_helper_interface $unit_helper, user $user)
 	{
@@ -150,7 +150,7 @@ class main_controller
 	 *
 	 * @param string|null $name The unique identifier of a package
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
+	 * @return Response A Symfony Response object
 	 */
 	public function handle($name)
 	{
@@ -198,7 +198,7 @@ class main_controller
 	 *
 	 * @param string|null $name The unique identifier of a package
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
+	 * @return Response A Symfony Response object
 	 */
 	protected function list_packages($name)
 	{
@@ -254,7 +254,7 @@ class main_controller
 	 *
 	 * @param int $term_id The term ID
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
+	 * @return Response A Symfony Response object
 	 */
 	protected function select_term($term_id)
 	{

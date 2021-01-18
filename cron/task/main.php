@@ -23,18 +23,18 @@ class main extends base
 	const INTERVAL = 3600;
 
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\subscription_interface
+	 * @var subscription_interface
 	 */
 	protected $sub_operator;
 
 	/**
-	 * @param \phpbb\config\config                               $config
-	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
+	 * @param config                 $config
+	 * @param subscription_interface $sub_operator
 	 */
 	public function __construct(config $config, subscription_interface $sub_operator)
 	{

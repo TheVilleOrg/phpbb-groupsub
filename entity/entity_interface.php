@@ -10,6 +10,9 @@
 
 namespace stevotvr\groupsub\entity;
 
+use stevotvr\groupsub\exception\missing_field;
+use stevotvr\groupsub\exception\out_of_bounds;
+
 /**
  * Group Subscription entity interface.
  */
@@ -22,7 +25,7 @@ interface entity_interface
 	 *
 	 * @return entity_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function load($id);
 
@@ -33,8 +36,8 @@ interface entity_interface
 	 *
 	 * @return entity_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\missing_field
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws missing_field
+	 * @throws out_of_bounds
 	 */
 	public function import(array $data);
 
@@ -43,7 +46,7 @@ interface entity_interface
 	 *
 	 * @return entity_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function insert();
 
@@ -52,7 +55,7 @@ interface entity_interface
 	 *
 	 * @return entity_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function save();
 

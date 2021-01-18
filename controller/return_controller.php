@@ -24,42 +24,42 @@ use stevotvr\groupsub\operator\unit_helper_interface;
 class return_controller
 {
 	/**
-	 * @var \phpbb\controller\helper
+	 * @var helper
 	 */
 	protected $helper;
 
 	/**
-	 * @var \phpbb\language\language
+	 * @var language
 	 */
 	protected $language;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\package_interface
+	 * @var package_interface
 	 */
 	protected $pkg_operator;
 
 	/**
-	 * @var \phpbb\request\request_interface
+	 * @var request_interface
 	 */
 	protected $request;
 
 	/**
-	 * @var \phpbb\template\template
+	 * @var template
 	 */
 	protected $template;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\unit_helper_interface
+	 * @var unit_helper_interface
 	 */
 	protected $unit_helper;
 
 	/**
-	 * @param \phpbb\controller\helper                          $helper
-	 * @param \phpbb\language\language                          $language
-	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
-	 * @param \phpbb\request\request_interface                  $request
-	 * @param \phpbb\template\template                          $template
-	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
+	 * @param helper                $helper
+	 * @param language              $language
+	 * @param package_interface     $pkg_operator
+	 * @param request_interface     $request
+	 * @param template              $template
+	 * @param unit_helper_interface $unit_helper
 	 */
 	public function __construct(helper $helper, language $language, package_interface $pkg_operator, request_interface $request, template $template, unit_helper_interface $unit_helper)
 	{
@@ -74,7 +74,7 @@ class return_controller
 	/**
 	 * Handle the /groupsub/return route.
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
+	 * @return Response A Symfony Response object
 	 */
 	public function handle()
 	{

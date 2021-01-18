@@ -20,7 +20,7 @@ use stevotvr\groupsub\exception\out_of_bounds;
 abstract class entity implements entity_interface
 {
 	/**
-	 * @var \phpbb\db\driver\driver_interface
+	 * @var driver_interface
 	 */
 	protected $db;
 
@@ -53,8 +53,8 @@ abstract class entity implements entity_interface
 	protected $table_name;
 
 	/**
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param string                            $table_name The name of the database table
+	 * @param driver_interface $db
+	 * @param string           $table_name The name of the database table
 	 */
 	public function __construct(driver_interface $db, $table_name)
 	{

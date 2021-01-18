@@ -18,14 +18,14 @@ use phpbb\config\db_text;
 class acp_settings_controller extends acp_base_controller implements acp_settings_interface
 {
 	/**
-	 * @var \phpbb\config\db_text
+	 * @var db_text
 	 */
 	protected $config_text;
 
 	/**
 	 * Set up the controller.
 	 *
-	 * @param \phpbb\config\db_text $config_text
+	 * @param db_text $config_text
 	 */
 	public function setup(db_text $config_text)
 	{

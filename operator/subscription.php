@@ -23,17 +23,17 @@ use stevotvr\groupsub\exception\out_of_bounds;
 class subscription extends operator implements subscription_interface
 {
 	/**
-	 * @var \phpbb\notification\manager
+	 * @var manager
 	 */
 	protected $notification_manager;
 
 	/**
-	 * @var \phpbb\event\dispatcher_interface
+	 * @var dispatcher_interface
 	 */
 	protected $phpbb_dispatcher;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\package_interface
+	 * @var pkg_operator
 	 */
 	protected $pkg_operator;
 
@@ -103,10 +103,10 @@ class subscription extends operator implements subscription_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\notification\manager                   $notification_manager
-	 * @param \phpbb\event\dispatcher_interface             $phpbb_dispatcher
-	 * @param \stevotvr\groupsub\operator\package_interface $pkg_operator
-	 * @param string                                        $phpbb_users_table    The name of the phpBB users table
+	 * @param manager              $notification_manager
+	 * @param dispatcher_interface $phpbb_dispatcher
+	 * @param pkg_operator         $pkg_operator
+	 * @param string               $phpbb_users_table    The name of the phpBB users table
 	 */
 	public function setup(manager $notification_manager, dispatcher_interface $phpbb_dispatcher, pkg_operator $pkg_operator, $phpbb_users_table)
 	{

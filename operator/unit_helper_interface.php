@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\operator;
 
+use stevotvr\groupsub\exception\unexpected_value;
+
 /**
  * Group Subscription unit helper operator interface.
  */
@@ -48,7 +50,7 @@ interface unit_helper_interface
 	 *
 	 * @return int The length of time in days
 	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 * @throws unexpected_value
 	 */
 	public function get_days($length, $unit);
 }

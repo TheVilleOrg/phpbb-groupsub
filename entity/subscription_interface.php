@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\entity;
 
+use stevotvr\groupsub\exception\out_of_bounds;
+
 /**
  * Group Subscription subscription entity interface.
  */
@@ -30,7 +32,7 @@ interface subscription_interface extends entity_interface
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_package($package_id);
 
@@ -44,7 +46,7 @@ interface subscription_interface extends entity_interface
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_user($user_id);
 
@@ -58,7 +60,7 @@ interface subscription_interface extends entity_interface
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_start($start);
 
@@ -72,7 +74,7 @@ interface subscription_interface extends entity_interface
 	 *
 	 * @return subscription_interface This object for chaining
 	 *
-	 * @throws \stevotvr\groupsub\exception\out_of_bounds
+	 * @throws out_of_bounds
 	 */
 	public function set_expire($expire);
 }

@@ -25,42 +25,42 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class acp_base_controller implements acp_base_interface
 {
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
+	 * @var ContainerInterface
 	 */
 	protected $container;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\currency_interface
+	 * @var currency_interface
 	 */
 	protected $currency;
 
 	/**
-	 * @var \phpbb\db\driver\driver_interface
+	 * @var driver_interface
 	 */
 	protected $db;
 
 	/**
-	 * @var \phpbb\language\language
+	 * @var language
 	 */
 	protected $language;
 
 	/**
-	 * @var \phpbb\request\request_interface
+	 * @var request_interface
 	 */
 	protected $request;
 
 	/**
-	 * @var \phpbb\template\template
+	 * @var template
 	 */
 	protected $template;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\unit_helper_interface
+	 * @var unit_helper_interface
 	 */
 	protected $unit_helper;
 
@@ -72,14 +72,14 @@ abstract class acp_base_controller implements acp_base_interface
 	protected $u_action;
 
 	/**
-	 * @param \phpbb\config\config                           $config
-	 * @param ContainerInterface                             $container
-	 * @param \stevotvr\groupsub\operator\currency_interface $currency
-	 * @param \phpbb\db\driver\driver_interface              $db
-	 * @param \phpbb\language\language                       $language
-	 * @param \phpbb\request\request_interface               $request
-	 * @param \phpbb\template\template                       $template
-	 * @param \stevotvr\groupsub\operator\unit_helper_interface $unit_helper
+	 * @param config                $config
+	 * @param ContainerInterface    $container
+	 * @param currency_interface    $currency
+	 * @param driver_interface      $db
+	 * @param language              $language
+	 * @param request_interface     $request
+	 * @param template              $template
+	 * @param unit_helper_interface $unit_helper
 	 */
 	public function __construct(config $config, ContainerInterface $container, currency_interface $currency, driver_interface $db, language $language, request_interface $request, template $template, unit_helper_interface $unit_helper)
 	{

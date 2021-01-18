@@ -23,17 +23,17 @@ use stevotvr\groupsub\operator\package_interface as pkg_operator;
 class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interface
 {
 	/**
-	 * @var \stevotvr\groupsub\operator\package_interface
+	 * @var pkg_operator
 	 */
 	protected $pkg_operator;
 
 	/**
-	 * @var \phpbb\event\dispatcher_interface
+	 * @var dispatcher_interface
 	 */
 	protected $phpbb_dispatcher;
 
 	/**
-	 * @var \phpbb\group\helper
+	 * @var helper
 	 */
 	protected $group_helper;
 
@@ -47,10 +47,10 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	/**
 	 * Set up the controller.
 	 *
-	 * @param \stevotvr\groupsub\operator\package_interface     $pkg_operator
-	 * @param \phpbb\event\dispatcher_interface                 $phpbb_dispatcher
-	 * @param \phpbb\group\helper                               $group_helper
-	 * @param string                                            $phpbb_groups_table The name of the phpBB groups table
+	 * @param pkg_operator         $pkg_operator
+	 * @param dispatcher_interface $phpbb_dispatcher
+	 * @param helper               $group_helper
+	 * @param string               $phpbb_groups_table The name of the phpBB groups table
 	 */
 	public function setup(pkg_operator $pkg_operator, dispatcher_interface $phpbb_dispatcher, helper $group_helper, $phpbb_groups_table)
 	{
@@ -139,7 +139,7 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	/**
 	 * Process data for the add/edit package form.
 	 *
-	 * @param \stevotvr\groupsub\entity\package_interface $entity The package
+	 * @param pkg_entity $entity The package
 	 */
 	protected function add_edit_pkg_data(pkg_entity $entity)
 	{
@@ -228,8 +228,8 @@ class acp_pkgs_controller extends acp_base_controller implements acp_pkgs_interf
 	/**
 	 * Assign the main template variables.
 	 *
-	 * @param \stevotvr\groupsub\entity\package_interface $entity The package
-	 * @param array                                       $post   The posted data
+	 * @param pkg_entity $entity The package
+	 * @param array      $post   The posted data
 	 */
 	protected function assign_tpl_vars(pkg_entity $entity, array $post)
 	{

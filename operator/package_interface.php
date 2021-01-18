@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\operator;
 
+use stevotvr\groupsub\entity\package_interface as entity;
+
 /**
  * Group Subscription package operator interface.
  */
@@ -46,9 +48,9 @@ interface package_interface
 	/**
 	 * Add a package.
 	 *
-	 * @param \stevotvr\groupsub\entity\package_interface $package
+	 * @param entity $package
 	 */
-	public function add_package(\stevotvr\groupsub\entity\package_interface $package);
+	public function add_package(entity $package);
 
 	/**
 	 * Delete a package.

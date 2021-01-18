@@ -18,12 +18,12 @@ use phpbb\config\config;
 abstract class admin_base_type extends base_type
 {
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @param \phpbb\config\config $config
+	 * @param config $config
 	 */
 	public function set_config(config $config)
 	{

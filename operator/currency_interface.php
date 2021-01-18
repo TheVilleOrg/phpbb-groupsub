@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\operator;
 
+use stevotvr\groupsub\exception\unexpected_value;
+
 /**
  * Group Subscription currency operator interface.
  */
@@ -30,7 +32,7 @@ interface currency_interface
 	 *
 	 * @return string The formatted value
 	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 * @throws unexpected_value
 	 */
 	public function format_value($currency_code, $value, $with_separator = false, $localized = true);
 
@@ -42,7 +44,7 @@ interface currency_interface
 	 *
 	 * @return string The formatted price
 	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 * @throws unexpected_value
 	 */
 	public function format_price($currency_code, $value);
 
@@ -54,7 +56,7 @@ interface currency_interface
 	 *
 	 * @return int The value in the subunit of the currency
 	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 * @throws unexpected_value
 	 */
 	public function parse_value($currency_code, $value);
 

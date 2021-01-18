@@ -33,30 +33,30 @@ class ipn_controller
 	const VALID = 'VERIFIED';
 
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\http_helper_interface
+	 * @var http_helper_interface
 	 */
 	protected $http_helper;
 
 	/**
-	 * @var \phpbb\request\request_interface
+	 * @var request_interface
 	 */
 	protected $request;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\transaction_interface
+	 * @var transaction_interface
 	 */
 	protected $trans_operator;
 
 	/**
-	 * @param \phpbb\config\config                              $config
-	 * @param \stevotvr\groupsub\operator\http_helper_interface $http_helper
-	 * @param \phpbb\request\request_interface                  $request
-	 * @param \stevotvr\groupsub\operator\transaction_interface $trans_operator
+	 * @param config                $config
+	 * @param http_helper_interface $http_helper
+	 * @param request_interface     $request
+	 * @param transaction_interface $trans_operator
 	 */
 	public function __construct(config $config, http_helper_interface $http_helper, request_interface $request, transaction_interface $trans_operator)
 	{
@@ -69,7 +69,7 @@ class ipn_controller
 	/**
 	 * Handle the /groupsub/ipn route.
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
+	 * @return Response A Symfony Response object
 	 */
 	public function handle()
 	{

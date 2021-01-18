@@ -22,27 +22,27 @@ use stevotvr\groupsub\operator\subscription_interface;
 class transaction extends operator implements transaction_interface
 {
 	/**
-	 * @var \phpbb\event\dispatcher_interface
+	 * @var dispatcher_interface
 	 */
 	protected $phpbb_dispatcher;
 
 	/**
-	 * @var \phpbb\request\request_interface
+	 * @var request_interface
 	 */
 	protected $request;
 
 	/**
-	 * @var \phpbb\log\log_interface
+	 * @var log_interface
 	 */
 	protected $log;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\currency_interface
+	 * @var currency_interface
 	 */
 	protected $currency;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\subscription_interface
+	 * @var subscription_interface
 	 */
 	protected $sub_operator;
 
@@ -61,14 +61,13 @@ class transaction extends operator implements transaction_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param \phpbb\request\request_interface                   $request
-	 * @param \phpbb\log\log_interface                           $log
-	 * @param \stevotvr\groupsub\operator\currency_interface     $currency
-	 * @param \phpbb\event\dispatcher_interface                  $phpbb_dispatcher
-	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
-	 * @param string                                             $trans_table The name of the
-	 *                                                                        groupsub_trans table
-	 * @param string                                             $phpbb_users_table    The name of the phpBB users table
+	 * @param request_interface      $request
+	 * @param log_interface          $log
+	 * @param currency_interface     $currency
+	 * @param dispatcher_interface   $phpbb_dispatcher
+	 * @param subscription_interface $sub_operator
+	 * @param string                 $trans_table       The name of the groupsub_trans table
+	 * @param string                 $phpbb_users_table The name of the phpBB users table
 	 */
 	public function setup(request_interface $request, log_interface $log, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
 	{

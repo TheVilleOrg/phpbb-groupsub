@@ -24,27 +24,27 @@ use stevotvr\groupsub\operator\subscription_interface as sub_operator;
 class acp_subs_controller extends acp_base_controller implements acp_subs_interface
 {
 	/**
-	 * @var \stevotvr\groupsub\operator\package_interface
+	 * @var pkg_operator
 	 */
 	protected $pkg_operator;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\subscription_interface
+	 * @var sub_operator
 	 */
 	protected $sub_operator;
 
 	/**
-	 * @var \phpbb\auth\auth
+	 * @var auth
 	 */
 	protected $auth;
 
 	/**
-	 * @var \phpbb\pagination
+	 * @var pagination
 	 */
 	protected $pagination;
 
 	/**
-	 * @var \phpbb\user
+	 * @var user
 	 */
 	protected $user;
 
@@ -86,12 +86,12 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Set up the controller.
 	 *
-	 * @param \stevotvr\groupsub\operator\package_interface      $pkg_operator
-	 * @param \stevotvr\groupsub\operator\subscription_interface $sub_operator
-	 * @param \phpbb\auth\auth                                   $auth
-	 * @param \phpbb\pagination                                  $pagination
-	 * @param \phpbb\user                                        $user
-	 * @param string                                             $phpbb_users_table The name of the phpBB users table
+	 * @param pkg_operator $pkg_operator
+	 * @param sub_operator $sub_operator
+	 * @param auth         $auth
+	 * @param pagination   $pagination
+	 * @param user         $user
+	 * @param string       $phpbb_users_table The name of the phpBB users table
 	 */
 	public function setup(pkg_operator $pkg_operator, sub_operator $sub_operator, auth $auth, pagination $pagination, user $user, $phpbb_users_table)
 	{
@@ -310,8 +310,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Process data for the add/edit subscription form.
 	 *
-	 * @param \stevotvr\groupsub\entity\subscription_interface $entity The subscription
-	 * @param string                                           $params The URL parameters string
+	 * @param sub_entity $entity The subscription
+	 * @param string     $params The URL parameters string
 	 */
 	protected function add_edit_sub_data(sub_entity $entity, $params)
 	{
@@ -426,8 +426,8 @@ class acp_subs_controller extends acp_base_controller implements acp_subs_interf
 	/**
 	 * Assign the main template variables.
 	 *
-	 * @param \stevotvr\groupsub\entity\subscription_interface $entity The package
-	 * @param array                                            $post   The posted data
+	 * @param sub_entity $entity The package
+	 * @param array      $post   The posted data
 	 */
 	protected function assign_tpl_vars(sub_entity $entity, array $post)
 	{

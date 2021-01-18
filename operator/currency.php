@@ -108,7 +108,7 @@ class currency extends operator implements currency_interface
 	 *
 	 * @param string $currency_code The currency code to validate
 	 *
-	 * @throws \stevotvr\groupsub\exception\unexpected_value
+	 * @throws unexpected_value
 	 */
 	protected function validate($currency_code)
 	{

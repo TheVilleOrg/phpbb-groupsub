@@ -22,24 +22,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class acp_listener implements EventSubscriberInterface
 {
 	/**
-	 * @var \phpbb\auth\auth
+	 * @var auth
 	 */
 	protected $auth;
 
 	/**
-	 * @var \phpbb\request\request_interface
+	 * @var request_interface
 	 */
 	protected $request;
 
 	/**
-	 * @var \stevotvr\groupsub\controller\acp_subs_interface
+	 * @var sub_controller
 	 */
 	protected $sub_controller;
 
 	/**
-	 * @param \phpbb\auth\auth                                 $auth
-	 * @param \phpbb\request\request_interface                 $request
-	 * @param \stevotvr\groupsub\controller\acp_subs_interface $sub_controller
+	 * @param auth              $auth
+	 * @param request_interface $request
+	 * @param sub_controller    $sub_controller
 	 */
 	public function __construct(auth $auth, request_interface $request, sub_controller $sub_controller)
 	{
@@ -61,7 +61,7 @@ class acp_listener implements EventSubscriberInterface
 	/**
 	 * Adds subscriptions mode to the ACP user management form.
 	 *
-	 * @param \phpbb\event\data $event The event data
+	 * @param data $event The event data
 	 */
 	public function acp_users_mode_add(data $event)
 	{

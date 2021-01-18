@@ -20,17 +20,17 @@ use stevotvr\groupsub\operator\transaction_interface;
 class acp_trans_controller extends acp_base_controller implements acp_trans_interface
 {
 	/**
-	 * @var \phpbb\pagination
+	 * @var pagination
 	 */
 	protected $pagination;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\transaction_interface
+	 * @var transaction_interface
 	 */
 	protected $trans_operator;
 
 	/**
-	 * @var \phpbb\user
+	 * @var user
 	 */
 	protected $user;
 
@@ -58,9 +58,9 @@ class acp_trans_controller extends acp_base_controller implements acp_trans_inte
 	/**
 	 * Set up the controller.
 	 *
-	 * @param \phpbb\pagination                                 $pagination
-	 * @param \stevotvr\groupsub\operator\transaction_interface $sub_operator
-	 * @param \phpbb\user                                       $user
+	 * @param pagination            $pagination
+	 * @param transaction_interface $sub_operator
+	 * @param user                  $user
 	 */
 	public function setup(pagination $pagination, transaction_interface $trans_operator, user $user)
 	{

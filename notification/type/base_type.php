@@ -20,20 +20,20 @@ use phpbb\user_loader;
 abstract class base_type extends base
 {
 	/**
-	 * @var \phpbb\controller\helper
+	 * @var helper
 	 */
 	protected $helper;
 
 	/**
-	 * @var \phpbb\user_loader
+	 * @var user_loader
 	 */
 	protected $user_loader;
 
 	/**
 	 * Set up the notification type.
 	 *
-	 * @param \phpbb\controller\helper $helper
-	 * @param \phpbb\user_loader       $user_loader
+	 * @param helper      $helper
+	 * @param user_loader $user_loader
 	 */
 	public function setup(helper $helper, user_loader $user_loader)
 	{

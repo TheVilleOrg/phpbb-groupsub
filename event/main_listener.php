@@ -25,32 +25,32 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class main_listener implements EventSubscriberInterface
 {
 	/**
-	 * @var \phpbb\auth\auth
+	 * @var auth
 	 */
 	protected $auth;
 
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @var \phpbb\db\driver\driver_interface
+	 * @var driver_interface
 	 */
 	protected $db;
 
 	/**
-	 * @var \phpbb\controller\helper
+	 * @var helper
 	 */
 	protected $helper;
 
 	/**
-	 * @var \stevotvr\groupsub\operator\package_interface
+	 * @var package_interface
 	 */
 	protected $pkg_operator;
 
 	/**
-	 * @var \phpbb\template\template
+	 * @var template
 	 */
 	protected $template;
 
@@ -69,16 +69,14 @@ class main_listener implements EventSubscriberInterface
 	protected $sub_table;
 
 	/**
-	 * @param \phpbb\auth\auth                              $auth
-	 * @param \phpbb\config\config                          $config
-	 * @param \phpbb\db\driver\driver_interface             $db
-	 * @param \phpbb\controller\helper                      $helper
-	 * @param \stevotvr\groupsub\operator\package_interface $pkg_operator
-	 * @param \phpbb\template\template                      $template
-	 * @param string                                        $action_table  The name of the
-	 *                                                                     groupsub_actions table
-	 * @param string                                        $sub_table     The name of the
-	 *                                                                     groupsub_subs table
+	 * @param auth              $auth
+	 * @param config            $config
+	 * @param driver_interface  $db
+	 * @param helper            $helper
+	 * @param package_interface $pkg_operator
+	 * @param template          $template
+	 * @param string            $action_table The name of the groupsub_actions table
+	 * @param string            $sub_table    The name of the groupsub_subs table
 	 */
 	public function __construct(auth $auth, config $config, driver_interface $db, helper $helper, package_interface $pkg_operator, template $template, $action_table, $sub_table)
 	{
@@ -108,7 +106,7 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Loads the permissions.
 	 *
-	 * @param \phpbb\event\data $event The event data
+	 * @param data $event The event data
 	 */
 	public function permissions(data $event)
 	{
@@ -128,7 +126,7 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Adds the extension language set and the controller link on user setup.
 	 *
-	 * @param \phpbb\event\data $event The event data
+	 * @param data $event The event data
 	 */
 	public function user_setup(data $event)
 	{
@@ -148,7 +146,7 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Remove references to a group after it is deleted.
 	 *
-	 * @param \phpbb\event\data	$event The event data
+	 * @param data $event The event data
 	 */
 	public function delete_group_after(data $event)
 	{
@@ -166,7 +164,7 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Remove references to users after they are deleted.
 	 *
-	 * @param \phpbb\event\data	$event The event data
+	 * @param data $event The event data
 	 */
 	public function delete_user_after(data $event)
 	{

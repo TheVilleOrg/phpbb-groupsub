@@ -21,22 +21,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class operator
 {
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
-	 * @var \Symfony\Component\DependencyInjection\ContainerInterface
+	 * @var ContainerInterface
 	 */
 	protected $container;
 
 	/**
-	 * @var \phpbb\db\driver\driver_interface
+	 * @var driver_interface
 	 */
 	protected $db;
 
 	/**
-	 * @var \phpbb\language\language
+	 * @var language
 	 */
 	protected $language;
 
@@ -76,15 +76,15 @@ abstract class operator
 	protected $sub_table;
 
 	/**
-	 * @param \phpbb\config\config              $config
-	 * @param ContainerInterface                $container
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\language\language          $language
-	 * @param array                             $currencies    List of currencies
-	 * @param string                            $package_table The name of the groupsub_packages table
-	 * @param string                            $action_table  The name of the groupsub_actions table
-	 * @param string                            $term_table    The name of the groupsub_terms table
-	 * @param string                            $sub_table     The name of the groupsub_subs table
+	 * @param config             $config
+	 * @param ContainerInterface $container
+	 * @param driver_interface   $db
+	 * @param language           $language
+	 * @param array              $currencies    List of currencies
+	 * @param string             $package_table The name of the groupsub_packages table
+	 * @param string             $action_table  The name of the groupsub_actions table
+	 * @param string             $term_table    The name of the groupsub_terms table
+	 * @param string             $sub_table     The name of the groupsub_subs table
 	 */
 	public function __construct(config $config, ContainerInterface $container, driver_interface $db, language $language, array $currencies, $package_table, $action_table, $term_table, $sub_table)
 	{

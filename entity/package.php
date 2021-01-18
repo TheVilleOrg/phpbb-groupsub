@@ -35,14 +35,14 @@ class package extends entity implements package_interface
 	protected $id_column = 'pkg_id';
 
 	/**
-	 * @var \phpbb\config\config
+	 * @var config
 	 */
 	protected $config;
 
 	/**
 	 * Set up the entity with the configuration.
 	 *
-	 * @param \phpbb\config\config $config
+	 * @param config $config
 	 */
 	public function setup(config $config)
 	{
