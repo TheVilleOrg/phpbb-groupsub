@@ -21,7 +21,6 @@
 
 		<delete file="${dir}/.gitignore" />
 		<delete file="${dir}/.gitattributes" />
-		<delete file="${dir}/.travis.yml" />
 		<delete file="${dir}/.codeclimate.yml" />
 		<delete file="${dir}/.csslintrc" />
 		<delete file="${dir}/.editorconfig" />
@@ -104,10 +103,10 @@
 		</phingcall>
 
 		<!-- Try setting the package version property from composer.json -->
-		<exec dir="${package-directory}"
-			  command='php -r "\$j = json_decode(file_get_contents(\"composer.json\")); echo (isset(\$j->version) ? \$j->version : \"${version}\");"'
-			  checkreturn="true"
-			  outputProperty='package-version' />
+		<exec executable="php" outputProperty="package-version">
+			<arg value="-r" />
+			<arg value="$j = json_decode(file_get_contents('composer.json')); echo (isset($j->version) ? $j->version : '${version}');" />
+		</exec>
 
 		<phingcall target="wrap-package">
 			<property name="destination-filename" value="${build-directory}/upload/${vendor-name}_${extension-name}_${package-version}" />
