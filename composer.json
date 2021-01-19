@@ -15,7 +15,7 @@
 	],
 	"require": {
 		"php": ">=5.4",
-		"composer/installers": "~1.0"
+		"paypal/paypal-checkout-sdk": "1.0.1"
 	},
 	"require-dev": {
 		"phing/phing": "2.*"

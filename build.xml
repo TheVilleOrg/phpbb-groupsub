@@ -6,7 +6,7 @@
 	Only set this to "true" if you have dependencies in the composer.json,
 	otherwise use "false".
 	-->
-	<property name="has-dependencies" value="false" />
+	<property name="has-dependencies" value="true" />
 
 	<target name="clean-package">
 		<!--
@@ -15,7 +15,9 @@
 		-->
 		<delete dir="${dir}/tests" />
 		<delete dir="${dir}/travis" />
-		<delete dir="${dir}/vendor" />
+        <delete dir="${dir}/vendor/paypal/paypal-checkout-sdk/samples" />
+        <delete dir="${dir}/vendor/paypal/paypal-checkout-sdk/tests" />
+        <delete dir="${dir}/vendor/phing" />
 
 		<delete file="${dir}/.gitignore" />
 		<delete file="${dir}/.gitattributes" />
@@ -28,6 +30,21 @@
 		<delete file="${dir}/build.xml" />
 		<delete file="${dir}/composer.lock" />
 		<delete file="${dir}/README.md" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/.gitignore" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/composer.phar" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/gen.yml" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/homepage.jpg" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/init" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/phpunit.xml" />
+		<delete file="${dir}/vendor/paypal/paypal-checkout-sdk/README.md" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/.gitattributes" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/.gitignore" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/.travis.yml" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/CHANGELOG.md" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/CONTRIBUTING.md" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/phpunit.xml" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/Rakefile" />
+		<delete file="${dir}/vendor/paypal/paypalhttp/README.md" />
 	</target>
 
 	<!--
@@ -47,6 +64,10 @@
 	<target name="clean">
 		<delete dir="${build-directory}" />
 	</target>
+
+    <target name="composer">
+        <exec dir="${build-directory}/../" command="php composer.phar install" passthru="true" />
+    </target>
 
 	<!--
 	Recreate the necessary folders
