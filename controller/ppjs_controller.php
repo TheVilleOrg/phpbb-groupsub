@@ -97,7 +97,8 @@ class ppjs_controller
 		$client_id = $this->config[$sandbox ? 'stevotvr_groupsub_sb_client' : 'stevotvr_groupsub_pp_client'];
 		$client_secret = $this->config[$sandbox ? 'stevotvr_groupsub_sb_secret' : 'stevotvr_groupsub_pp_secret'];
 
-		if (!$client_id || !$client_secret) {
+		if (!$client_id || !$client_secret)
+		{
 			return new Response('', 404);
 		}
 
