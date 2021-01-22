@@ -24,7 +24,6 @@ use stevotvr\groupsub\operator\package_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 use stevotvr\groupsub\operator\unit_helper_interface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Group Subscription controller for the main user-facing interface.
