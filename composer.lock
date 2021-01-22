@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9eaaa8aba688c6e58353f7f3812eb22",
+    "content-hash": "75eb264b1a02708672fd83d7f3133bff",
     "packages": [
         {
             "name": "paypal/paypal-checkout-sdk",
