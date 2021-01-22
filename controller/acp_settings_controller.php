@@ -62,8 +62,10 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 
 			$data = array(
 				'pp_sandbox'		=> $this->request->variable('pp_sandbox', true),
-				'pp_sb_business'	=> $this->request->variable('pp_sb_business', ''),
-				'pp_business'		=> $this->request->variable('pp_business', ''),
+				'pp_client'			=> $this->request->variable('pp_client', ''),
+				'pp_secret'			=> $this->request->variable('pp_secret', ''),
+				'sb_client'			=> $this->request->variable('sb_client', ''),
+				'sb_secret'			=> $this->request->variable('sb_secret', ''),
 				'notify_admins'		=> $this->request->variable('notify_admins', false),
 				'collapse_terms'	=> max(2, $this->request->variable('collapse_terms', 0)),
 				'currency'			=> $this->request->variable('currency', ''),
@@ -109,7 +111,7 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 					$this->config->set('stevotvr_groupsub_' . $key, $value);
 				}
 
-				$this->config->set('stevotvr_groupsub_active', !$data['pp_sandbox'] && $data['pp_business']);
+				$this->config->set('stevotvr_groupsub_active', !$data['pp_sandbox'] && $data['pp_client'] && $data['pp_secret']);
 
 				trigger_error($this->language->lang('ACP_GROUPSUB_SETTINGS_SAVED') . adm_back_link($this->u_action));
 			}
@@ -136,8 +138,10 @@ class acp_settings_controller extends acp_base_controller implements acp_setting
 			'S_FOOTER_MAGIC_URL_CHECKED'	=> $footer_options & OPTION_FLAG_LINKS,
 
 			'PP_SANDBOX'		=> $this->config['stevotvr_groupsub_pp_sandbox'],
-			'PP_SB_BUSINESS'	=> $this->config['stevotvr_groupsub_pp_sb_business'],
-			'PP_BUSINESS'		=> $this->config['stevotvr_groupsub_pp_business'],
+			'PP_CLIENT'			=> $this->config['stevotvr_groupsub_pp_client'],
+			'PP_SECRET'			=> $this->config['stevotvr_groupsub_pp_secret'],
+			'SB_CLIENT'			=> $this->config['stevotvr_groupsub_sb_client'],
+			'SB_SECRET'			=> $this->config['stevotvr_groupsub_sb_secret'],
 			'CURRENCY'			=> $this->config['stevotvr_groupsub_currency'],
 			'NOTIFY_ADMINS'		=> $this->config['stevotvr_groupsub_notify_admins'],
 			'HEADER'			=> $header['text'],

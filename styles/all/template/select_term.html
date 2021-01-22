@@ -52,7 +52,7 @@
 					<dt>{{ lang('GROUPSUB_SUBSCRIPTION') ~ lang('COLON') }}</dt>
 					<dd>{{ PKG_NAME }}</dd>
 					<dt>{{ lang('GROUPSUB_PRICE') ~ lang('COLON') }}</dt>
-					<dd>{{ TERM_DISPLAY_PRICE }}</dd>
+					<dd>{{ TERM_PRICE }}</dd>
 					<dt>{{ lang('GROUPSUB_LENGTH') ~ lang('COLON') }}</dt>
 					<dd>{% if TERM_LENGTH %}{{ TERM_LENGTH }}{% else %}<b>{{ lang('GROUPSUB_LENGTH_UNLIMITED') }}</b>{% endif %}</dd>
 				</dl>
@@ -66,23 +66,18 @@
 		<hr>
 
 		<fieldset class="submit-buttons">
-			<a href="{{ U_ACTION }}" class="button2" style="vertical-align: middle;">{{ lang('CANCEL') }}</a>&nbsp;
-{% if PP_BUSINESS %}
-			<input type="hidden" name="business" value="{{ PP_BUSINESS }}">
-			<input type="hidden" name="cmd" value="_xclick">
-			<input type="hidden" name="notify_url" value="{{ U_NOTIFY }}">
-			<input type="hidden" name="amount" value="{{ TERM_PRICE }}">
-			<input type="hidden" name="item_name" value="{{ PKG_NAME }}">
-			<input type="hidden" name="item_number" value="{{ TERM_ID }}">
-			<input type="hidden" name="custom" value="{{ GROUPSUB_USER_ID }}">
-			<input type="hidden" name="currency_code" value="{{ TERM_CURRENCY }}">
-			<input type="hidden" name="lc" value="{{ lang('GROUPSUB_PP_LOCALE') }}">
-			<input type="hidden" name="no_shipping" value="1">
-			<input type="hidden" name="return" value="{{ U_RETURN }}">
-			<input type="hidden" name="cancel_return" value="{{ U_CANCEL_RETURN }}">
-			<input type="hidden" name="charset" value="utf-8">
-			<input type="image" name="submit" src="https://www.paypalobjects.com/{{ lang('GROUPSUB_PP_LOCALE') }}/i/btn/btn_buynow_LG.gif" alt="{{ lang('GROUPSUB_PP_BUY_NOW') }}">
+{% if PP_ENABLED %}
+			<noscript><p class="error">{{ lang('GROUPSUB_JS_REQUIRED') }}</p></noscript>
+			<script>paypal_button_config = {{ PAYPAL_CONFIG|raw }};</script>
+			<div id="paypal-button-container"></div>
+			{% INCLUDEJS U_PPSDK %}
+			{% INCLUDEJS '@stevotvr_groupsub/paypal_buttons.js' %}
 {% endif %}
+			<a href="{{ U_ACTION }}" class="button2">{{ lang('CANCEL') }}</a>
+		</fieldset>
+
+		<fieldset id="paypal-success" style="display: none;">
+			<p>{{ lang('GROUPSUB_RETURN_MESSAGE', PKG_NAME, TERM_LENGTH) }}</p>
 		</fieldset>
 
 	</div>

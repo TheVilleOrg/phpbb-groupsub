@@ -23,6 +23,7 @@ use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\package_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 use stevotvr\groupsub\operator\unit_helper_interface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -258,40 +259,37 @@ class main_controller
 	 */
 	protected function select_term($term_id)
 	{
-		$sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
-		$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
-
 		$term = $this->pkg_operator->get_package_term($term_id);
 		if (!$term)
 		{
 			throw new http_exception(404, 'PAGE_NOT_FOUND');
 		}
 
-		$price = $term['term']->get_price();
-		$currency = $term['term']->get_currency();
+		$sandbox = $this->config['stevotvr_groupsub_pp_sandbox'];
+		$client_id = $this->config[$sandbox ? 'stevotvr_groupsub_sb_client' : 'stevotvr_groupsub_pp_client'];
+		$client_secret = $this->config[$sandbox ? 'stevotvr_groupsub_sb_secret' : 'stevotvr_groupsub_pp_secret'];
 
-		$u_ipn = $this->helper->route('stevotvr_groupsub_ipn', array(), true, false, UrlGeneratorInterface::ABSOLUTE_URL);
-		$return_params = array('term_id' => $term['term']->get_id());
-		$u_return = $this->helper->route('stevotvr_groupsub_return', $return_params, true, false, UrlGeneratorInterface::ABSOLUTE_URL);
-		$u_main = $this->helper->route('stevotvr_groupsub_main', array(), true, false, UrlGeneratorInterface::ABSOLUTE_URL);
+		$u_ppsdk = sprintf('https://www.paypal.com/sdk/js?client-id=%s&amp;locale=%s', $client_id, $this->language->lang('GROUPSUB_PP_LOCALE'));
+		$u_create = $this->helper->route('stevotvr_groupsub_ppjs', array('action' => 'create'));
+		$u_capture = $this->helper->route('stevotvr_groupsub_ppjs', array('action' => 'capture'));
+
+		$paypal_config = json_encode(array(
+			'u_create'	=> $u_create,
+			'u_capture'	=> $u_capture,
+			'term_id'	=> $term['term']->get_id(),
+		));
 
 		$this->template->assign_vars(array(
-			'S_PP_SANDBOX'	=> $sandbox,
+			'PP_ENABLED'	=> !empty($client_id) && !empty($client_secret),
 
-			'GROUPSUB_USER_ID'	=> $this->user->data['user_id'],
-			'PP_BUSINESS'		=> $business,
+			'PKG_NAME'		=> $term['package']->get_name(),
+			'PKG_DESC'		=> $term['package']->get_desc_for_display(),
+			'TERM_PRICE'	=> $this->currency->format_price($term['term']->get_currency(), $term['term']->get_price()),
+			'TERM_LENGTH'	=> $term['term']->get_length() ? $this->unit_helper->get_formatted_timespan($term['term']->get_length()) : 0,
 
-			'PKG_NAME'				=> $term['package']->get_name(),
-			'PKG_DESC'				=> $term['package']->get_desc_for_display(),
-			'TERM_ID'				=> $term['term']->get_id(),
-			'TERM_PRICE'			=> $this->currency->format_value($currency, $price, false, false),
-			'TERM_CURRENCY'			=> $currency,
-			'TERM_DISPLAY_PRICE'	=> $this->currency->format_price($currency, $price),
-			'TERM_LENGTH'			=> $term['term']->get_length() ? $this->unit_helper->get_formatted_timespan($term['term']->get_length()) : 0,
+			'PAYPAL_CONFIG'	=> $paypal_config,
 
-			'U_NOTIFY'			=> $u_ipn,
-			'U_RETURN'			=> $u_return,
-			'U_CANCEL_RETURN'	=> $u_main,
+			'U_PPSDK'	=> $u_ppsdk,
 		));
 
 		return $this->helper->render('@stevotvr_groupsub/select_term.html', $term['package']->get_name());

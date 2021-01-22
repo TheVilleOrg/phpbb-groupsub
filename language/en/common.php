@@ -51,14 +51,13 @@ $lang = array_merge($lang, array(
 	'GROUPSUB_SUBSCRIBED'		=> 'You are subscribed forever',
 	'GROUPSUB_SUBSCRIBED_UNTIL'	=> 'You are subscribed until %s',
 	'GROUPSUB_CONFIRM'			=> 'Confirm subscription to %s',
+	'GROUPSUB_JS_REQUIRED'		=> 'Your browser does not support JavaScript, which is required to continue.',
 
-	'GROUPSUB_RETURN_TITLE'		=> 'Thank You',
 	'GROUPSUB_RETURN'			=> 'Subscribed',
 	'GROUPSUB_RETURN_UNLIMITED'	=> '<strong>unlimited</strong> time',
-	'GROUPSUB_RETURN_MESSAGE'	=> 'You have subscribed to <strong>%1$s</strong> for %2$s. Please allow a few minutes for your payment to be processed and your subscription to be activated.',
+	'GROUPSUB_RETURN_MESSAGE'	=> 'You have successfully subscribed to <strong>%1$s</strong> for %2$s!',
 
 	'GROUPSUB_PP_LOCALE'	=> 'en_US',
-	'GROUPSUB_PP_BUY_NOW'	=> 'Buy Now',
 
 	'GROUPSUB_DECIMAL_SEPARATOR'	=> '.',
 	'GROUPSUB_THOUSANDS_SEPARATOR'	=> ',',

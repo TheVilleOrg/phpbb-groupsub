@@ -150,14 +150,6 @@ services:
                 - '%core.php_ext%'
                 - '%core.adm_relative_path%'
 
-    stevotvr.groupsub.controller.ipn:
-        class: stevotvr\groupsub\controller\ipn_controller
-        arguments:
-            - '@config'
-            - '@stevotvr.groupsub.operator.http_helper'
-            - '@request'
-            - '@stevotvr.groupsub.operator.transaction'
-
     stevotvr.groupsub.controller.main:
         class: stevotvr\groupsub\controller\main_controller
         arguments:
@@ -179,15 +171,16 @@ services:
                 - '%core.root_path%'
                 - '%core.php_ext%'
 
-    stevotvr.groupsub.controller.return:
-        class: stevotvr\groupsub\controller\return_controller
+    stevotvr.groupsub.controller.ppjs:
+        class: stevotvr\groupsub\controller\ppjs_controller
         arguments:
+            - '@config'
+            - '@stevotvr.groupsub.operator.currency'
             - '@controller.helper'
-            - '@language'
-            - '@stevotvr.groupsub.operator.package'
             - '@request'
-            - '@template'
-            - '@stevotvr.groupsub.operator.unit_helper'
+            - '@stevotvr.groupsub.operator.package'
+            - '@stevotvr.groupsub.operator.transaction'
+            - '@user'
 
     stevotvr.groupsub.entity:
         class: stevotvr\groupsub\entity\entity
@@ -271,7 +264,6 @@ services:
         calls:
             - method: setup
               arguments:
-                - '@request'
                 - '@log'
                 - '@stevotvr.groupsub.operator.currency'
                 - '@dispatcher'

@@ -10,6 +10,8 @@
 
 namespace stevotvr\groupsub\operator;
 
+use PayPalHttp\HttpResponse;
+
 /**
  * Group Subscription transaction operator interface.
  */
@@ -18,14 +20,17 @@ interface transaction_interface
 	/**
 	 * The status for a completed payment
 	 */
-	const STATUS_COMPLETED = 'Completed';
+	const STATUS_COMPLETED = 'COMPLETED';
 
 	/**
 	 * Process a transaction from PayPal
 	 *
+	 * @param HttpResponse $response The response data from the PayPal API
+	 * @param boolean      $sandbox  This transaction occurred in the sandbox environment
+	 *
 	 * @return boolean The transaction was accepted
 	 */
-	public function process_transaction();
+	public function process_transaction(HttpResponse $response, $sandbox);
 
 	/**
 	 * Get transactions.

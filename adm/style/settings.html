@@ -16,14 +16,28 @@
 			<dt><label for="pp_sandbox">{{ lang('ACP_GROUPSUB_PP_SANDBOX') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PP_SANDBOX_EXPLAIN') }}</span></dt>
 			<dd><label><input type="radio" id="pp_sandbox" name="pp_sandbox" value="1"{% if PP_SANDBOX %} checked{% endif %}> {{ lang('YES') }}</label><label><input type="radio" name="pp_sandbox" value="0"{% if not PP_SANDBOX %} checked{% endif %}> {{ lang('NO') }}</label></dd>
 		</dl>
-		<dl>
-			<dt><label for="pp_sb_business">{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PP_SB_BUSINESS_EXPLAIN') }}</span></dt>
-			<dd><input class="text medium" type="text" id="pp_sb_business" name="pp_sb_business" value="{{ PP_SB_BUSINESS }}"></dd>
-		</dl>
-		<dl>
-			<dt><label for="pp_business">{{ lang('ACP_GROUPSUB_PP_BUSINESS') ~ lang('COLON') }}</label><br><span>{{ lang('ACP_GROUPSUB_PP_BUSINESS_EXPLAIN') }}</span></dt>
-			<dd><input class="text medium" type="text" id="pp_business" name="pp_business" value="{{ PP_BUSINESS }}"></dd>
-		</dl>
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PP_API') }}</legend>
+			<dl>
+				<dt><label for="pp_client">{{ lang('ACP_GROUPSUB_PP_CLIENT') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="text" id="pp_client" name="pp_client" value="{{ PP_CLIENT }}"></dd>
+			</dl>
+			<dl>
+				<dt><label for="pp_secret">{{ lang('ACP_GROUPSUB_PP_SECRET') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="password" id="pp_secret" name="pp_secret" value="{{ PP_SECRET }}"></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{{ lang('ACP_GROUPSUB_SETTINGS_PP_SB_API') }}</legend>
+			<dl>
+				<dt><label for="sb_client">{{ lang('ACP_GROUPSUB_PP_CLIENT') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="text" id="sb_client" name="sb_client" value="{{ SB_CLIENT }}"></dd>
+			</dl>
+			<dl>
+				<dt><label for="sb_secret">{{ lang('ACP_GROUPSUB_PP_SECRET') ~ lang('COLON') }}</label></dt>
+				<dd><input class="text medium" type="password" id="sb_secret" name="sb_secret" value="{{ SB_SECRET }}"></dd>
+			</dl>
+		</fieldset>
 	</fieldset>
 	<fieldset>
 		<legend>{{ lang('ACP_GROUPSUB_SETTINGS_GENERAL') }}</legend>

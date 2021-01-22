@@ -10,9 +10,9 @@
 
 namespace stevotvr\groupsub\operator;
 
+use PayPalHttp\HttpResponse;
 use phpbb\event\dispatcher_interface;
 use phpbb\log\log_interface;
-use phpbb\request\request_interface;
 use stevotvr\groupsub\operator\currency_interface;
 use stevotvr\groupsub\operator\subscription_interface;
 
@@ -25,11 +25,6 @@ class transaction extends operator implements transaction_interface
 	 * @var dispatcher_interface
 	 */
 	protected $phpbb_dispatcher;
-
-	/**
-	 * @var request_interface
-	 */
-	protected $request;
 
 	/**
 	 * @var log_interface
@@ -61,7 +56,6 @@ class transaction extends operator implements transaction_interface
 	/**
 	 * Set up the operator.
 	 *
-	 * @param request_interface      $request
 	 * @param log_interface          $log
 	 * @param currency_interface     $currency
 	 * @param dispatcher_interface   $phpbb_dispatcher
@@ -69,9 +63,8 @@ class transaction extends operator implements transaction_interface
 	 * @param string                 $trans_table       The name of the groupsub_trans table
 	 * @param string                 $phpbb_users_table The name of the phpBB users table
 	 */
-	public function setup(request_interface $request, log_interface $log, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
+	public function setup(log_interface $log, currency_interface $currency, dispatcher_interface $phpbb_dispatcher, subscription_interface $sub_operator, $trans_table, $phpbb_users_table)
 	{
-		$this->request = $request;
 		$this->log = $log;
 		$this->currency = $currency;
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
@@ -83,27 +76,19 @@ class transaction extends operator implements transaction_interface
 	/**
 	 * @inheritDoc
 	 */
-	public function process_transaction()
+	public function process_transaction(HttpResponse $response, $sandbox)
 	{
-		if ($this->request->variable('txn_type', '') !== 'web_accept')
+		if ($response->statusCode !== 201)
 		{
 			return false;
 		}
 
-		$sandbox = $this->request->variable('test_ipn', false);
-
-		$business = $this->config[$sandbox ? 'stevotvr_groupsub_pp_sb_business' : 'stevotvr_groupsub_pp_business'];
-		if (strcasecmp($business, $this->request->variable('business', '')) !== 0)
+		if ($response->result->status !== self::STATUS_COMPLETED)
 		{
 			return false;
 		}
 
-		if ($this->request->variable('payment_status', '') !== self::STATUS_COMPLETED)
-		{
-			return true;
-		}
-
-		$term_id = $this->request->variable('item_number', 0);
+		$term_id = $response->result->purchase_units[0]->reference_id;
 		$term = $this->container->get('stevotvr.groupsub.entity.term')->load($term_id);
 		if (!$term)
 		{
@@ -111,20 +96,20 @@ class transaction extends operator implements transaction_interface
 			return false;
 		}
 
-		$currency = $this->request->variable('mc_currency', '');
+		$currency = $response->result->purchase_units[0]->payments->captures[0]->amount->currency_code;
 		if ($term->get_currency() !== $currency)
 		{
 			return false;
 		}
 
-		$gross = $this->request->variable('mc_gross', '');
+		$gross = $response->result->purchase_units[0]->payments->captures[0]->amount->value;
 		$amount = $this->currency->parse_value($currency, $gross);
 		if ($term->get_price() !== $amount)
 		{
 			return false;
 		}
 
-		$trans_id = $this->request->variable('txn_id', '');
+		$trans_id = $response->result->purchase_units[0]->payments->captures[0]->invoice_id;
 		$sql = 'SELECT 1
 				FROM ' . $this->trans_table . "
 				WHERE trans_id = '" . $this->db->sql_escape($trans_id) . "'";
@@ -137,10 +122,11 @@ class transaction extends operator implements transaction_interface
 			return false;
 		}
 
-		$user_id = $this->request->variable('custom', 0);
+		$user_id = $response->result->purchase_units[0]->payments->captures[0]->custom_id;
 		$sub_id = $this->sub_operator->create_subscription($term, $user_id);
+		$payer_id = $response->result->payer->payer_id;
 
-		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross);
+		return $this->insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross, $payer_id);
 	}
 
 	/**
@@ -189,22 +175,12 @@ class transaction extends operator implements transaction_interface
 	 * @param int     $user_id  The user ID
 	 * @param int     $sub_id   The subscription ID
 	 * @param string  $gross    The gross payment amount
+	 * @param string  $payer_id The PayPal payer ID
 	 *
 	 * @return boolean The record was inserted successfully
 	 */
-	protected function insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross)
+	protected function insert_transaction($trans_id, $sandbox, $amount, $currency, $user_id, $sub_id, $gross, $payer_id)
 	{
-		if (!preg_match('/^[A-Z0-9]{17}$/', $trans_id))
-		{
-			return false;
-		}
-
-		$payer_id = $this->request->variable('payer_id', '');
-		if (!preg_match('/^[A-Z0-9]{13}$/', $payer_id))
-		{
-			return false;
-		}
-
 		if (!isset($this->currencies[$currency]))
 		{
 			return false;
