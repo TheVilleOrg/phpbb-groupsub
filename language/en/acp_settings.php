@@ -47,6 +47,7 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_SETTINGS_PP_SB_API'		=> 'PayPal sandbox API settings',
 	'ACP_GROUPSUB_PP_CLIENT'				=> 'Client ID',
 	'ACP_GROUPSUB_PP_SECRET'				=> 'Client secret',
+	'ACP_GROUPSUB_PP_API_EXPLAIN'			=> 'To get your <strong>Client ID</strong> and <strong>Client secret</strong>, go to the <a href="https://developer.paypal.com/developer/applications/" target="_blank">PayPal Developer Dashboard</a>. With <strong>%1$s</strong> selected at the top, click on an existing application or click <strong>Create App</strong> to create a new application. Here you will be able to access your API credentials.',
 	'ACP_GROUPSUB_SETTINGS_GENERAL'			=> 'General options',
 	'ACP_GROUPSUB_NOTIFY_ADMINS'			=> 'Notify admins',
 	'ACP_GROUPSUB_NOTIFY_ADMINS_EXPLAIN'	=> 'If enabled, administrators with the <em>“Can view users’ subscriptions”</em> permission will be notified of all new subscriptions.',
@@ -63,6 +64,9 @@ $lang = array_merge($lang, array(
 	'ACP_GROUPSUB_WARN_TIME_EXPLAIN'		=> 'The number of days before the expiration of a subscription to notify the subscriber.',
 	'ACP_GROUPSUB_GRACE'					=> 'Grace period',
 	'ACP_GROUPSUB_GRACE_EXPLAIN'			=> 'The number of days after a subscription ends before removing the user from groups.',
+
+	'ACP_GROUPSUB_SANDBOX'	=> 'Sandbox',
+	'ACP_GROUPSUB_LIVE'		=> 'Live',
 
 	'ACP_GROUPSUB_ERROR_CURRENCY'	=> 'You must select a valid currency.',
 ));
