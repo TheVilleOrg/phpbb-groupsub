@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0-beta (1/22/21)
+
+* Replaced the PayPal IPN system with the PayPal REST API
+
 ## 1.2.0 (12/26/20)
 
 * No changes
