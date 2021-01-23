@@ -70,7 +70,10 @@
 			<noscript><p class="error">{{ lang('GROUPSUB_JS_REQUIRED') }}</p></noscript>
 			<script>paypal_button_config = {{ PAYPAL_CONFIG|raw }};</script>
 			<div id="paypal-button-container"></div>
-			{% INCLUDEJS U_PPSDK %}
+			{% if not INCLUDED_PAYPALSDKJS %}
+				{% INCLUDEJS U_PPSDK %}
+				{% DEFINE INCLUDED_PAYPALSDKJS = true %}
+			{% endif %}
 			{% INCLUDEJS '@stevotvr_groupsub/paypal_buttons.js' %}
 {% endif %}
 			<a href="{{ U_ACTION }}" class="button2">{{ lang('CANCEL') }}</a>
