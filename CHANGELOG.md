@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0-beta3 (1/23/21)
+
+* Fixed error initiating checkout when using currencies other than USD
+
 ## 1.3.0-beta2 (1/22/21)
 
 * Fixed error initiating checkout in Live mode
