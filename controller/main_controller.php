@@ -268,7 +268,7 @@ class main_controller
 		$client_id = $this->config[$sandbox ? 'stevotvr_groupsub_sb_client' : 'stevotvr_groupsub_pp_client'];
 		$client_secret = $this->config[$sandbox ? 'stevotvr_groupsub_sb_secret' : 'stevotvr_groupsub_pp_secret'];
 
-		$u_ppsdk = sprintf('https://www.paypal.com/sdk/js?client-id=%s&amp;locale=%s', $client_id, $this->language->lang('GROUPSUB_PP_LOCALE'));
+		$u_ppsdk = sprintf('https://www.paypal.com/sdk/js?client-id=%s&amp;locale=%s&amp;currency=%s', $client_id, $this->language->lang('GROUPSUB_PP_LOCALE'), $term['term']->get_currency());
 		$u_create = $this->helper->route('stevotvr_groupsub_ppjs', array('action' => 'create'));
 		$u_capture = $this->helper->route('stevotvr_groupsub_ppjs', array('action' => 'capture'));
 
