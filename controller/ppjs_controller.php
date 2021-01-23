@@ -10,8 +10,8 @@
 
 namespace stevotvr\groupsub\controller;
 
-use PayPalCheckoutSdk\Core\LiveEnvironment;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
@@ -102,7 +102,7 @@ class ppjs_controller
 			return new Response('', 404);
 		}
 
-		$environment = $sandbox ? new SandboxEnvironment($client_id, $client_secret) : new LiveEnvironment($client_id, $client_secret);
+		$environment = $sandbox ? new SandboxEnvironment($client_id, $client_secret) : new ProductionEnvironment($client_id, $client_secret);
 		$client = new PayPalHttpClient($environment);
 
 		switch ($action)
