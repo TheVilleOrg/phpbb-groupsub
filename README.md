@@ -16,6 +16,12 @@ This is a extension for phpBB 3.2 that allows you to create paid subscriptions f
 * Configurable warning time and grace period
 * Sandbox mode for testing
 
+## Requirements
+
+* PHP 5.6 or newer
+* TLS 1.2 support
+* A PayPal Business account
+
 ## Install
 
 1. [Download the latest validated release](https://www.phpbb.com/customise/db/extension/groupsub/).
