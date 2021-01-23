@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0-beta2 (1/22/21)
+
+* Fixed error initiating checkout in Live mode
+* Fixed inclusion of PayPal SDK JS to comply with phpBB policy
+
 ## 1.3.0-beta (1/22/21)
 
 * Replaced the PayPal IPN system with the PayPal REST API
