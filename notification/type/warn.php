@@ -67,7 +67,7 @@ class warn extends base_type
 		$this->language->add_lang('common', 'stevotvr/groupsub');
 
 		$params = array('name' => $this->get_data('pkg_ident'));
-		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::RELATIVE_PATH);
+		$u_view_sub = $this->helper->route('stevotvr_groupsub_main', $params, false, false, UrlGeneratorInterface::ABSOLUTE_URL);
 
 		$days_left = floor(((int) $this->get_data('sub_expires') - time()) / 86400);
 
@@ -76,7 +76,7 @@ class warn extends base_type
 			'DAYS'		=> $this->language->lang('GROUPSUB_DAYS', $days_left),
 			'SUB_NAME'	=> $this->get_data('pkg_name'),
 
-			'U_VIEW_SUB'	=> generate_board_url() . '/' . $u_view_sub,
+			'U_VIEW_SUB'	=> $u_view_sub,
 		);
 	}
 
