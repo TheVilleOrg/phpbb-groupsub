@@ -14,7 +14,7 @@
 		${dir}/ is the folder of your extension, e.g. ext/nickvergessen/newspage/
 		-->
 		<delete dir="${dir}/tests" />
-		<delete dir="${dir}/travis" />
+        <delete dir="${dir}/vendor/bin" />
         <delete dir="${dir}/vendor/paypal/paypal-checkout-sdk/samples" />
         <delete dir="${dir}/vendor/paypal/paypal-checkout-sdk/tests" />
         <delete dir="${dir}/vendor/phing" />
