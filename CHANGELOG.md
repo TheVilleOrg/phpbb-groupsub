@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0-beta4 (2/2/21)
+
+* Fixed fatal error on phpBB 3.3.3
+
 ## 1.3.0-beta3 (1/23/21)
 
 * Fixed error initiating checkout when using currencies other than USD
